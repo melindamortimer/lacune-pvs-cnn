@@ -20,6 +20,7 @@
 tenSubjects/
 NNet_Scripts/my-model
 Thesis_Docs/Images
+NNet_Scripts/ex
 
 # Unnecessary tex stuff
 *.aux
