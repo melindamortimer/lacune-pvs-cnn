@@ -19,15 +19,15 @@ NNet_Scripts/my-model
 Thesis_Docs/Images
 
 # Unnecessary tex stuff
-.aux
-.bbl
-.blg
-.log
-.lot
-.toc
-.tks
-.eps
-.gz
-.log
+*.aux
+*.bbl
+*.blg
+*.log
+*.lot
+*.toc
+*.tks
+*.eps
+*.gz
+*.log
 *.cls
-.xml
+*.xml
