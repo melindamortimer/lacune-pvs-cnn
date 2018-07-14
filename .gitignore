@@ -7,8 +7,8 @@
 .RProj.user
 
 # Pdfs and docs
-.pdf
-.doc
+*.pdf
+*.doc
 
 # Apple
 .DS_Store
