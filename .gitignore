@@ -1,0 +1,14 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data
+.RData
+.RProj.user
+
+# Pdfs and docs
+.pdf
+.doc
+
+# Apple
+.DS_Store
