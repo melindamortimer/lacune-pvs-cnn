@@ -6,9 +6,12 @@
 .RData
 .RProj.user
 
-# Pdfs and docs
+# Large file types
 *.pdf
 *.doc
+*.nii
+*.img
+*.hdf
 
 # Apple
 .DS_Store
