@@ -29,5 +29,5 @@ Thesis_Docs/Images
 .eps
 .gz
 .log
-.cls
+*.cls
 .xml
