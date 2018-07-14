@@ -1,0 +1,217 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  A small sample UNSW Honours Thesis file.
+%  Any questions to Ian Doust i.doust@unsw.edu.au
+%
+% Edited CSG 11.9.2015, use some of Gery's ideas for front matter; add a conclusion chapter.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%  The first part pulls in a UNSW Thesis class file.  This one is
+%  slightly nonstandard and has been set up to do a couple of
+%  things automatically
+%
+
+\documentclass[honours,12pt]{unswthesis}
+
+\usepackage{afterpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  The following are some simple LaTeX macros to give some
+%  commonly used letters in funny fonts. You may need more or less of
+%  these
+%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\X}{\mathfrak{X}}
+\newcommand{\Y}{\mathfrak{Y}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The following are much more esoteric commands that I have left in
+% so that this file still processes. Use or delete as you see fit
+%
+\newcommand{\bv}[1]{\mbox{BV($#1$)}}
+\newcommand{\comb}[2]{\left(\!\!\!\begin{array}{c}#1\\#2\end{array}\!\!\!\right)
+}
+\newcommand{\Lat}{{\rm Lat}}
+\newcommand{\var}{\mathop{\rm var}}
+\newcommand{\Pt}{{\mathcal P}}
+\def\tr(#1){{\rm trace}(#1)}
+\def\Exp(#1){{\mathbb E}(#1)}
+\def\Exps(#1){{\mathbb E}\sparen(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\hatt}[1]{\widehat #1}
+\newcommand{\modeq}[3]{#1 \equiv #2 \,(\text{mod}\, #3)}
+\newcommand{\rmod}{\,\mathrm{mod}\,}
+\newcommand{\p}{\hphantom{+}}
+\newcommand{\vect}[1]{\mbox{\boldmath $ #1 $}}
+\newcommand{\reff}[2]{\ref{#1}.\ref{#2}}
+\newcommand{\psum}[2]{\sum_{#1}^{#2}\!\!\!'\,\,}
+\newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
+				#1 \\ #2
+			\end{array}\right)	}
+%
+%  Macros - some of these are in plain TeX (gasp!)
+%
+\newcommand{\be}{($\beta$)}
+\newcommand{\eqp}{\mathrel{{=}_p}}
+\newcommand{\ltp}{\mathrel{{\prec}_p}}
+\newcommand{\lep}{\mathrel{{\preceq}_p}}
+\def\brack#1{\left \{ #1 \right \}}
+\def\bul{$\bullet$\ }
+\def\cl{{\rm cl}}
+\let\del=\partial
+\def\enditem{\par\smallskip\noindent}
+\def\implies{\Rightarrow}
+\def\inpr#1,#2{\t \hbox{\langle #1 , #2 \rangle} \t}
+\def\ip<#1,#2>{\langle #1,#2 \rangle}
+\def\lp{\ell^p}
+\def\maxb#1{\max \brack{#1}}
+\def\minb#1{\min \brack{#1}}
+\def\mod#1{\left \vert #1 \right \vert}
+\def\norm#1{\left \Vert #1 \right \Vert}
+\def\paren(#1){\left( #1 \right)}
+\def\qed{\hfill \hbox{$\Box$} \smallskip}
+\def\sbrack#1{\Bigl \{ #1 \Bigr \} }
+\def\ssbrack#1{ \{ #1 \} }
+\def\smod#1{\Bigl \vert #1 \Bigr \vert}
+\def\smmod#1{\bigl \vert #1 \bigr \vert}
+\def\ssmod#1{\vert #1 \vert}
+\def\sspmod#1{\vert\, #1 \, \vert}
+\def\snorm#1{\Bigl \Vert #1 \Bigr \Vert}
+\def\ssnorm#1{\Vert #1 \Vert}
+\def\sparen(#1){\Bigl ( #1 \Bigr )}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These environments allow you to get nice numbered headings
+%  for your Theorems, Definitions etc.  
+%
+%  Environments
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{notation}[theorem]{Notation}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\chapter{Introduction}\label{s-intro}
+
+\section{Overview}\label{overview}
+
+{\noindent} Cerebral Small Vessel Disease (SVD) describes a set of abnormalities affecting small blood vessels in the deep grey and white matter of the brain. The changes are particularly prevalent amongst the elderly, with SVD biomarkers appearing in over 90\% of MRI for those aged 60-90 years \cite{deLeeuwF-E2001Pocw}. SVD is the primary cause of over one fifth of ischaemic (oxygen-starved) strokes \cite{SmithStephen2002ARaA} and is a major cause of dementia and cognitive decline \cite{NorrvingBo2008Linb}.
+
+Imaging markers of SVD include lacunes, enlarged perivascular spaces, white matter hyperintensities, microbleeds, recent small subcortical infarcts and brain atrophy \cite{WardlawJ.M.2013Nsfr}.
+
+Current research is investigating the role of particular biomarkers in the advancement of SVD. Currently, it is not clear the extent to which SVD affects cognition, or which events are to blame. Consequently, there is the need for clear identification of biomarkers to ensure accurate analysis can be made.
+
+The identification of SVD biomarkers in MRI (rating) is generally conducted by eye. The 3D image constructed by an MRI scan is made up of numerous 2D slices. Trained clinicians, with reference to STRIVE criterion \cite{WardlawJ.M.2013Nsfr}, examine each image slice for lesions and other features of interest. The coordinates, sizes and counts of these features are logged manually.
+
+However, some neuroscientists have commented on the difficulty and reliability of these rating methods. Wardlaw et al. \cite{WardlawJm2013Mosc} advised caution when conducted inference as many of the features are difficult to identify. This was especially the case for research coordinated prior to 2013, before the STRIVE criterion was established \cite{WardlawJ.M.2013Nsfr}.
+
+Several attempts have been made to improve the reliability of visual rating, with moderate success \cite{AdamsH.H.Hieab2013RMfD, PotterGillian2015CPSV}. However intra-rater and inter-rater percentage agreements are still low for brain regions with a higher frequency of lacunes and perivascular spaces, such as the basal ganglia. In the trial by Potter et al. \cite{PotterGillian2015CPSV},  the intra-rater and inter-rater agreements for the basal ganglia were 0.54-0.68 and 0.65-0.77 respectively. This was considered an improvement, however the extent of the remaining inconsistencies means that caution must be taken when drawing conclusions.
+
+In one instance, Benjamin et al. \cite{BenjaminJ.Philip2018LIbN} argue that it is only lacunes, rather than perivascular spaces, that influence cognitive decline. They suspect that previous observed influence of perivascular spaces may have been the result of incorrect classification during the rating process.
+
+To allow for more accurate, efficient and consistent image rating of lacunes and perivascular spaces, this paper attempts to automate the process via machine learning. As developments with machine learning are fairly recent, there have been a limited number of previous attempts.
+
+The first attempts at automated lacune detection were conducted by Yokoyama et al. \cite{YokoyamaRyujiro2002Aado}, primarily focussing on the definition of lacunes in identification. Their study showed promising results, but with a high proportion of false-positives - 1.77 per image.
+
+By 2007, their model had undergone a number of revisions. Uchiyama et al. \cite{UchiyamaYoshikazu2007Ioad} used top-hat transforms and principal component determination to reduce false positives down to 0.30 per image, with a sensitivity of 0.968.
+
+In 2016, Dou et al. \cite{DouQ.2016ADoC} released a study on the detection of cerebral microbleeds using 3D convolutional neural networks. Ghafoorian et al. \cite{GhafoorianM.2017Dml3} then applied these same techniques to the detection of lacunes. This algorithm demonstrated a sensitivity of 0.974, with 0.13 false positives per slice. Our study hopes to recreate and improve on this model.
+
+Chapter 2 is an introduction to the terminology surrounding MRI and the biomakers involved in SVD. Chapter 3 is an introduction to the workings, structure and equations behind neural networks and convolutional neural networks.
+
+\section{Results}\label{results}
+
+
+- overview
+
+- motivation
+
+- brief results
+
+- structure of thesis
+
+
+Lacunes are ovoid fluid-filled cavities, between 3mm to 15mm in diameter. In MRI, lacunes return a similar signal intensity to that of cerebrospinal fluid (CSF).
+
+
+In accordance to the standardised definitions specified by the STRIVE criterion \cite{WardlawJ.M.2013Nsfr}, lacunes  
+
+
+Perivascular spaces are small areas of the brain filled with cerebrospinal fluid (CSF) due to brain shrinkage.
+
+Current methods for feature identification include rating by eye, or utilising a program to automate the process.
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+
+\bibliographystyle{plain}
+\bibliography{../Readings/bibliography.bib}
+
+\end{document}
+
+
+
+\end{document}
+
+
+
+
+

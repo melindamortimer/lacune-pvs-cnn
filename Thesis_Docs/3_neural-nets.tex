@@ -1,0 +1,452 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  A small sample UNSW Honours Thesis file.
+%  Any questions to Ian Doust i.doust@unsw.edu.au
+%
+% Edited CSG 11.9.2015, use some of Gery's ideas for front matter; add a conclusion chapter.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%  The first part pulls in a UNSW Thesis class file.  This one is
+%  slightly nonstandard and has been set up to do a couple of
+%  things automatically
+%
+
+\documentclass[honours,12pt]{unswthesis}
+
+\usepackage{afterpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  The following are some simple LaTeX macros to give some
+%  commonly used letters in funny fonts. You may need more or less of
+%  these
+%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\X}{\mathfrak{X}}
+\newcommand{\Y}{\mathfrak{Y}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The following are much more esoteric commands that I have left in
+% so that this file still processes. Use or delete as you see fit
+%
+\newcommand{\bv}[1]{\mbox{BV($#1$)}}
+\newcommand{\comb}[2]{\left(\!\!\!\begin{array}{c}#1\\#2\end{array}\!\!\!\right)
+}
+\newcommand{\Lat}{{\rm Lat}}
+\newcommand{\var}{\mathop{\rm var}}
+\newcommand{\Pt}{{\mathcal P}}
+\def\tr(#1){{\rm trace}(#1)}
+\def\Exp(#1){{\mathbb E}(#1)}
+\def\Exps(#1){{\mathbb E}\sparen(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\hatt}[1]{\widehat #1}
+\newcommand{\modeq}[3]{#1 \equiv #2 \,(\text{mod}\, #3)}
+\newcommand{\rmod}{\,\mathrm{mod}\,}
+\newcommand{\p}{\hphantom{+}}
+\newcommand{\vect}[1]{\mbox{\boldmath $ #1 $}}
+\newcommand{\reff}[2]{\ref{#1}.\ref{#2}}
+\newcommand{\psum}[2]{\sum_{#1}^{#2}\!\!\!'\,\,}
+\newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
+				#1 \\ #2
+			\end{array}\right)	}
+%
+%  Macros - some of these are in plain TeX (gasp!)
+%
+\newcommand{\be}{($\beta$)}
+\newcommand{\eqp}{\mathrel{{=}_p}}
+\newcommand{\ltp}{\mathrel{{\prec}_p}}
+\newcommand{\lep}{\mathrel{{\preceq}_p}}
+\def\brack#1{\left \{ #1 \right \}}
+\def\bul{$\bullet$\ }
+\def\cl{{\rm cl}}
+\let\del=\partial
+\def\enditem{\par\smallskip\noindent}
+\def\implies{\Rightarrow}
+\def\inpr#1,#2{\t \hbox{\langle #1 , #2 \rangle} \t}
+\def\ip<#1,#2>{\langle #1,#2 \rangle}
+\def\lp{\ell^p}
+\def\maxb#1{\max \brack{#1}}
+\def\minb#1{\min \brack{#1}}
+\def\mod#1{\left \vert #1 \right \vert}
+\def\norm#1{\left \Vert #1 \right \Vert}
+\def\paren(#1){\left( #1 \right)}
+\def\qed{\hfill \hbox{$\Box$} \smallskip}
+\def\sbrack#1{\Bigl \{ #1 \Bigr \} }
+\def\ssbrack#1{ \{ #1 \} }
+\def\smod#1{\Bigl \vert #1 \Bigr \vert}
+\def\smmod#1{\bigl \vert #1 \bigr \vert}
+\def\ssmod#1{\vert #1 \vert}
+\def\sspmod#1{\vert\, #1 \, \vert}
+\def\snorm#1{\Bigl \Vert #1 \Bigr \Vert}
+\def\ssnorm#1{\Vert #1 \Vert}
+\def\sparen(#1){\Bigl ( #1 \Bigr )}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These environments allow you to get nice numbered headings
+%  for your Theorems, Definitions etc.  
+%
+%  Environments
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{notation}[theorem]{Notation}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\chapter{Neural Networks}\label{neuralNets-intro}
+
+To understand the methods used, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks, convolutional neural networks, and 3-dimensional neural networks.
+
+% - Basic neural networks theory + perceptron
+% - Loss functions
+% - Minimisation functions
+% 
+% - Convolutional neural networks overview
+% - Convolution layer
+% - ReLU
+% - Pooling
+% - Fully connected layers
+% 
+% - 3D CNNs overview
+
+{\noindent}\citep{AdamsH.H.Hieab2013RMfD}
+
+\section{Neural Networks}\label{nnets}
+
+Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors and patterns that may not be easily employed using other statistical methods. Given enough data, computational power, and training time, neural network models have exhibited high speed and accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans (see MNIST and ImageNET). They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and AI.
+
+The construction of neural networks has to be conducted with some care, however. The resulting models are difficult to interpret, and are prone to overfitting. 
+
+\subsection{Basic Structure}\label{nnets-structure}
+
+Neural networks are made up of a series of layers of nodes, called neurons. The first layer is an input layer, where data is fed in. The last layer is an output layer, giving the final result. The central layers are known as hidden layers.
+
+% Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
+	\caption{Basic neural network structure.}
+	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
+\end{figure}
+
+Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be $n$ input variables, $\mathbf{w} = (w_1, w_2, \ldots, w_n)^\top$ be some weights and $b$ be some bias. Then the output of a neuron is given by
+\[
+	f(\mathbf{w}\cdot\mathbf{x} + b),
+\]
+where $f(\cdot)$ is some activation function.
+
+The weights and biases are chosen such that they minimise some cost function $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$ analytically.
+
+Instead, this minimisation is approximated via the Gradient Descent algorithm \textbf{(see Section)}. This algorithm is run until the cost falls below a specified margin, or reaches a maximum number of iterations.
+
+\subsection{Notation}\label{nnets-not}
+
+In order to more efficiently describe the computations, it is necessary to introduce some notation.
+
+Define $\mathbf{w}_j^l$ to be the vector of weights used by the $j$th neuron of the $l$th layer, where $w_{ji}^l$ is the weight attributed to the $i$th neuron of the $(l-1)$th layer.
+
+$b_j^l$ is the bias of the $j$th neuron in the $l$th layer.
+
+$\mathbf{a}^l$ is the vector of activation values for the $l$th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
+
+Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ are the activation values of the final output layer.
+
+Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$th feature of $\mathbf{y}_i$.
+
+Let $W$ and $B$ be the sets of all weights and biases as before.
+
+\subsection{Activation Functions}\label{nnets-act}
+
+Activation functions serve to constrain a neuron's output to within a particular range, and to introduce nonlinearity into the system. 
+
+For the perceptron, a basic neuron, we have
+\[
+	x_i \in \{0,1\} \text{ and } f(z) = \begin{cases}
+		1 & z > 0 \\
+		0 & z \le 0
+	\end{cases}.
+\]
+
+To allow for continuous outputs, other common activation functions include the sigmoid,
+\[
+	f(z) = \sigma(z) = \dfrac{1}{1+e^{-z}},
+\]
+and tanh functions,
+\[
+	f(z) = \tanh(z),
+\]
+which are smooth approximations to the step activation function used by the perceptron.
+
+Rectified Linear Unit (ReLU) activation is another common activation function,
+\[
+	f(z) = \max(0, z),
+\]
+which allows for some neurons to output 0 and be essentially deactivated. This is useful for convolutional neural networks for image recognition.
+
+For classification tasks, it can be useful to apply a softmax activation function,
+\[
+	f(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
+\]
+as the outputs take on the form of a probability distribution.
+
+\subsection{Cost Functions}\label{nnets-cost}
+
+Weights and biases are chosen such that they minimise some cost function.
+
+In using gradient descent \textbf{(see Section)}, there are two requirements. First, that the cost, $C_X(\cdot)$, accrued from all samples, $X$, can be expressed as the mean of the costs accrued from $n$ distinct subsamples of $X$, denoted $X_i, i \in[1,n]$,
+\[
+	C_X(W, B) = \dfrac{1}{n}\sum_{i = 1}^nC_{X_i}(W,B).
+\]
+
+The second requirement is that the only activation values that the cost is dependent on are those in the final output layer of the network, $\mathbf{a}^L$.
+
+There are a number of cost functions in frequent use, and the choice of cost function is dependent on the context of the problem.
+
+One of the most common cost functions for regression is the quadratic or Mean Squared Error cost, given by
+\[
+	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2.
+\]
+This form is convenient as it has gradient
+\[
+	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
+\]
+Note that when there is a high amount of error, the learning rate is low.
+
+The most common cost function for classification tasks is cross entropy, given by
+\[
+	C(W,B) = -\dfrac{1}{n}\sum_{i=1}^n\sum_j\big[y_{ij}\ln a_j^L(\mathbf{x}_i,W,B) + (1 - y_{ij})\ln (1 - a_j^L(\mathbf{x}_i,W,B))\big],
+\]
+with gradient
+\[
+	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n\sum_j\dfrac{a_j^L(\mathbf{x}_i,W,B) - y_{ij}}{a_j^L(\mathbf{x}_i,W,B)(1-a_j^L(\mathbf{x}_i,W,B))}.
+\]
+Unlike the quadratic cost, when error is high, the learning rate is also high.
+
+%Cost functions can include: the quadratic (simple), cross-entropy, regularisation (L1, L2, dropout, artificial expansion of training data).
+%In using cross-entropy, the learning rate of the weight is controlled by the amount of error. This is unlike the quadratic cost function, which has a very slow learning rate when there is high error.
+%Changing these can improve a model.
+%Other improvements made by making better initialisations of weights, and better heuristics to choose hyper-parameters.
+
+\subsection{Gradient Descent}\label{nnets-graddesc}
+
+Weights and biases are chosen such that they will minimise the cost function. However, there are too many variables for this to be done analytically, and so they are instead estimated using the Gradient Descent algorithm.
+
+As described by Nielson \cite{Nielson2015}, Gradient Descent works by considering the gradient of the cost given the current weights and biases. The algorithm then shifts the weights and biases such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$.
+
+Then for all weight and bias variables denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
+\begin{align*}
+	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \ldots + \dfrac{\partial C}{\partial v_N}\Delta v_N\text{, for some number of variables } N\\
+	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.
+\end{align*}
+
+If the $\mathbf{v}$ are chosen such that
+\[
+	\Delta\mathbf{v} = -\eta \nabla C(\mathbf{v}), \quad \text{ where }\eta > 0,
+\]
+then from \textbf{Equation} we can write
+\[
+	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0,
+\]
+where $\|\cdot\|$ is the $L^2$ norm.
+
+Thus if the new $\mathbf{v}' = \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost will decrease.
+
+In training a neural network, the size of the shift is specified as $\|\Delta\mathbf{v}\| = \epsilon$, for some $\epsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\epsilon$ and $\nabla C$.
+
+\begin{proposition}\label{nnets-graddescminproof}
+	If the size of the shift is constrained such that $\|\Delta\mathbf{v}\| = \epsilon$ where $\epsilon > 0$, then $\nabla C \cdot \Delta\mathbf{v}$ is minimised by $\Delta\mathbf{v} = -\eta\nabla C$, where $\eta = \dfrac{\epsilon}{\|\nabla C\|}$.
+\end{proposition}
+
+\begin{proof}
+	Using the Cauchy-Schwarz Inequality,
+	\[
+			|\nabla C\cdot\Delta\mathbf{v}| \le \|\nabla C\|\times\|\Delta\mathbf{v}\|.
+	\]
+	Then, \begin{align*}
+		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\cdot\|\Delta\mathbf{v}\| \\
+		& = -\epsilon\|\nabla C\|,\quad\epsilon = \|\Delta\mathbf{v}\| \\
+		& = -\dfrac{\epsilon\|\nabla C\|^2}{\|\nabla C\|} \\
+		& = -\dfrac{\epsilon\nabla C\cdot\nabla C}{\|\nabla C\|}
+	\end{align*}\begin{align*}
+		\therefore\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\epsilon\nabla C}{\|\nabla C\|} \\
+		& = -\eta\nabla C,\quad\eta = \dfrac{\epsilon}{\|\nabla C\|}
+	\end{align*}
+\end{proof}
+
+
+This method assumes that the starting values are close enough to the global minimum to actually converge. The method will otherwise be constricted to the local minimum.
+
+As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem. In this scenario, the weights and biases shift by smaller and smaller increments, so that further training does not improve the model over time.
+
+A common solution to this problem is the use of the ReLU activation function. 
+% Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
+
+\subsection{Stochastic Gradient Descent}\label{nnets-stochgraddesc}
+
+Another issue is that of time. Taking the average over all training inputs can be very costly. As a result, Stochastic Gradient Descent is a popular alternative. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from. After the training with that batch is complete, another batch of training inputs is randomly chosen, and the process repeats. When all training inputs have been used, it is said that an \textbf{epoch} of training has been completed.
+
+%
+%We attempt to choose weights and biases that will minimise the cost function. As we cannot use calculus, we must estimate - by gradient descent. Move all the estimates a little, in the direction of decrease. The amount of movement is dependent on a learning rate parameter.
+%
+%This takes a long time with all inputs. Stochastic gradient descent instead randomly choosing $m$ training inputs, known as a mini-batch. It trains with the mini-batch, then rechooses $m$ different, unused inputs, re-trains, etc. When there are no more inputs to choose from, the algorithm has completed an 'epoch' of training.
+%
+%Backpropagation: gradient of the cost function. 
+
+
+
+
+
+
+One of the main issues with neural networks is the tendency to overfit. Increasing the amount of training data is one method to reduce this. But in general, we apply regularisation techniques. The most common of these is L2-regularisation, also known as Ridge Regression.
+This adds an extra regularisation term to the cost function, to get $C(w,b) + \dfrac{\lambda}{2n}\sum_{w}w^2$. The regularisation term is the sum of squares of the weights, scaled with a regularisation parameter $\lambda$. 
+L1-regularisation, or Lasso Regression, adds the absolute values of weights: $C(w,b) + \dfrac{\lambda}{n}\sum_w|w|$.
+
+Dropout is another regularisation technique vastly different from L1 and L2. Through the training process, each affected neuron has a probability of being deactivated, regardless of the input.
+
+Artificial expansion of the training set. More accuracy with more varied samples. Try various augmentations, as long as they are still valid. E.g. rotations and flips, but note flips aren't valid for reading handwriting for instance.
+
+Weight initialisation: Initial weights and biases chosen using independent Gaussian random variables, with mean 0, sd 1. But this is quite a broad distribution. Can become relatively likely for neurons to become saturated (corrections are minuscule). Instead, try a standard deviation of $1/\sqrt(n)$.
+
+Choosing hyper-parameters:
+It can be difficult to determine what to change with so many parameters in play at once. This is particularly the case with large amounts of data or complex models. Change the learning rate? Number of hidden neurons? Number of layers? 
+General strategy is to start simple. First just try to get ANY non-trivial result. E.g. for MNIST, just isolate 0/1 images. Start without hidden layers, just to test it out. Once there are non-trivial results, start building these more complex structures.
+
+Adjusting learning rate:
+Start with a value like 0.01. Track the learning cost for the first few epochs, say first 30. We want a learning rate that is the largest value at which the cost decreases during the first few epochs.
+
+Variable learning rate:
+Learning rate constant until validation accuracy drops, then drop learning rate by a few factors. At first, keep in constant however.
+
+Early stopping:
+After each epoch, calculate the accuracy on the validation set. Once this accuracy stops increasing, stop the training phase. But some sessions may have a decrease early, so we could wait until say 10 epochs without increase. But some might have little improvement for a while before increasing again. The 10 epoch rule is good initially.
+
+Regularisation:
+Initially keep $\lambda = 0$. Find the learning rate $\eta$ first. Then start with a value like $\lambda = 1.0$, and slowly increase or decrease by factors of 10, as needed to improve validation accuracy. Then return to $eta$ and re-optimise.
+
+Variations on Stochastic Gradient Descent:
+Hessian Technique - has some good properties, but difficult to implement
+Momentum-based - Moves faster than standard gradient descent so will overshoot. Have to specify a 'friction' coefficient $\mu$ called the 'momentum coefficient'. Quite commonly used.
+
+Other Neurons:
+$tanh(z) = \dfrac{e^z - e^{-z}}{e^z + e^{-z}}$: Close to the sigmoid.
+
+In fact, $sigmoid(z) = \dfrac{1 + tanh(z/2)}{2}$, just rescaled! Output ranges from -1 to 1, instead of 0 to 1, so may require normalisation.
+
+Equations in site http://neuralnetworksanddeeplearning.com/chap1.html. But they require some editing to include more detail. E.g. Equation 6 is actually meant to have a dependent on w and b.
+Equations also in Lacune CNN and Microbleed CNN articles.
+
+\section{Convolutional Neural Networks}\label{convNeuralNets}
+
+Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.
+The neurons of a convNet are arranged in 3D. 
+%http://cs231n.github.io/convolutional-networks/
+
+Input layer: raw pixel values, with width, height and color channels
+Conv layer: Compute output for regions of input. Each computes a dot product between weights and a region that they are connected to.
+ReLU: elementwise activation function.
+Pool: downsampling
+FC - fully connected: each neuron here is connected to all previous.
+
+Conv layer has a set of learnable filters. The filter might have only a small size, but will slide (convolve) across the image, computing dot products at each position.
+
+%https://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications
+%https://pappubahry.com/misc/neural/nielsen_1/
+% http://neuralnetworksanddeeplearning.com/
+
+%Good animated representation: https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
+%
+%https://medium.com/technologymadeeasy/the-best-explanation-of-convolutional-neural-networks-on-the-internet-fbb8b1ad5df8
+%
+%https://tensorflow.rstudio.com/tensorflow/articles/tutorial_mnist_beginners.html
+%
+%https://adeshpande3.github.io/A-Beginner%27s-Guide-To-Understanding-Convolutional-Neural-Networks-Part-2/
+%
+%https://tech.hbc.com/2016-05-18-fully-connected-to-convolutional-conversion.html
+
+
+\section{R-CNN}
+Purpose is to take in an image, and draw bounding boxes over all of the objects. Train to find 4D output (x, y, width, height) of object. Use L2 distance loss between prediction and 'ground truth'.
+
+Done by attaching a fully connected layer to the last conv layer. Separate classification layers and box coord layers. 
+Accuracy determined by Intersection over Union (ioU) area. 
+
+
+
+
+\section{3D Convolutional Neural Networks}\label{3dConvNeuralNets}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+
+\bibliographystyle{plain}
+\bibliography{../Readings/bibliography.bib}
+
+\end{document}
+
+
+
+\end{document}
+
+
+
+
+

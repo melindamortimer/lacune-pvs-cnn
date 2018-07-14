@@ -1,0 +1,257 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  A small sample UNSW Honours Thesis file.
+%  Any questions to Ian Doust i.doust@unsw.edu.au
+%
+% Edited CSG 11.9.2015, use some of Gery's ideas for front matter; add a conclusion chapter.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%  The first part pulls in a UNSW Thesis class file.  This one is
+%  slightly nonstandard and has been set up to do a couple of
+%  things automatically
+%
+
+\documentclass[honours,12pt]{unswthesis}
+
+\usepackage{afterpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  The following are some simple LaTeX macros to give some
+%  commonly used letters in funny fonts. You may need more or less of
+%  these
+%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\X}{\mathfrak{X}}
+\newcommand{\Y}{\mathfrak{Y}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The following are much more esoteric commands that I have left in
+% so that this file still processes. Use or delete as you see fit
+%
+\newcommand{\bv}[1]{\mbox{BV($#1$)}}
+\newcommand{\comb}[2]{\left(\!\!\!\begin{array}{c}#1\\#2\end{array}\!\!\!\right)
+}
+\newcommand{\Lat}{{\rm Lat}}
+\newcommand{\var}{\mathop{\rm var}}
+\newcommand{\Pt}{{\mathcal P}}
+\def\tr(#1){{\rm trace}(#1)}
+\def\Exp(#1){{\mathbb E}(#1)}
+\def\Exps(#1){{\mathbb E}\sparen(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\hatt}[1]{\widehat #1}
+\newcommand{\modeq}[3]{#1 \equiv #2 \,(\text{mod}\, #3)}
+\newcommand{\rmod}{\,\mathrm{mod}\,}
+\newcommand{\p}{\hphantom{+}}
+\newcommand{\vect}[1]{\mbox{\boldmath $ #1 $}}
+\newcommand{\reff}[2]{\ref{#1}.\ref{#2}}
+\newcommand{\psum}[2]{\sum_{#1}^{#2}\!\!\!'\,\,}
+\newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
+				#1 \\ #2
+			\end{array}\right)	}
+%
+%  Macros - some of these are in plain TeX (gasp!)
+%
+\newcommand{\be}{($\beta$)}
+\newcommand{\eqp}{\mathrel{{=}_p}}
+\newcommand{\ltp}{\mathrel{{\prec}_p}}
+\newcommand{\lep}{\mathrel{{\preceq}_p}}
+\def\brack#1{\left \{ #1 \right \}}
+\def\bul{$\bullet$\ }
+\def\cl{{\rm cl}}
+\let\del=\partial
+\def\enditem{\par\smallskip\noindent}
+\def\implies{\Rightarrow}
+\def\inpr#1,#2{\t \hbox{\langle #1 , #2 \rangle} \t}
+\def\ip<#1,#2>{\langle #1,#2 \rangle}
+\def\lp{\ell^p}
+\def\maxb#1{\max \brack{#1}}
+\def\minb#1{\min \brack{#1}}
+\def\mod#1{\left \vert #1 \right \vert}
+\def\norm#1{\left \Vert #1 \right \Vert}
+\def\paren(#1){\left( #1 \right)}
+\def\qed{\hfill \hbox{$\Box$} \smallskip}
+\def\sbrack#1{\Bigl \{ #1 \Bigr \} }
+\def\ssbrack#1{ \{ #1 \} }
+\def\smod#1{\Bigl \vert #1 \Bigr \vert}
+\def\smmod#1{\bigl \vert #1 \bigr \vert}
+\def\ssmod#1{\vert #1 \vert}
+\def\sspmod#1{\vert\, #1 \, \vert}
+\def\snorm#1{\Bigl \Vert #1 \Bigr \Vert}
+\def\ssnorm#1{\Vert #1 \Vert}
+\def\sparen(#1){\Bigl ( #1 \Bigr )}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These environments allow you to get nice numbered headings
+%  for your Theorems, Definitions etc.  
+%
+%  Environments
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{notation}[theorem]{Notation}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\chapter{Literature Review}\label{litrev-intro}
+
+{\noindent}T
+
+
+\citep{AdamsH.H.Hieab2013RMfD}
+
+\section{Multi-Scale Location-Aware 3D CNN}\label{litrev-paper1}
+
+Entire model is made up of two neural networks.
+
+The first is trained such that it detects candidate lacunes.
+
+The second then takes the candidate lacunes, and processes them through a more thorough 3D CNN to finalise the outcome.
+
+\section{First Phase - Candidate Detection}
+
+Takes in 51x51 samples, where the T1 and FLAIR components are treated as separate channels. Twice as many negative samples as positive, with a total of 320K for training.
+
+Seven layer CNN:
+- 4 convolutional, with 20, 40, 80, 110 filters, with size 7x7, 5x5, 3x3, 3x3 respectively.
+- 1 pooling layer: size 2x2, stride 2, after first conv layer
+- 3 fully connected layers: sizes 300, 200 and 2
+- Softmax output layer
+
+All neurons went under batch normalisation.
+
+Weights initialised by the He method.
+
+ReLU activation to prevent vanishing gradient problem
+
+Dropout of 0.3 on fully connected layers
+
+Training conducted by stochastic gradient descent, Adam optimiser. Learning rate decayed, from 5e-4 to 1e-6
+
+Batch size of 128
+
+Categorical cross-entropy loss, with L2-regularisation (Ridge regression), lambda2 = 0.0001
+
+Early stopping - model with highest accuracy on validation set
+
+
+This method can be slow on its own. Translate the fully connected layers to convolutional layers, via shift-and-stitch method.
+
+Local maxima extraction (10x10 window) - picking those with likelihood lower than 0.1.
+
+
+Didn't mention: number of epochs to train. How pooling and convolutions were padded. Diagram implied no padding, but diagram dimensions weren't correct. 
+
+\section{Second Phase - False Positive Reduction}
+
+This model uses data at different scales around each candidate lacune. 
+
+Input data of each point at three different scales: 32x32x5, 64x64x5, 128x128x5.
+
+Each of these scales is reduced to 32x32x5, then put through a separate branch of the network.
+
+385K training, 35K validation.
+
+Three separate branches of convNets, one for each scale. Each branch contains:
+ - 6 conv layers (64, 64, 128, 128, 256,256 filters, with sizes 3x3x2, 3x3x2, 3x3x1, 3x3x1, 3x3x1, 3x3x1)
+ - 1 pooling, size 2x2x1, placed after second conv layer
+ - Fully connected layer of 300 neurons
+ 
+ The 3x300 fully connected neurons were concatenated with 7 addition location feature inputs.
+ 
+ These location features include:
+  - x,y,z coordinates
+  - distances from left ventricle, right ventricle, cortex and midsaggital brain surface.
+
+Then the 907 neurons are fully connected to two more fully connected layers, of size 200 and 2 neurons. 
+These are fed through a softmax classifier to output the final result.
+
+All weights are He initialised 
+
+All activations are ReLU, and are batch normalised.
+
+Fully connected layers have a dropout of 0.5.
+
+Cost function is cross entropy with L2 regularisation, lambda2 = 2e-5. 
+
+Stochastic gradient descent, Adam optimiser. Decaying learning rate, from 5e-4, decay factor of 2 when training accuracy dropped. 
+
+Training for 40 epochs, batch size of 128.
+
+Chose model with highest validation accuracy. 
+
+Hyper-parameters were also chosen such as to attain highest validation accuracy. These hyper-parameters included network depth, batch size, initial learning rate, learning decay factor, lambda2 and dropout rate. This is done during the validation stage. Make several models, with differing hyper-parameters, with performance compared using the validation set. Then whichever model performs best on this validation set is chosen, and final performance judged by the test set.
+
+Data was augmented during test time: cropping and flipping. Predictions of the 242 variants per sample were averaged.
+ 
+ 
+ Didn't mention: stride of pooling. Assumed 2 from diagram.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+
+\bibliographystyle{plain}
+\bibliography{../Readings/bibliography.bib}
+
+\end{document}
+
+
+
+\end{document}
+
+
+
+
+

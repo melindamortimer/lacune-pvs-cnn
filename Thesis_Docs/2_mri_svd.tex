@@ -1,0 +1,247 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  A small sample UNSW Honours Thesis file.
+%  Any questions to Ian Doust i.doust@unsw.edu.au
+%
+% Edited CSG 11.9.2015, use some of Gery's ideas for front matter; add a conclusion chapter.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%  The first part pulls in a UNSW Thesis class file.  This one is
+%  slightly nonstandard and has been set up to do a couple of
+%  things automatically
+%
+
+\documentclass[honours,12pt]{unswthesis}
+
+\usepackage{afterpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  The following are some simple LaTeX macros to give some
+%  commonly used letters in funny fonts. You may need more or less of
+%  these
+%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\BB}{\mathcal{B}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\X}{\mathfrak{X}}
+\newcommand{\Y}{\mathfrak{Y}}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% The following are much more esoteric commands that I have left in
+% so that this file still processes. Use or delete as you see fit
+%
+\newcommand{\bv}[1]{\mbox{BV($#1$)}}
+\newcommand{\comb}[2]{\left(\!\!\!\begin{array}{c}#1\\#2\end{array}\!\!\!\right)
+}
+\newcommand{\Lat}{{\rm Lat}}
+\newcommand{\var}{\mathop{\rm var}}
+\newcommand{\Pt}{{\mathcal P}}
+\def\tr(#1){{\rm trace}(#1)}
+\def\Exp(#1){{\mathbb E}(#1)}
+\def\Exps(#1){{\mathbb E}\sparen(#1)}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\hatt}[1]{\widehat #1}
+\newcommand{\modeq}[3]{#1 \equiv #2 \,(\text{mod}\, #3)}
+\newcommand{\rmod}{\,\mathrm{mod}\,}
+\newcommand{\p}{\hphantom{+}}
+\newcommand{\vect}[1]{\mbox{\boldmath $ #1 $}}
+\newcommand{\reff}[2]{\ref{#1}.\ref{#2}}
+\newcommand{\psum}[2]{\sum_{#1}^{#2}\!\!\!'\,\,}
+\newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
+				#1 \\ #2
+			\end{array}\right)	}
+%
+%  Macros - some of these are in plain TeX (gasp!)
+%
+\newcommand{\be}{($\beta$)}
+\newcommand{\eqp}{\mathrel{{=}_p}}
+\newcommand{\ltp}{\mathrel{{\prec}_p}}
+\newcommand{\lep}{\mathrel{{\preceq}_p}}
+\def\brack#1{\left \{ #1 \right \}}
+\def\bul{$\bullet$\ }
+\def\cl{{\rm cl}}
+\let\del=\partial
+\def\enditem{\par\smallskip\noindent}
+\def\implies{\Rightarrow}
+\def\inpr#1,#2{\t \hbox{\langle #1 , #2 \rangle} \t}
+\def\ip<#1,#2>{\langle #1,#2 \rangle}
+\def\lp{\ell^p}
+\def\maxb#1{\max \brack{#1}}
+\def\minb#1{\min \brack{#1}}
+\def\mod#1{\left \vert #1 \right \vert}
+\def\norm#1{\left \Vert #1 \right \Vert}
+\def\paren(#1){\left( #1 \right)}
+\def\qed{\hfill \hbox{$\Box$} \smallskip}
+\def\sbrack#1{\Bigl \{ #1 \Bigr \} }
+\def\ssbrack#1{ \{ #1 \} }
+\def\smod#1{\Bigl \vert #1 \Bigr \vert}
+\def\smmod#1{\bigl \vert #1 \bigr \vert}
+\def\ssmod#1{\vert #1 \vert}
+\def\sspmod#1{\vert\, #1 \, \vert}
+\def\snorm#1{\Bigl \Vert #1 \Bigr \Vert}
+\def\ssnorm#1{\Vert #1 \Vert}
+\def\sparen(#1){\Bigl ( #1 \Bigr )}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These environments allow you to get nice numbered headings
+%  for your Theorems, Definitions etc.  
+%
+%  Environments
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{notation}[theorem]{Notation}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\chapter{Magnetic Resonance Imaging and Small Vessel Disease}\label{mri_svd_intro}
+
+An overview of some background knowledge is required to understand the data and the features that are being detected. This chapter introduces the general structure of the brain, MRI and the resulting images, SVD biomarkers, and the existing rating standards.
+
+\section{Structure of the Brain}\label{brain}
+
+The central nervous system (CNS) is made up of the brain and spinal chord. Information from throughout the body is communicated via nerves, through the spinal chord, and to the brain. The brain is then tasked with receiving, interpreting and then responding to these signals. The brain itself is the most complex mechanism in the human body, and can be segmented into a number of regions, responsible for different roles. 
+
+The cerebrum is the largest part of the brain, forming the outer surface. It is responsible for voluntary actions, senses, thought and memory. It is divided into two hemispheres - left and right, and each hemisphere divides into four lobes: \begin{itemize}
+	\item The \textbf{frontal lobe} is located at the front of the cerebrum. It is responsible for voluntary movement, skills and behaviours, mood and memory.
+	\item The \textbf{parietal lobe} is situated behind the frontal lobe and is responsible for the senses, including pain, and physical and spacial awareness.
+	\item The \textbf{temporal lobe} is located at the the side of the cerebrum, and is responsible for for memory and auditory functions, including hearing and speech.
+	\item The \textbf{occipital lobe} is at the back of the cerebrum, behind the parietal lobe. It is responsible for visual information.
+\end{itemize}
+
+% Cerebrum diagram
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Images/2_Lobes_of_the_brain_NL.png}
+	\caption{The four lobes of the cerebral cortex.}
+	\small Image taken from Wikimedia Commons: \url{'Gray728.svg'}
+\end{figure}
+
+% Gray vs white matter diagram
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Images/2_Hearing_mechanics_cropped.jpg}
+	\caption{Auditory processing. Note steps 4 to 6 - the majority of signal processing occurs in the grey matter.}
+	\small Image taken from Wikimedia Commons: \url{'Hearing_mechanics_cropped.jpg'}
+\end{figure}
+
+% Basal Ganglia
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Images/2_Basal_Ganglia_and_Related_Structures.png}
+	\caption{The basal ganglia and other related structures.}
+	\small Image taken from Wikimedia Commons: \url{'Basal_Ganglia_and_Related_Structures.svg'}
+\end{figure}
+
+
+The outer surface of the brain consists of a layer of neurons referred to as grey matter. This layer has a thickness of around 4mm, and much of the brain processes occur here. This is demonstrated in \textbf{Figure}, where the majority of auditory processing is passed to the grey matter. Grey matter also occurs in the cerebellum, brainstem and within the spinal chord.
+
+Underneath the grey matter is a network of fibres that connects these grey matter neurons together. Collectively, they form the white matter. 
+
+
+
+At the centre of the brain, the main structures include the thalamus, hypothalamus and pituitary gland. Of particular interest are a group of structures that form the basal ganglia. This region of the brain is responsible for voluntary movement and learning. It is also a region with a higher proportion of lacunes and perivascular spaces.
+
+At the base of the brain lies the cerebellum and brain stem. 
+
+The entire brain is surrounded by cerebral spinal fluid (CSF). This fluid makes its way into the gaps through surface brain matter.
+
+
+\section{Magnetic Resonance Imaging}\label{MRI}
+
+Magnetic Resonance Imaging (MRI) is a radiological technique that uses magnetic fields and radio waves to generate greyscale images of organs inside the body. The two most common images produced are referred to as T1-weighted and T2-weighted images.
+
+T1-weighted images are bright in regions with high fat content, such as white matter, and are dark in regions with high water content, usually CSF.
+
+In contrast, T2-weighted images are bright in regions with high fat and water content. This can make it easier to spot abnormalities.
+
+FLuid-Attenuated Inversion Recovery (FLAIR) is another commonly used imaging sequence. It is similar to that of T2, except it allows CSF to remain dark. This allows for easier identification of abnormalities against CSF.
+
+% T1, T2 and FLAIR images
+
+MRI scan data is made up of numerous 2D slices, that together form a three dimensional volume. The data itself is stored in a variety of formats, some frequent file types include Analyze, Nifti, Mine and Dicom. The resolution of an MRI scanner is higher than that of other scans, such as CT scanning, so is frequently preferred for neurological and cancer studies.
+
+\section{Biomarkers of Small Vessel Disease}\label{svd-markers}
+
+In the analysis of MRI scans for SVD, there are a number of biomarkers that clinicians look for. Two of these markers include lacunes and perivascular spaces. Though appearing similar in MRI, their origins greatly contrast each other, and so there is the need to differentiate between them.
+
+Prior to 2013, there were no official guidelines as to the identification of these events. There were several studies attempting to establish guidelines for consistency \cite{PotterGillian2015CPSV, AdamsH.H.Hieab2013RMfD}, however these methods tended to focus on only specific events rather than SVD biomarkers in general.
+
+In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces.
+
+As a result, the STRIVE criterion \cite{WardlawJ.M.2013Nsfr} were put into place to standardise the terminology and definitions surrounding SVD biomakers.
+
+Lacunes are defined as a form of small brain cavity. They usually appear without symptoms, and are frequently found in the scans of elderly. When present, they indicate a heightened risk of stroke and dementia \cite{VanDerFlierM.Wiesje2005SVDa, BenjaminJ.Philip2018LIbN}. In MRI, lacunes appear round, with a diameter between 3mm and 15mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of CSF. Lacunes also have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in FLAIR imaging.
+
+Perivascular spaces are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other SVD biomarkers such as lacunes and white matter hyperintensities. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to CSF. They are found running parallel to vessels, and are generally found under 3mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but oblong when viewed in parallel to the vessels.
+
+% Images of lacunes and perivascular spaces from STRIVE
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+
+\bibliographystyle{plain}
+\bibliography{../Readings/bibliography.bib}
+
+\end{document}
+
+
+
+\end{document}
+
+
+
+
+

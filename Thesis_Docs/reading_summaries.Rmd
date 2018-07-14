@@ -1,0 +1,462 @@
+---
+title: "Reading Summaries"
+date: "05-03-2018"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 001 Strive criteria_lancet neurology 2013
+
+[@WardlawJ.M.2013Nsfr] : standardises terminology and identification
+
+Presence of white matter hyperintensities and lacunes are commonly linked to cerebral small vessel disease, which is associated with stroke and dementia.
+
+
+### Recent small subcortical infarct (lacunar stroke)
+
+Infarction occuring within the previous few weeks. May be silent (asymptomatic), found by chance or after stroke. Though 30% of stroke patients do not have these infarcts. Less than 20mm max diameter.
+
+"Lesions in the basal ganglia and internal capsule that are larger than 20 mm and seem to be due to simultaneous infarction in several penetrating arteries should not be classified as small subcortical infarcts, but rather as striatocapsular infarcts, a subtype of infarct with a distinct cause."
+
+There is no lower size limit for small subcortical infarcts.
+
+
+### Lacune (hole) of Presumed Vascular Origin
+
+"Frequently seen on imaging in elderly patients with no symptoms and are associated with an increased risk of stroke, gait impairment, and dementia."
+
+"Round or ovoid, subcortical, fluid-filled (similar signal as CSF) cavity, of between 3 mm and about 15 mm in diameter, consistent with a previous acute small deep brain infarct or haemorrhage in the territory of one perforating arteriole"
+
+Usually have hyperintense rim (brighter edges)
+
+"Lesions that are less than 3 mm in diameter are more likely to be perivascular spaces than to be lacunes, and we recommend the use of this size criterion to discriminate between the two lesions, which is consistent with previous studies."
+
+
+### White matter hyperintensity of presumed vascular origin
+
+"Can appear as isointense or hypointense (although not as hypointense as CSF) on T1-weighted sequences, depending on the sequence parameters and severity of pathological change"
+
+
+### Perivascular Space
+
+"Are extensions of the extracerebral fluid space around arteries, arterioles, veins, and venules"
+
+Usually microscopic, but grow larger with age, particularly at the base of the brain. Diameter generally less than 3mm. At high res, a vessel can sometimes be seen at the centre, which would instead indicate lacune. Perivascular spaces are most prominant in the inferior basal ganglia, hemispheric white matter and midbrain. Rarely in the cerebellum.
+
+"Associated with other morphological features of SVD such as white matter hyperintensities and lacunes, but not atrophy."
+
+Can be longer, ~ 2mm but can also be larger. Similar signal intensities to lacunes, but without the hyperintense rim.
+
+
+### Cerebral Microbleed
+
+"Small (generally 2–5 mm in diameter, but up to 10 mm) areas of signal void with associated blooming. ... Well defined, of homogeneous low signal, and are either round or oval in shape"
+
+
+
+## 002 microbleeds_using_DeepLearning HAS EQUATIONS FOR CNN
+
+[@DouQ.2016ADoC] : Machine learning for microbleed detection
+
+Detects cerebral microbleeds from magnetic resonance (MR) images by exploiting the 3D convolutional neural network (CNN). First exploit a 3D fully convolutional network (FCN) strategy to retrieve the candidates with high probabilities of being CMBs. This is done to drastically speed up the process as the FCN is able to input the whole volumetric data and output probabilities in one step. Then apply a well-trained 3D CNN discrimination model to distinguish CMBs from hard mimics.
+
+*Research CNNs (reference 34) and sliding window strategy, support vector machines, random forest algorithms*
+
+More samples added by augmenting positive samples via transform, rotation and mirroring. Model trained by training over the initial samples, and retraining with identified false positives. The model is then transformed from CNN to FCN by convolution. The training data was a mixture of 23.63% positives, 47.52% randomly selected negatives and 28.85% false positives.
+
+Evaluated using sensitivity, precision and average number of false positives. Tested final results against true assessed classification via Pearson correlation coefficient. Tested the sensitivity, precision and average number of false positives given different 3D block sizes (sizes of the blocks that are analyzed). The ideal here was  20 x 20 x 16. 
+
+Various discrimination models were built (Reference 15 <- support vector machine (SVM), Random forest - reference 20, 2D CNN SVM - reference 18). Used geometry and intensity based features:
+
+Intensity based:
+
+ - Local intensity (the max intensity?)
+ - mean intensity of the local cuboid (mean for the cuboid?)
+ - difference of local intensity and random offset cuboid mean
+ - difference of local and random offset cuboid means
+ 
+Also utilised PCA (reference 43) to extract 100 principle components. 
+ 
+Geometry based - local thresholding -> binary mask from mean & sd (reference 15):
+
+ - Volume (num of voxels in region)
+ - Sorted sizes of the bounding box -> lmax, lmed, lmin
+ - Ratios of the sizes -> lmin/lmax, lmax/lmed
+ - Compactness -> V/(lmax x lmed x lmin)
+ 
+500 trees, with max depth of 10
+
+
+Model Specifics (Fig 2):
+Equation for convolution given by equation 1
+
+Model 1 (Candidate Gathering):
+3D FCN (Fully Convolutional Network)
+Train with a traditional 3D CNN. Once done, the fully connected layers are transformed into the convolutional fashion. ie. A matrix is reshaped into a 5D tensor - a series of convolution kernels. 
+Then in TESTING, a volume can be input directly, and output a 3D score volume (note reduced resolution from original)
+
+
+Model 2 (Discrimination):
+Samples are 3D blocks, rather than 2D patches
+ReLU activation
+Weights initialised by Gaussian distribution
+Trainable parameters by back-propagation with stoachastic gradient descent, minimising cross-entropy loss
+Dropout to reduce overfitting
+ 
+
+
+
+
+## 003 CNN Lacunes
+
+[@GhafoorianM.2017Dml3] : 3D CNNs for lacune identification, also a good template for intro to thesis
+
+Similar methodologies to [@DouQ.2016ADoC]. Fully Convolutional Neural Network to identify candidates, then apply thorough inspection through 3D CNN for false positive reduction.
+Multi-scale analysis and integration of explicit location features applied to give the models contextual information.
+Sample size of 1075.
+Model tested by comparing their algorithm with 4 trained observers. Sensitivity = 0.974, false positives = 0.13/slice.
+
+Lacunes are round/ovoid subcortical fluid-filled cavities between 3mm and 15mm, with signal densities similar to cerebrospinal fluid (CSF).
+Perivascular spaces are also areas filled by CSF. Often smaller than 3mm, but can enlarge up to 10 to 20mm.
+Lacunes are associated with an increased risk of stroke, gait impairment (difficulty walking) and dementia. 
+
+Past Methods:
+*Yokoyama et al. (2007)*: threshold-based multiphase binarisation and a top-hat transform
+*Uchiyama et al. (2007a)*: Yokoyama's + rule based, support vector machine classifier (12 features used)
+*Uchiyama et al. (2007b)*: Rule-based + 3 layer neural network + modular classifier
+*Uchiyama et al. (2009, 8)*: 6 features + Neural network differentiating lacunes from PVS
+*Uchiyama et al. (2015)*: Different false positive reduction - template matching in the eigenspace
+*Wang et al. (2012)*: dilate white matter mask + rule-based false pos removal considering intensity relative to surrounding white matter.
+
+Can't properly compare our method with theirs, as different data can skew results.
+
+Pre-Processing:
+ - Image Registration: ensuring T1 and FLAIR coordinates overlap, using FSL-FLIRT(*Jenkinson and Smith, 2001*)
+ - Brain Extraction: Removing skull, eyes etc. Here by applying FSL-BET on T1 (*Smith, 2002*)
+ - Bias Field Correction: Correct spatial intensity variations, by applying FSL-FAST (*Zhang et al, 2001*)
+ - Intensity Normalisation: Normalise intensities across scans, so all intensities between 0 and 1.
+ 
+Samples:
+    1075 MRI scans
+    
+First Model (Fig 1):
+    Each sample was a subimage around a candidate lacune. Each sample is actually a 51x51 patch, from both T1 and FLAIR. Positive samples could be flipped horizontally. Twice as many negative samples as positive samples.     A total of 320K patches for training.
+Layers (7):
+    4 convolutional (20, 40, 80, 110 filters of size 7x7, 5x5, 3x3, 3x3)
+    1 pooling (size 2x2, stride 2) placed after the first convolutional layer
+    3 fully connected layers (size 300, 200, 2)
+    Softmax likelihood classifier
+In Training:
+    Batch normalisation (reduces internal covariate shift - faster convergence)
+    Stochastic gradient descent with Adam update rule, mini-batch size 128 and categorical cross-entropy loss function
+    Decaying learning rate. 5e-4 reduced to 1e-6
+    ReLU applied to neurons (prevents vanishing gradient problem)
+    Weights initialised by He Method. Weights drawn from a Gaussian distribution!!
+    Dropout of 0.3 on fully connected layers (avoids overfitting)
+    L2 regularisation with lambda_2 = 0.0001
+    Early stopping - highest accuracy on validation set
+    
+Fully convolutional segmentation and candidate extraction
+    Reformulate the trained fully connected layers into equivalent convolutional filter counterparts (*Long et al, 2015*), then use a shift-and-stitch to increase the image size back to normal.
+    This method may connect candidate lacunes that are close together. Use local maxima extraction (10x10 window) to separate. Filtered out local maxima < 0.1
+    
+
+Model 2 - false positive reduction (Fig 3):
+    3D patches (instead of 2D) of scales 32x32x5, 64x64x5 and 128x128x5. The two larger ones are scaled down to the smallest one. Larger scales to give more context, not more detail.
+    Positive samples were augmented by cropping down to 32x32 from 42x42, and horizontal flipping.
+    Equal number of negative samples, with random cropping (so that patches where the lacune is not central will not present false positives)
+    Patches were normalised and zero-centred, giving 385K and 35K for training and validation respectively.
+Layers:
+    6 convolutional layers with weight sharing (filters 64, 64, 128, 128, 256, 256, size 3x3x2, 3x3x2, 3x3x1, 3x3x1, 3x3x1, 3x3x1).
+    Pooling layer after 2nd convolution (size 2x2x1)
+    3 fully connected layers of 300 neurons, concatenated
+    Embedded 7 location features, forming feature vector, size 907.
+    Those 907 neurons fully connected to 2 more fully connected layers, with 200 and 2 neurons.
+    Softmax
+Training:
+    All activations batch-normalised
+    Stochastic gradient descent, Adam updater, Mini-batch size 128.
+    ReLU activation with He weight initialisation.
+    Dropout rate 0.5 on fully connected layers
+    L2 regularisation, lambda_2= 2e-5. 
+    Decaying learning rate from 5e-4, decay factor 2 when training accuracy drops.
+    Training for 40 epochs
+    Model selection by highest accuracy on validaiton set
+    Then parameters adjusted to optimise accuracy on validation set (hyper-parameters: network depth, mini-batch size, initial learning rate, decaying factor, lambda_2, dropout rate)
+Testing:
+    Applying augmentations, like flipping and cropping, to the testing set, resulting in 242 variants per sample. Each sample had its variant predictions averaged.
+
+
+## 004 Lacunes at edge of white matter hyperintensities
+
+[@DueringMarco2013Ilpl]
+
+Health issues caused by cerebral small vessel disease outlined by *O'Brien et al., 2003; Pantoni, 2010*. Has a good introduction/context.
+
+Good examples for visual identification of lacunes, including scans through time.
+
+More than 90% of incident lacunes appeared at the edge of a pre-existing white matter hyperintensity, with half of these showing no overlap with the white matter hyperintensity. Follow ups showed still >90% at edge, with only 7% fully surrounded.
+
+
+
+
+
+## 005 SVD and general cognitive function in nondisabled elderly - the LADIS study 
+
+[@VanDerFlierM.Wiesje2005SVDa]
+
+Investigates the effect of white matter hyperintensities and lacunes on brain function in elderly. In people that have no or minimal disability, does having WMH or lacunes in the brain then relate to a development of a disability?
+
+A good description of the data. Is specific about the image type, sizes, resolutions (P2117).
+
+Number of lacunes increased with the severity of white matter hyperintensity.
+
+Lacunar infarcts occur with localised damage that results in small regions of dead tissue. They occur in white matter and subcortical structures such as the basal ganglia, thalamus and brain stem.
+
+There are distinct effects of lacunes and white matter hyperintensities.
+
+## 006 Lacunes not PvS cause cognitive decline
+
+[@BenjaminJ.Philip2018LIbN]
+
+Enlarged perivascular spaces are associated with lacunar stroke, and have debated connection to cognitive decline. 
+
+Perivascular spaces and lacunes both occur in cerebral small vessel disease. And SVD has been linked to cognitive decline. However it is only lacunes that predict this cognitive decline, and not perivascular spaces (*Reference 9*). Lacunes are thought to cause this by discrupting white matter pathways.
+The influence of perivascular spaces of cognitive ability has been uncertain. But this may just be from the difficulty of differentiating them from lacunes.
+
+'SVD' describes a group of pathological processes, not a single specific observations. Lacunar strokes represent ~20% of all 'blood-restrictive' (ischemic) strokes, and is a major cause of vascular cognitive impairement. (*Reference 2*)
+
+Contains table for differentiating classifications of lacunes and perivascular spaces.
+
+T2-weighted images can often overestimate PvS in patients with severe white matter disease. Presence of lacunes and hyperintensities also make differentiation difficult (*Reference 10*)
+
+This study highlights the importance of correctly differentiating between the two features.
+
+
+
+
+
+
+## 007 Quantitative MR Markers of SVD
+
+[@DeGuioFrançois2016Ravo]
+
+MRI markers of small vessel disease include white matter hyperintensities, lacunes, dilated perivascular spaces, microbleeds and brain volume. 
+
+As of August 2015, no existing studies on the variability of identification of PVS and lacunes. No computational segmentation of PVS and lacunes has been conudcted.
+
+Common to combine FLAIR with T1/T2 weighted.
+
+Partial voluming: combination of different tissues to the same voxel. 
+
+Lacunes: round/ovoid. Subcortical (below the cortex - top layer). Fluid filled, between 3-15mm. Interested in number, size, shape and location. Lacunes identification in *Reference 37, 48-51*.
+
+PVS: Fluid filled that follow the course of a vessel. Signal similar to CSF. Interested in number, size, shape and location. Identification in *Reference 53, 54*. 
+
+Detection of PVS *Reference 52*
+
+## 008 PVS Rating and reliability
+
+[@PotterGillian2015CPSV]
+
+Paper looks at updating rating methods for identifying PVS: rating methods and criteria, to improve rating reliability. 
+
+PVS is associated with worsening condition and has several disease states (CADASIL, depression, MS, Parkinson's, SVD, WMH and dementia). Defined as small, sharply delineated structures of CSF intensity, <3mm diameter. They follow the course of perforating vessels. Round from an axial perspective. Longitudinal (ellipse?) if cut on the long axis. *Reference 24*
+
+Assessed reliability by calculating intra- and inter-observer weighted kappas (quadratic) for agreement. Simple gamma for the midbrain data.
+Intra- and inter- rater percentage agreement is similar: ranging 0.54-0.96 and 0.43-0.87 respectively. 
+For basal ganglia: 0.54-0.68, and 0.65-0.77.
+For centrum semiovale: 0.57-0.65 and 0.65-0.68.
+Higher agreement in the midbrain than these more difficult areas.
+
+Causes for disagreement: WMH in centrum semiovale, PVS that is difficult to see.
+
+Higher definition sequences caused greater disagreement since there were more areas for discussion. 
+
+
+
+
+
+
+## 009 Causes and consequences of SVD
+
+CSV appears frequently in imaging of elderly people and has been related to cognitive impairement and possible dementia. This study brings together a cohort of 503 people between 50-85 with SVD. The study will observe the effect of SVD over time, to see if there truly is a relation to reduced cognition.
+
+Lacunes identified by eye, using STRIVE criterion.
+
+
+
+
+
+
+## 010 Prevalance of SVD
+
+Of all subjects aged 60-90, only 8% were free of subcortical white matter lesions. Subcortical lesions increase with age: 60-70 had 13% free. 80-90, 0% free.
+
+Women exhibited a greater number of lesions to men. Highest volume occurs in the frontal and parietal lobes, 20 and 100 times higher than in the occipital and temporal lobes.
+
+[@deLeeuwF-E2001Pocw]
+
+
+
+## 011 Neuroimaging in SVD - new concepts
+
+[@MikaShibuyaNics]
+
+SVD accounts for 45% of dementias and responsible for 25% of ischemic strokes.
+
+Defines lacunes, perivascular spaces and white matter hyperintensities (including imaging examples of the three).
+
+Paper suggests that it may not be necessary to differentiate them since they are part of the spectrum of the same disease (in contrast to some other studies).
+
+
+
+
+## 012 SVD Neuroimaging insights
+
+[@WardlawJm2013Mosc]
+
+Paper highlights conclusions made from neuroimaging SVD features. In general, the paper recommends caution in establishing conclusions as many of the features are difficult to diagnose and standardise (before the STRIVE criterion was set up). Paper says that the consideration of the different components as individual diseases should be discontinued until there is better evidence of their split effects.
+
+SVD is a common disease that causes substantial cognitive, psychiatric and physical disabilities. Responsible for one fifth of strokes, doubles the risk of stroke and contributes to 45% of dementias. 
+
+Lacunes defined as fluid-filled cavities thought to show old lacunar infarcts. They vary in size between 3-15mm. Those that are identified above 15mm are generally not caused by SVD. Many lacunes are asymptomatic, appearing silently in the brain.
+
+Perivascular spaces surround the small deep perforating arterioles as the arterioles pass from deep grey to white matter. Visible as regions of increased fluid of similar signal to CSF. At a perpendicular view, these are round. At a parallel view, they are linear. 
+Number of pervascular spaces correlated with white matter hyperintensities and symptomatic lacunar stroke. 
+
+Visible perivascular spaces in the basal ganglia associated with lacunar stroke. PS in general associated with white matter hyperinensities. 
+
+Permeability of the blood-brain barrier (endothelium) more pronounced in patients with dementia, less so with Alzheimer's. Similarly SVD is the most common cause of vascular dementia and often arises with Alzheimer's.
+
+Larger lacunar regions might be end stage SVD, but the implications of PS and other visible changes is less well understood. 
+
+## 013 Rating Virchow-Robin spaces in MRI
+
+[@AdamsH.H.Hieab2013RMfD]
+
+2013 paper on visual rating methods for perivascular spaces. 
+
+PS linear, ovoid shape dependent on perspective. Dilated PS >= 1mm diameter.
+
+To differentiate from lacunes, look for symmetry, sharp demarcation (distinct borders), and the absence of a hyperintense rim (lacunes can have WMH around the edge)
+
+Inter-rater reliability of 0.8 across all tested regions. Though worst performance in the basal ganglia of 0.62 inter-rater reliability - the region with a higher proportion of lacunes.
+
+
+
+
+## 014 Algorithmic approach
+
+[@HarperL.2014Aaat]
+
+Lists neuroimaging scans, intensities and regions - gives specifics of neuroimaging features and implications for dementia. This study uses visual rating. But says that volumetric quantification and automated classifier algorithms will be useful in future. *Brain volumetry - Reference 71, 73*.
+
+Structural neuroimaging is improving the diagnostic accuracy of dementia during life. Spotted by signal change over time. Even so, post-mortem examination of tissue remains the only definitive means of diagnosis in most cases.
+Definition of lacunes taken from STRIVE (rim of hyperintensity).
+
+
+## 015 Clinical use of brain volumetry
+
+[@GiorgioA.2013Cuob]
+
+Discusses the use of automated or semi-automated brain volumetry algorithms in the use of diagnosis. Pays particular attention to the role of brain atrophy in the diagnosis of dementia, Alzheimer's and parkinsonisms.
+Brain volumetry involves the classification of brain regions of interest. These are done entirely manually, is time-consuming, requires great expertise, and introduces observer variation. 
+
+
+## 016 Multi-stage segmentation of WMH, cortical and lacunes
+
+[@WangY.2012Msow]
+
+In the development of semi- or fully automated identification of white matter hyperintensities, Methods involved first employing empirical thresholds, then apply linear fitting or fuzzy clustering to remove false positives - these approaches were conducted on FLAIR imaging.
+Other methods involved Markov Random Field models, k-nearest neighbours and neural classification. *References Schwarz 2009, Anbeek 2004, Wen 2009, Dyrby 2008*. Similar approaches used in the classification of Multiple Sclerosis regions. 
+
+For lacunar infarcts: apply top hat transform then binarize voxels. Use support vector machines to eliminate false positives. *References Uchiyama 2007, Yokoyama 2007*
+
+*Sasaki 2008* combined FLAIR with T1/T2 to improve segmentation accuracy. 
+
+Segmentation method in this paper uses Gaussian mixture models, region growing and morphological operations, without the use of a training set.
+The algorithm preprocesses MRI to retrieve just the brain tissue of interest. Then segments out hyperintense regions. Of these regions, White Matter Hyperintensities and cortical infarcts are separated (by location).
+Then the lacunar infarcts are separated out. These are found in white matter and subcortical structures surrounded by hyperintense rims, with hypointense dots on T1 and FLAIR. *Reference Sasaki 2008*. 
+
+Identification of lacunar infarcts done by starting from regions of white matter hyperintensity. A dilation operation extends this region, where there is a higher likelihood of lacunar infarcts.
+
+LI voxels identified by highlighting those that have FLAIR and T1 intensities below that of the average within the WMH region. This study, however, did not deal with identifying perivascular spaces. These were instead ignored as they are <1mm generally.
+
+Other similar segmentation projects: *Admiraal-Behloul 2005, Anbeek 2004, Dyrby 2008*
+
+
+
+
+
+
+## 017 MRI File Types
+[@LarobinaMichele2014MIFF]
+
+The most common file types:
+Analyze, Neuroimaging Informatics Technology Initiative (Nifti), Minc, and Digital Imaging and Communications in Medicine (Dicom)
+
+Table 1 has good summary of header length, file extension and data types for each.
+
+The paper concludes that dicom is actually the preferred file type.
+
+
+## 018 Faster R-CNN
+[@RenHe2015]
+Made of 2 modules.
+First is a deep conv net that proposed regions. Called a Region Proposal Network (RPN).
+The second is a detector that uses the proposed regions and classifies them. 
+
+Region proposals: Occurs after conv layers. A small neural network takes in the output of the last conv layer, an nxn region. This is then mapped to a lower dim feature. Put through two fully connected layers: box-regression and box-classification layers. 
+nxn conv, followed by two 1x1 convs (one for reach of the box-regression and classification layers).
+
+At each sliding-window location, there are k proposed boxes. The reg layer outputs the x/y coord of the top left corner, and the height/width, giving 4k outputs total. The class layer is a 2 class softmax - object or not - score, 2k outputs total. The proposed boxes are parameterised relative to k reference boxes, called anchors. They are central to the sliding window, and are denoted by scale and aspect ratio. 3 scales and 3 aspect ratios give 9 anchors to test at each sliding position.
+
+Loss function: each anchor is given a binary label. 
+
+Training: end-to-end by backpropagation and stochastic gradient descent. 
+
+# Next Reading Ideas:
+
+
+ - https://betterhealthwhileaging.net/cerebral-small-vessel-disease/
+
+ - Brain structure: just general neuroscience terminology and brain components
+ - Overview of cerebral small vessel disease and the demographics affected
+ - Pinpoint lacune and perivascular space definitions (STRIVE?)
+ - Current research of the two: the causes and effects of both. ie the necessity to differentiate them.
+ - Their appearance: look for articles that mention the difficulty of differentiating them (STRIVE, 004, 003). Current accuracy levels by eye
+ - Current statistical solutions and accuracy. (CNN Lacunes. Look for more, particularly those that are statistical)
+ - Research support vector machines (002: 15) and convolutional neural networks (002: 18, 34; 003)
+ - Methods of identifying microbleeds (007: 65-69). Try to apply these to lacunes.
+   
+   
+   
+   
+   
+
+ - Medical journal microbleed and lacune identification
+
+ - 002 reference 15 (support vector machines), 20 (random forest), 18 (2D CNN SVM)
+ - CNNs in general, 002 reference 34 + sliding window strategy
+ - PCA? 002 reference 43 + significance and methods of principle components
+ - 003 Yokoyama reference of CNN methods
+ 
+ 
+ 
+R package for viewing MRI: AnalyzeFMRI. Load this and practise with the samples given in email.
+
+Separate program installs:
+ - FSL View
+ - MRICran
+
+
+
+# References
