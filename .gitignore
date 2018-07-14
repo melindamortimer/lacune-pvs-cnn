@@ -32,4 +32,4 @@ Thesis_Docs/Images
 *.cls
 *.xml
 *.lof
-#.bcf
+*.bcf
