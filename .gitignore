@@ -31,3 +31,5 @@ Thesis_Docs/Images
 *.log
 *.cls
 *.xml
+*.lof
+#.bcf
