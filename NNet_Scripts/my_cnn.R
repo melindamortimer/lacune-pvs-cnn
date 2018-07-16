@@ -24,8 +24,8 @@ library(tensorflow)
 # GoogLeNet (2015):
 # - Highly complex, inception module - many streams in parallel. Choice between 1x1 conv, 3x3 conv, 5x5 conv and 3x3 pooling at each layer.
 # - Including 1x1 conv before the 3x3 and 5x5 reduces dimensionality, as well as allows for more ReLU.
-# - Model is able to extract very fine detail, while having a large receptive field, all while being rather computational efficient.
-# - 9 inception moduels - over 100 layers.
+# - Model is able to extract very fine detail, while having a large receptive field, all while being rather computationally efficient.
+# - 9 inception modules - over 100 layers.
 # - No fully connected layers, used average pool instead.
 # - 12x fewer parameters than AlexNet.
 

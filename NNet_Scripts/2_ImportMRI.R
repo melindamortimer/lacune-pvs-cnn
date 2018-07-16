@@ -18,7 +18,7 @@ hdr$pixdim
 
 A <- f.read.nifti.volume("../tenSubjects/0046_t1_MAS_w1.nii")
 dim(A)
-image(A[138,,,])
+image(A[,,150,])
 
 B <- f.read.nifti.slice("../tenSubjects/0046_t1_MAS_w1.nii",
                         slice = 100, tpt = 1)

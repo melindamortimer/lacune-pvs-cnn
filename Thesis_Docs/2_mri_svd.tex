@@ -145,7 +145,7 @@
 
 An overview of some background knowledge is required to understand the data and the features that are being detected. This chapter introduces the general structure of the brain, MRI and the resulting images, SVD biomarkers, and the existing rating standards.
 
-\section{Structure of the Brain}\label{brain}
+\section{Structure of the Brain}\label{svd-brain}
 
 The central nervous system (CNS) is made up of the brain and spinal chord. Information from throughout the body is communicated via nerves, through the spinal chord, and to the brain. The brain is then tasked with receiving, interpreting and then responding to these signals. The brain itself is the most complex mechanism in the human body, and can be segmented into a number of regions, responsible for different roles. 
 
@@ -157,52 +157,53 @@ The cerebrum is the largest part of the brain, forming the outer surface. It is 
 \end{itemize}
 
 % Cerebrum diagram
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{Images/2_Lobes_of_the_brain_NL.png}
+	\includegraphics[width=0.8\textwidth]{Images/2_Lobes_of_the_brain_NL.png}
 	\caption{The four lobes of the cerebral cortex.}
 	\small Image taken from Wikimedia Commons: \url{'Gray728.svg'}
 \end{figure}
 
 % Gray vs white matter diagram
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{Images/2_Hearing_mechanics_cropped.jpg}
-	\caption{Auditory processing. Note steps 4 to 6 - the majority of signal processing occurs in the grey matter.}
-	\small Image taken from Wikimedia Commons: \url{'Hearing_mechanics_cropped.jpg'}
-\end{figure}
+\textbf{[Grey vs white matter diagram]}
 
 % Basal Ganglia
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{Images/2_Basal_Ganglia_and_Related_Structures.png}
+	\includegraphics[width=0.8\textwidth]{Images/2_Basal_Ganglia_and_Related_Structures.png}
 	\caption{The basal ganglia and other related structures.}
 	\small Image taken from Wikimedia Commons: \url{'Basal_Ganglia_and_Related_Structures.svg'}
 \end{figure}
 
 
-The outer surface of the brain consists of a layer of neurons referred to as grey matter. This layer has a thickness of around 4mm, and much of the brain processes occur here. This is demonstrated in \textbf{Figure}, where the majority of auditory processing is passed to the grey matter. Grey matter also occurs in the cerebellum, brainstem and within the spinal chord.
+The outer surface of the brain consists of a layer of neurons referred to as grey matter. This layer has a thickness of around 4mm, and much of the brain processes occur here. Grey matter also occurs in the cerebellum, brainstem and within the spinal chord.
 
 Underneath the grey matter is a network of fibres that connects these grey matter neurons together. Collectively, they form the white matter. 
 
+At the centre of the brain, the main structures include the thalamus, hypothalamus and pituitary gland. Of particular interest are a group of structures that form the basal ganglia. This region of the brain is responsible for voluntary movement and learning; and exhibits more numerous instances of lacunes and perivascular spaces.
+
+At the base of the brain lies the cerebellum and brain stem. These are responsible for coordination and the transmission of nerve communications respectively.
+
+Within the skull, the brain sits in cerebral spinal fluid (CSF). This fluid can flow between the ridges  at the surface of the brain, to be found filling gaps, such as perivascular spaces, throughout the brain matter.
 
 
-At the centre of the brain, the main structures include the thalamus, hypothalamus and pituitary gland. Of particular interest are a group of structures that form the basal ganglia. This region of the brain is responsible for voluntary movement and learning. It is also a region with a higher proportion of lacunes and perivascular spaces.
-
-At the base of the brain lies the cerebellum and brain stem. 
-
-The entire brain is surrounded by cerebral spinal fluid (CSF). This fluid makes its way into the gaps through surface brain matter.
-
-
-\section{Magnetic Resonance Imaging}\label{MRI}
+\section{Magnetic Resonance Imaging}\label{svd-MRI}
 
 Magnetic Resonance Imaging (MRI) is a radiological technique that uses magnetic fields and radio waves to generate greyscale images of organs inside the body. The two most common images produced are referred to as T1-weighted and T2-weighted images.
+
+% Image comparisons
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/2_t1_t2_flair.jpg}
+	\caption{A comparison of T1, T2 and FLAIR images.}
+	\small Image taken from \cite{Preston2006}
+\end{figure}
 
 T1-weighted images are bright in regions with high fat content, such as white matter, and are dark in regions with high water content, usually CSF.
 
 In contrast, T2-weighted images are bright in regions with high fat and water content. This can make it easier to spot abnormalities.
 
-FLuid-Attenuated Inversion Recovery (FLAIR) is another commonly used imaging sequence. It is similar to that of T2, except it allows CSF to remain dark. This allows for easier identification of abnormalities against CSF.
+FLuid-Attenuated Inversion Recovery (FLAIR) is another commonly used imaging sequence. It is similar to that of T2, except that CSF remains dark. This allows for easier identification of abnormalities against CSF.
 
 % T1, T2 and FLAIR images
 
@@ -212,19 +213,34 @@ MRI scan data is made up of numerous 2D slices, that together form a three dimen
 
 In the analysis of MRI scans for SVD, there are a number of biomarkers that clinicians look for. Two of these markers include lacunes and perivascular spaces. Though appearing similar in MRI, their origins greatly contrast each other, and so there is the need to differentiate between them.
 
-Prior to 2013, there were no official guidelines as to the identification of these events. There were several studies attempting to establish guidelines for consistency \cite{PotterGillian2015CPSV, AdamsH.H.Hieab2013RMfD}, however these methods tended to focus on only specific events rather than SVD biomarkers in general.
+Prior to 2013, there were no official guidelines for the identification of these events. There were several studies attempting to establish guidelines for consistency \cite{PotterGillian2015CPSV, AdamsH.H.Hieab2013RMfD}, however these methods tended to focus on only specific events rather than SVD biomarkers in general.
 
-In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces.
+In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces\cite{WardlawJ.M.2013Nsfr, AdamsH.H.Hieab2013RMfD}.
 
 As a result, the STRIVE criterion \cite{WardlawJ.M.2013Nsfr} were put into place to standardise the terminology and definitions surrounding SVD biomakers.
+
+% Images of lacunes and perivascular spaces from STRIVE
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width = \textwidth]{Images/2_STRIVE.png}
+	\caption{STRIVE criterion and MRI examples.}
+	\small Image taken from \cite{WardlawJ.M.2013Nsfr}
+\end{figure}
 
 Lacunes are defined as a form of small brain cavity. They usually appear without symptoms, and are frequently found in the scans of elderly. When present, they indicate a heightened risk of stroke and dementia \cite{VanDerFlierM.Wiesje2005SVDa, BenjaminJ.Philip2018LIbN}. In MRI, lacunes appear round, with a diameter between 3mm and 15mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of CSF. Lacunes also have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in FLAIR imaging.
 
 Perivascular spaces are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other SVD biomarkers such as lacunes and white matter hyperintensities. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to CSF. They are found running parallel to vessels, and are generally found under 3mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but oblong when viewed in parallel to the vessels.
 
-% Images of lacunes and perivascular spaces from STRIVE
 
+\section{Existing Rating Methods}\label{svd-rating}
 
+Without a biopsy for confirmation, the identification of SVD biomarkers relies on MRI. Current rating methods involve trained observers examining MRI slice by slice. They then identify any lesions or points of interest in conjunction with the STRIVE criterion \cite{WardlawJ.M.2013Nsfr}. Though the criterion helped to standardise the definition of lacunes and perivascular spaces, their appearances are still highly similar, and so difficult to distinguish. As a result, manual rating has been found to be highly inconsistent \cite{PotterGillian2015CPSV}. 
+
+In addition, the manual rating process is also time consuming. The checking and logging of an individual scan can take over 10 minutes.
+
+It is only recently that machine learning algorithms have begun to improve the rating process. Dou et al. \cite{DouQ.2016ADoC} released a machine learning algorithm for the detection of cerebral microbleeds. This algorithm exhibited a sensitivity of 93.16\%, with an average of 2.74 false positives per slice. 
+
+Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a machine learning algorithm for the automated detection of lacunes. This algorithm was able to achieve a sensitivity of 97.4\%, with 0.13 false positives per slice. \textbf{This algorithm will be discussed further in Section.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -233,7 +249,7 @@ Perivascular spaces are extensions of the fluid space surrounding blood vessels 
 \addcontentsline{toc}{chapter}{References}
 
 \bibliographystyle{plain}
-\bibliography{../Readings/bibliography.bib}
+\bibliography{bibliography.bib}
 
 \end{document}
 
