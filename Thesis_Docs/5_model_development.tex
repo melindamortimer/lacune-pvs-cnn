@@ -141,104 +141,33 @@
 
 \begin{document}
 
-\chapter{Literature Review}\label{litrev-intro}
+\chapter{Model Development}\label{model}
 
-{\noindent}T
+\section{The Data}
 
+Where the data came from. The MRI source, type of images, with wavelengths etc. Similar description to Ghafoorian's (Section 2.1). Any preprocessing.
 
-\citep{AdamsH.H.Hieab2013RMfD}
+What the samples were. E.g. 51x51 patches. Number of training, validation, testing.
 
-\section{Multi-Scale Location-Aware 3D CNN}\label{litrev-paper1}
+Show some example images, alongside their classification.
 
-Entire model is made up of two neural networks.
+The system that the models were built under - built in R using a tensorflow API. Models were run on dedicated servers.
 
-The first is trained such that it detects candidate lacunes.
+\section{First Model Structure}
 
-The second then takes the candidate lacunes, and processes them through a more thorough 3D CNN to finalise the outcome.
+Code in Appendix.
 
-\section{First Phase - Candidate Detection}
+Purpose was to have a point of comparison against the model built by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}.
 
-Takes in 51x51 samples, where the T1 and FLAIR components are treated as separate channels. Twice as many negative samples as positive, with a total of 320K for training.
-
-Seven layer CNN:
-- 4 convolutional, with 20, 40, 80, 110 filters, with size 7x7, 5x5, 3x3, 3x3 respectively.
-- 1 pooling layer: size 2x2, stride 2, after first conv layer
-- 3 fully connected layers: sizes 300, 200 and 2
-- Softmax output layer
-
-All neurons went under batch normalisation.
-
-Weights initialised by the He method.
-
-ReLU activation to prevent vanishing gradient problem
-
-Dropout of 0.3 on fully connected layers
-
-Training conducted by stochastic gradient descent, Adam optimiser. Learning rate decayed, from 5e-4 to 1e-6
-
-Batch size of 128
-
-Categorical cross-entropy loss, with L2-regularisation (Ridge regression), lambda2 = 0.0001
-
-Early stopping - model with highest accuracy on validation set
+Brief outline of structure.
 
 
-This method can be slow on its own. Translate the fully connected layers to convolutional layers, via shift-and-stitch method.
+\section{Proposed Model Structure}
 
-Local maxima extraction (10x10 window) - picking those with likelihood lower than 0.1.
+Code in Appendix.
 
+Explain structure of model, including diagram similar to that from Ghafoorian. Number of layers, number of neurons in each layer. What each layer was and the order. Method for chosen hyper-parameters. 
 
-Didn't mention: number of epochs to train. How pooling and convolutions were padded. Diagram implied no padding, but diagram dimensions weren't correct. 
-
-\section{Second Phase - False Positive Reduction}
-
-This model uses data at different scales around each candidate lacune. 
-
-Input data of each point at three different scales: 32x32x5, 64x64x5, 128x128x5.
-
-Each of these scales is reduced to 32x32x5, then put through a separate branch of the network.
-
-385K training, 35K validation.
-
-Three separate branches of convNets, one for each scale. Each branch contains:
- - 6 conv layers (64, 64, 128, 128, 256,256 filters, with sizes 3x3x2, 3x3x2, 3x3x1, 3x3x1, 3x3x1, 3x3x1)
- - 1 pooling, size 2x2x1, placed after second conv layer
- - Fully connected layer of 300 neurons
- 
- The 3x300 fully connected neurons were concatenated with 7 addition location feature inputs.
- 
- These location features include:
-  - x,y,z coordinates
-  - distances from left ventricle, right ventricle, cortex and midsaggital brain surface.
-
-Then the 907 neurons are fully connected to two more fully connected layers, of size 200 and 2 neurons. 
-These are fed through a softmax classifier to output the final result.
-
-All weights are He initialised 
-
-All activations are ReLU, and are batch normalised.
-
-Fully connected layers have a dropout of 0.5.
-
-Cost function is cross entropy with L2 regularisation, lambda2 = 2e-5. 
-
-Stochastic gradient descent, Adam optimiser. Decaying learning rate, from 5e-4, decay factor of 2 when training accuracy dropped. 
-
-Training for 40 epochs, batch size of 128.
-
-Chose model with highest validation accuracy. 
-
-Hyper-parameters were also chosen such as to attain highest validation accuracy. These hyper-parameters included network depth, batch size, initial learning rate, learning decay factor, lambda2 and dropout rate. This is done during the validation stage. Make several models, with differing hyper-parameters, with performance compared using the validation set. Then whichever model performs best on this validation set is chosen, and final performance judged by the test set.
-
-Data was augmented during test time: cropping and flipping. Predictions of the 242 variants per sample were averaged.
- 
- 
- Didn't mention: stride of pooling. Assumed 2 from diagram.
- 
- \subsection{Model performance}
- 
-%Famous Image Recognition Models
- \section{ImageNet}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

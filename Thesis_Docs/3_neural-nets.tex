@@ -195,7 +195,7 @@ Define $\mathbf{w}_j^l$ to be the vector of weights used by the $j$th neuron of 
 
 $b_j^l$ is the bias of the $j$th neuron in the $l$th layer.
 
-$\mathbf{a}^l$ is the vector of activation values for the $l$th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
+$\mathbf{a}^l$ is the vector of activation values (outputs) for the $l$th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
 
 Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ are the activation values of the final output layer.
 
@@ -203,11 +203,13 @@ Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$
 
 Let $W$ and $B$ be the sets of all weights and biases as before.
 
+Let $\eta$ be the learning rate of the minimiser during training.
+
 \subsection{Activation Functions}\label{nnets-act}
 
 Activation functions serve to constrain a neuron's output to within a particular range, and to introduce nonlinearity into the system. 
 
-For the perceptron, a basic neuron, we have
+For the perceptron, a basic neuron, we have the step function,
 \[
 	x_i \in \{0,1\} \text{ and } f(z) = \begin{cases}
 		1 & z > 0 \\
@@ -231,15 +233,15 @@ Rectified Linear Unit (ReLU) activation is another common activation function,
 \]
 which allows for some neurons to output 0 and be essentially deactivated. This is useful for convolutional neural networks for image recognition.
 
-For classification tasks, it can be useful to apply a softmax activation function,
+A common activation function for the final layer is the softmax function,
 \[
-	f(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
+	f(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}}.
 \]
-as the outputs take on the form of a probability distribution.
+This is useful for classification tasks as the output takes on the form of a probability distribution.
 
 \subsection{Cost Functions}\label{nnets-cost}
 
-Weights and biases are chosen such that they minimise some cost function.
+Weights and biases are chosen such that they approximately minimise some cost function.
 
 In using gradient descent \textbf{(see Section)}, there are two requirements. First, that the cost, $C_X(\cdot)$, accrued from all samples, $X$, can be expressed as the mean of the costs accrued from $n$ distinct subsamples of $X$, denoted $X_i, i \in[1,n]$,
 \[
@@ -250,11 +252,11 @@ The second requirement is that the only activation values that the cost is depen
 
 There are a number of cost functions in frequent use, and the choice of cost function is dependent on the context of the problem.
 
-One of the most common cost functions for regression is the quadratic or Mean Squared Error cost, given by
+One of the most common cost functions for regression is the quadratic, or Mean Squared Error, cost given by
 \[
-	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2.
+	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2,
 \]
-This form is convenient as it has gradient
+where $\|\cdot\|$ is the $L^2$ norm. This form is convenient as it has gradient
 \[
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
 \]
@@ -279,7 +281,7 @@ Unlike the quadratic cost, when error is high, the learning rate is also high.
 
 Weights and biases are chosen such that they will minimise the cost function. However, there are too many variables for this to be done analytically, and so they are instead estimated using the Gradient Descent algorithm.
 
-As described by Nielson \cite{Nielson2015}, Gradient Descent works by considering the gradient of the cost given the current weights and biases. The algorithm then shifts the weights and biases such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$.
+As described by Nielson \cite{Nielson2015}, Gradient Descent works by considering the gradient of the cost given the current weights and biases. The algorithm then shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
 
 Then for all weight and bias variables denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
 \begin{align*}
@@ -311,7 +313,7 @@ In training a neural network, the size of the shift is specified as $\|\Delta\ma
 			|\nabla C\cdot\Delta\mathbf{v}| \le \|\nabla C\|\times\|\Delta\mathbf{v}\|.
 	\]
 	Then, \begin{align*}
-		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\cdot\|\Delta\mathbf{v}\| \\
+		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\times\|\Delta\mathbf{v}\| \\
 		& = -\epsilon\|\nabla C\|,\quad\epsilon = \|\Delta\mathbf{v}\| \\
 		& = -\dfrac{\epsilon\|\nabla C\|^2}{\|\nabla C\|} \\
 		& = -\dfrac{\epsilon\nabla C\cdot\nabla C}{\|\nabla C\|}
@@ -333,6 +335,8 @@ A common solution to this problem is the use of the ReLU activation function.
 
 Another issue is that of time. Taking the average over all training inputs can be very costly. As a result, Stochastic Gradient Descent is a popular alternative. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from. After the training with that batch is complete, another batch of training inputs is randomly chosen, and the process repeats. When all training inputs have been used, it is said that an \textbf{epoch} of training has been completed.
 
+In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed, while still utilising all the information provided by the whole set of samples by the end of training time.
+
 %
 %We attempt to choose weights and biases that will minimise the cost function. As we cannot use calculus, we must estimate - by gradient descent. Move all the estimates a little, in the direction of decrease. The amount of movement is dependent on a learning rate parameter.
 %
@@ -341,15 +345,32 @@ Another issue is that of time. Taking the average over all training inputs can b
 %Backpropagation: gradient of the cost function. 
 
 
+\subsection{Back-Propagation}
+
+
+
+\subsection{Reducing Overfitting}
+
+% Regularisation & Dropout
+
+One of the main issues with neural networks is the tendency to overfit. One common method to mitigate this is to apply regularisation techniques to the calculation of cost. The most common of these is L2-regularisation, also known as Ridge Regression.
+
+This adds an extra regularisation term to the cost function, to get
+\[
+	C(W,B) + \dfrac{\lambda}{2n}\sum_{w}w^2.
+\]
+The regularisation term is the sum of squares of the weights, scaled with a regularisation parameter $\lambda$. 
+
+Another common regularisation is L1, or Lasso Regression, which takes the sum of the absolute weights,
+\[
+	C(W,B) + \dfrac{\lambda}{n}\sum_w|w|.
+\]
+
+Another regularisation technique is to add a dropout layer. Through the training process, it is possible for individual neurons to pick up on the patterns of specific observations, and hence overfit. When a dropout layer is added, each affected neuron has a probability of being deactivated, regardless of their input. This ensures that relevant features of the data are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
 
 
 
 
-One of the main issues with neural networks is the tendency to overfit. Increasing the amount of training data is one method to reduce this. But in general, we apply regularisation techniques. The most common of these is L2-regularisation, also known as Ridge Regression.
-This adds an extra regularisation term to the cost function, to get $C(w,b) + \dfrac{\lambda}{2n}\sum_{w}w^2$. The regularisation term is the sum of squares of the weights, scaled with a regularisation parameter $\lambda$. 
-L1-regularisation, or Lasso Regression, adds the absolute values of weights: $C(w,b) + \dfrac{\lambda}{n}\sum_w|w|$.
-
-Dropout is another regularisation technique vastly different from L1 and L2. Through the training process, each affected neuron has a probability of being deactivated, regardless of the input.
 
 Artificial expansion of the training set. More accuracy with more varied samples. Try various augmentations, as long as they are still valid. E.g. rotations and flips, but note flips aren't valid for reading handwriting for instance.
 
