@@ -12,6 +12,7 @@
 *.nii
 *.img
 *.hdf
+*.xlsx
 
 # Apple
 .DS_Store

@@ -170,14 +170,14 @@ The construction of neural networks has to be conducted with some care, however.
 Neural networks are made up of a series of layers of nodes, called neurons. The first layer is an input layer, where data is fed in. The last layer is an output layer, giving the final result. The central layers are known as hidden layers.
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
 	\caption{Basic neural network structure.}
 	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
 \end{figure}
 
-Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be $n$ input variables, $\mathbf{w} = (w_1, w_2, \ldots, w_n)^\top$ be some weights and $b$ be some bias. Then the output of a neuron is given by
+Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be $n$ input variables, $\mathbf{w} = (w_1, w_2, \ldots, w_n)^\top$ be some weights and $b$ be some controlled bias to be added. This bias is not to be confused with statistical bias. Then the output of a neuron is given by
 \[
 	f(\mathbf{w}\cdot\mathbf{x} + b),
 \]
@@ -199,7 +199,7 @@ $\mathbf{a}^l$ is the vector of activation values (outputs) for the $l$th layer,
 
 Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ are the activation values of the final output layer.
 
-Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$th feature of $\mathbf{y}_i$.
+Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$th random variable of $\mathbf{y}_i$.
 
 Let $W$ and $B$ be the sets of all weights and biases as before.
 
@@ -285,7 +285,7 @@ As described by Nielson \cite{Nielson2015}, Gradient Descent works by considerin
 
 Then for all weight and bias variables denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
 \begin{align*}
-	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \ldots + \dfrac{\partial C}{\partial v_N}\Delta v_N\text{, for some number of variables } N\\
+	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\text{, for some number of variables } N\\
 	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.
 \end{align*}
 
