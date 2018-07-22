@@ -351,6 +351,24 @@ In this manner, a relatively small number of samples is used for each weight adj
 The backpropagation algorithm is used during gradient descent. It is a quick way of calculating the gradient of the cost function.
 Determines dC/dz (Equation 29), then relates those values to the ones of interest: dC/dw and dC/db.
 
+Where $z_j^l = \sum_k w_{jk}^la_k^{l-1} + b_j^l$,
+
+The error of the jth neuron of the final output layer is given by
+\[
+	\delta_j^L = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L)
+\]
+In matrix form, these errors are:
+\[
+	\delta^L = \nabla_aC\odot \sigma'(z^L),
+\]
+where $\odot$ is the element-wise multiplier.
+
+In fact the error of a particular layer can be expressed as a function of the next layer:
+\[
+	\delta^l = ((w^{l+1})^\top \delta^{l+1})\odot\sigma'(z^l)
+\]
+
+
 \subsection{Reducing Overfitting}
 
 % Regularisation & Dropout
