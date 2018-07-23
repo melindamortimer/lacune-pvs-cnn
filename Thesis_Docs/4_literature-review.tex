@@ -143,10 +143,20 @@
 
 \chapter{Literature Review}\label{litrev-intro}
 
-{\noindent}T
+{\noindent}There have been a number of statistical attempts at identifying lacunes. Previous attempts make use of the tendency for lacunes to have a hyperintense rim in T1-weighted imaging. Regressed variables included the normalised location, existence of hyperintense rim and diameter.
 
 
-\citep{AdamsH.H.Hieab2013RMfD}
+
+
+
+The first studies were conducted by Yokoyama:
+ - multiphase binarisation
+ - top hat transforms
+ 
+ Uchiyama took this model and reduced false positives by applying 12 additional variables, with a classifier built using support vector machines. This model has been continually updated and improved through to 2015. 
+ 
+First convolutional neural network attempts were based off the work by Dou et al. \cite{DouQ.2016ADoC}, in the detection of cerebral microbleeds. Ghafoorian et al. \cite{GhafoorianM.2017Dml3} utilised the fully convolutional nature of the initial detection model. This allows for fast image processing in comparison to fully connected layers, for 3D volumes. In addition, Ghafoorian et al. additionally utilised a multi-resolution convolutional neural network, along with 7 additional location features for false positive reduction.
+
 
 \section{Multi-Scale Location-Aware 3D CNN}\label{litrev-paper1}
 
