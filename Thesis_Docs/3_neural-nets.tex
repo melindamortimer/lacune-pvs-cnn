@@ -328,10 +328,7 @@ In training a neural network, the size of the shift is specified as $\|\Delta\ma
 
 This method assumes that the starting values are close enough to the global minimum to actually converge. The method will otherwise be constricted to the local minimum.
 
-As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem. In this scenario, the weights and biases shift by smaller and smaller increments, so that further training does not improve the model over time.
-
-A common solution to this problem is the use of the ReLU activation function. 
-% Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
+As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem, which is discussed further in \textbf{Section}.
 
 \subsection{Stochastic Gradient Descent}\label{nnets-stochgraddesc}
 
@@ -354,21 +351,34 @@ During gradient descent, it is necessary to calculate the gradient of the cost f
 % http://neuralnetworksanddeeplearning.com/chap2.html
 
 The error of the jth neuron of the final output layer is given by
+\begin{align*}
+	\delta_j^L & = \dfrac{\partial C}{\partial z_j^L} \\
+	& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
+	& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\text{, as }z_j^L\text{ is only a function of }a_k^L\text{ for }k = j \\
+	& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+\end{align*}
+In matrix form, these errors are expressed as
 \[
-	\delta_j^L = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
-\]
-In matrix form, these errors are:
-\[
-	\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC
+	\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC,
 \]
 where $\Sigma'(\cdot)$ is the diagonal matrix of the $\sigma'(z_j^L)$.
 
-In fact the error of a particular layer can be expressed as a function of the next layer:
+The error $\delta_j^l$ can be written in terms of the error in the next layer, $\delta_j^{l+1}$. Using the chain rule,
+\begin{align*}
+	\delta_j^l & = \dfrac{\partial C}{\partial z_j^l} \\
+	& = \sum_k\dfrac{\partial C}{\partial z_k^{l+1}}\dfrac{\partial z_k^{l+1}}{\partial z_j^l} \\
+	& = \sum_k\delta_k^{l+1}\dfrac{\partial z_k^{l+1}}{\partial z_j^l}.
+\end{align*}
+Then as $\dfrac{\partial z_k^{l+1}}{\partial z_j^l} = \dfrac{\partial}{\partial z_j^l}(w_{kj}^{l+1}\sigma(z_j^l) + b_k^{l+1}) = w_{kj}^{l+1}\sigma'(z_j^l)$,
+\begin{align*}
+	\delta_j^l & = \sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
+\end{align*}
+
+Together, the errors of layer $l$ can be written
 \begin{align*}
 	\delta^l & = \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\delta^{l+1} \\
-	& = \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\ldots\Sigma'(\mathbf{z}^{L-1})(w^L)^\top\Sigma'(\mathbf{z}^L)\nabla_aC
+	& = \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\ldots\Sigma'(\mathbf{z}^{L-1})(w^L)^\top\Sigma'(\mathbf{z}^L)\nabla_aC.
 \end{align*}
-Note that this error is dependent on the gradient of the activation function. If the activation function used has a gradient close to 0, then the amount of error detected, and so the learning rate, also becomes close to 0. In particular, this occurs in the sigmoid and tanh activation functions, where the gradient is close to zero.
 
 This error is equivalent to the rate of change in cost with respect to the bias,
 \[
@@ -379,11 +389,21 @@ The rate of change in cost with respect to any single weight value is given by
 	\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l.
 \]
 
-Steps for the backpropagation algorithm:
+Using these equations, the backpropagation algorithm runs as follows:
 \begin{enumerate}
-	\item Input $x$: 
+	\item \textbf{Enter inputs }$x$ to retrieve $\mathbf{a}^1$.
+	\item \textbf{Feedforward}. Compute the $\mathbf{z}^l = \mathbf{w}^l\mathbf{a}^{l-1} + \mathbf{b}^l$ for each $l = 2, 3,\ldots,L$.
+	\item \textbf{Output error }$\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$.
+	\item \textbf{Backpropagation}. For each $l = L-1, L-2, \ldots, 2$, compute $\delta^l =  \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\delta^{l+1}$.
+	\item \textbf{Output the gradient} given by $\dfrac{\partial C}{\partial b_j^l} = \delta_j^l$ and $\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l$.
 \end{enumerate}
 
+
+\subsection{The Vanishing Gradient Problem}
+Note that the error, $\delta^l$, is dependent on the gradient of the activation function. If the activation function used has a gradient close to 0, then the amount of error detected, and so the learning rate, also becomes close to 0. In particular, this occurs in the sigmoid and tanh activation functions, where the gradient is close to zero for $z_j^l$ near 0 and 1.
+
+In this scenario, the weights and biases shift by smaller and smaller increments, so that further training does not improve the model over time. A common solution to this problem is the use of the ReLU activation function.
+% Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
 
 
 \subsection{Reducing Overfitting}
