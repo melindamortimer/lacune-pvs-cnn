@@ -170,12 +170,12 @@ The construction of neural networks has to be conducted with some care, however.
 Neural networks are made up of a series of layers of nodes, called neurons. The first layer is an input layer, where data is fed in. The last layer is an output layer, giving the final result. The central layers are known as hidden layers.
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
-%	\caption{Basic neural network structure.}
-%	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
-%\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
+	\caption{Basic neural network structure.}
+	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
+\end{figure}
 
 Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be $n$ input variables, $\mathbf{w} = (w_1, w_2, \ldots, w_n)^\top$ be some weights and $b$ be some controlled bias to be added. This bias is not to be confused with statistical bias. Then the output of a neuron is given by
 \[
@@ -413,9 +413,9 @@ Together, the errors of layer $l$ can be written
 \end{proposition}
 \begin{proof}
 	Using the Chain Rule,
-	\begin{align*}
+	\begin{align*}	
 		\dfrac{\partial C}{\partial w_{jk}^l} & = \dfrac{\partial C}{\partial z_j^l}\dfrac{\partial z_j^l}{\partial w_{jk}^l} \\
-		& = \delta_j^l a_k^{l-1}
+		& = \delta_j^l a_k^{l-1}.
 	\end{align*}
 \end{proof}
 
