@@ -170,12 +170,12 @@ The construction of neural networks has to be conducted with some care, however.
 Neural networks are made up of a series of layers of nodes, called neurons. The first layer is an input layer, where data is fed in. The last layer is an output layer, giving the final result. The central layers are known as hidden layers.
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
-	\caption{Basic neural network structure.}
-	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
-\end{figure}
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
+%	\caption{Basic neural network structure.}
+%	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
+%\end{figure}
 
 Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be $n$ input variables, $\mathbf{w} = (w_1, w_2, \ldots, w_n)^\top$ be some weights and $b$ be some controlled bias to be added. This bias is not to be confused with statistical bias. Then the output of a neuron is given by
 \[
@@ -318,10 +318,12 @@ In training a neural network, the size of the shift is specified as $\|\Delta\ma
 		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\times\|\Delta\mathbf{v}\| \\
 		& = -\epsilon\|\nabla C\|,\quad\epsilon = \|\Delta\mathbf{v}\| \\
 		& = -\dfrac{\epsilon\|\nabla C\|^2}{\|\nabla C\|} \\
-		& = -\dfrac{\epsilon\nabla C\cdot\nabla C}{\|\nabla C\|}
-	\end{align*}\begin{align*}
-		\therefore\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\epsilon\nabla C}{\|\nabla C\|} \\
-		& = -\eta\nabla C,\quad\eta = \dfrac{\epsilon}{\|\nabla C\|}
+		& = -\dfrac{\epsilon\nabla C\cdot\nabla C}{\|\nabla C\|}.
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\epsilon\nabla C}{\|\nabla C\|} \\
+		& = -\eta\nabla C,\quad\eta = \dfrac{\epsilon}{\|\nabla C\|}.
 	\end{align*}
 \end{proof}
 
@@ -369,7 +371,8 @@ The error $\delta_j^l$ can be written in terms of the error in the next layer, $
 	& = \sum_k\dfrac{\partial C}{\partial z_k^{l+1}}\dfrac{\partial z_k^{l+1}}{\partial z_j^l} \\
 	& = \sum_k\delta_k^{l+1}\dfrac{\partial z_k^{l+1}}{\partial z_j^l}.
 \end{align*}
-Then as $\dfrac{\partial z_k^{l+1}}{\partial z_j^l} = \dfrac{\partial}{\partial z_j^l}(w_{kj}^{l+1}\sigma(z_j^l) + b_k^{l+1}) = w_{kj}^{l+1}\sigma'(z_j^l)$,
+
+Then as $\dfrac{\partial z_k^{l+1}}{\partial z_j^l} = \dfrac{\partial}{\partial z_j^l}(\mathbf{w}_k^{l+1}\cdot\sigma(\mathbf{z}^{l}) + b_k^{l+1}) = w_{kj}^{l+1}\sigma'(z_j^l)$,
 \begin{align*}
 	\delta_j^l & = \sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
 \end{align*}
@@ -380,14 +383,42 @@ Together, the errors of layer $l$ can be written
 	& = \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\ldots\Sigma'(\mathbf{z}^{L-1})(w^L)^\top\Sigma'(\mathbf{z}^L)\nabla_aC.
 \end{align*}
 
-This error is equivalent to the rate of change in cost with respect to the bias,
-\[
-	\dfrac{\partial C}{\partial b_j^l} = \delta_j^l.
-\]
-The rate of change in cost with respect to any single weight value is given by
-\[
-	\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l.
-\]
+\begin{proposition}
+	The error $\delta_j^l$ is equivalent to the rate of change in cost with respect to the bias, so that
+	\[
+		\delta_j^l = \dfrac{\partial C}{\partial b_j^l}.
+	\]
+\end{proposition}
+\begin{proof}
+	By definition,
+	\[
+		\delta_j^l = \dfrac{\partial C}{\partial z_j^l}.
+	\]
+	Then by the Chain Rule,
+	\[
+		\delta_j^l = \sum_k\dfrac{\partial C}{\partial b_k^l}\dfrac{\partial b_k^l}{\partial z_j^l}.
+	\]
+	Then as $z_j^l$ is only a function of $b_k^l$ for $j = k$,
+	\begin{align*}
+		\delta_j^l & = \dfrac{\partial C}{\partial b_j^l}\dfrac{\partial b_j^l}{\partial z_j^l} \\
+		& = \dfrac{\partial C}{\partial b_j^l}.
+	\end{align*}
+\end{proof}
+
+\begin{proposition}
+	It can be shown that the rate of change in cost with respect to any single weight value is given by
+	\[
+		\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l.
+	\]
+\end{proposition}
+\begin{proof}
+	Using the Chain Rule,
+	\begin{align*}
+		\dfrac{\partial C}{\partial w_{jk}^l} & = \dfrac{\partial C}{\partial z_j^l}\dfrac{\partial z_j^l}{\partial w_{jk}^l} \\
+		& = \delta_j^l a_k^{l-1}
+	\end{align*}
+\end{proof}
+
 
 Using these equations, the backpropagation algorithm runs as follows:
 \begin{enumerate}
