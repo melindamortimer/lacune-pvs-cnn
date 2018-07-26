@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.26)  24 JUL 2018 22:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.26)  26 JUL 2018 20:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -292,8 +292,8 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./I
-mages/3_nnet_structure.jpg>] [3] [4] [5] [6] [7] [8]
-Overfull \hbox (29.59967pt too wide) in paragraph at lines 397--398
+mages/3_nnet_structure.jpg>] [3] [4] [5] [6] [7] [8] [9]
+Overfull \hbox (29.59967pt too wide) in paragraph at lines 428--429
 []\OT1/cmr/bx/n/12 Backpropagation\OT1/cmr/m/n/12 . For each $\OML/cmm/m/it/12 
 l \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 L \OMS/cmsy/m/n/12 ^^@ \OT1/cmr/m/n/12 1\O
 ML/cmm/m/it/12 ; L \OMS/cmsy/m/n/12 ^^@ \OT1/cmr/m/n/12 2\OML/cmm/m/it/12 ; [] 
@@ -302,7 +302,7 @@ ML/cmm/m/it/12 ; L \OMS/cmsy/m/n/12 ^^@ \OT1/cmr/m/n/12 2\OML/cmm/m/it/12 ; []
 ML/cmm/m/it/12 ^^N[]$\OT1/cmr/m/n/12 . 
  []
 
-[9] [10] [11] [12] (./3_neural-nets.bbl) [13
+[10] [11] [12] [13] (./3_neural-nets.bbl) [14
 
 
 ] (./3_neural-nets.aux) ) 
@@ -330,12 +330,11 @@ r8.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
 pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.p
 fb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pf
 b></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/latxfont/lasy
-10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/symbols/
-msam10.pfb>
-Output written on 3_neural-nets.pdf (13 pages, 256490 bytes).
+10.pfb>
+Output written on 3_neural-nets.pdf (14 pages, 250946 bytes).
 PDF statistics:
- 116 PDF objects out of 1000 (max. 8388607)
- 82 compressed objects within 1 object stream
+ 115 PDF objects out of 1000 (max. 8388607)
+ 81 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
