@@ -20,21 +20,5 @@
 # Large folders
 tenSubjects/
 NNet_Scripts/my-model
-Thesis_Docs/Images
 NNet_Scripts/ex
 
-# Unnecessary tex stuff
-*.aux
-*.bbl
-*.blg
-*.log
-*.lot
-*.toc
-*.eps
-*.gz
-*.log
-*.cls
-*.xml
-*.lof
-*.bcf
-.Rproj.user
