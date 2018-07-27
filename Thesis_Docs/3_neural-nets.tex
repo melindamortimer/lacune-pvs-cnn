@@ -412,7 +412,16 @@ Together, the errors of layer $l$ can be written
 	\]
 \end{proposition}
 \begin{proof}
-	Using the Chain Rule,
+	By definition,
+	\begin{align*}
+		z_k^l & = \mathbf{w}_k^l\cdot\mathbf{a}^{l-1} + b_k^l \\
+		& = \sum_jw_{kj}^la_j^{l-1} + b_k^l.
+	\end{align*}
+	Then differentiating with respect to some weight $w_{km}^l$,
+	\[
+		\dfrac{\partial z_k^l}{\partial w_{km}^l} = a_m^{l-1}.
+	\]
+	Then using the Chain Rule,
 	\begin{align*}	
 		\dfrac{\partial C}{\partial w_{jk}^l} & = \dfrac{\partial C}{\partial z_j^l}\dfrac{\partial z_j^l}{\partial w_{jk}^l} \\
 		& = \delta_j^l a_k^{l-1}.

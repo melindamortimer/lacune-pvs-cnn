@@ -23,12 +23,13 @@ NNet_Scripts/my-model
 NNet_Scripts/ex
 
 # Ignore texmaker compile files
-*.blg
-*.log
-*.xml
-*.gz
-*.eps
-*.toc
 *.aux
 *.bbl
+*.blg
+*.eps
+*.gz
 *.lof
+*.log
+*.lot
+*.toc
+*.xml
