@@ -423,6 +423,11 @@ Loss function: each anchor is given a binary label.
 
 Training: end-to-end by backpropagation and stochastic gradient descent. 
 
+
+## 019 Yokoyama 2007
+
+
+
 # Next Reading Ideas:
 
 
