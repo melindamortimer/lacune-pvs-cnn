@@ -433,9 +433,9 @@ Using these equations, the backpropagation algorithm runs as follows:
 \begin{enumerate}
 	\item \textbf{Enter inputs }$x$ to retrieve $\mathbf{a}^1$.
 	\item \textbf{Feedforward}. Compute the $\mathbf{z}^l = \mathbf{w}^l\mathbf{a}^{l-1} + \mathbf{b}^l$ for each $l = 2, 3,\ldots,L$.
-	\item \textbf{Output error }$\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$.
+	\item \textbf{Calculate output error }$\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$.
 	\item \textbf{Backpropagation}. For each $l = L-1, L-2, \ldots, 2$, compute $\delta^l =  \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\delta^{l+1}$.
-	\item \textbf{Output the gradient} given by $\dfrac{\partial C}{\partial b_j^l} = \delta_j^l$ and $\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l$.
+	\item \textbf{Output the gradients} given by $\dfrac{\partial C}{\partial b_j^l} = \delta_j^l$ and $\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l$.
 \end{enumerate}
 
 

@@ -425,6 +425,18 @@ Training: end-to-end by backpropagation and stochastic gradient descent.
 
 
 ## 019 Yokoyama 2007
+[@Yokoyama2007]
+
+Detection of lacunes on T1 and T2.
+
+For isolated lacunes, used the multiple-phase binarisation method.
+For lacunes next to white matter hyperintensities, images were manipulated, then candidate lacunes found by considering area, circularity and gravity centre.
+
+False positives removed by first removing candidates along the edge. Then extra false positives removed by considering mean pixel intensities. Sensitivity 90.1%, 1.7 false positives per image.
+
+## 020 Uchiyama 2015
+[@Uchiyama2015]
+
 
 
 
