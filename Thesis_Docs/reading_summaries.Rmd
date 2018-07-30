@@ -437,7 +437,9 @@ False positives removed by first removing candidates along the edge. Then extra 
 ## 020 Uchiyama 2015
 [@Uchiyama2015]
 
+Uchiyama's previous work (Uchiyama's 2012 paper) specialised in computer algorithms that would aid clinicians in the identification of lacunes. The program suggests possible lacunes, which are then examined by a clinician for final classification. This old model was found to achieve a sensitivity of 96.8% with 0.71 false positives per slice. Though this model was able to significantly increase the accuracy of lacune detection, there is still some concern as to the treatment of false positivies - the source of most error.
 
+In this paper, Uchiyama now attempts to more accurate distinguish between lacunes and false positives through the use of template matching.
 
 
 # Next Reading Ideas:

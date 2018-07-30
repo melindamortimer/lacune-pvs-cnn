@@ -12,7 +12,7 @@
 %
 
 \documentclass[honours,12pt]{unswthesis}
-
+\linespread{1.6}
 \usepackage{afterpage}
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -143,11 +143,42 @@
 
 \chapter{Literature Review}\label{litrev-intro}
 
-{\noindent}There have been a number of statistical attempts at identifying lacunes. Previous attempts make use of the tendency for lacunes to have a hyperintense rim in T1-weighted imaging. Regressed variables included the normalised location, existence of hyperintense rim and diameter.
+This chapter discusses past attempts at automated detection in MRI. Various methods have been employed for the identification of lacunes. In 2007, Yokoyama et al. \cite{Yokoyama2007} quantified a number of variables and then employed regression to classify lacunes. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554} developed a model for computer-aided detection of lacunes. In 2015, Uchiyama et al. \cite{Uchiyama2015} revised their 2007 model, identifying the need for improved false-positive reduction through template matching.
+
+In 2016, Dou et al. \cite{DouQ.2016ADoC} develop a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adapted Dou's algorithm for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
 
 
+\section{Regression Attempts}\label{litrev-reg}
 
+This section describes previous attempts to automate the identification of lacunes, via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images. This algorithm works in two stages. In the first phase, candidate lacunes are identified in the T2-weighted images. Then false positives are reduced using T1-weighted images.
 
+Lacunes are segmented into two types: lacunes that are isolated, and those that are found next to white matter hyperintensities.
+
+For isolated lacunes, Yokoyama et al. used multiple-phase binarisation. This method uses mean pixel values in the MRI to develop threshold values, used for binarisation \textbf{(Fig 3)}. Then for lacunes that are next to white matter hyperintensities, images are manipulated and candidate lacunes are found by considering their area, circularity and gravitational centre.
+
+Yokoyama 2007 model
+ 
+\section{Support Vector Machines}
+
+Uchiyama 2007a
+
+\section{Neural Networks}
+
+Uchiyama 2007b
+
+\section{Computer Assisted Detection}
+
+Uchiyama 2012, on their 2007a model
+
+\section{Template Matching}
+
+Uchiyama 2015
+
+\section{Convolutional Neural Networks}
+
+Microbleeds Dou 2016
+
+Ghafoorian 2017
 
 The first studies were conducted by Yokoyama:
  - multiphase binarisation
@@ -166,7 +197,7 @@ The first is trained such that it detects candidate lacunes.
 
 The second then takes the candidate lacunes, and processes them through a more thorough 3D CNN to finalise the outcome.
 
-\section{First Phase - Candidate Detection}
+\subsection{First Phase - Candidate Detection}
 
 Takes in 51x51 samples, where the T1 and FLAIR components are treated as separate channels. Twice as many negative samples as positive, with a total of 320K for training.
 
@@ -200,7 +231,7 @@ Local maxima extraction (10x10 window) - picking those with likelihood lower tha
 
 Didn't mention: number of epochs to train. How pooling and convolutions were padded. Diagram implied no padding, but diagram dimensions weren't correct. 
 
-\section{Second Phase - False Positive Reduction}
+\subsection{Second Phase - False Positive Reduction}
 
 This model uses data at different scales around each candidate lacune. 
 
@@ -241,14 +272,13 @@ Chose model with highest validation accuracy.
 Hyper-parameters were also chosen such as to attain highest validation accuracy. These hyper-parameters included network depth, batch size, initial learning rate, learning decay factor, lambda2 and dropout rate. This is done during the validation stage. Make several models, with differing hyper-parameters, with performance compared using the validation set. Then whichever model performs best on this validation set is chosen, and final performance judged by the test set.
 
 Data was augmented during test time: cropping and flipping. Predictions of the 242 variants per sample were averaged.
+
+Didn't mention: stride of pooling. Assumed 2 from diagram.
  
- 
- Didn't mention: stride of pooling. Assumed 2 from diagram.
- 
- \subsection{Model performance}
+\subsection{Model performance}
  
 %Famous Image Recognition Models
- \section{ImageNet}
+\section{ImageNet}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
