@@ -145,7 +145,8 @@
 
 This chapter discusses past attempts at automated detection in MRI. Various methods have been employed for the identification of lacunes. In 2007, Yokoyama et al. \cite{Yokoyama2007} quantified a number of variables and then employed regression to classify lacunes. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554} developed a model that asists clinicians in identifying candidate lacunes, allowing for greater accuracy in manual rating. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
 
-In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adapted Dou's algorithm for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
+In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adopted a similar method for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
+
 
 
 \section{Regression Attempts}\label{litrev-reg}
@@ -154,10 +155,35 @@ This section describes previous attempts to automate the identification of lacun
 
 Lacunes are segmented into two types: lacunes that are isolated, and those that are found next to white matter hyperintensities.
 
-For isolated lacunes, Yokoyama et al. used multiple-phase binarisation. This method uses mean pixel values in the MRI to develop threshold values, used for binarisation \textbf{(Fig 3)}. Then for lacunes that are next to white matter hyperintensities, images are manipulated and candidate lacunes are found by considering their area, circularity and gravitational centre.
+For isolated lacunes, Yokoyama et al. used multiple-phase binarisation. This method involves using mean pixel values in the MRI to develop thresholds used for binarisation \textbf{(Fig 3 \cite{Yokoyama2007})}. Then for lacunes that are next to white matter hyperintensities, images are manipulated and candidate lacunes are found by considering their area, circularity and gravitational centre.
 
-Yokoyama 2007 model
- 
+% Fig. 3 from Yokoyama 2007
+%\begin{figure}
+%	\includegraphics[scale=\texwidth]{•}
+%\end{figure}
+
+Area, $A$, is defined as the number of pixels that the candidate lacune covers. 
+
+Circularity is defined as
+\[
+	C = 4\pi \times \dfrac{A}{l^2},
+\]
+where $l$ is the perimeter of the candidate lacune.
+
+The gravitational centre is defined as the mean intensity of the pixels in the candidate lacune,
+\[
+	(g_x, g_y) = \bigg(\dfrac{1}{n}\sum_{i=1}^nx_i, \dfrac{1}{n}\sum_{i=1}^ny_i\bigg).
+\]
+
+Candidate lacunes then satisfy
+\begin{align*}
+	19 \le A \le 200 \\
+	0.45 \le C \\
+	(g_x - c_x)^2 + (g_y - c_y)^2 < 12000,
+\end{align*}
+where $(c_x, c_y)$ is the center of a region of interest that has a high volume of lacunes, such as the basal ganglia.
+
+
 \section{Support Vector Machines}
 
 Uchiyama 2007a
