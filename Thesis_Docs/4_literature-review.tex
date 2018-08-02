@@ -151,16 +151,17 @@ In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networ
 
 \section{Regression Attempts}\label{litrev-reg}
 
-This section describes previous attempts to automate the identification of lacunes, via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images. This algorithm works in two stages. In the first phase, candidate lacunes are identified in the T2-weighted images. Then false positives are reduced using T1-weighted images.
+This section describes previous attempts to automate the identification of lacunes, via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images.
 
-Lacunes are segmented into two types: lacunes that are isolated, and those that are found next to white matter hyperintensities.
+% Fig 1. from Yokoyama 2007 that shows structure of algorithm
 
-For isolated lacunes, Yokoyama et al. used multiple-phase binarisation. This method involves using mean pixel values in the MRI to develop thresholds used for binarisation \textbf{(Fig 3 \cite{Yokoyama2007})}. Then for lacunes that are next to white matter hyperintensities, images are manipulated and candidate lacunes are found by considering their area, circularity and gravitational centre.
+The algorithm is comprised of several stages. In the first phase, T2-weighted images are used to identify candidate lacunes. These candidates are one of two types: lacunes that are isolated, and those that are found next to white matter hyperintensities. The classification between the two types of lacunes is based on the location of the candidate.
 
 % Fig. 3 from Yokoyama 2007
-%\begin{figure}
-%	\includegraphics[scale=\texwidth]{•}
-%\end{figure}
+
+Isolated lacune candidates were determined by extracting the cerebral ventricle and determining the mean pixel value of that region. The threshold for lacune identification was set at 70\% of the mean value. As lacunes primarily occur in the basal ganglia, a structure at the centre of the brain, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
+
+Lacunes were identified by considering three properties: area, circularity and gravitational centre.
 
 Area, $A$, is defined as the number of pixels that the candidate lacune covers. 
 
@@ -181,7 +182,18 @@ Candidate lacunes then satisfy
 	0.45 \le C \\
 	(g_x - c_x)^2 + (g_y - c_y)^2 < 12000,
 \end{align*}
-where $(c_x, c_y)$ is the center of a region of interest that has a high volume of lacunes, such as the basal ganglia.
+where $(c_x, c_y)$ is the center of the circular region of interest.
+
+For lacunes that appear next to white matter hyperintensities, the candidate region is more difficult to extract. To detect lacunes, Yokoyama et al. use the difference between two circular filters of radii 1 and 8 pixels. To eliminate false-positives, Yokoyama et al. considered a small change in pixel intensity between lacunar infarcts and cerebral ventricle CSF, using region growing techniques to detect circular features. Using the same definitions for area and circularity as with isolated lacunes, candidates next to white matter hyperintensities satisfy
+\begin{align*}
+	25 \le A \le 100 \\
+	0.48 \le C.
+\end{align*}
+
+
+
+
+
 
 
 \section{Support Vector Machines}
