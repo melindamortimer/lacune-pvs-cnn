@@ -176,7 +176,9 @@ The gravitational centre is defined as the mean intensity of the pixels in the c
 	(g_x, g_y) = \bigg(\dfrac{1}{n}\sum_{i=1}^nx_i, \dfrac{1}{n}\sum_{i=1}^ny_i\bigg).
 \]
 
-Candidate lacunes then satisfy
+% Fig. 5 from Yokoyama 2007 showing the bounds for area and circularity for false and true lacunes.
+
+Candidate lacunes were then found to satisfy
 \begin{align*}
 	19 \le A \le 200 \\
 	0.45 \le C \\
@@ -189,6 +191,11 @@ For lacunes that appear next to white matter hyperintensities, the candidate reg
 	25 \le A \le 100 \\
 	0.48 \le C.
 \end{align*}
+
+Once candidate lacunes have been identified, Yokoyama et al. then eliminate false positives by examining the T1-weighted scans. Removal of candidates is based on the location of the candidate, and on the area and gravitational centre as defined earlier, on the T1-weighted scans.
+
+The algorithm was trained on 100 scans, containing 832 slices in total. 20 of these scans were used for training and 80 for testing. The algorithm achieved a testing sensitivity of 90.1\%, with 1.7 false positives per slice on average.
+
 
 
 
