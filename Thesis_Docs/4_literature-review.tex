@@ -192,15 +192,25 @@ For lacunes that appear next to white matter hyperintensities, the candidate reg
 	0.48 \le C.
 \end{align*}
 
-Once candidate lacunes have been identified, Yokoyama et al. then eliminate false positives by examining the T1-weighted scans. Removal of candidates is based on the location of the candidate, and on the area and gravitational centre as defined earlier, on the T1-weighted scans.
+Once candidate lacunes have been identified, Yokoyama et al. then eliminated false positives by examining the T1-weighted scans. Removal of candidates is based on the location of the candidate, and on the area and gravitational centre as defined previously.
 
-The algorithm was trained on 100 scans, containing 832 slices in total. 20 of these scans were used for training and 80 for testing. The algorithm achieved a testing sensitivity of 90.1\%, with 1.7 false positives per slice on average.
+The algorithm was trained on 100 scans, containing 832 slices in total. 20 of these scans were used for training and 80 for testing. The algorithm achieved a testing sensitivity of 90.1\%, with an average of 1.7 false positives per slice.
 
+The second phase of training reduced the number of false positives by 68\%. However, of the four types of false positives, enlarged perivascular spaces had no reduction. This model is instead more likely to differentiate lacunes from the edge of the cerebrum, hyperintensities and the cerebral ventricle.
 
+In this model, perivascular spaces were defined as small, circular regions of diameter less than 3mm, located at the lower basal ganglia. This specification meant that the model was not sensitive to enlarged perivascular spaces, which can have a diameter up to 10mm and can occur anywhere in the grey and white matter of the brain.
 
+Yokoyama et al. suggest that further reductions in false positives could be attained through the use of FLAIR imaging. Lacunes are found to have a low intensity in T1-weighted imaging and a high intensity in T2-weighted imaging. In FLAIR imaging, lacunes are also found to have a low intensity, but not as low as the surrounding CSF, and often have a hyperintense rim \cite{WardlawJ.M.2013Nsfr}. 
 
+Yokoyama et al. also suggest increasing image context by using multiple slices for each candidate. Using 3D information, the axial slices above and below a candidate could be used to further eliminate false positives. This is particularly relevant when a candidate lacune appears on only a single axial slice, or when the candidate diverges from the usual ovoid shape in surrounding slices. Including this information would assist in differentiation between lacunes and perivascular spaces, since perivascular spaces can appear oblong along the coronial or saggital plane.
 
+It should be mentioned that this model is dependent on a number of existing architectures. The first is the identification and extraction of particular brain regions. In this model, Yokoyama et al. were able to use existing binarisation techniques to extract the cerebral ventricle, in order to calculate its mean pixel intensity.
 
+Each sample also requires a calculated area, circularity and gravitational centre. Each of these calculations requires sufficient time and resources, particularly if these calculations are to be conducted manually.
+
+% Table 1 from Yokoyama 2007. Elimination of false positives - all PVS got through!
+
+Finally, the proportion of false positives is still relatively high. The sensitivity after the second phase is 90\%, which is substantial but still not accurate enough to warrant full automation of the process. Of particular concern is the proportion of perivascular spaces falsely marked as lacunes. Though they appear similar to lacunes, perivascular spaces do present some slight shape and intensity differences.
 
 
 \section{Support Vector Machines}

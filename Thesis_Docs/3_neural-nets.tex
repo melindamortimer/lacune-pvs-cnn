@@ -258,7 +258,7 @@ One of the most common cost functions for regression is the quadratic, or Mean S
 \[
 	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2,
 \]
-where $\|\cdot\|$ is the $L^2$ norm. This form is convenient for backpropagation \textbf{(see Section)} as it has gradient
+where $\|\cdot\|$ is the Euclidean norm. This form is convenient for backpropagation \textbf{(see Section)} as it has gradient
 \[
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
 \]
@@ -299,7 +299,7 @@ then from \textbf{Equation} we can write
 \[
 	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0,
 \]
-where $\|\cdot\|$ is the $L^2$ norm.
+where $\|\cdot\|$ is the Euclidean norm.
 
 Thus if the new $\mathbf{v}' = \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost will decrease.
 
@@ -316,7 +316,7 @@ In training a neural network, the size of the shift is specified as $\|\Delta\ma
 	\]
 	Then, \begin{align*}
 		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\times\|\Delta\mathbf{v}\| \\
-		& = -\epsilon\|\nabla C\|,\quad\epsilon = \|\Delta\mathbf{v}\| \\
+		& = -\epsilon\|\nabla C\| \\
 		& = -\dfrac{\epsilon\|\nabla C\|^2}{\|\nabla C\|} \\
 		& = -\dfrac{\epsilon\nabla C\cdot\nabla C}{\|\nabla C\|}.
 	\end{align*}
