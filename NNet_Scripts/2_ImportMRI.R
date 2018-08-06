@@ -1,5 +1,5 @@
 library(AnalyzeFMRI)
-hdr <- f.read.header("../tenSubjects/0046_t1_MAS_w1.nii")
+hdr <- f.read.header("0046_t1_MAS_w1.nii")
 hdr$dim
 # Dimensions of image: 
 # 3D
@@ -16,10 +16,10 @@ hdr$pixdim
 # slice thickness: 1mm
 # timeslice: 1
 
-A <- f.read.nifti.volume("../tenSubjects/0046_t1_MAS_w1.nii")
+A <- f.read.nifti.volume("0046_t1_MAS_w1.nii")
 dim(A)
-image(A[,,150,])
+image(A[,,150,], col = grey.colors(100))
 
-B <- f.read.nifti.slice("../tenSubjects/0046_t1_MAS_w1.nii",
+B <- f.read.nifti.slice("0046_t1_MAS_w1.nii",
                         slice = 100, tpt = 1)
-image(B)
+image(B, col = grey.colors(100))

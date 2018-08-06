@@ -163,15 +163,15 @@ Isolated lacune candidates were determined by extracting the cerebral ventricle 
 
 Lacunes were identified by considering three properties: area, circularity and gravitational centre.
 
-Area, $A$, is defined as the number of pixels that the candidate lacune covers. 
+\textit{Area}, $A$, is defined as the number of pixels that the candidate lacune covers. 
 
-Circularity is defined as
+\textit{Circularity} is defined as
 \[
 	C = 4\pi \times \dfrac{A}{l^2},
 \]
 where $l$ is the perimeter of the candidate lacune.
 
-The gravitational centre is defined as the mean intensity of the pixels in the candidate lacune,
+The \textit{gravitational centre} is defined as the mean intensity of the pixels in the candidate lacune,
 \[
 	(g_x, g_y) = \bigg(\dfrac{1}{n}\sum_{i=1}^nx_i, \dfrac{1}{n}\sum_{i=1}^ny_i\bigg).
 \]
@@ -242,6 +242,8 @@ The first studies were conducted by Yokoyama:
  Uchiyama took this model and reduced false positives by applying 12 additional variables, with a classifier built using support vector machines. This model has been continually updated and improved through to 2015. 
  
 First convolutional neural network attempts were based off the work by Dou et al. \cite{DouQ.2016ADoC}, in the detection of cerebral microbleeds. Ghafoorian et al. \cite{GhafoorianM.2017Dml3} utilised the fully convolutional nature of the initial detection model. This allows for fast image processing in comparison to fully connected layers, for 3D volumes. In addition, Ghafoorian et al. additionally utilised a multi-resolution convolutional neural network, along with 7 additional location features for false positive reduction.
+
+\section{gxboost}
 
 
 \section{Multi-Scale Location-Aware 3D CNN}\label{litrev-paper1}
