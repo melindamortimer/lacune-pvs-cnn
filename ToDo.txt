@@ -1,0 +1,55 @@
+ - read multivariate lecture
+ - examine model code. How to structure data to fit? Even write some pseudo-code
+ - Read uchiyama2007a paper and continue literature review
+ - tax return
+
+
+Project:
+ - Go through images & spreadsheet. Determine x,y,z of lacunes. Ask Wei for help if necessary.
+
+Thesis:
+ - Research backpropagation algorithm - finds the local minimum, not global. But that is good enough for this project.
+ - Convolution section: algorithm + pooling
+ - Check section on cost functions - advantages of ReLU
+ - Add some MRI images, when data comes through
+ - literature review: Mention some other techniques - statistical and machine learning - why wouldn’t they work? Known that results are not very successful? Mention that time constraints mean that they won’t be implemented for this study; but it’s known that their accuracy is ___. NOTE statistical methods more prominent in micro bleed detection attempts than lacunes. Details in microbleed CNN paper.
+ - In neural network equations, express the entire network using composite functions - shown in DeepTriangle.pdf P3 (Readings folder)
+ - Justify tools: why did I choose tensorflow with R? Vs straight Python. Not kerbs? Pierre’s website lists common tools.
+
+
+ - Deep learning with R. Chollet 2018.
+ - 3T vs 7T
+ - The maths behind deep learning. www.deeplearningbook.org
+
+
+
+QUESTIONS:
+ - Thesis NNet background: How to structure outline of notation?
+
+
+	
+
+TO WRITE:
+
+Intro: Brief results. Will talk about what each section is.
+
+Background on brains and lacunes in MRI. First, the brain - structures in general, and those that are scanned/visible in MRI. The types of imaging: T1, T2, Flair. Show images!
+Lacunes and perivascular spaces. Rough definitions, hypothesised causes and societal impacts.
+Current rating methods: manual identification and automation.
+Identification standards: STRIVE criterion. Include images of what raters look for. Try to find lacunes and perivascular spaces in MRI. Current success rates using this criterion.
+Introduce the idea of automated detection. Attempts at identifying microbleeds and lacunes. Briefly describe methods and success rates.
+
+Research and understand the workings of Neural networks, convolutional neural networks and 3D CNNs. Understand the mathematics behind them - collect equations. Note the regression functions used.
+
+Lacune CNN paper literature review.
+
+My project: 
+The Data
+My attempts at applying the two literature models
+Changes made and accompanying equations
+Results
+Comments/Improvements?
+
+
+
+
