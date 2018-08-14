@@ -146,15 +146,16 @@ for (id in list.id.lacune) {
   file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
   lacune <- f.read.nifti.volume(file.lacune)
   
-  for (x in 1:256) {
-    for (y in 1:256) {
-      for (z in 1:190) {
+  for (x in 1:dim(soft)[1]) {
+    for (y in 1:dim(soft)[2]) {
+      for (z in 1:dim(soft)[3]) {
         if (lacune[x,y,z,1] == 0) next
         print(paste("Lacune at [", x, y, z, "]"))
         data.lacunes[i, 1] <- as.numeric(id)
         data.lacunes[i, 2] <- x
         data.lacunes[i, 3] <- y
         data.lacunes[i, 4] <- z
+
         patch.t1 <- soft[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
         patch.flair <- flair[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
         
@@ -169,9 +170,71 @@ for (id in list.id.lacune) {
     }
   }
   
-  
-  
-  
 }
 
 
+
+# Negatives ---------------------------------------------------------------
+
+
+# Only scan in spots that can fit a patch.
+# ie x 51:dim(soft)[1] - 50
+# Try to collect 200 points per scan (1 per z slice?)
+# Randomise x/y. If lacune, pass.
+# If scan value 0, pass.
+max.rows2 <- 100000
+data.notlacunes <- array(NA, dim = c(max.rows2, 5207))
+i <- 1
+for (id in list.id[1]) {
+  cat(white$bgBlack(paste("Processing",id,"\n")))
+  
+  file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  soft <- f.read.nifti.volume(file.soft)
+  
+  file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  flair <- f.read.nifti.volume(file.flair)
+  
+  file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  if (file_test("-f", file.lacune)) {
+    lacune <- f.read.nifti.volume(file.lacune)
+  } else {
+    lacune <- array(data = 0, dim = dim(soft))
+  }
+  
+  print("1")
+  # INCORRECT NUMBER OF DIMENSIONS FOR LACUNES BETWEEN 3 AND 4
+  # CAREFUL THAT LOOP CURRENTLY WILL RUN FOREVER IF A LAYER DOES NOT HAVE ANY NONZERO READINGS IN T1
+  
+  for (z in 1:dim(soft)[3]) {
+    print("2")
+    # Randomise x/y
+    x <- round(runif(1,51,(dim(soft)[1] - 50)))
+    y <- round(runif(1,51,(dim(soft)[2] - 50)))
+    print("3")
+    # Keep randomising until the sample is not empty and not a lacune
+    while(lacune[x,y,z] == 0 | soft[x,y,z] == 0) {
+      print("4")
+      x <- round(runif(51:(dim(soft)[1] - 50)))
+      y <- round(runif(51:(dim(soft)[2] - 50)))
+    }
+    print("5")
+    print(paste("Lacune at [", x, y, z, "]"))
+    data.notlacunes[i, 1] <- as.numeric(id)
+    data.notlacunes[i, 2] <- x
+    data.notlacunes[i, 3] <- y
+    data.notlacunes[i, 4] <- z
+    
+    patch.t1 <- soft[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
+    patch.flair <- flair[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
+    
+    data.notlacunes[i, 5:2605] <- patch.t1
+    data.notlacunes[i, 2606:5206] <- patch.flair
+    
+    data.notlacunes[i, 5207] <- 0
+    
+    i <- i + 1
+    if (i > max.rows2) break
+      
+  }
+  
+}
