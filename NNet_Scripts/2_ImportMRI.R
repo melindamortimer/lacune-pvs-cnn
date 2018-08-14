@@ -1,41 +1,44 @@
 library(AnalyzeFMRI)
 library(stringr)
+library(crayon)
 
 data.dir <- "/srv/scratch/z5016924/MAS_W2/"
 
-hdr <- f.read.header("../../tenSubjects/0046_t1_MAS_w1.nii")
-hdr$dim
+
+
+# hdr <- f.read.header("../../tenSubjects/0046_t1_MAS_w1.nii")
+# hdr$dim
 # Dimensions of image: 
 # 3D
 # x: 256 (slice width)
 # y: 190 (slice height)
 # z: 245 (volume depth)
 
-hdr$datatype
+# hdr$datatype
 # Datatype 4: Signed short
 
-hdr$pixdim
+# hdr$pixdim
 # voxel width: 1mm
 # voxel height: 1mm
 # slice thickness: 1mm
 # timeslice: 1
 
-A <- f.read.nifti.volume("../../tenSubjects/0046_t1_MAS_w1.nii")
-dim(A)
-image(A[,,150,], col = grey.colors(100))
-
-B <- f.read.nifti.slice("../../tenSubjects/0046_t1_MAS_w1.nii",
-                        slice = 100, tpt = 1)
-image(B, col = grey.colors(100))
+# A <- f.read.nifti.volume("../../tenSubjects/0046_t1_MAS_w1.nii")
+# dim(A)
+# image(A[,,150,], col = grey.colors(100))
+# 
+# B <- f.read.nifti.slice("../../tenSubjects/0046_t1_MAS_w1.nii",
+#                         slice = 100, tpt = 1)
+# image(B, col = grey.colors(100))
 
 
 # t1 <- f.read.nifti.volume("/srv/scratch/z5016924/MAS_W2/T1/0046_tp2_t1.nii")
 # flair <- f.read.nifti.volume("/srv/scratch/z5016924/MAS_W2/FLAIRinT1space/r0046_tp2_flair.nii")
-soft <- f.read.nifti.volume("/srv/scratch/z5016924/MAS_W2/T1softTiss/0022_T1softTiss.nii")
+# soft <- f.read.nifti.volume("/srv/scratch/z5016924/MAS_W2/T1softTiss/0022_T1softTiss.nii")
 # lacune <- f.read.nifti.volume("/srv/scratch/z5016924/MAS_W2/lacune_T1space/0046_lacuneT1space.nii")
 
 # image(t1[,,140,], col = grey.colors(100))
-image(soft[,,140,], col = grey.colors(100))
+# image(soft[,,140,], col = grey.colors(100))
 
 # image(flair[,,140,], col = grey.colors(100))
 # image(lacune[,,140,], col = grey.colors(100))
@@ -78,6 +81,33 @@ image(soft[,,140,], col = grey.colors(100))
 
 # ALTERNATIVELY store for both models by just storing for the second, then retrieving variables for the first by taking the middle slice of the 32x32x5 block.
 
+# View Functions ----------------------------------------------------------
+
+ViewPatch <- function(id, x, y, z, type = "soft") {
+  id <- sprintf("%04d", id)
+  if (type == "soft") {
+    file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  } else if (type == "t1") {
+    file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
+  } else if (type == "flair") {
+    file.name <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  } else {
+    stop("Type needs to be one of 'soft', 't1' or 'flair'")
+  }
+  img <- f.read.nifti.volume(file.name)
+  subimg <- img[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
+  image(subimg, col = grey.colors(100))
+}
+
+ViewSlice <- function(id,z) {
+  id <- sprintf("%04d", id)
+  file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
+  img <- f.read.nifti.volume(file.name)
+  subimg <- img[,,z, 1]
+  image(subimg, col = grey.colors(100))
+}
+
+
 
 # Import ------------------------------------------------------------------
 # image dim: [256,256,190,1]
@@ -91,7 +121,7 @@ list.lacune <- list.files("/srv/scratch/z5016924/MAS_W2/lacune_T1space/")
 list.id <- str_extract(list.t1, "^[0-9]{4}")
 list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 
-max.rows <- 1000
+max.rows <- 3000
 
 # large number of samples (max.rows), each is made of:
 # - scan id
@@ -103,9 +133,9 @@ max.rows <- 1000
 data.lacunes <- array(NA, dim = c(max.rows, 5207))
 # Find lacune samples first
 i <- 1
-# for (id in lac.list) {
-for (id in "0046") {
-  print(paste("Processing", id))
+for (id in list.id.lacune) {
+# for (id in "0046") {
+  cat(white$bgBlack(paste("Processing",id,"\n")))
   
   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
   soft <- f.read.nifti.volume(file.soft)
@@ -120,7 +150,8 @@ for (id in "0046") {
     for (y in 1:256) {
       for (z in 1:190) {
         if (lacune[x,y,z,1] == 0) next
-        data.lacunes[i, 1] <- id
+        print(paste("Lacune at [", x, y, z, "]"))
+        data.lacunes[i, 1] <- as.numeric(id)
         data.lacunes[i, 2] <- x
         data.lacunes[i, 3] <- y
         data.lacunes[i, 4] <- z
@@ -142,3 +173,5 @@ for (id in "0046") {
   
   
 }
+
+
