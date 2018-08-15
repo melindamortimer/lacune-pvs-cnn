@@ -206,6 +206,7 @@ for (id in list.id[1]) {
   # CAREFUL THAT LOOP CURRENTLY WILL RUN FOREVER IF A LAYER DOES NOT HAVE ANY NONZERO READINGS IN T1
   
   for (z in 1:dim(soft)[3]) {
+    
     print("2")
     # Randomise x/y
     x <- round(runif(1,51,(dim(soft)[1] - 50)))
@@ -214,8 +215,8 @@ for (id in list.id[1]) {
     # Keep randomising until the sample is not empty and not a lacune
     while(lacune[x,y,z] == 0 | soft[x,y,z] == 0) {
       print("4")
-      x <- round(runif(51:(dim(soft)[1] - 50)))
-      y <- round(runif(51:(dim(soft)[2] - 50)))
+      x <- round(runif(1,51,(dim(soft)[1] - 50)))
+      y <- round(runif(1,51,(dim(soft)[2] - 50)))
     }
     print("5")
     print(paste("Lacune at [", x, y, z, "]"))
