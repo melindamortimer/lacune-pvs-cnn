@@ -202,7 +202,7 @@ for (id in list.id[1]) {
     lacune <- array(data = 0, dim = dim(soft))
   }
   
-  # Can't randomise, as proportion of matter is low in the scan. Up to only 20% per slice is brain matter
+  # Can't randomise as proportion of matter is low in the scan. Up to only 20% per slice is brain matter
   # Instead, take every 50th pixel of matter? Skip if not matter or if a lacune. Sequence starts randomly between 26 and 76
   
   for (x in seq(round(runif(1, 26, 76)), dim(soft)[1] - 25, by = 30)) {
