@@ -1,5 +1,6 @@
 library(tensorflow)
-
+load("/srv/scratch/z5016924/training.Rda")
+load("/srv/scratch/z5016924/testing.Rda")
 
 # 1 -----------------------------------------------------------------------
 
@@ -11,8 +12,8 @@ library(tensorflow)
 # - 3 fully connected
 
 # Data placeholders
-# Unlimited samples, 51x51 = 2601
-x <- tf$placeholder(tf$float32, shape(NULL, 2601L))
+# Unlimited samples, 51x51 = 2601. 2 channels
+x <- tf$placeholder(tf$float32, shape(NULL, 5202L))
 # Unlimited samples, 2 outcomes, lacune or not
 y_ <- tf$placeholder(tf$float32, shape(NULL, 2L))
 
@@ -137,7 +138,7 @@ cross.entropy <- tf$reduce_mean(-tf$reduce_sum(y_ * tf$log(y), reduction_indices
 l2.reg <- cross.entropy + 0.0001 * tf$reduce_sum(W.fcl3^2)
 
 # Stochastic gradient descent (Adam update)
-learn.rate <- tf$placeholder(tf$float32,shape(1L))
+learn.rate <- tf$placeholder(tf$float32)
 train.step <- tf$train$AdamOptimizer(learn.rate)$minimize(l2.reg)
 
 correct.prediction <- tf$equal(tf$argmax(y, 1L), tf$argmax(y_, 1L))
@@ -154,35 +155,37 @@ saver <- tf$train$Saver(ls(pattern = '^(W|beta|scale)'))
 
 # Current format not in epochs
 # Randomise samples, then take batches of 128
-max.epochs <- 40
+# max.epochs <- 40
+max.epochs <- 1
+num.samples <- nrow(training)
 # Decaying learning rate. 5e-4 reduced to 1e-6
 learning.rates <- seq(1e-6, 5e-4, length.out = n)
-# for (e in 1:max.epochs) {
-#   # randomise data
-#   while (next_batch of 128) {
-#     train.step$run(feed_dict = dict(
-#       x = batch[[1]], y_ = batch[[2]], keep.prob = 0.7, learn.rate = learning.rates[e]))
-#   }
-#   # Reporting accuracy
-#   if (e %% 5) {
-#     train.accuracy <- accuracy$eval(feed_dict = dict(
-#       x = batch[[1]], y_ = batch[[2]], keep.prob = 1.0, learn.rate = learning.rates[e]))
-#     cat(sprintf("step %d, training accuracy %g\n", e, train.accuracy))
-#   }
-#   # Early stopping - highest accuracy on validation set
-#   if(sess$run(train.accuracy) > sess$run(best.accuracy)) {
-#     sess$run(tf$assign(best.accuracy, train.accuracy))
-#     saver$save(sess, './1_lacune_cnn_1/model', global_step = e)
-#   }
-# }
+for (e in 1:max.epochs) {
+  # randomise data
+  for (i in seq(1, num.samples, by = 128)) {
+    train.step$run(feed_dict = dict(
+      x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 0.7, learn.rate = learning.rates[e]))
+  }
+  # Reporting accuracy
+  if (e %% 5) {
+    train.accuracy <- accuracy$eval(feed_dict = dict(
+      x = batch[[1]], y_ = batch[[2]], keep.prob = 1.0, learn.rate = learning.rates[e]))
+    cat(sprintf("step %d, training accuracy %g\n", e, train.accuracy))
+  }
+  # Early stopping - highest accuracy on validation set
+  if(sess$run(train.accuracy) > sess$run(best.accuracy)) {
+    sess$run(tf$assign(best.accuracy, train.accuracy))
+    saver$save(sess, './1_lacune_cnn_1/model', global_step = e)
+  }
+}
 
-saver$restore(sess, tf$train$latest_checkpoint('./1_lacune_cnn_1/'))
+saver$restore(sess, tf$train$latest_checkpoint('/srv/scratch/z5016924/model1/1_lacune_cnn_1/'))
 
 
-# test.accuracy <- accuracy$eval(feed_dict = dict(
-#   x = test.set.images, y_ = test.set.labels, keep.prob = 1.0, learning.rate = learning.rates[n]
-# ))
-# cat(sprintf("test accuracy %g\n", test.accuracy))
+test.accuracy <- accuracy$eval(feed_dict = dict(
+  x = test.set.images, y_ = test.set.labels, keep.prob = 1.0, learning.rate = learning.rates[n]
+))
+cat(sprintf("test accuracy %g\n", test.accuracy))
 
 sess$close()
 
