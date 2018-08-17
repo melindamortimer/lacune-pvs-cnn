@@ -34,3 +34,4 @@ NNet_Scripts/ex
 *.toc
 *.xml
 
+.Rproj.user

@@ -1,4 +1,5 @@
 library(tensorflow)
+library(crayon)
 load("/srv/scratch/z5016924/training.Rda")
 load("/srv/scratch/z5016924/testing.Rda")
 
@@ -143,41 +144,72 @@ train.step <- tf$train$AdamOptimizer(learn.rate)$minimize(l2.reg)
 
 correct.prediction <- tf$equal(tf$argmax(y, 1L), tf$argmax(y_, 1L))
 accuracy <- tf$reduce_mean(tf$cast(correct.prediction, tf$float32))
-best.accuracy <- tf$Variable(0.0)
 
-sess <- tf$Session()
+saver <- tf$train$Saver()
+
+sess <- tf$InteractiveSession()
 
 sess$run(tf$global_variables_initializer())
 
 # Early stopping
-saver <- tf$train$Saver(ls(pattern = '^(W|beta|scale)'))
-
 
 # Current format not in epochs
 # Randomise samples, then take batches of 128
-# max.epochs <- 40
-max.epochs <- 1
 num.samples <- nrow(training)
+max.epochs <- 40
 # Decaying learning rate. 5e-4 reduced to 1e-6
-learning.rates <- seq(1e-6, 5e-4, length.out = n)
-for (e in 1:max.epochs) {
+learning.rates <- seq(1e-6, 5e-4, length.out = max.epochs)
+best.accuracy <- 0
+e <- 1
+start.timer <- proc.time()
+while (e <max.epochs) {
   # randomise data
-  for (i in seq(1, num.samples, by = 128)) {
+  for (i in seq(1, num.samples-128, by = 128)) {
+    cat(white$bgBlack(paste("Epoch:",e)))
+    cat(paste(" Analysing sample: ",i, "/",num.samples, " = ",round(i/num.samples,3)*100,"%", sep = ""))
+    cat(paste(" Elapsed:", round((proc.time() - start.timer)[[3]]/60,2), "min"))
     train.step$run(feed_dict = dict(
       x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 0.7, learn.rate = learning.rates[e]))
+    
+    # Report training accuracy
+    if (i %% 5 == 0) {
+      train.accuracy <- accuracy$eval(feed_dict = dict(
+        x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+      cat(sprintf(" Acc: %g", train.accuracy))
+    }
+    cat("\n")
   }
-  # Reporting accuracy
-  if (e %% 5) {
+  # Reporting testing accuracy
+  # if (e %% 5) {
     train.accuracy <- accuracy$eval(feed_dict = dict(
-      x = batch[[1]], y_ = batch[[2]], keep.prob = 1.0, learn.rate = learning.rates[e]))
-    cat(sprintf("step %d, training accuracy %g\n", e, train.accuracy))
-  }
+      x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+    cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy))
+  # }
   # Early stopping - highest accuracy on validation set
-  if(sess$run(train.accuracy) > sess$run(best.accuracy)) {
-    sess$run(tf$assign(best.accuracy, train.accuracy))
-    saver$save(sess, './1_lacune_cnn_1/model', global_step = e)
+  if(train.accuracy > best.accuracy) {
+    cat("Saving Model..\n")
+    best.accuracy <- train.accuracy
+    saver$save(sess, '/srv/scratch/z5016924/model1/1_lacune_cnn_1/model', global_step = e)
   }
+  
+  e <- e + 1
 }
+
+# 85% of the way through epoch 12, accuracy sudden plummets from around 100%, down to near 0??
+test.up.to <- 5000
+accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
+
+# Check all testing accuracy (in batches since it can't evaluate all at once)
+num.testing <- dim(testing)[1]
+testing.seq <- seq(1, num.testing, by = 5000)
+testing.accuracy <- numeric(length(testing.seq))
+for (i in 1:length(testing.seq)) {
+  print(paste(i,"of", length(testing.seq)))
+  testing.accuracy[i] <- accuracy$eval(feed_dict = dict(x = testing[i:min(i+4999, num.testing),5:5206], y_ = testing[i:min(i+4999, num.testing),5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+}
+mean(testing.accuracy)
+# 0.9974
 
 saver$restore(sess, tf$train$latest_checkpoint('/srv/scratch/z5016924/model1/1_lacune_cnn_1/'))
 
