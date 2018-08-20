@@ -3,7 +3,6 @@ library(crayon)
 load("/srv/scratch/z5016924/training.Rda")
 load("/srv/scratch/z5016924/testing.Rda")
 
-model.checkpoint <- "/srv/scratch/z5016924/model1/1_lacune_cnn_1/"
 
 # 1 -----------------------------------------------------------------------
 
@@ -170,7 +169,7 @@ i.train.acc2 <- 1
 best.accuracy <- 0
 e <- 1
 start.timer <- proc.time()
-while (e <max.epochs) {
+while (e < max.epochs) {
   # randomise data
   for (i in seq(1, num.samples-128, by = 128)) {
     cat(white$bgBlack(paste("Epoch:",e)))
@@ -194,14 +193,15 @@ while (e <max.epochs) {
       x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
     cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy2[i.train.acc2]))
     
-    # accuracy$eval(feed_dict = dict(
-    #   x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-
+    # MANUAL ACCURACY TESTING
+    accuracy$eval(feed_dict = dict(x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+    
+    
   # Early stopping - highest accuracy on validation set
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, paste0(model.checkpoint,"model.ckpt"))
+    saver$save(sess, "/srv/scratch/z5016924/model1/curr/model.ckpt")
   }
     i.train.acc2 <- i.train.acc2 + 1
     
@@ -224,12 +224,12 @@ for (i in 1:length(testing.seq)) {
 mean(testing.accuracy)
 # 0.9974
 
-saver$restore(sess, paste0(model.checkpoint,"model.ckpt"))
-# saver$restore(sess, tf$train$latest_checkpoint(model.checkpoint))
+saver$restore(sess, "/srv/scratch/z5016924/model1/curr/model.ckpt")
+# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/curr"))
 
 sess$close()
 
-
+# store <- tf$global_variables()
 
 
 # Converting Full to Convolutional ----------------------------------------
