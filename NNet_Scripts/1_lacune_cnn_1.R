@@ -3,6 +3,8 @@ library(crayon)
 load("/srv/scratch/z5016924/training.Rda")
 load("/srv/scratch/z5016924/testing.Rda")
 
+model.checkpoint <- "/srv/scratch/z5016924/model1/1_lacune_cnn_1/"
+
 # 1 -----------------------------------------------------------------------
 
 # Each sample was a subimage around a candidate lacune. Each sample is actually a 51x51 patch, from both T1 and FLAIR (2 channels)
@@ -135,7 +137,7 @@ y <- tf$nn$softmax(bn.fcl3)
 # Cross entropy loss
 # L2 regularisation (Ridge Regression) with lambda_2 = 0.0001
 # Note L1 regularisation is Lasso Regression
-cross.entropy <- tf$reduce_mean(-tf$reduce_sum(y_ * tf$log(y), reduction_indices = 1L))
+cross.entropy <- tf$reduce_mean(-tf$reduce_sum(y_ * tf$log(y + 1e-10), reduction_indices = 1L))
 l2.reg <- cross.entropy + 0.0001 * tf$reduce_sum(W.fcl3^2)
 
 # Stochastic gradient descent (Adam update)
@@ -158,7 +160,13 @@ sess$run(tf$global_variables_initializer())
 num.samples <- nrow(training)
 max.epochs <- 40
 # Decaying learning rate. 5e-4 reduced to 1e-6
-learning.rates <- seq(1e-6, 5e-4, length.out = max.epochs)
+learning.rates <- seq(5e-4, 1e-6, length.out = max.epochs)
+
+train.accuracy <- numeric(max.epochs*num.samples)
+i.train.acc <- 1
+train.accuracy2 <- numeric(max.epochs)
+i.train.acc2 <- 1
+
 best.accuracy <- 0
 e <- 1
 start.timer <- proc.time()
@@ -173,25 +181,30 @@ while (e <max.epochs) {
     
     # Report training accuracy
     if (i %% 5 == 0) {
-      train.accuracy <- accuracy$eval(feed_dict = dict(
+      train.accuracy[i.train.acc] <- accuracy$eval(feed_dict = dict(
         x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-      cat(sprintf(" Acc: %g", train.accuracy))
+      cat(sprintf(" Acc: %g", train.accuracy[i.train.acc]))
+      i.train.acc <- i.train.acc + 1
+      plot(train.accuracy[max(i.train.acc-300,1):i.train.acc])
     }
     cat("\n")
   }
   # Reporting testing accuracy
-  # if (e %% 5) {
-    train.accuracy <- accuracy$eval(feed_dict = dict(
+    train.accuracy2[i.train.acc2] <- accuracy$eval(feed_dict = dict(
       x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-    cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy))
-  # }
+    cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy2[i.train.acc2]))
+    
+    # accuracy$eval(feed_dict = dict(
+    #   x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+
   # Early stopping - highest accuracy on validation set
-  if(train.accuracy > best.accuracy) {
+  if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
-    best.accuracy <- train.accuracy
-    saver$save(sess, '/srv/scratch/z5016924/model1/1_lacune_cnn_1/model', global_step = e)
+    best.accuracy <- train.accuracy2[i.train.acc2]
+    saver$save(sess, paste0(model.checkpoint,"model.ckpt"))
   }
-  
+    i.train.acc2 <- i.train.acc2 + 1
+    
   e <- e + 1
 }
 
@@ -211,13 +224,8 @@ for (i in 1:length(testing.seq)) {
 mean(testing.accuracy)
 # 0.9974
 
-saver$restore(sess, tf$train$latest_checkpoint('/srv/scratch/z5016924/model1/1_lacune_cnn_1/'))
-
-
-test.accuracy <- accuracy$eval(feed_dict = dict(
-  x = test.set.images, y_ = test.set.labels, keep.prob = 1.0, learning.rate = learning.rates[n]
-))
-cat(sprintf("test accuracy %g\n", test.accuracy))
+saver$restore(sess, paste0(model.checkpoint,"model.ckpt"))
+# saver$restore(sess, tf$train$latest_checkpoint(model.checkpoint))
 
 sess$close()
 

@@ -161,6 +161,11 @@ Purpose was to have a point of comparison against the model built by Ghafoorian 
 
 Brief outline of structure.
 
+Different number of samples. Far fewer lacunes in our dataset. Paper had 2/3 negaatives, 1/3 positives. Our data consists of just under 10\% positives. Proposed model paper had 320K total samples. Our data has 50K, far fewer samples than the proposed model.
+
+In addition, around the 11th epoch, the training accuracy drops from near 100\% to near 0\%. This could be since the cross entropy has a log, and the algorithm attempts to take log(0). Introduce a small constant to achieve log(y + 1e-10).
+Getting NANs from the cross entropy function.
+
 
 \section{Proposed Model Structure}
 

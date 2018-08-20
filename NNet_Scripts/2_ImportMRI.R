@@ -199,7 +199,6 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 # data.lacunes <- data.lacunes[sample(nrow(data.lacunes)),]
 # 
 # save(data.lacunes, file = "/srv/scratch/z5016924/data_lacunes.Rda")
-load("/srv/scratch/z5016924/data_lacunes.Rda")
 
 
 
@@ -271,14 +270,16 @@ load("/srv/scratch/z5016924/data_lacunes.Rda")
 # Randomise and save
 
 # data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
-save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
+# save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
 
-load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
 
 
 
 # Sampling ----------------------------------------------------------------
+
+load("/srv/scratch/z5016924/data_lacunes.Rda")
+load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
 dim(data.lacunes)
 # [1] 3846 5208
@@ -300,15 +301,30 @@ training <- training[sample(36275),]
 testing <- rbind(data.lacunes[2693:3846,], data.nonlacune[33584:47976,])
 testing <- testing[sample(15544),]
 
-save(training, file = "/srv/scratch/z5016924/training.Rda")
+dim(training)
+# [1] 36275  5208
+dim(testing)
+# [1] 15544  5208
+
+# 7.4% positives
+save(training, file = "/srv/scratch/z5016924/training.Rda") 
 save(testing, file = "/srv/scratch/z5016924/testing.Rda")
 
 
-dim(training)
-# [1] 36275  5208
+# To get the 1/3 positives seen in the paper
+# Split data training:validation:testing = 50:25:25
+data.nonlacune2 <- data.nonlacune[sample(47976,7692),]
+data2 <- rbind(data.lacunes, data.nonlacune2)
+n <- nrow(data2)
+data2 <- data2[sample(n),]
 
-dim(testing)
-# [1] 15544  5208
+training2 <- data2[1:floor(n/2),]
+validation2 <- data2[ceiling(n/2):floor(0.75*n),]
+testing2 <- data2[ceiling(0.75*n):n,]
+
+save(training2, file = "/srv/scratch/z5016924/training2.Rda")
+save(validation2, file = "/srv/scratch/z5016924/validation2.Rda")
+save(testing2, file = "/srv/scratch/z5016924/testing2.Rda")
 
 
 
