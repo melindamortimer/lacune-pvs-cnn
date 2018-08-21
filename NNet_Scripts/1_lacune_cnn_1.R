@@ -184,7 +184,7 @@ while (e < max.epochs) {
         x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
       cat(sprintf(" Acc: %g", train.accuracy[i.train.acc]))
       i.train.acc <- i.train.acc + 1
-      plot(train.accuracy[max(i.train.acc-300,1):i.train.acc])
+      plot(train.accuracy[max(i.train.acc-500,1):i.train.acc])
     }
     cat("\n")
   }
@@ -194,14 +194,14 @@ while (e < max.epochs) {
     cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy2[i.train.acc2]))
     
     # MANUAL ACCURACY TESTING
-    accuracy$eval(feed_dict = dict(x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+    # accuracy$eval(feed_dict = dict(x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
     
     
   # Early stopping - highest accuracy on validation set
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, "/srv/scratch/z5016924/model1/curr/model.ckpt")
+    saver$save(sess, "/srv/scratch/z5016924/model1/attempt2/model.ckpt", global_step = e)
   }
     i.train.acc2 <- i.train.acc2 + 1
     
@@ -224,8 +224,8 @@ for (i in 1:length(testing.seq)) {
 mean(testing.accuracy)
 # 0.9974
 
-saver$restore(sess, "/srv/scratch/z5016924/model1/curr/model.ckpt")
-# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/curr"))
+saver$restore(sess, "/srv/scratch/z5016924/model1/attempt2/model.ckpt")
+# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt2"))
 
 sess$close()
 
