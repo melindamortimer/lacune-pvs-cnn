@@ -1,8 +1,15 @@
 library(tensorflow)
 library(crayon)
-load("/srv/scratch/z5016924/training.Rda")
-load("/srv/scratch/z5016924/testing.Rda")
-
+# rm(list = ls())
+# load("/srv/scratch/z5016924/training.Rda")
+# load("/srv/scratch/z5016924/testing.Rda")
+load("/srv/scratch/z5016924/training2.Rda")
+load("/srv/scratch/z5016924/validation2.Rda")
+load("/srv/scratch/z5016924/testing2.Rda")
+training <- training2
+validation <- validation2
+testing <- testing2
+rm(list = c("training2","validation2","testing2"))
 
 # 1 -----------------------------------------------------------------------
 
@@ -190,39 +197,53 @@ while (e < max.epochs) {
   }
   # Reporting testing accuracy
     train.accuracy2[i.train.acc2] <- accuracy$eval(feed_dict = dict(
-      x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+      x = validation[,5:5206], y_ = validation[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
     cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy2[i.train.acc2]))
     
     # MANUAL ACCURACY TESTING
-    # accuracy$eval(feed_dict = dict(x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+    # accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
     
     
   # Early stopping - highest accuracy on validation set
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, "/srv/scratch/z5016924/model1/attempt2/model.ckpt", global_step = e)
+    saver$save(sess, "/srv/scratch/z5016924/model1/attempt2/model.ckpt")
   }
     i.train.acc2 <- i.train.acc2 + 1
     
   e <- e + 1
 }
 
-# 85% of the way through epoch 12, accuracy sudden plummets from around 100%, down to near 0??
-test.up.to <- 5000
-accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-# Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
 
-# Check all testing accuracy (in batches since it can't evaluate all at once)
-num.testing <- dim(testing)[1]
-testing.seq <- seq(1, num.testing, by = 5000)
-testing.accuracy <- numeric(length(testing.seq))
-for (i in 1:length(testing.seq)) {
-  print(paste(i,"of", length(testing.seq)))
-  testing.accuracy[i] <- accuracy$eval(feed_dict = dict(x = testing[i:min(i+4999, num.testing),5:5206], y_ = testing[i:min(i+4999, num.testing),5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-}
-mean(testing.accuracy)
-# 0.9974
+
+# Batch Accuracy Testing --------------------------------------------------
+# When data was split into train/test only, and positives only made up 7% of data
+
+# # 85% of the way through epoch 12, accuracy sudden plummets from around 100%, down to near 0??
+# test.up.to <- 5000
+# accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# # Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
+# 
+# # Check all testing accuracy (in batches since it can't evaluate all at once)
+# num.testing <- dim(testing)[1]
+# testing.seq <- seq(1, num.testing, by = 5000)
+# testing.accuracy <- numeric(length(testing.seq))
+# for (i in 1:length(testing.seq)) {
+#   print(paste(i,"of", length(testing.seq)))
+#   testing.accuracy[i] <- accuracy$eval(feed_dict = dict(x = testing[i:min(i+4999, num.testing),5:5206], y_ = testing[i:min(i+4999, num.testing),5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# }
+# mean(testing.accuracy)
+# # 0.9974
+
+
+
+# Testing Set -------------------------------------------------------------
+# Positives now make 1/3 of the data. Data split into training/validation/testing
+
+accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+
+
 
 saver$restore(sess, "/srv/scratch/z5016924/model1/attempt2/model.ckpt")
 # saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt2"))

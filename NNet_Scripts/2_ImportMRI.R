@@ -327,5 +327,10 @@ save(validation2, file = "/srv/scratch/z5016924/validation2.Rda")
 save(testing2, file = "/srv/scratch/z5016924/testing2.Rda")
 
 
-
+dim(training2)
+#[1] 5769 5208
+dim(validation2)
+#[1] 2885 5208
+dim(testing2)
+#[1] 2885 5208
 
