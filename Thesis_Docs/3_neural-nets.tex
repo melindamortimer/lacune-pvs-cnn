@@ -143,7 +143,7 @@
 
 \chapter{Neural Networks}\label{neuralNets-intro}
 
-To understand the methods used, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks, convolutional neural networks, and 3-dimensional neural networks.
+To understand the models outlined in \textbf{Chapter}, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks, convolutional neural networks, and 3D convolutional neural networks.
 
 % - Basic neural networks theory + perceptron
 % - Loss functions
@@ -157,17 +157,15 @@ To understand the methods used, it is necessary to introduce neural networks. Th
 % 
 % - 3D CNNs overview
 
-{\noindent}\citep{AdamsH.H.Hieab2013RMfD}
-
 \section{Neural Networks}\label{nnets}
 
-Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors and patterns that may not be easily employed using other statistical methods. Given enough data, computational power, and training time, neural network models have exhibited high speed and accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans (see MNIST and ImageNET). They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and AI.
+Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors and patterns that may not be easily employed using other statistical methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans (see MNIST and ImageNET). They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and AI.
 
 The construction of neural networks has to be conducted with some care, however. The resulting models are difficult to interpret, and are prone to overfitting. 
 
 \subsection{Basic Structure}\label{nnets-structure}
 
-Neural networks are made up of a series of layers of nodes, called neurons. The first layer is an input layer, where data is fed in. The last layer is an output layer, giving the final result. The central layers are known as hidden layers.
+Neural networks are made up of a series of layers of \textit{neurons}, as shown in \textbf{Figure}. The first layer is an input layer, where data is fed into the model. The last layer is an output layer, generating the final result. The central layers are known as \textit{hidden layers}, which conduct most of the processing.
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 \begin{figure}[ht]
@@ -177,19 +175,19 @@ Neural networks are made up of a series of layers of nodes, called neurons. The 
 	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
 \end{figure}
 
-Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be $n$ input variables, $\mathbf{w} = (w_1, w_2, \ldots, w_n)^\top$ be some weights and $b$ be some controlled bias to be added. This bias is not to be confused with statistical bias. Then the output of a neuron is given by
+Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\top$ be a vector of weights, where each $w_i$ is associated with $x_i$. Let $b$ be an additional variable be added, known as the \textit{bias}. This bias is not to be confused with statistical bias. The output of a single neuron is given by
 \[
-	\sigma(\mathbf z) = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
+	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
 \]
-where $\sigma(\cdot)$ is some activation function and $\mathbf{z} = \mathbf{w}\cdot\mathbf{x} + b$.
+where $\sigma(\cdot)$ is some activation function and $a$ is known as an \textit{activation value}.
 
-The weights and biases are chosen such that they minimise some cost function $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$ analytically.
+The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$ analytically.
 
 Instead, this minimisation is approximated via the Gradient Descent algorithm \textbf{(see Section)}. This algorithm is run until the cost falls below a specified margin, or reaches a maximum number of iterations.
 
 \subsection{Notation}\label{nnets-not}
 
-In order to more efficiently describe the computations, it is necessary to introduce some notation.
+In order to more efficiently and coherantly describe the computations, it is necessary to introduce some notation.
 
 Define $\mathbf{w}_j^l$ to be the vector of weights used by the $j$th neuron of the $l$th layer, where $w_{ji}^l$ is the weight attributed to the $i$th neuron of the $(l-1)$th layer.
 
@@ -197,11 +195,11 @@ $b_j^l$ is the bias of the $j$th neuron in the $l$th layer.
 
 $\mathbf{a}^l$ is the vector of activation values (outputs) for the $l$th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
 
-Set $z_j^l = \sum_k w_{jk}^la_k^{l-1} + b_j^l$ to be the values calculated before activation, and $\mathbf{z}^l$ to be the vector of $z_j^l$ for layer $l$. Set $z$ to be the set of all $z_j^l$ in the whole network.
+Set $z_j^l = \mathbf{w}_j^l\cdot \mathbf{a}^{l-1} + b_j^l= \sum_k w_{jk}^la_k^{l-1} + b_j^l$ to be the values calculated before activation, and $\mathbf{z}^l$ to be the vector of $z_j^l$ for layer $l$. Set $Z$ to be the set of all $z_j^l$ in the whole network.
 
 Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ are the activation values of the final output layer.
 
-Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$th random variable of $\mathbf{y}_i$.
+Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$th variable of $\mathbf{y}_i$.
 
 Let $W$ and $B$ be the sets of all weights and biases as before.
 
@@ -209,7 +207,7 @@ Let $\eta$ be the learning rate of the minimiser during training.
 
 \subsection{Activation Functions}\label{nnets-act}
 
-Activation functions serve to constrain a neuron's output to within a particular range, and to introduce nonlinearity into the system. 
+Activation functions serve to introduce nonlinearity into the model. 
 
 For the perceptron, a basic neuron, we have the step function,
 \[
@@ -227,42 +225,42 @@ and tanh functions,
 \[
 	\sigma(z) = \tanh(z),
 \]
-which are smooth approximations to the step activation function used by the perceptron.
+which are smooth approximations to a step activation function.
 
-Rectified Linear Unit (ReLU) activation is another common activation function,
+Rectified Linear Unit (ReLU) activation is a common activation function for convolutional neural networks. It is given by,
 \[
 	\sigma(z) = \max(0, z),
 \]
-which allows for some neurons to output 0 and be essentially deactivated. This is useful for convolutional neural networks for image recognition.
+which allows for some neurons to output 0 and be essentially deactivated. Using ReLU activation helps to avoid the vanishing gradient problem, which can occur during gradient descent (\textbf{see Section}).
 
 A common activation function for the final layer is the softmax function,
 \[
 	\sigma(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}}.
 \]
-This is useful for classification tasks as the output takes on the form of a probability distribution.
+This is used for classification tasks as the output takes on the form of a probability distribution.
 
 \subsection{Cost Functions}\label{nnets-cost}
 
 Weights and biases are chosen such that they approximately minimise some cost function.
 
-In using gradient descent \textbf{(see Section)}, there are two requirements. First, that the cost, $C_X(\cdot)$, accrued from all samples, $X$, can be expressed as the mean of the costs accrued from $n$ distinct subsamples of $X$, denoted $X_i, i \in[1,n]$,
+In using gradient descent \textbf{(see Section)}, there are two requirements. First, that the cost, $C_X(\cdot)$, accrued from all samples, $X$, can be expressed as the mean of costs accrued from $n$ distinct subsamples of $X$, denoted $X_i$,
 \[
-	C_X(W, B) = \dfrac{1}{n}\sum_{i = 1}^nC_{X_i}(W,B).
+	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
 \]
 
 The second requirement is that the only activation values that the cost is dependent on are those in the final output layer of the network, $\mathbf{a}^L$.
 
 There are a number of cost functions in frequent use, and the choice of cost function is dependent on the context of the problem.
 
-One of the most common cost functions for regression is the quadratic, or Mean Squared Error, cost given by
+One of the most common cost functions for regression is the quadratic cost, or Mean Squared Error cost, given by
 \[
 	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2,
 \]
-where $\|\cdot\|$ is the Euclidean norm. This form is convenient for backpropagation \textbf{(see Section)} as it has gradient
+where $\|\cdot\|$ is the Euclidean norm. This form is convenient for backpropagation \textbf{(see Section)} as it has an efficiently computable gradient,
 \[
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
 \]
-Note that when there is a high amount of error, the learning rate is low.
+In using quadratic cost, when there is a high amount of error, the learning rate is low.
 
 The most common cost function for classification tasks is cross entropy, given by
 \[
@@ -285,7 +283,7 @@ Weights and biases are chosen such that they will minimise the cost function. Ho
 
 As described by Nielson \cite{Nielson2015}, Gradient Descent works by considering the gradient of the cost given the current weights and biases. The algorithm then shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
 
-Then for all weight and bias variables denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
+Then for all weights and biases denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
 \begin{align*}
 	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\text{, for some number of variables } N\\
 	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.
@@ -434,7 +432,7 @@ Using these equations, the backpropagation algorithm runs as follows:
 	\item \textbf{Enter inputs }$x$ to retrieve $\mathbf{a}^1$.
 	\item \textbf{Feedforward}. Compute the $\mathbf{z}^l = \mathbf{w}^l\mathbf{a}^{l-1} + \mathbf{b}^l$ for each $l = 2, 3,\ldots,L$.
 	\item \textbf{Calculate output error }$\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$.
-	\item \textbf{Backpropagation}. For each $l = L-1, L-2, \ldots, 2$, compute $\delta^l =  \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\delta^{l+1}$.
+	\item \textbf{Backpropagation}. For $l = L-1, \ldots, 2$, compute $\delta^l =  \Sigma'(\mathbf{z}^l)(w^{l+1})^\top\delta^{l+1}$.
 	\item \textbf{Output the gradients} given by $\dfrac{\partial C}{\partial b_j^l} = \delta_j^l$ and $\dfrac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l$.
 \end{enumerate}
 
