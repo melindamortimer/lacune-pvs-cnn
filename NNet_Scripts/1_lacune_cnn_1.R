@@ -1,8 +1,8 @@
 library(tensorflow)
 library(crayon)
 # rm(list = ls())
-load("/srv/scratch/z5016924/training.Rda")
-load("/srv/scratch/z5016924/testing.Rda")
+load("/srv/scratch/z5016924/training3.Rda")
+load("/srv/scratch/z5016924/testing3.Rda")
 # load("/srv/scratch/z5016924/training2.Rda")
 # load("/srv/scratch/z5016924/validation2.Rda")
 # load("/srv/scratch/z5016924/testing2.Rda")
@@ -197,7 +197,7 @@ while (e < max.epochs) {
   }
   # Reporting testing accuracy
     train.accuracy2[i.train.acc2] <- accuracy$eval(feed_dict = dict(
-      x = testing[1:500,5:5206], y_ = testing[1:500,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+      x = validation[,5:5206], y_ = validation[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
     cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy2[i.train.acc2]))
     
     # MANUAL ACCURACY TESTING
@@ -245,13 +245,13 @@ mean(testing.accuracy)
 
 
 
-saver$restore(sess, "/srv/scratch/z5016924/model1/attempt1/model.ckpt")
+saver$restore(sess, "/srv/scratch/z5016924/model1/attempt3/model.ckpt")
 # saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt3"))
 
 sess$close()
 
 # Cut out 0s
-train.accuracy <- train.accuracy[1:2184]
+train.accuracy <- train.accuracy[1:1560]
 
 # Training accuracy
 save(train.accuracy, file = "/srv/scratch/z5016924/model1/attempt3/train_accuracy.Rda")
