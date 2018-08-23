@@ -495,36 +495,62 @@ This activation has gradient
 \]
 which avoids the 0 gradient for negative $z$.
 
-\subsection{Reducing Overfitting}
+\subsection{L2-Regularisation}\label{nnet-l2reg}
 
 % Regularisation & Dropout
 
-One of the main issues with neural networks is the tendency to overfit. One common method to mitigate this is to apply regularisation techniques to the calculation of cost. The most common of these is L2-regularisation, also known as Ridge Regression.
+One of the main issues with neural networks is the tendency to overfit. One common method to mitigate this is to apply regularisation techniques to the calculation of cost. The most common of these is \textit{L2-regularisation}, also known as Ridge Regression.
 
-This adds an extra regularisation term to the cost function, to get
+This adds an extra penalty term to the cost function, to get
 \[
-	C(W,B) + \dfrac{\lambda}{2n}\sum_{w}w^2.
+	C(W,B) + \dfrac{\lambda}{2n}\sum_{w\in W}w^2.
 \]
-The regularisation term is the sum of squares of the weights, scaled with a regularisation parameter $\lambda$. 
+The penalty term is scaled by $\lambda$, known as the regularisation parameter. 
 
 Another common regularisation is L1, or Lasso Regression, which takes the sum of the absolute weights,
 \[
-	C(W,B) + \dfrac{\lambda}{n}\sum_w|w|.
+	C(W,B) + \dfrac{\lambda}{n}\sum_{w\in W}|w|.
 \]
 
-Another regularisation technique is to add a dropout layer. Through the training process, it is possible for individual neurons to pick up on the patterns of specific observations, and hence overfit. When a dropout layer is added, each affected neuron has a probability of being deactivated, regardless of their input. This ensures that relevant features of the data are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
+\subsection{Dropout}\label{nnet-dropout}
 
+Through the training process, it is possible for individual neurons to become sensitive to patterns present in specific observations. When a dropout layer is added, each neuron connected to the layer has a preset probability $p$ of being deactivated, regardless of their input.
 
+This ensures that relevant features of the data are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
 
+\subsection{Data Expansion}
 
+As there are a large number of variables, neural networks require a very large sample size to avoid overfitting. Where the number of samples may not be large enough, the data can be augmented and added to the existing dataset, introducing more varied samples.
 
-Artificial expansion of the training set. More accuracy with more varied samples. Try various augmentations, as long as they are still valid. E.g. rotations and flips, but note flips aren't valid for reading handwriting for instance.
+Common augmentations for image data include flipping horizontally and vertically, rotation and cropping. It should be noted, however, that not all augmentations will be valid for each context. For instance, handwriting cannot be flipped. 
 
-Weight initialisation: Initial weights and biases chosen using independent Gaussian random variables, with mean 0, sd 1. But this is quite a broad distribution. Can become relatively likely for neurons to become saturated (corrections are minuscule). Instead, try a standard deviation of $1/\sqrt(n)$.
+\subsection{Weight Initialisation}
 
-Choosing hyper-parameters:
-It can be difficult to determine what to change with so many parameters in play at once. This is particularly the case with large amounts of data or complex models. Change the learning rate? Number of hidden neurons? Number of layers? 
-General strategy is to start simple. First just try to get ANY non-trivial result. E.g. for MNIST, just isolate 0/1 images. Start without hidden layers, just to test it out. Once there are non-trivial results, start building these more complex structures.
+The initialisation of weights and biases affects the rate and quality of training. Intuitively, if the weights are initialised close to final output values, it will be faster to train. Conversely, weights that are initialised poorly will take a long time to train to the same accuracy, or may not converge to an appropriate solution at all.
+
+In a single layer, it is necessary for there to be variability in the weights and biases across nodes. Where the weights of two nodes are similar, usage of the same activation function will result in similar outputs. Hence, initialising weights and biases the same way introduces a lot of redudant calculations.
+
+It is commonplace for weights and biases to be initialised randomly. A common distribution for weight initialisation is the truncated normal distribution. Where $X\sim\mathcal{N}(\mu,\sigma^2)$ and $-\infty \le a < b \le \infty$, the truncated normal is $X$ conditional on $X\in(a,b)$. The probability density function is given by
+\[
+	f_X(x;\mu, \sigma^2,a,b) = \dfrac{\phi\big(\frac{x-\mu}{\sigma}\big)}{\sigma\bigg(\Phi\big(\frac{b-\mu}{\sigma}\big) - \Phi\big(\frac{a-\mu}{\sigma}\big)\bigg)},
+\]
+where $\phi$ and $\Phi$ are the standard normal probability density function and cumulative density function respectively.
+
+Another common weight initialisation method is the He Method \cite{HeKaiming2015DDiR}. This method recognises the use of the ReLU activation function. Initial values are dependent on the size of the previous layer.
+
+He Method initialisation is given by
+\[
+	w = Z\times\sqrt{\dfrac{2}{d_{l-1}}},Z\sim\mathcal{N}(0,1),
+\]
+where $d_{l-1}$ is the number of nodes in the $(l-1)$th layer.
+
+%Initial weights and biases chosen using independent Gaussian random variables, with mean 0, sd 1. But this is quite a broad distribution. Can become relatively likely for neurons to become saturated (corrections are minuscule). Instead, try a standard deviation of $1/\sqrt(n)$.
+
+%Choosing hyper-parameters:
+%It can be difficult to determine what to change with so many parameters in play at once. This is particularly the case with large amounts of data or complex models. Change the learning rate? Number of hidden neurons? Number of layers? 
+%General strategy is to start simple. First just try to get ANY non-trivial result. E.g. for MNIST, just isolate 0/1 images. Start without hidden layers, just to test it out. Once there are non-trivial results, start building these more complex structures.
+
+\subsection{Learning Rate}
 
 Adjusting learning rate:
 Start with a value like 0.01. Track the learning cost for the first few epochs, say first 30. We want a learning rate that is the largest value at which the cost decreases during the first few epochs.
