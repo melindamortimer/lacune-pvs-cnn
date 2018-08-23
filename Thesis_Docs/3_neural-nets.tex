@@ -283,17 +283,17 @@ Weights and biases are chosen such that they will minimise the cost function. Ho
 
 As described by Nielson \cite{Nielson2015}, Gradient Descent works by considering the gradient of the cost given the current weights and biases. The algorithm then shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
 
-Then for all weights and biases denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
+For all weights and biases denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by
 \begin{align*}
 	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\text{, for some number of variables } N\\
 	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.
 \end{align*}
 
-If the $\mathbf{v}$ are chosen such that
+The next values of $\mathbf{v}$ are chosen such that the cost will decrease by an amount controlled by $\eta$, such that
 \[
-	\Delta\mathbf{v} = -\eta \nabla C(\mathbf{v}), \quad \text{ where }\eta > 0,
+	\Delta\mathbf{v} = -\eta \nabla C(\mathbf{v}), \quad \text{ where }\eta > 0.
 \]
-then from \textbf{Equation} we can write
+By substitution, we can write
 \[
 	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0,
 \]
@@ -301,7 +301,7 @@ where $\|\cdot\|$ is the Euclidean norm.
 
 Thus if the new $\mathbf{v}' = \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost will decrease.
 
-In training a neural network, the size of the shift is specified as $\|\Delta\mathbf{v}\| = \epsilon$, for some $\epsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\epsilon$ and $\nabla C$.
+In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \epsilon$, for some $\epsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\epsilon$ and $\nabla C$.
 
 \begin{proposition}\label{nnets-graddescminproof}
 	If the size of the shift is constrained such that $\|\Delta\mathbf{v}\| = \epsilon$ where $\epsilon > 0$, then $\nabla C \cdot \Delta\mathbf{v}$ is minimised by $\Delta\mathbf{v} = -\eta\nabla C$, where $\eta = \dfrac{\epsilon}{\|\nabla C\|}$.
@@ -312,27 +312,30 @@ In training a neural network, the size of the shift is specified as $\|\Delta\ma
 	\[
 			|\nabla C\cdot\Delta\mathbf{v}| \le \|\nabla C\|\times\|\Delta\mathbf{v}\|.
 	\]
-	Then, \begin{align*}
+	Then the minimum is given by, \begin{align*}
 		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\times\|\Delta\mathbf{v}\| \\
 		& = -\epsilon\|\nabla C\| \\
 		& = -\dfrac{\epsilon\|\nabla C\|^2}{\|\nabla C\|} \\
 		& = -\dfrac{\epsilon\nabla C\cdot\nabla C}{\|\nabla C\|}.
 	\end{align*}
-	Therefore,
+	Then by equating the coefficients of $\nabla C$,
 	\begin{align*}
 		\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\epsilon\nabla C}{\|\nabla C\|} \\
 		& = -\eta\nabla C,\quad\eta = \dfrac{\epsilon}{\|\nabla C\|}.
 	\end{align*}
 \end{proof}
 
+As gradient descent moves the coefficients in the direction of the steepest negative gradient, it assumes that the starting values are close enough to the global minimum to converge. If this assumption is not satistifed, the algorithm will instead converge to the local minimum. However, it is not possible to confirm whether the weights are converging to the global minimum or not.
 
-This method assumes that the starting values are close enough to the global minimum to actually converge. The method will otherwise be constricted to the local minimum.
+%To address this, it is commonplace to initialise the weights randomly.
+%
+%A common distribution for initialising weights is the truncated normal distribution, which has the shape of the normal distribution $\mathcal{N}(\mu, \sigma^2)$, but is bounded such that $X\in(a,b),-\infty\le a < b\le \infty$.
 
-As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem, which is discussed further in \textbf{Section}.
+As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem, which is discussed further in section \ref{nnet-vanishinggradprob}.
 
 \subsection{Stochastic Gradient Descent}\label{nnets-stochgraddesc}
 
-Another issue is that of time. Taking the average over all training inputs can be very costly. As a result, Stochastic Gradient Descent is a popular alternative. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from. After the training with that batch is complete, another batch of training inputs is randomly chosen, and the process repeats. When all training inputs have been used, it is said that an \textbf{epoch} of training has been completed.
+As the neural network has a very large number of weights, gradient descent is a highly computationally intensive algorithm. To improve training time, Stochastic Gradient Descent is a popular alternative. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from, referred to as a \textit{batch}. After training has been completed for that batch, another batch of training inputs is randomly selected, and the process repeats. When all training batches have been used, it is said that an \textit{epoch} of training has been completed.
 
 In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed, while still utilising all the information provided by the whole set of samples by the end of training time.
 
@@ -344,36 +347,53 @@ In this manner, a relatively small number of samples is used for each weight adj
 %Backpropagation: gradient of the cost function. 
 
 
-\subsection{Backpropagation}
+\subsection{Backpropagation}\label{nnets-backprop}
 
-During gradient descent, it is necessary to calculate the gradient of the cost function. This is done through the process of backpropagation. This algorithm determines the $\dfrac{\partial C}{\partial z}$, then relates those values to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$.
+During gradient descent, it is necessary to calculate the gradient of the cost function. This is done through the process of backpropagation. This algorithm determines the $\dfrac{\partial C}{\partial z}$, then relates those values to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$. To describe the algorithm, we first need to derive some results.
 
 % http://neuralnetworksanddeeplearning.com/chap2.html
 
-The error of the jth neuron of the final output layer is given by
-\begin{align*}
-	\delta_j^L & = \dfrac{\partial C}{\partial z_j^L} \\
-	& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
-	& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\text{, as }z_j^L\text{ is only a function of }a_k^L\text{ for }k = j \\
-	& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
-\end{align*}
-In matrix form, these errors are expressed as
-\[
-	\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC,
-\]
+\begin{proposition}
+	The error of the jth neuron of the final output layer is
+	\[
+		\delta_j^L = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+	\]
+	This can be expressed in the matrix form,
+	\[
+		\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC,
+	\]
 where $\Sigma'(\cdot)$ is the diagonal matrix of the $\sigma'(z_j^L)$.
+\end{proposition}
 
-The error $\delta_j^l$ can be written in terms of the error in the next layer, $\delta_j^{l+1}$. Using the chain rule,
-\begin{align*}
-	\delta_j^l & = \dfrac{\partial C}{\partial z_j^l} \\
-	& = \sum_k\dfrac{\partial C}{\partial z_k^{l+1}}\dfrac{\partial z_k^{l+1}}{\partial z_j^l} \\
-	& = \sum_k\delta_k^{l+1}\dfrac{\partial z_k^{l+1}}{\partial z_j^l}.
-\end{align*}
+\begin{proof}
+	\begin{align*}
+		\delta_j^L & = \dfrac{\partial C}{\partial z_j^L} \\
+		& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
+		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\text{, as }z_j^L\text{ is only a function of }a_k^L\text{ for }k = j \\
+		& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+	\end{align*}
+\end{proof}
 
-Then as $\dfrac{\partial z_k^{l+1}}{\partial z_j^l} = \dfrac{\partial}{\partial z_j^l}(\mathbf{w}_k^{l+1}\cdot\sigma(\mathbf{z}^{l}) + b_k^{l+1}) = w_{kj}^{l+1}\sigma'(z_j^l)$,
-\begin{align*}
-	\delta_j^l & = \sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
-\end{align*}
+\begin{proposition}
+	The error $\delta_j^l$ can be written in terms of the errors in the next layer, 
+	\begin{align*}
+		\delta_j^l & = \sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
+	\end{align*}
+\end{proposition}
+
+\begin{proof}
+	Using the chain rule,
+	\begin{align*}
+		\delta_j^l & = \dfrac{\partial C}{\partial z_j^l} \\
+		& = \sum_k\dfrac{\partial C}{\partial z_k^{l+1}}\dfrac{\partial z_k^{l+1}}{\partial z_j^l} \\
+		& = \sum_k\delta_k^{l+1}\dfrac{\partial z_k^{l+1}}{\partial z_j^l}.
+	\end{align*}
+	Then as $\dfrac{\partial z_k^{l+1}}{\partial z_j^l} = \dfrac{\partial}{\partial z_j^l}(\mathbf{w}_k^{l+1}\cdot\sigma(\mathbf{z}^{l}) + b_k^{l+1}) = w_{kj}^{l+1}\sigma'(z_j^l)$,
+	\begin{align*}
+		\delta_j^l & = \sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l).
+	\end{align*}
+\end{proof}
+
 
 Together, the errors of layer $l$ can be written
 \begin{align*}
@@ -437,12 +457,43 @@ Using these equations, the backpropagation algorithm runs as follows:
 \end{enumerate}
 
 
-\subsection{The Vanishing Gradient Problem}
-Note that the error, $\delta^l$, is dependent on the gradient of the activation function. If the activation function used has a gradient close to 0, then the amount of error detected, and so the learning rate, also becomes close to 0. In particular, this occurs in the sigmoid and tanh activation functions, where the gradient is close to zero for $z_j^l$ near 0 and 1.
+\subsection{The Vanishing Gradient Problem}\label{nnet-vanishinggradprob}
+Note that the error, $\delta^l$, is dependent on the gradient of the activation function. If the gradient of the activation is close to 0, then both the error detected and learning rate also become close to 0.
 
-In this scenario, the weights and biases shift by smaller and smaller increments, so that further training does not improve the model over time. A common solution to this problem is the use of the ReLU activation function.
+\noindent For the sigmoid activation function,
+\[
+	\sigma '(z) = e^{-z}(1+e^{-z})^{-2}.
+\]
+For the tanh activation function,
+\[
+	\sigma '(z) = 1-\tanh^2(z).
+\]
+Taking the limit as $z\rightarrow\infty$ and as $z\rightarrow-\infty$ yields 
+\begin{align*}
+	\lim_{z\rightarrow\infty}\sigma '(z) & = 0 & \lim_{z\rightarrow-\infty}\sigma '(z) & = 0.
+\end{align*}
+For the sigmoid and tanh activation functions, very large or very small $z_j^l$ will have near zero gradients. In this scenario, the training of weights and biases shift by smaller and smaller increments, so that further training does not improve the model over time.
+
+A common alternative to these is the ReLU activation function. This activation has gradient
+\[
+	\sigma '(z) = \begin{cases}
+		1 & z > 0 \\
+		0 & z < 0
+	\end{cases}.
+\]
 % Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
-
+Neurons that are active will have a constant gradient of 1. Where the value of $z$ becomes negative, the neurons will stop training. When this occurs in the whole network, the ReLU activation can be replaced with the \textit{leaky ReLU},
+\[
+	\sigma(z) = \max(x, ax), \quad a \le 1.
+\]
+This activation has gradient
+\[
+	\sigma '(z) = \begin{cases}
+		1 & z > 0 \\
+		a & z < 0
+	\end{cases},
+\]
+which avoids the 0 gradient for negative $z$.
 
 \subsection{Reducing Overfitting}
 

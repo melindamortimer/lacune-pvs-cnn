@@ -276,7 +276,7 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 
 
 
-# Sampling ----------------------------------------------------------------
+# Sampling 1 ----------------------------------------------------------------
 
 load("/srv/scratch/z5016924/data_lacunes.Rda")
 load("/srv/scratch/z5016924/data_nonlacune.Rda")
@@ -288,7 +288,7 @@ dim(data.nonlacune)
 # [1] 47976  5208
 
 # Paper has 320K patches in total. 2/3 of these are negatives
-# In our data, only 8% are positives, with around 52000 samples in total.
+# In our data, only 7% are positives, with around 52000 samples in total.
 # Split training and testing to 70:30
 
 # 51822 rows total
@@ -309,6 +309,11 @@ dim(testing)
 # 7.4% positives
 save(training, file = "/srv/scratch/z5016924/training.Rda") 
 save(testing, file = "/srv/scratch/z5016924/testing.Rda")
+
+
+
+
+# Sampling 2 --------------------------------------------------------------
 
 
 # To get the 1/3 positives seen in the paper
@@ -334,3 +339,37 @@ dim(validation2)
 dim(testing2)
 #[1] 2885 5208
 
+
+# Sampling 3 --------------------------------------------------------------
+
+# Use all samples, keeping the positive percentage at 7%.
+# Not too low, in case the model starts outputting non lacune too often, just to inflate accuracy.
+
+load("/srv/scratch/z5016924/data_lacunes.Rda")
+load("/srv/scratch/z5016924/data_nonlacune.Rda")
+
+# Split into training/validation/testing = 50:25:25
+nl <- nrow(data.lacunes)
+nn <- nrow(data.nonlacune)
+
+training <- rbind(data.lacunes[1:floor(0.5*nl),], data.nonlacune[1:floor(0.5*nn),])
+training <- training[sample(nrow(training)),]
+
+validation <- rbind(data.lacunes[(floor(0.5*nl)+1):floor(0.75*nl),], data.nonlacune[(floor(0.5*nn)+1):floor(0.75*nn),])
+validation <- validation[sample(nrow(validation)),]
+
+testing <- rbind(data.lacunes[(floor(0.75*nl)+1):nl,], data.nonlacune[(floor(0.75*nn)+1):nn,])
+testing <- testing[sample(nrow(testing)),]
+
+dim(training)
+# [1] 25911  5208
+
+dim(validation)
+# [1] 12955  5208
+
+dim(testing)
+# [1] 12956  5208
+
+save(training, file = "/srv/scratch/z5016924/training3.Rda")
+save(validation, file = "/srv/scratch/z5016924/validation3.Rda")
+save(testing, file = "/srv/scratch/z5016924/testing3.Rda")
