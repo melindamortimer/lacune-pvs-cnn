@@ -1,144 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  A small sample UNSW Honours Thesis file.
-%  Any questions to Ian Doust i.doust@unsw.edu.au
-%
-% Edited CSG 11.9.2015, use some of Gery's ideas for front matter; add a conclusion chapter.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-%  The first part pulls in a UNSW Thesis class file.  This one is
-%  slightly nonstandard and has been set up to do a couple of
-%  things automatically
-%
-
-\documentclass[honours,12pt]{unswthesis}
-
-\usepackage{afterpage}
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage[english]{babel}
-\usepackage{graphicx}
-\usepackage{natbib}
-\usepackage[utf8]{inputenc}
-\usepackage{latexsym}
-\usepackage{url}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  The following are some simple LaTeX macros to give some
-%  commonly used letters in funny fonts. You may need more or less of
-%  these
-%
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\F}{\mathbb{F}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\T}{\mathbb{T}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\B}{\mathfrak{B}}
-\newcommand{\BB}{\mathcal{B}}
-\newcommand{\M}{\mathfrak{M}}
-\newcommand{\X}{\mathfrak{X}}
-\newcommand{\Y}{\mathfrak{Y}}
-\newcommand{\CC}{\mathcal{C}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\cP}{\mathcal{P}}
-\newcommand{\cS}{\mathcal{S}}
-\newcommand{\A}{\mathcal{A}}
-\newcommand{\ZZ}{\mathcal{Z}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% The following are much more esoteric commands that I have left in
-% so that this file still processes. Use or delete as you see fit
-%
-\newcommand{\bv}[1]{\mbox{BV($#1$)}}
-\newcommand{\comb}[2]{\left(\!\!\!\begin{array}{c}#1\\#2\end{array}\!\!\!\right)
-}
-\newcommand{\Lat}{{\rm Lat}}
-\newcommand{\var}{\mathop{\rm var}}
-\newcommand{\Pt}{{\mathcal P}}
-\def\tr(#1){{\rm trace}(#1)}
-\def\Exp(#1){{\mathbb E}(#1)}
-\def\Exps(#1){{\mathbb E}\sparen(#1)}
-\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
-\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
-\newcommand{\hatt}[1]{\widehat #1}
-\newcommand{\modeq}[3]{#1 \equiv #2 \,(\text{mod}\, #3)}
-\newcommand{\rmod}{\,\mathrm{mod}\,}
-\newcommand{\p}{\hphantom{+}}
-\newcommand{\vect}[1]{\mbox{\boldmath $ #1 $}}
-\newcommand{\reff}[2]{\ref{#1}.\ref{#2}}
-\newcommand{\psum}[2]{\sum_{#1}^{#2}\!\!\!'\,\,}
-\newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
-				#1 \\ #2
-			\end{array}\right)	}
-%
-%  Macros - some of these are in plain TeX (gasp!)
-%
-\newcommand{\be}{($\beta$)}
-\newcommand{\eqp}{\mathrel{{=}_p}}
-\newcommand{\ltp}{\mathrel{{\prec}_p}}
-\newcommand{\lep}{\mathrel{{\preceq}_p}}
-\def\brack#1{\left \{ #1 \right \}}
-\def\bul{$\bullet$\ }
-\def\cl{{\rm cl}}
-\let\del=\partial
-\def\enditem{\par\smallskip\noindent}
-\def\implies{\Rightarrow}
-\def\inpr#1,#2{\t \hbox{\langle #1 , #2 \rangle} \t}
-\def\ip<#1,#2>{\langle #1,#2 \rangle}
-\def\lp{\ell^p}
-\def\maxb#1{\max \brack{#1}}
-\def\minb#1{\min \brack{#1}}
-\def\mod#1{\left \vert #1 \right \vert}
-\def\norm#1{\left \Vert #1 \right \Vert}
-\def\paren(#1){\left( #1 \right)}
-\def\qed{\hfill \hbox{$\Box$} \smallskip}
-\def\sbrack#1{\Bigl \{ #1 \Bigr \} }
-\def\ssbrack#1{ \{ #1 \} }
-\def\smod#1{\Bigl \vert #1 \Bigr \vert}
-\def\smmod#1{\bigl \vert #1 \bigr \vert}
-\def\ssmod#1{\vert #1 \vert}
-\def\sspmod#1{\vert\, #1 \, \vert}
-\def\snorm#1{\Bigl \Vert #1 \Bigr \Vert}
-\def\ssnorm#1{\Vert #1 \Vert}
-\def\sparen(#1){\Bigl ( #1 \Bigr )}
-
-\newcommand\blankpage{%
-    \null
-    \thispagestyle{empty}%
-    \addtocounter{page}{-1}%
-    \newpage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% These environments allow you to get nice numbered headings
-%  for your Theorems, Definitions etc.  
-%
-%  Environments
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{question}[theorem]{Question}
-\newtheorem{notation}[theorem]{Notation}
-\numberwithin{equation}{section}
-
+\include{packages}
 \begin{document}
 
 \chapter{Neural Networks}\label{neuralNets-intro}
@@ -468,10 +328,10 @@ For the tanh activation function,
 \[
 	\sigma '(z) = 1-\tanh^2(z).
 \]
-Taking the limit as $z\rightarrow\infty$ and as $z\rightarrow-\infty$ yields 
-\begin{align*}
-	\lim_{z\rightarrow\infty}\sigma '(z) & = 0 & \lim_{z\rightarrow-\infty}\sigma '(z) & = 0.
-\end{align*}
+For both the sigmoid and tanh activations, the limit as $z\rightarrow\pm\infty$ yields 
+\[
+	\lim_{z\rightarrow\pm\infty}\sigma '(z)= 0.
+\]
 For the sigmoid and tanh activation functions, very large or very small $z_j^l$ will have near zero gradients. In this scenario, the training of weights and biases shift by smaller and smaller increments, so that further training does not improve the model over time.
 
 A common alternative to these is the ReLU activation function. This activation has gradient
@@ -550,31 +410,19 @@ where $d_{l-1}$ is the number of nodes in the $(l-1)$th layer.
 %It can be difficult to determine what to change with so many parameters in play at once. This is particularly the case with large amounts of data or complex models. Change the learning rate? Number of hidden neurons? Number of layers? 
 %General strategy is to start simple. First just try to get ANY non-trivial result. E.g. for MNIST, just isolate 0/1 images. Start without hidden layers, just to test it out. Once there are non-trivial results, start building these more complex structures.
 
-\subsection{Learning Rate}
+\subsection{Learning Rate}\label{nnets-learningrate}
 
-Adjusting learning rate:
-Start with a value like 0.01. Track the learning cost for the first few epochs, say first 30. We want a learning rate that is the largest value at which the cost decreases during the first few epochs.
+The learning rate, given by $\eta$, controls the adjustment of weights during training. As in Section \ref{nnets-graddesc}, the change in gradients, $\Delta\mathbf{v} = -\eta\nabla C$, moves the weights in the direction of the steepest negative gradient. $\eta$ then controls the magnitude of the movement.
 
-Variable learning rate:
-Learning rate constant until validation accuracy drops, then drop learning rate by a few factors. At first, keep in constant however.
+The size of $\eta$ controls how quickly the model learns. If $\eta$ is too small, training will take a long time. If $\eta$ is too large, the model may move the weights too far, and the values of $\mathbf{v}$ will move past the local minimum.
 
-Early stopping:
-After each epoch, calculate the accuracy on the validation set. Once this accuracy stops increasing, stop the training phase. But some sessions may have a decrease early, so we could wait until say 10 epochs without increase. But some might have little improvement for a while before increasing again. The 10 epoch rule is good initially.
+To aid in efficient training, learning rates can be adjusted throughout. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision. A common technique is to lower the learning rate only when validation accuracy drops.
 
-Regularisation:
-Initially keep $\lambda = 0$. Find the learning rate $\eta$ first. Then start with a value like $\lambda = 1.0$, and slowly increase or decrease by factors of 10, as needed to improve validation accuracy. Then return to $eta$ and re-optimise.
+\subsection{Early Stopping}\label{nnets-earlystop}
 
-Variations on Stochastic Gradient Descent:
-Hessian Technique - has some good properties, but difficult to implement
-Momentum-based - Moves faster than standard gradient descent so will overshoot. Have to specify a 'friction' coefficient $\mu$ called the 'momentum coefficient'. Quite commonly used.
+Lengthy model training can cause extensive overfitting of the training data. To help avoid this, model training can be stopped early, before testing performance drops.
 
-Other Neurons:
-$tanh(z) = \dfrac{e^z - e^{-z}}{e^z + e^{-z}}$: Close to the sigmoid.
-
-In fact, $sigmoid(z) = \dfrac{1 + tanh(z/2)}{2}$, just rescaled! Output ranges from -1 to 1, instead of 0 to 1, so may require normalisation.
-
-Equations in site http://neuralnetworksanddeeplearning.com/chap1.html. But they require some editing to include more detail. E.g. Equation 6 is actually meant to have a dependent on w and b.
-Equations also in Lacune CNN and Microbleed CNN articles.
+One common method is to stop the training phase once validation accuracy does not improve after some $k$ epochs. Alternatively, a model can be trained over all epochs, and select the model that performs best on the validation set.
 
 \section{Convolutional Neural Networks}\label{convNeuralNets}
 
@@ -624,22 +472,6 @@ Accuracy determined by Intersection over Union (ioU) area.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\clearpage
-
-\addcontentsline{toc}{chapter}{References}
-
-\bibliographystyle{plain}
-\bibliography{bibliography.bib}
-
-\end{document}
-
-
-
-\end{document}
-
-
-
-
-
+\include{bibliography}

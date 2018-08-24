@@ -11,133 +11,7 @@
 %  things automatically
 %
 
-\documentclass[honours,12pt]{unswthesis}
-\linespread{1}
-
-\usepackage{afterpage}
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage[english]{babel}
-\usepackage{graphicx}
-\usepackage{natbib}
-\usepackage[utf8]{inputenc}
-\usepackage{latexsym}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%  The following are some simple LaTeX macros to give some
-%  commonly used letters in funny fonts. You may need more or less of
-%  these
-%
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\F}{\mathbb{F}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\T}{\mathbb{T}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\B}{\mathfrak{B}}
-\newcommand{\BB}{\mathcal{B}}
-\newcommand{\M}{\mathfrak{M}}
-\newcommand{\X}{\mathfrak{X}}
-\newcommand{\Y}{\mathfrak{Y}}
-\newcommand{\CC}{\mathcal{C}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\cP}{\mathcal{P}}
-\newcommand{\cS}{\mathcal{S}}
-\newcommand{\A}{\mathcal{A}}
-\newcommand{\ZZ}{\mathcal{Z}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% The following are much more esoteric commands that I have left in
-% so that this file still processes. Use or delete as you see fit
-%
-\newcommand{\bv}[1]{\mbox{BV($#1$)}}
-\newcommand{\comb}[2]{\left(\!\!\!\begin{array}{c}#1\\#2\end{array}\!\!\!\right)
-}
-\newcommand{\Lat}{{\rm Lat}}
-\newcommand{\var}{\mathop{\rm var}}
-\newcommand{\Pt}{{\mathcal P}}
-\def\tr(#1){{\rm trace}(#1)}
-\def\Exp(#1){{\mathbb E}(#1)}
-\def\Exps(#1){{\mathbb E}\sparen(#1)}
-\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
-\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
-\newcommand{\hatt}[1]{\widehat #1}
-\newcommand{\modeq}[3]{#1 \equiv #2 \,(\text{mod}\, #3)}
-\newcommand{\rmod}{\,\mathrm{mod}\,}
-\newcommand{\p}{\hphantom{+}}
-\newcommand{\vect}[1]{\mbox{\boldmath $ #1 $}}
-\newcommand{\reff}[2]{\ref{#1}.\ref{#2}}
-\newcommand{\psum}[2]{\sum_{#1}^{#2}\!\!\!'\,\,}
-\newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
-				#1 \\ #2
-			\end{array}\right)	}
-%
-%  Macros - some of these are in plain TeX (gasp!)
-%
-\newcommand{\be}{($\beta$)}
-\newcommand{\eqp}{\mathrel{{=}_p}}
-\newcommand{\ltp}{\mathrel{{\prec}_p}}
-\newcommand{\lep}{\mathrel{{\preceq}_p}}
-\def\brack#1{\left \{ #1 \right \}}
-\def\bul{$\bullet$\ }
-\def\cl{{\rm cl}}
-\let\del=\partial
-\def\enditem{\par\smallskip\noindent}
-\def\implies{\Rightarrow}
-\def\inpr#1,#2{\t \hbox{\langle #1 , #2 \rangle} \t}
-\def\ip<#1,#2>{\langle #1,#2 \rangle}
-\def\lp{\ell^p}
-\def\maxb#1{\max \brack{#1}}
-\def\minb#1{\min \brack{#1}}
-\def\mod#1{\left \vert #1 \right \vert}
-\def\norm#1{\left \Vert #1 \right \Vert}
-\def\paren(#1){\left( #1 \right)}
-\def\qed{\hfill \hbox{$\Box$} \smallskip}
-\def\sbrack#1{\Bigl \{ #1 \Bigr \} }
-\def\ssbrack#1{ \{ #1 \} }
-\def\smod#1{\Bigl \vert #1 \Bigr \vert}
-\def\smmod#1{\bigl \vert #1 \bigr \vert}
-\def\ssmod#1{\vert #1 \vert}
-\def\sspmod#1{\vert\, #1 \, \vert}
-\def\snorm#1{\Bigl \Vert #1 \Bigr \Vert}
-\def\ssnorm#1{\Vert #1 \Vert}
-\def\sparen(#1){\Bigl ( #1 \Bigr )}
-
-\newcommand\blankpage{%
-    \null
-    \thispagestyle{empty}%
-    \addtocounter{page}{-1}%
-    \newpage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% These environments allow you to get nice numbered headings
-%  for your Theorems, Definitions etc.  
-%
-%  Environments
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{question}[theorem]{Question}
-\newtheorem{notation}[theorem]{Notation}
-\numberwithin{equation}{section}
+\include{packages}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -174,67 +48,7 @@
 
 \begin{document}
 
-\beforepreface
-
-\afterpage{\blankpage}
-
-% plagiarism
-
-\prefacesection{Plagiarism statement}
-
-\vskip 10pc \noindent I declare that this thesis is my
-own work, except where acknowledged, and has not been submitted for
-academic credit elsewhere. 
-
-\vskip 2pc  \noindent I acknowledge that the assessor of this
-thesis may, for the purpose of assessing it:
-\begin{itemize}
-\item Reproduce it and provide a copy to another member of the University; and/or,
-\item Communicate a copy of it to a plagiarism checking service (which may then retain a copy of it on its database for the purpose of future plagiarism checking).
-\end{itemize}
-
-\vskip 2pc \noindent I certify that I have read and understood the University Rules in
-respect of Student Academic Misconduct, and am aware of any potential plagiarism penalties which may 
-apply.\vspace{24pt}
-
-\vskip 2pc \noindent By signing this declaration I am agreeing to the statements and conditions above.
-\vskip 2pc
-Signed: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt}
-
-\afterpage{\blankpage}
-
-% Acknowledgements are optional
-
-
-\prefacesection{Acknowledgements}
-
-{\bigskip}By far the greatest thanks must go to my supervisor for
-the guidance, care and support they provided. 
-
-{\bigskip\noindent}Thanks must also go to Emily, Michelle, John and Alex who helped by
-proof-reading the document in the final stages of preparation.
-
-{\bigskip\noindent}Although I have not lived with them for a number of years, my family also deserve many thanks for their encouragement.
-
-{\bigskip\noindent} Thanks go to Robert Taggart for allowing his thesis style to be shamelessly copied.
-
-{\bigskip\bigskip\bigskip\noindent} Fred Flintstone, 2 November 2015.
-
-\afterpage{\blankpage}
-
-% Abstract
-
-\prefacesection{Abstract}
-
-This thesis is a coherent presentation of a quest to generalise three classical
-theorems that were discovered in the 1920s, 1930s and 1940s. Their analogues are
-the product of a conglomeration of ideas that straddle the 1980s and 1990s and
-the application of these new results brings the story into the twenty-first
-century.
-\afterpage{\blankpage}
-
-
-\afterpreface
+\include{prelims}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -247,98 +61,26 @@ century.
 
 \afterpage{\blankpage}
 
-\chapter{Introduction}\label{s-intro}
+\include{1_intro}
 
-\section{Overview}\label{overview}
+\include{2_mri_svd}
 
+\include{3_neural-nets}
 
+\include{4_literature-review}
 
-{\noindent} Cerebral Small Vessel Disease (SVD) describes a set of abnormalities affecting small blood vessels in the deep grey and white matter of the brain. The changes are particularly prevalent amongst the elderly, with SVD biomarkers appearing in over 90\% of MRI for those aged 60-90 years \cite{deLeeuwF-E2001Pocw}. SVD is the primary cause of over one fifth of ischaemic (oxygen-starved) strokes \cite{SmithStephen2002ARaA} and is a major cause of dementia and cognitive decline \cite{NorrvingBo2008Linb}.
+\include{5_model_development}
 
-Imaging markers of SVD include lacunes, enlarged perivascular spaces, white matter hyperintensities, microbleeds, recent small subcortical infarcts and brain atrophy \cite{WardlawJ.M.2013Nsfr}.
+\include{6_results}
 
+\include{7_conclusion}
 
-%Current research into SVD (EXPAND):
-
-Current research is investigating the role that each feature plays in SVD. It is not clear the extent to which SVD affects cognition, or which events are to blame, so there is the need to differentiate between features.
-
-Current feature identification is conducted either by eye (rating) or using computational algorithms. 
-
-Rating by eye is conducted in accordance to STRIVE criterion. Lacunes are defined as ...
-
-Perivascular spaces are ...
-
-% Rating by eye consistency
-
-\section{Results}\label{results}
-
-
-
-
-
-
-
-
-Lacunes are ovoid fluid-filled cavities, between 3mm to 15mm in diameter. In MRI, lacunes return a similar signal intensity to that of cerebrospinal fluid (CSF).
-
-
-In accordance to the standardised definitions specified by the STRIVE criterion \cite{WardlawJ.M.2013Nsfr}, lacunes are 
-
-
-Perivascular spaces are small areas of the brain filled with cerebrospinal fluid (CSF) due to brain shrinkage.
-
-Current studies are current uncertain about the impact of perivascular spaces on cognitive decline, in particular the comparison against lacunes. A paper discusses that PVS are not causes of decline, and that other studies only give PVS significance since they are difficult to distinguish from lacunes.
-
-Current methods for feature identification include rating by eye, or utilising a program to automate the process.
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\chapter{An Introduction to Neural Networks}\label{nn-intro}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%
-\section{Neural Networks}\label{nn-overview}
-%%%%%%%%%%%
-
-\section{Convolutional Neural Networks}\label{cnn-overview}
-
-\section{3D Convolutional Neural Networks}\label{3dcnn-overview}
-
-% include historical performance of these models on images/3d
-
-
-
-o
-
-
-\chapter{Conclusion}\label{ccl}
-
-f
-
+\include{8_appendix}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\clearpage
-
-\addcontentsline{toc}{chapter}{References}
-
-\bibliographystyle{plain}
-\bibliography{bibliography.bib}
-
-\end{document}
-
-
-
-\end{document}
-
+\include{bibliography}
 
 
 
