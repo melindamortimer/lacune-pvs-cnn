@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TexmakerSession quickmode="12">
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/1_intro.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/2_mri_svd.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/3_neural-nets.tex" bookmark1="0" line="346" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/4_literature-review.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/5_model_development.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/6_results.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/7_conclusion.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/8_appendix.tex" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="false"/>
-    <document bookmark3="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/bibliography.bib" bookmark1="0" line="0" master="false" bookmark2="0" hasfocus="true"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="346" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/3_neural-nets.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/4_literature-review.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/1_intro.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/2_mri_svd.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/5_model_development.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/7_conclusion.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/6_results.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/8_appendix.tex"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="false" bookmark2="0" master="false" line="0" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/bibliography.bib"/>
+    <document bookmark1="0" bookmark3="0" hasfocus="true" bookmark2="0" master="false" line="20" file="/home/z5016924/hdrive/Honours/lacune-pvs-cnn/Thesis_Docs/my-honours.tex"/>
 </TexmakerSession>

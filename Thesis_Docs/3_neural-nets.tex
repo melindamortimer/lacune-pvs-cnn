@@ -422,21 +422,58 @@ To aid in efficient training, learning rates can be adjusted throughout. At the 
 
 Lengthy model training can cause extensive overfitting of the training data. To help avoid this, model training can be stopped early, before testing performance drops.
 
-One common method is to stop the training phase once validation accuracy does not improve after some $k$ epochs. Alternatively, a model can be trained over all epochs, and select the model that performs best on the validation set.
+One common method is to stop the training phase once validation accuracy does not improve after some $k$ epochs. Alternatively, a model can be trained over all epochs. The model that performs best on the validation set is selected.
 
-\section{Convolutional Neural Networks}\label{convNeuralNets}
+\section{Convolutional Neural Networks}\label{convnets}
 
-Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.
-The neurons of a convNet are arranged in 3D. 
-%http://cs231n.github.io/convolutional-networks/
+Convolutional neural networks are of particular interest when working with image problems. The input data is assumed to be in 2 dimensions. Unlike fully connected layers, convolutional layers look to identify particular features within a subset of the 2D data sample. Collections of these features can be combined and interpreted for image classification.
 
-Input layer: raw pixel values, with width, height and color channels
-Conv layer: Compute output for regions of input. Each computes a dot product between weights and a region that they are connected to.
-ReLU: elementwise activation function.
-Pool: downsampling
-FC - fully connected: each neuron here is connected to all previous.
+\subsection{Convolutional Layers}\label{convnets-convlayer}
 
-Conv layer has a set of learnable filters. The filter might have only a small size, but will slide (convolve) across the image, computing dot products at each position.
+In a convolutional layer, a \textit{filter} is a matrix of weights that describes a particular visual feature to be identified. These filters have predetermined dimensions, usually set to assess a small subset of the original image. Each filter has the same depth as the original image. For instance, an image that has three colour channels; red, blue and green, will have convolution filters also with a depth of three. Each convolutional layer can have many filters.
+
+The filters are then said to \textit{convolve} around the image. Suppose that a filter $F^{(f)}$ has dimension $M\times N \times C$. Then given an input image matrix $X$, the value of the convolution starting from element $X_{j,k}$ is given by
+\[
+	a_{jk}^{(f)} = \sigma\bigg(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\bigg)
+\]
+where $\sigma(\cdot)$ is some activation function as before, $C$ is the number of input channels and $b^{(f)}$ is the bias to be added when using filter $f$. 
+
+The process starts from the top-left corner. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are point-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
+
+[Image of convolution process.]
+
+Each filter of a convolutional layer builds a matrix of neurons, where its dimension is a subset of the original image (depending on the size of the zero padding). These matrices are bound together to form a 3D array, with depth depending on the number of filters used.
+
+\subsection{Zero Padding}
+
+As the filters convolve around the image, the filters can only be placed within the bounds of the input image. This results in some loss of dimension. For a starting image with dimension $J \times K$ and a filter with dimension $M \times N$, the convolutional output will be of dimension $(J - M + 1)\times (K - N + 1)$.
+
+In order to retain the original image dimensions, the input image can be zero padded, with padding given by $P$. The dimension of the original image is increased to $(J+2P) \times (K+2P)$, with the outer $P$ elements all set to zero. When the convolution takes place, the resulting image size will have dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$.
+
+\subsection{Stride}
+
+As the dimension of images an be quite large, moving a convolutional filter by only one element at a time can make the training process very long. To reduce the number of resulting variables, the filter can be moved by multiple elements at a time. The distanced moved is known as the \textit{stride}, given by $S$.
+
+For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\Big(\Bigl\lfloor \dfrac{J + 2P - M}{S}\Bigr\rfloor + 1\Big) \times \Big(\Bigl\lfloor \dfrac{K + 2P - N}{S} \Bigr\rfloor + 1\Big)$.
+
+
+
+\subsection{Max Pooling}
+
+\subsection{ReLU Activation}
+
+
+%Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.
+%The neurons of a convNet are arranged in 3D. 
+%%http://cs231n.github.io/convolutional-networks/
+%
+%Input layer: raw pixel values, with width, height and color channels
+%Conv layer: Compute output for regions of input. Each computes a dot product between weights and a region that they are connected to.
+%ReLU: elementwise activation function.
+%Pool: downsampling
+%FC - fully connected: each neuron here is connected to all previous.
+%
+%Conv layer has a set of learnable filters. The filter might have only a small size, but will slide (convolve) across the image, computing dot products at each position.
 
 %https://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications
 %https://pappubahry.com/misc/neural/nielsen_1/
