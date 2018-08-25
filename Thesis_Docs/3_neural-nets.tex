@@ -426,7 +426,9 @@ One common method is to stop the training phase once validation accuracy does no
 
 \section{Convolutional Neural Networks}\label{convnets}
 
-Convolutional neural networks are of particular interest when working with image problems. The input data is assumed to be in 2 dimensions. Unlike fully connected layers, convolutional layers look to identify particular features within a subset of the 2D data sample. Collections of these features can be combined and interpreted for image classification.
+\textbf{DESCRIBE GENERAL STRUCTURE OF CNNS FOR CLASSIFICATION. IE INPUT $\rightarrow$ CONV $\rightarrow$ MAX POOLING $\rightarrow$ FC $\rightarrow$ SOFTMAX. THIS ACTIVATION ALLOWS FOR THE OUTPUT TO BE A PROBABILITY DISTRIBUTION AS BEFORE}
+
+Convolutional neural networks (CNNs) are of particular interest when working with image problems. The input data is assumed to be in 2 dimensions. Unlike fully connected layers, convolutional layers look to identify particular features within a subset of the 2D data sample. Collections of these features can be combined and interpreted for image classification.
 
 \subsection{Convolutional Layers}\label{convnets-convlayer}
 
@@ -444,23 +446,27 @@ The process starts from the top-left corner. A subset of the image is taken at t
 
 Each filter of a convolutional layer builds a matrix of neurons, where its dimension is a subset of the original image (depending on the size of the zero padding). These matrices are bound together to form a 3D array, with depth depending on the number of filters used.
 
-\subsection{Zero Padding}
+\subsection{Zero Padding}\label{convnets-pad}
 
 As the filters convolve around the image, the filters can only be placed within the bounds of the input image. This results in some loss of dimension. For a starting image with dimension $J \times K$ and a filter with dimension $M \times N$, the convolutional output will be of dimension $(J - M + 1)\times (K - N + 1)$.
 
 In order to retain the original image dimensions, the input image can be zero padded, with padding given by $P$. The dimension of the original image is increased to $(J+2P) \times (K+2P)$, with the outer $P$ elements all set to zero. When the convolution takes place, the resulting image size will have dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$.
 
-\subsection{Stride}
+\subsection{Stride}\label{convnets-stride}
 
 As the dimension of images an be quite large, moving a convolutional filter by only one element at a time can make the training process very long. To reduce the number of resulting variables, the filter can be moved by multiple elements at a time. The distanced moved is known as the \textit{stride}, given by $S$.
 
 For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\Big(\Bigl\lfloor \dfrac{J + 2P - M}{S}\Bigr\rfloor + 1\Big) \times \Big(\Bigl\lfloor \dfrac{K + 2P - N}{S} \Bigr\rfloor + 1\Big)$.
 
+\subsection{Max Pooling}\label{convnets-pool}
 
+It is common practise to follow convolution layers with max pooling layers. Pooling is a method of dimension reduction. Pooling layers create a sliding window of specified dimension and stride size. At each sliding window position, the pooling layer outputs a single value. In particular for max pooling, the layer outputs the maximum value at each sliding window location.
 
-\subsection{Max Pooling}
+The motivation behind this is that convolutional layers output high values in regions where the features of interest have been located. However, the algorithm is only interested in gathering information for classification and does not need the location to be highly specific. To improve computation time, it is then advantageous to remove a large number of variables, while retaining variables that identify significant features.
 
-\subsection{ReLU Activation}
+\subsection{ReLU Activation}\label{convnets-act}
+
+The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. As image data presents a very large number of variables, computation time can become very large. To aid this, the ReLU function is a common choice, as it can be computed very quickly. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}.
 
 
 %Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.
