@@ -1,17 +1,17 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 
 
 \chapter{Magnetic Resonance Imaging and Small Vessel Disease}\label{mri_svd_intro}
 
-An overview of some background knowledge is required to understand the data and the features that are being detected. This chapter introduces the general structure of the brain, MRI and the resulting images, SVD biomarkers, and the existing rating standards.
+An overview of magnetic resonance imaging and small vessel disease is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, MRI and the resulting images, SVD biomarkers, and existing rating standards.
 
 \section{Structure of the Brain}\label{svd-brain}
 
 The \textit{central nervous system} (CNS) is made up of the brain and spinal chord. Information from throughout the body is communicated via nerves, through the spinal chord, and to the brain. The brain is then tasked with receiving, interpreting and then responding to these signals. The brain itself is the most complex mechanism in the human body, and can be segmented into a number of regions, responsible for different roles. 
 
-The \textit{cerebrum} is the largest part of the brain, forming the outer surface. It is responsible for voluntary actions, senses, thought and memory. It is divided into two hemispheres - left and right, and each hemisphere divides into four lobes:
+The \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfig}, is the largest part of the brain, forming the outer surface. It is responsible for voluntary actions, senses, thought and memory. It is divided into two hemispheres - left and right, and each hemisphere divides into four lobes:
  \begin{itemize}
 	\item The \textit{frontal lobe} is located at the front of the cerebrum. It is responsible for voluntary movement, skills and behaviours, mood and memory.
 	\item The \textit{parietal lobe} is situated behind the frontal lobe and is responsible for the senses, including pain, and physical and spacial awareness.
@@ -22,32 +22,41 @@ The \textit{cerebrum} is the largest part of the brain, forming the outer surfac
 % Cerebrum diagram
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Images/2_Lobes_of_the_brain_NL.png}
+	\includegraphics[width=0.7\textwidth]{Images/2_Lobes_of_the_brain_NL.png}
 	\caption{The four lobes of the cerebral cortex.}
 	\small Image taken from Wikimedia Commons: \url{'Gray728.svg'}
+	\label{svd-cerebrumfig}
 \end{figure}
 
 % Gray vs white matter diagram
-\textbf{[Grey vs white matter diagram]}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Images/2_white_vs_grey.png}
+	\caption{Grey matter occurs at the surface and within central structures such as the spinal chord. The white matter connects these structures together.}
+	\small Image taken from \url{'https://medlineplus.gov/ency/imagepages/18117.htm'}
+	\label{svd-greywhitefig}
+\end{figure}
+
 
 % Basal Ganglia
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Images/2_Basal_Ganglia_and_Related_Structures.png}
+	\includegraphics[width=0.7\textwidth]{Images/2_Basal_Ganglia_and_Related_Structures.png}
 	\caption{The basal ganglia and other related structures.}
 	\small Image taken from Wikimedia Commons: \url{'Basal_Ganglia_and_Related_Structures.svg'}
+	\label{svd-basalfig}
 \end{figure}
 
 
 The outer surface of the brain consists of a layer of neurons referred to as \textit{grey matter}. This layer has a thickness of around 4mm, and much of the brain processes occur here. Grey matter also occurs in the cerebellum, brainstem and within the spinal chord.
 
-Underneath the grey matter is a network of fibres that connects these grey matter neurons together. Collectively, they form the \textit{white matter}. 
+Underneath the grey matter is a network of fibres that connects these grey matter neurons together. Collectively, they form the \textit{white matter}. The grey and white matter are shown in Figure \ref{svd-greywhitefig}.
 
-At the centre of the brain, the main structures include the thalamus, hypothalamus and pituitary gland. Of particular interest are a group of structures that form the \textit{basal ganglia}. This region of the brain is responsible for voluntary movement and learning; and exhibits more numerous instances of lacunes and perivascular spaces.
+At the centre of the brain, the main structures include the thalamus, hypothalamus and pituitary gland. Of particular interest are a group of structures that form the \textit{basal ganglia}, shown in Figure \ref{svd-basalfig}. This region of the brain is responsible for voluntary movement and learning; and exhibits more numerous instances of lacunes and perivascular spaces.
 
-At the base of the brain lies the cerebellum and brain stem. These are responsible for coordination and the transmission of nerve communications respectively.
+At the base of the brain lies the cerebellum and brain stem, also shown in Figure \ref{svd-basalfig}. These are responsible for coordination and the transmission of nerve communications respectively.
 
-Within the skull, the brain sits in \textit{cerebral spinal fluid} (CSF). This fluid can flow between the ridges  at the surface of the brain, to be found filling gaps, such as perivascular spaces, throughout the brain matter.
+Within the skull, the brain sits in \textit{cerebral spinal fluid} (CSF). This fluid can flow between the ridges  at the surface of the brain, found filling gaps, such as perivascular spaces, throughout the brain matter.
 
 
 \section{Magnetic Resonance Imaging}\label{svd-MRI}
@@ -96,7 +105,7 @@ Perivascular spaces are extensions of the fluid space surrounding blood vessels 
 
 Other biomarkers of interest include white matter hyperintensities, cerebral microbleeds, recent small subcortical infarcts and brain atrophy. 
 
-White matter hyperintensities are regions of hyperintensity shown in T2-weighted imaging. They also appear in T1-weighted images, but are hypointense, though not as dark as CSF. Their cause is not well understood.
+White matter hyperintensities are regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as CSF. Their cause is not well understood.
 
 Cerebral microbleeds are blooming regions of microscopic bleeding, around 2-5mm in diameter, though they can be larger. They are not visible on T1-weighted, T2-weighted and FLAIR images, and are instead found in T2*-imaging - constructed as a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
 
@@ -117,4 +126,4 @@ Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a machine learning algor
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
