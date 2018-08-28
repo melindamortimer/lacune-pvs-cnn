@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TexmakerSession quickmode="12">
-    <document bookmark1="0" file="/Users/melindamortimer/Google Drive/Thesis/Thesis Docs/1_intro.tex" bookmark2="0" hasfocus="false" bookmark3="0" line="55" master="false"/>
-    <document bookmark1="0" file="/Users/melindamortimer/Google Drive/Thesis/Thesis Docs/2_mri_svd.tex" bookmark2="0" hasfocus="false" bookmark3="0" line="56" master="false"/>
-    <document bookmark1="0" file="/Users/melindamortimer/Google Drive/Thesis/Thesis Docs/3_neural-nets.tex" bookmark2="0" hasfocus="true" bookmark3="0" line="271" master="false"/>
-    <document bookmark1="0" file="/Users/melindamortimer/Google Drive/Thesis/Thesis Docs/my-honours.tex" bookmark2="0" hasfocus="false" bookmark3="0" line="56" master="false"/>
-    <document bookmark1="0" file="/Users/melindamortimer/Google Drive/Thesis/Readings/bibliography.bib" bookmark2="0" hasfocus="false" bookmark3="0" line="0" master="false"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/bibliography.bib" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/4_literature-review.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/6_results.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/7_conclusion.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="true" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/my-honours.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/8_appendix.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/2_mri_svd.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/3_neural-nets.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/5_model_development.tex" bookmark3="0"/>
+    <document line="0" master="false" hasfocus="false" bookmark1="0" bookmark2="0" file="/Users/melindamortimer/Honours Scripts/Thesis_Docs/1_intro.tex" bookmark3="0"/>
 </TexmakerSession>
