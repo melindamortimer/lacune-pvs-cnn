@@ -1,25 +1,30 @@
-%\begin{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Literature Review}\label{litrev-intro}
 
-This chapter discusses past attempts at automated detection in MRI. Various methods have been employed for the identification of lacunes. In 2007, Yokoyama et al. \cite{Yokoyama2007} quantified a number of variables and then employed regression to classify lacunes. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554} developed a model that asists clinicians in identifying candidate lacunes, allowing for greater accuracy in manual rating. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
+This chapter discusses past attempts at automated detection in MRI. Various methods have been employed for the identification of lacunes. In 2007, Yokoyama et al. \cite{Yokoyama2007} quantified a number of variables and then employed regression to classify lacunes. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554} developed a model that assists clinicians in identifying candidate lacunes, allowing for greater accuracy in manual rating. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
 
 In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adopted a similar method for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
 
 
+\section{Regression}\label{litrev-reg}
 
-\section{Regression Attempts}\label{litrev-reg}
-
-This section describes previous attempts to automate the identification of lacunes, via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images.
+This section describes a previous attempt to automate the identification of lacunes, via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images.
 
 % Fig 1. from Yokoyama 2007 that shows structure of algorithm
 
-The algorithm is comprised of several stages. In the first phase, T2-weighted images are used to identify candidate lacunes. These candidates are one of two types: lacunes that are isolated, and those that are found next to white matter hyperintensities. The classification between the two types of lacunes is based on the location of the candidate.
+The algorithm is comprised of several stages. In the first phase, T2-weighted images were used to identify candidate lacunes. These candidates were one of two types: lacunes that were isolated, and those that were found next to white matter hyperintensities. The classification between the two types of lacunes was partially dependent on the location of the candidate.
 
 % Fig. 3 from Yokoyama 2007
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/4_extract_ventricle.png}
+	\caption{Extraction of the cerebral ventricle.}
+	\small Image taken from \cite{Yokoyama2007}
+\end{figure}
 
-Isolated lacune candidates were determined by extracting the cerebral ventricle and determining the mean pixel value of that region. The threshold for lacune identification was set at 70\% of the mean value. As lacunes primarily occur in the basal ganglia, a structure at the centre of the brain, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
+Isolated lacune candidates were determined by extracting the cerebral ventricle and determining the mean pixel value of that region. The threshold for lacune identification was set at 70\% of the mean value. Yokoyama et a. claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. As a result, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
 
 Lacunes were identified by considering three properties: area, circularity and gravitational centre.
 
@@ -40,17 +45,18 @@ The \textit{gravitational centre} is defined as the mean intensity of the pixels
 
 Candidate lacunes were then found to satisfy
 \begin{align*}
-	19 \le A \le 200 \\
-	0.45 \le C \\
+	19 \le A \le 200, \\
+	0.45 \le C, \\
 	(g_x - c_x)^2 + (g_y - c_y)^2 < 12000,
 \end{align*}
 where $(c_x, c_y)$ is the center of the circular region of interest.
 
-For lacunes that appear next to white matter hyperintensities, the candidate region is more difficult to extract. To detect lacunes, Yokoyama et al. use the difference between two circular filters of radii 1 and 8 pixels. To eliminate false-positives, Yokoyama et al. considered a small change in pixel intensity between lacunar infarcts and cerebral ventricle CSF, using region growing techniques to detect circular features. Using the same definitions for area and circularity as with isolated lacunes, candidates next to white matter hyperintensities satisfy
-\begin{align*}
-	25 \le A \le 100 \\
-	0.48 \le C.
-\end{align*}
+For lacunes that appear next to white matter hyperintensities, the candidate region is more difficult to extract. To detect lacunes, Yokoyama et al. use the difference between two circular filters of radii 1 and 8 pixels. To eliminate false-positives, Yokoyama et al. considered a small change in pixel intensity between lacunar infarcts and cerebral ventricle CSF, using region growing techniques to detect circular features.
+
+Using the same definitions for area and circularity as with isolated lacunes, candidates next to white matter hyperintensities satisfy
+\[
+	25 \le A \le 100\text{ and } 0.48 \le C.
+\]
 
 Once candidate lacunes have been identified, Yokoyama et al. then eliminated false positives by examining the T1-weighted scans. Removal of candidates is based on the location of the candidate, and on the area and gravitational centre as defined previously.
 
@@ -58,33 +64,60 @@ The algorithm was trained on 100 scans, containing 832 slices in total. 20 of th
 
 The second phase of training reduced the number of false positives by 68\%. However, of the four types of false positives, enlarged perivascular spaces had no reduction. This model is instead more likely to differentiate lacunes from the edge of the cerebrum, hyperintensities and the cerebral ventricle.
 
-In this model, perivascular spaces were defined as small, circular regions of diameter less than 3mm, located at the lower basal ganglia. This specification meant that the model was not sensitive to enlarged perivascular spaces, which can have a diameter up to 10mm and can occur anywhere in the grey and white matter of the brain.
-
 Yokoyama et al. suggest that further reductions in false positives could be attained through the use of FLAIR imaging. Lacunes are found to have a low intensity in T1-weighted imaging and a high intensity in T2-weighted imaging. In FLAIR imaging, lacunes are also found to have a low intensity, but not as low as the surrounding CSF, and often have a hyperintense rim \cite{WardlawJ.M.2013Nsfr}. 
 
-Yokoyama et al. also suggest increasing image context by using multiple slices for each candidate. Using 3D information, the axial slices above and below a candidate could be used to further eliminate false positives. This is particularly relevant when a candidate lacune appears on only a single axial slice, or when the candidate diverges from the usual ovoid shape in surrounding slices. Including this information would assist in differentiation between lacunes and perivascular spaces, since perivascular spaces can appear oblong along the coronial or saggital plane.
+Further improvements could be made by using multiple slices for each candidate, increasing image context. Using 3D information, the axial slices above and below a candidate could be used to further eliminate false positives. This is particularly relevant when a candidate lacune appears on only a single axial slice, or when the candidate diverges from the usual ovoid shape in surrounding slices. Including this information would assist in differentiation between lacunes and perivascular spaces, since perivascular spaces can appear oblong along the coronial or saggital plane.
 
-It should be mentioned that this model is dependent on a number of existing architectures. The first is the identification and extraction of particular brain regions. In this model, Yokoyama et al. were able to use existing binarisation techniques to extract the cerebral ventricle, in order to calculate its mean pixel intensity.
+\subsection*{Concerns}
 
-Each sample also requires a calculated area, circularity and gravitational centre. Each of these calculations requires sufficient time and resources, particularly if these calculations are to be conducted manually.
+Although the testing sensitivity was high, it was not high enough for the model to be usable on its own. Model improvement is required before it can be used to aid clinicians reliably.
+
+Yokoyama et al. made the assumption that lacunes only occur deep within the brain, within and surrounding the basal ganglia. This was the motivation behind extracting the cerebral ventricle. However, this assumption is not always satisfied. Though less common, lacunes have been found in other brain regions, including the cerebrum. As such, the analysis of only the deep central structures eliminates the possibility of identifying lacunes outside of that region.
+
+The feature definitions used for the model also make it difficult to identify perivascular spaces. In this model, perivascular spaces were defined as small, circular regions of diameter less than 3mm, located at the lower basal ganglia. This specification meant that the model was not sensitive to enlarged perivascular spaces, which can have a diameter up to 10mm and can occur anywhere in the grey and white matter of the brain. This change in definition contributes to the seemingly low false positive presence that PVS exhibit in the data.
 
 % Table 1 from Yokoyama 2007. Elimination of false positives - all PVS got through!
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Images/4_yokoyama2007testing.png}
+	\caption{Elimination of false positives. Perivascular spaces (PVS) see no reduction. They make only 4.1\% of false positives under their definition.}
+	\small Image taken from \cite{Yokoyama2007}
+\end{figure}
+
+It should be mentioned that this model is dependent on a number of existing architectures. The first is the identification and extraction of particular brain regions. In this model, Yokoyama et al. were able to use existing binarisation techniques to extract the cerebral ventricle. Each sample also requires a calculated area, circularity and gravitational centre. Each of these calculations requires sufficient time and resources, particularly if these calculations are to be conducted manually.
 
 Finally, the proportion of false positives is still relatively high. The sensitivity after the second phase is 90\%, which is substantial but still not accurate enough to warrant full automation of the process. Of particular concern is the proportion of perivascular spaces falsely marked as lacunes. Though they appear similar to lacunes, perivascular spaces do present some slight shape and intensity differences.
 
 
 \section{Support Vector Machines}
 
-In 2007, Uchiyama et al. \cite{Uchiyama20071554} use machine learning to develop a computer-assisted diagnosis (CAD) program to identify lacunes. Their algorithm takes the form of a support vector machine (SVM). 
+In 2007, Uchiyama et al. \cite{Uchiyama20071554} used machine learning to develop a computer-assisted diagnosis (CAD) program to identify lacunes. The false positive reduction takes the form of a support vector machine (SVM).
 
- - 132 scans: 1143 of T1 and T2-weighted slices each.
- - initial candidates: top-hat transform?? Multiple-phase binarisation (similar to yokoyama?). Again, candidates split into two types: isolated, and those close to the cerebral ventricle.
- - False positive reduction: x/y location, signal difference T1 - T2, nodular components scale 1-4, linear components scale 1-4. 
- - Support vector machine with 12 features for reducing false positives
- - holdout method evaluation??
- - sensitivity 96.8\% with 0.76 false positives per slice.
+Their data consisted of 132 MRI scans, each with T1-weighted and T2-weighted images, giving a total of 1143 axial slices in the dataset. 
+
+Similar to the method conducted by Yokoyama et al. \cite{Yokoyama2007}, Uchiyama et al. identified candidate lacunes of two forms: isolated lacunes, and those close to the cerebral ventricle. As with Yokoyama et al., isolated lacunes were determined by establishing a threshold, as these points exhibit a higher intensity. For lacunes close to the cerebral ventricle, their higher intensity can be masked by the intensity of the surrounding ventricle. To get around this, Uchiyama et al. used top-hat transforms on the T2-weighted images, a method that is specialised for extracting small details from image data.
+
+% Candidate lacune identification
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Images/4_uchiyama_candidates.png}
+	\caption{Candidate lacune detection. Isolated lacune in a), with resulting top-hat transform shown in c). Lacune in b) is next to the cerebral ventricle, with top-hat transform shown in d).}
+	\small Image taken from \cite{Uchiyama20071554}
+\end{figure}
+
+False positives were reduced using support vector machines. 12 features were used in false positive reduction, including the candidate's x and y location, signal differences in the T1-weighted and T2-weighted images, and filtered images based on 4 nodular components and 4 combined nodular and linear components. This model produced a sensitivity of 96.8\%, with 0.76 false positives per slice.
+
+\subsection*{Concerns}
+
+Model sensitivity is high enough to warrant usage of the model, though not high enough for full dependency. As described by Uchiyama et al., the model was designed as a CAD scheme, to run alongside manual rating by clinicians. The model still requires a user to oversee and confirm its results. 
  
- - Again, the model does not well distinguish between perivascular spaces and lacunes.
+Similar to the model developed by Yokoyama et al. \cite{Yokoyama2007}, the model developed by Uchiyama et al. was not able to distinguish between lacunes and enlarged perivascular spaces. Despite the data containing analysis on the nodular and linear nature of the candidate, the model was unable to make this distinction. Therefore, users of the CAD system must take care to confirm that the suggested candidates are not enlarged perivascular spaces.
+
+Many of the variables included in the method are dependent on other existing techniques. For instance, Uchiyama et al. explain that the nodular and linear components were determined via a newly explored filter bank technique. This technique was not well described, and as such, the model may be difficult to recreate.
+
+Another issue is the coordinate system. The model uses the x and y coordinates of the candidate to reduce false positives. The coordinates themselves do not have any innate information about the structure of the brain. It is possible for the same x and y values to link to differing regions across brain scans. It is not certain that particular coordinates will align with a brain structure that has a significant influence on the presence of lacunes. This is especially the case for candidates deep in the brain, as many brain structures sit close together. 
+
+Under the assumption that the x and y coordinates are indicative of lacune probability, the usage of location data may still incorrectly influence outcomes. Lacunes can be found throughout the brain, including in the cerebrum. 
 
 \section{Neural Networks}
 
@@ -115,7 +148,7 @@ First convolutional neural network attempts were based off the work by Dou et al
 \section{gxboost}
 
 
-\section{Multi-Scale Location-Aware 3D CNN}\label{litrev-paper1}
+\section{Multi-Scale Location-Aware 3D CNN}\label{litrev-ghafoorian}
 
 Entire model is made up of two neural networks.
 
@@ -209,4 +242,4 @@ Didn't mention: stride of pooling. Assumed 2 from diagram.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
