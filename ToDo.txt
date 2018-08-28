@@ -3,6 +3,8 @@
  - Read uchiyama2007a paper and continue literature review
  - tax return
 
+Locations of lacunes:
+location (frontal=1, parietal=2, occipital=3, temporal = 4, basal ganglia=5 (caudate=5a, putamen=5b, GP=5c, IC=5d, EC=5e),  brain stem=6, cerebellum=7, corpus callosum = 8, thalamus = 9)
 
 Project:
  - Go through images & spreadsheet. Determine x,y,z of lacunes. Ask Wei for help if necessary.
