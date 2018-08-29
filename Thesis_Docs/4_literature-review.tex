@@ -91,11 +91,11 @@ Finally, the proportion of false positives is still relatively high. The sensiti
 
 \section{Support Vector Machines}
 
-In 2007, Uchiyama et al. \cite{Uchiyama20071554} used machine learning to develop a computer-assisted diagnosis (CAD) program to identify lacunes. The false positive reduction takes the form of a support vector machine (SVM).
+In 2007, Uchiyama et al. \cite{Uchiyama20071554} used a machine learning algorithm to develop a computer-assisted diagnosis (CAD) program for lacune identification. In particular, false positive reduction took the form of a support vector machine (SVM).
 
 Their data consisted of 132 MRI scans, each with T1-weighted and T2-weighted images, giving a total of 1143 axial slices in the dataset. 
 
-Similar to the method conducted by Yokoyama et al. \cite{Yokoyama2007}, Uchiyama et al. identified candidate lacunes of two forms: isolated lacunes, and those close to the cerebral ventricle. As with Yokoyama et al., isolated lacunes were determined by establishing a threshold, as these points exhibit a higher intensity. For lacunes close to the cerebral ventricle, their higher intensity can be masked by the intensity of the surrounding ventricle. To get around this, Uchiyama et al. used top-hat transforms on the T2-weighted images, a method that is specialised for extracting small details from image data.
+Similar to the method conducted by Yokoyama et al. \cite{Yokoyama2007}, Uchiyama et al. identified candidate lacunes of two forms: isolated lacunes, and those close to the cerebral ventricle. Isolated lacunes were determined by establishing a threshold, as these points exhibit a higher intensity compared to the surrounding tissue. For lacunes close to the cerebral ventricle, their higher intensity can be masked by the intensity of the surrounding ventricle. To address this, Uchiyama et al. used top-hat transforms on the T2-weighted images, a method that is specialised for extracting small details from image data.
 
 % Candidate lacune identification
 \begin{figure}[ht]
@@ -121,7 +121,7 @@ Under the assumption that the x and y coordinates are indicative of lacune proba
 
 \section{Neural Networks}
 
-Uchiyama 2007b
+\cite{Uchiyama2007b}
 
 \section{Computer Assisted Detection}
 

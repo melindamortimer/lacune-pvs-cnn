@@ -167,23 +167,23 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 # 
 #         i <- i + 1
 #         if (i > max.rows) break
-#         
-#         
+# 
+# 
 #         # Also save the reverse image
 #         data.lacunes[i, 1] <- as.numeric(id)
 #         data.lacunes[i, 2] <- x
 #         data.lacunes[i, 3] <- y
 #         data.lacunes[i, 4] <- z
-#         
+# 
 #         patch.t1 <- soft[(x + 25):(x - 25), (y - 25):(y + 25), z, 1]
 #         patch.flair <- flair[(x + 25):(x - 25), (y - 25):(y + 25), z, 1]
-#         
+# 
 #         data.lacunes[i, 5:2605] <- patch.t1
 #         data.lacunes[i, 2606:5206] <- patch.flair
-#         
+# 
 #         data.lacunes[i, 5207] <- 1
 #         data.lacunes[i, 5208] <- 0
-#         
+# 
 #         i <- i + 1
 #         if (i > max.rows) break
 #       }
@@ -210,67 +210,67 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 # Try to collect 200 points per scan (1 per z slice?)
 # Randomise x/y. If lacune, pass.
 # If scan value 0, pass.
-# max.rows2 <- 50000
-# data.nonlacune <- array(NA, dim = c(max.rows2, 5208))
-# i <- 1
-# for (id in list.id) {
-#   cat(white$bgBlack(paste("Processing",id,"\n")))
-#   
-#   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
-#   soft <- f.read.nifti.volume(file.soft)
-#   
-#   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
-#   flair <- f.read.nifti.volume(file.flair)
-#   
-#   file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
-#   if (file_test("-f", file.lacune)) {
-#     lacune <- f.read.nifti.volume(file.lacune)
-#   } else {
-#     lacune <- array(data = 0, dim = dim(soft))
-#   }
-#   
-#   # Instead, take every kth pixel of matter? Skip if not matter or if a lacune. Sequence starts randomly between 26 and 76
-#   
-#   for (x in seq(round(runif(1, 26, 76)), dim(soft)[1] - 25, by = 20)) {
-#     for (y in seq(round(runif(1, 26, 76)), dim(soft)[2] - 25, by = 20)) {
-#       for (z in seq(round(runif(1, 26, 76)), dim(soft)[3] - 25, by = 20)) {
-#         # Skip if pixel is not in brain matter, or is a lacune
-#         if (soft[x,y,z,1] == 0 | lacune[x,y,z,1] == 1) next
-#         
-#         print(paste("Non-lacune at [", x, y, z, "]"))
-#         data.nonlacune[i, 1] <- as.numeric(id)
-#         data.nonlacune[i, 2] <- x
-#         data.nonlacune[i, 3] <- y
-#         data.nonlacune[i, 4] <- z
-#         
-#         patch.t1 <- soft[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
-#         patch.flair <- flair[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
-#         
-#         data.nonlacune[i, 5:2605] <- patch.t1
-#         data.nonlacune[i, 2606:5206] <- patch.flair
-#         
-#         data.nonlacune[i, 5207] <- 0
-#         data.nonlacune[i, 5208] <- 1
-#         
-#         i <- i + 1
-#         if (i > max.rows2) {
-#           print(paste("Reached max number of rows", max.rows2))
-#           break
-#         }
-#       }
-#     }
-#   }
-# }
+max.rows2 <- 50000
+data.nonlacune <- array(NA, dim = c(max.rows2, 5208))
+i <- 1
+for (id in list.id) {
+  cat(white$bgBlack(paste("Processing",id,"\n")))
+
+  file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  soft <- f.read.nifti.volume(file.soft)
+
+  file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  flair <- f.read.nifti.volume(file.flair)
+
+  file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  if (file_test("-f", file.lacune)) {
+    lacune <- f.read.nifti.volume(file.lacune)
+  } else {
+    lacune <- array(data = 0, dim = dim(soft))
+  }
+
+  # Instead, take every kth pixel of matter? Skip if not matter or if a lacune. Sequence starts randomly between 26 and 76
+
+  for (x in seq(round(runif(1, 26, 76)), dim(soft)[1] - 25, by = 20)) {
+    for (y in seq(round(runif(1, 26, 76)), dim(soft)[2] - 25, by = 20)) {
+      for (z in seq(round(runif(1, 26, 76)), dim(soft)[3] - 25, by = 20)) {
+        # Skip if pixel is not in brain matter, or is a lacune
+        if (lacune[x,y,z,1] == 1) next
+
+        print(paste("Non-lacune at [", x, y, z, "]"))
+        data.nonlacune[i, 1] <- as.numeric(id)
+        data.nonlacune[i, 2] <- x
+        data.nonlacune[i, 3] <- y
+        data.nonlacune[i, 4] <- z
+
+        patch.t1 <- soft[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
+        patch.flair <- flair[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
+
+        data.nonlacune[i, 5:2605] <- patch.t1
+        data.nonlacune[i, 2606:5206] <- patch.flair
+
+        data.nonlacune[i, 5207] <- 0
+        data.nonlacune[i, 5208] <- 1
+
+        i <- i + 1
+        if (i > max.rows2) {
+          print(paste("Reached max number of rows", max.rows2))
+          break
+        }
+      }
+    }
+  }
+}
 # 
 # Remove empty rows on end
 
-# numrows <- min(which(is.na(data.nonlacune[,1]))) - 1
-# data.nonlacune <- data.nonlacune[1:numrows,]
+numrows <- min(which(is.na(data.nonlacune[,1]))) - 1
+data.nonlacune <- data.nonlacune[1:numrows,]
 
 # Randomise and save
 
-# data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
-# save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
+data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
+save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
 
 
 
