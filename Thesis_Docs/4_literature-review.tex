@@ -3,7 +3,7 @@
 
 \chapter{Literature Review}\label{litrev-intro}
 
-This chapter discusses past attempts at automated detection in MRI. Various methods have been employed for the identification of lacunes. In 2007, Yokoyama et al. \cite{Yokoyama2007} quantified a number of variables and then employed regression to classify lacunes. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554} developed a model that assists clinicians in identifying candidate lacunes, allowing for greater accuracy in manual rating. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
+Previous attempts at automated lacune detection in \textsc{mri} have had mixed results. In 2007, Yokoyama et al. \cite{Yokoyama2007} determined candidates via top-hat transforms and multiphase binarisation. To reduce false positives, they then quantified a number of variables and employed regression. Uchiyama et al. \cite{Uchiyama20071554} used the method developed by Yokoyama et al., and additionally reduced false positives by feeding 12 features to a support vector machine. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
 
 In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adopted a similar method for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
 
@@ -24,7 +24,7 @@ The algorithm is comprised of several stages. In the first phase, T2-weighted im
 	\small Image taken from \cite{Yokoyama2007}
 \end{figure}
 
-Isolated lacune candidates were determined by extracting the cerebral ventricle and determining the mean pixel value of that region. The threshold for lacune identification was set at 70\% of the mean value. Yokoyama et a. claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. As a result, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
+Isolated lacune candidates were determined by extracting the cerebral ventricle and determining the mean pixel value of that region. The threshold for lacune identification was set at 70\% of the mean value. Yokoyama et al. claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. As a result, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
 
 Lacunes were identified by considering three properties: area, circularity and gravitational centre.
 
@@ -45,9 +45,9 @@ The \textit{gravitational centre} is defined as the mean intensity of the pixels
 
 Candidate lacunes were then found to satisfy
 \begin{align*}
-	19 \le A \le 200, \\
-	0.45 \le C, \\
-	(g_x - c_x)^2 + (g_y - c_y)^2 < 12000,
+	& 19 \le A \le 200, \\
+	& 0.45 \le C,\text{ and } \\
+	& (g_x - c_x)^2 + (g_y - c_y)^2 < 12000,
 \end{align*}
 where $(c_x, c_y)$ is the center of the circular region of interest.
 
@@ -121,32 +121,15 @@ Under the assumption that the x and y coordinates are indicative of lacune proba
 
 \section{Neural Networks}
 
-\cite{Uchiyama2007b}
+Uchiyama et al. \cite{Uchiyama2007b} improve their previous model \cite{Uchiyama20071554} by altering the method used for reducing false positives. The support vector machine was swapped with a neural network, using the same 12 input features.
 
-\section{Computer Assisted Detection}
-
-Uchiyama 2012, on their 2007a model
-
-\section{Template Matching}
-
-Uchiyama 2015
+The sensitivity of the model to lacunar infarcts remains the same, at 96.8\%. The number of false positives drops to 0.30 false positives per slice.
 
 \section{Convolutional Neural Networks}
-
-Microbleeds Dou 2016
-
-Ghafoorian 2017
-
-The first studies were conducted by Yokoyama:
- - multiphase binarisation
- - top hat transforms
  
- Uchiyama took this model and reduced false positives by applying 12 additional variables, with a classifier built using support vector machines. This model has been continually updated and improved through to 2015. 
- 
-First convolutional neural network attempts were based off the work by Dou et al. \cite{DouQ.2016ADoC}, in the detection of cerebral microbleeds. Ghafoorian et al. \cite{GhafoorianM.2017Dml3} utilised the fully convolutional nature of the initial detection model. This allows for fast image processing in comparison to fully connected layers, for 3D volumes. In addition, Ghafoorian et al. additionally utilised a multi-resolution convolutional neural network, along with 7 additional location features for false positive reduction.
+Ghafoorian et al. \cite{GhafoorianM.2017Dml3} utilised the fully convolutional nature of the initial detection model. This allows for fast image processing in comparison to fully connected layers, for 3D volumes. In addition, Ghafoorian et al. additionally utilised a multi-resolution convolutional neural network, along with 7 additional location features for false positive reduction.
 
-\section{gxboost}
-
+\section{xgboost}
 
 \section{Multi-Scale Location-Aware 3D CNN}\label{litrev-ghafoorian}
 
