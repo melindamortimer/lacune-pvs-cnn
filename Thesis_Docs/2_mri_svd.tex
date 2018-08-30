@@ -1,39 +1,51 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 
 
-\chapter{Magnetic Resonance Imaging and Small Vessel Disease}\label{mri_svd_intro}
+\chapter{Magnetic resonance imaging and small vessel disease}\label{mri_svd_intro}
 
-An overview of magnetic resonance imaging and small vessel disease is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, \textsc{mri} and the resulting images, \textsc{svd} biomarkers, and existing rating standards.
+An overview of magnetic resonance imaging (\textsc{mri}) and small vessel disease (\textsc{svd}) is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, \textsc{mri} and the resulting images, \textsc{svd} biomarkers, and existing rating standards.
 
-\section{Structure of the Brain}\label{svd-brain}
+\section{\textsc{mri} axes}
 
-The \textit{central nervous system} (CNS) is made up of the brain and spinal chord. Information from throughout the body is communicated via nerves, through the spinal chord, and to the brain. The brain is then tasked with receiving, interpreting and then responding to these signals. The brain itself is the most complex mechanism in the human body, and can be segmented into a number of regions, responsible for different roles. 
+By convention, the \textsc{mri} axis planes are referred to as axial, coronal, and sagittal, as shown in Figure \ref{svd-axes}.
 
-The \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfig}, is the largest part of the brain, forming the outer surface. It is responsible for voluntary actions, senses, thought and memory. It is divided into two hemispheres - left and right, and each hemisphere divides into four lobes:
- \begin{itemize}
-	\item The \textit{frontal lobe} is located at the front of the cerebrum. It is responsible for voluntary movement, skills and behaviours, mood and memory.
-	\item The \textit{parietal lobe} is situated behind the frontal lobe and is responsible for the senses, including pain, and physical and spacial awareness.
-	\item The \textit{temporal lobe} is located at the the side of the cerebrum, and is responsible for for memory and auditory functions, including hearing and speech.
-	\item The \textit{occipital lobe} is at the back of the cerebrum, behind the parietal lobe. It is responsible for visual information.
-\end{itemize}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.8]{Images/2_axes.png}
+	\caption{\textsc{mri} axis planes.}
+	\small \textbf{Image from}
+	\label{svd-axes}
+\end{figure}
+
+\section{Structure of the brain}\label{svd-brain}
 
 % Cerebrum diagram
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Images/2_Lobes_of_the_brain_NL.png}
 	\caption{The four lobes of the cerebral cortex.}
-	\small Image taken from Wikimedia Commons: \url{'Gray728.svg'}
+	\small Image taken from Wikimedia Commons: \url{`Gray728.svg'}
 	\label{svd-cerebrumfig}
 \end{figure}
+
+Information from throughout the body is communicated via nerves through the spinal chord to the brain. The brain is the most complex organ in the body, tasked with receiving, interpreting, and responding to these signals. It can be segmented into a number of regions, each responsible for different roles.
+
+The largest region is the \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfig}, which forms the outer surface of the brain. It is responsible for voluntary actions, senses, thought and memory, and is divided into two hemispheres - left and right. Each hemisphere is divided into four lobes:
+ \begin{itemize}
+	\item The \textit{frontal lobe}, located at the front of the cerebrum, is responsible for voluntary movement, skills and behaviours, mood, and memory.
+	\item The \textit{parietal lobe}, situated posterior to the frontal lobe, is responsible for the senses, including pain, and physical and spatial awareness.
+	\item The \textit{temporal lobe}, located exterior to the perietal lobe, is responsible for memory and auditory functions, including hearing and speech.
+	\item The \textit{occipital lobe}, located posterior to the parietal lobe, is responsible for visual information.
+\end{itemize}
 
 % Gray vs white matter diagram
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Images/2_white_vs_grey.png}
 	\caption{Grey matter occurs at the surface and within central structures such as the spinal chord. The white matter connects these structures together.}
-	\small Image taken from \url{'https://medlineplus.gov/ency/imagepages/18117.htm'}
+	\small Image taken from \url{`https://medlineplus.gov/ency/imagepages/18117.htm'}
 	\label{svd-greywhitefig}
 \end{figure}
 
@@ -43,92 +55,81 @@ The \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfig}, is the largest par
 	\centering
 	\includegraphics[width=0.7\textwidth]{Images/2_Basal_Ganglia_and_Related_Structures.png}
 	\caption{The basal ganglia and other related structures.}
-	\small Image taken from Wikimedia Commons: \url{'Basal_Ganglia_and_Related_Structures.svg'}
+	\small Image taken from Wikimedia Commons: \url{`Basal_Ganglia_and_Related_Structures.svg'}
 	\label{svd-basalfig}
 \end{figure}
 
 
-The outer surface of the brain consists of a layer of neurons referred to as \textit{grey matter}. This layer has a thickness of around 4mm, and much of the brain processes occur here. Grey matter also occurs in the cerebellum, brainstem and within the spinal chord.
+The outer surface of the brain consists of a layer of neurons referred to as \textit{grey matter}. This layer has a thickness of around 4 mm, where much of the brain processes occur. Grey matter also occurs in the cerebellum, brainstem, and within the spinal chord.
 
 Underneath the grey matter is a network of fibres that connects these grey matter neurons together. Collectively, they form the \textit{white matter}. The grey and white matter are shown in Figure \ref{svd-greywhitefig}.
 
-At the centre of the brain is a group of structures that form the \textit{basal ganglia}, shown in Figure \ref{svd-basalfig}. This region of the brain is responsible for voluntary movement and learning; and exhibits more numerous instances of lacunes and perivascular spaces. Two structures within the basal ganglia that are often found to have lacunes include the caudate and putamen. The thalamus is another structure that has a high frequency of lacunes, and is interconnected to the basal ganglia.
+At the centre of the brain is a group of structures that form the \textit{basal ganglia}, shown in Figure \ref{svd-basalfig}. This region of the brain is responsible for voluntary movement and learning. Connected to this structure is the thalamus, which is also related to sensory and motor function.
+%; and exhibits more numerous instances of lacunes and perivascular spaces. Two structures within the basal ganglia that are often found to have lacunes include the caudate and putamen. The thalamus is another structure that has a high frequency of lacunes, and is interconnected to the basal ganglia.
 
-At the base of the brain lies the cerebellum and brain stem, also shown in Figure \ref{svd-basalfig}. These are responsible for coordination and the transmission of nerve communications respectively.
+At the base of the brain lies the cerebellum and brain stem, also shown in Figure \ref{svd-basalfig}. They are responsible for coordination and the transmission of nerve communications respectively.
 
-Within the skull, the brain sits in \textit{cerebral spinal fluid} (CSF). This fluid can flow between the ridges  at the surface of the brain, found filling gaps such as perivascular spaces, throughout the brain matter.
+Within the skull, the brain sits in \textit{cerebral spinal fluid} (\textsc{csf}). This fluid can flow between the ridges  at the surface of the brain, filling gaps throughout the brain matter.
 
 
-\section{Magnetic Resonance Imaging}\label{svd-MRI}
+\section{Magnetic resonance imaging}\label{svd-MRI}
 
-\textit{Magnetic Resonance Imaging }(MRI) is a radiological technique that uses magnetic fields and radio waves to generate greyscale images of organs inside the body. The two most common images produced are referred to as \textit{T1-weighted} and \textit{T2-weighted} images, shown in Figure \ref{svd-t1-vs-t2}.
+(\textsc{mri}) is a radiological technique that uses magnetic fields and radio waves to generate greyscale images of organs inside the body. The two most common images produced are \textit{T1-weighted} and \textit{T2-weighted} images, shown in Figure \ref{svd-t1-vs-t2}.
 
 % Image comparisons
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/2_t1_t2_flair.jpg}
-	\caption{A comparison of T1, T2 and FLAIR images.}
+	\caption{A comparison of T1, T2 and \textsc{flair} images.}
 	\small Image taken from \cite{Preston2006}
 	\label{svd-t1-vs-t2}
 \end{figure}
 
-T1-weighted images are bright in regions with high fat content, such as white matter, and are dark in regions with high water content, usually CSF.
+T1-weighted images are bright in regions with high fat content, such as white matter, and are dark in regions with high water content, usually \textsc{csf}.
 
-In contrast, T2-weighted images are bright in regions with high fat and water content. This can make it easier to spot abnormalities.
+In contrast, T2-weighted images are bright in regions with high fat contents and water. This can make it easier to spot abnormalities.
 
-\textit{FLuid-Attenuated Inversion Recovery} (FLAIR) is another commonly used imaging sequence. It is similar to that of T2, except that CSF remains dark. This allows for easier identification of abnormalities against CSF.
+\textit{FLuid-Attenuated Inversion Recovery} (\textsc{flair}) is another commonly used imaging sequence. It is similar to T2-weighted images, except that \textsc{csf} remains dark. This allows for easier identification of abnormalities amongst \textsc{csf}.
 
 % T1, T2 and FLAIR images
 
-MRI scan data is made up of numerous 2D slices, that together form a three dimensional volume. The resolution of an MRI scanner is higher than that of other scans, such as CT scanning, so is frequently preferred for neurological and cancer studies.
+\textsc{mri} scan data is composed of numerous 2D slices, that together form a three dimensional volume. The resolution of a \textsc{mri} scan is higher than that of other scans, such as a \textsc{ct} scanning. Hence \textsc{mri} scanning is frequently preferred for neurological and cancer studies.
 
-\subsection*{MRI Axes}
+\section{Biomarkers of small vessel disease}\label{svd-markers}
 
-By convention, the MRI axis planes are referred to as axial, coronal and sagittal, as shown in Figure \ref{svd-axes}.
+\textit{Lacunes} are small brain cavities. They usually appear without symptoms, and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \cite{VanDerFlierM.Wiesje2005SVDa, BenjaminJ.Philip2018LIbN}. In \textsc{mri}, lacunes appear round, with a diameter between 3mm and 15mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of \textsc{csf}. Lacunes also have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in \textsc{flair} imaging.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.8]{Images/2_axes.png}
-	\caption{MRI axis planes.}
-	\small \textbf{Image taken from .... Show MRI examples?}
-	\label{svd-axes}
-\end{figure}
+\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and white matter hyperintensities. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to \textsc{csf}. They are found running parallel to vessels, and are generally found under 3mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but oblong when viewed in parallel to the vessels.
 
-\section{Biomarkers of Small Vessel Disease}\label{svd-markers}
-
-In the analysis of MRI scans for SVD, there are a number of biomarkers that clinicians look for. Two of these markers include lacunes and perivascular spaces. Though appearing similar in MRI, their origins greatly contrast each other, and so there is the need to differentiate between them.
-
-Prior to 2013, there were no official guidelines for the identification of these events. There were several studies attempting to establish guidelines \cite{PotterGillian2015CPSV, AdamsH.H.Hieab2013RMfD}, however these methods tended to focus on single specific events rather than SVD biomarkers in general.
-
-In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces \cite{AdamsH.H.Hieab2013RMfD, WardlawJ.M.2013Nsfr}.
-
-As a result, the STRIVE criterion \cite{WardlawJ.M.2013Nsfr} were put into place to standardise the terminology and definitions surrounding SVD biomakers.
-
-% Images of lacunes and perivascular spaces from STRIVE
+% Images of lacunes and perivascular spaces from \textsc{strive}
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width = \textwidth]{Images/2_STRIVE.png}
-	\caption{STRIVE criterion and MRI examples.}
+	\caption{\textsc{strive} criterion and \textsc{mri} examples.}
 	\small Image taken from \cite{WardlawJ.M.2013Nsfr}
 \end{figure}
 
-\textit{Lacunes} are defined as a form of small brain cavity. They usually appear without symptoms, and are frequently found in the scans of elderly. When present, they indicate a heightened risk of stroke and dementia \cite{VanDerFlierM.Wiesje2005SVDa, BenjaminJ.Philip2018LIbN}. In MRI, lacunes appear round, with a diameter between 3mm and 15mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of CSF. Lacunes also have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in FLAIR imaging.
-
-\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other SVD biomarkers such as lacunes and white matter hyperintensities. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to CSF. They are found running parallel to vessels, and are generally found under 3mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but oblong when viewed in parallel to the vessels.
-
 Other biomarkers of interest include white matter hyperintensities, cerebral microbleeds, recent small subcortical infarcts and brain atrophy. 
 
-\textit{White matter hyperintensities} are defined as regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as CSF. Their cause is not well understood.
+\textit{White matter hyperintensities} are defined as regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as \textsc{csf}. Their cause is not well understood.
 
-\textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, around 2-5mm in diameter, though they can be larger. They are not visible on T1-weighted, T2-weighted or FLAIR images, and are instead found in T2*-imaging - constructed as a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
+\textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, around 2-5mm in diameter, though they can be larger. They are not visible on T1-weighted, T2-weighted or \textsc{flair} images, and are instead found in T2*-imaging - constructed as a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
 
 \textit{Recent Small subcortical infarcts}, also called \textit{lacunar strokes}, are the cause of 25\% of ischaemic (oxygen starved) strokes \cite{WardlawJ.M.2013Nsfr}. They are regions of recent oxygen deprivation that have resulted in dying cells. These lesions are usually less than 20mm in diameter. 
 
-\textit{Brain atrophy} refers to the reduction of brain matter, not restricted to particular regions of the brain. It can be identified by the increase in CSF volume in T1-weighted, T2-weighted and FLAIR imaging.
+\textit{Brain atrophy} refers to the reduction of brain matter, not restricted to particular regions of the brain. It can be identified by the increase in \textsc{csf} volume in T1-weighted, T2-weighted and \textsc{flair} imaging.
 
-\section{Existing Rating Methods}\label{svd-rating}
+\section{Existing rating methods}\label{svd-rating}
 
-Without a biopsy for confirmation, the identification of SVD biomarkers relies on MRI analysis. Current rating methods are conducted manually. Trained observers examine MRI slice by slice. They then identify any lesions or points of interest in conjunction with the STRIVE criterion \cite{WardlawJ.M.2013Nsfr}. Though the criterion helped to standardise the definition of lacunes and perivascular spaces, their appearances are still highly similar and therefore difficult to distinguish. As a result, manual rating has been found to be highly inconsistent \cite{PotterGillian2015CPSV}. 
+In the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of biomarkers that clinicians observe. Two of these markers include lacunes and perivascular spaces. Though appearing similar in \textsc{mri}, their origins greatly contrast each other, and so there is a need to differentiate between the two.
+
+Prior to 2013, there were no official guidelines for the identification of these events. There were several studies attempting to establish guidelines \cite{PotterGillian2015CPSV, AdamsH.H.Hieab2013RMfD}, however these methods tended to focus on single specific events rather than \textsc{svd} biomarkers in general.
+
+In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces \cite{AdamsH.H.Hieab2013RMfD, WardlawJ.M.2013Nsfr}.
+
+As a result, the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr} were put into place to standardise the terminology and definitions surrounding \textsc{svd} biomakers.
+
+Without a biopsy for confirmation, the identification of \textsc{svd} biomarkers relies on \textsc{mri} analysis. Current rating methods are conducted manually. Trained observers examine \textsc{mri} slice by slice. They then identify any lesions or points of interest in conjunction with the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}. Though the criterion helped to standardise the definition of lacunes and perivascular spaces, their appearances are still highly similar and therefore difficult to distinguish. As a result, manual rating has been found to be highly inconsistent \cite{PotterGillian2015CPSV}. 
 
 In addition, the manual rating process is also time consuming. The checking and logging of an individual scan can take over 10 minutes.
 
@@ -138,4 +139,4 @@ Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a machine learning algor
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}

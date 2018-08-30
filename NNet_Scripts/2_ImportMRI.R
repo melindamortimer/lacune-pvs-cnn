@@ -264,22 +264,22 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 #   }
 # }
 # 
-# Remove empty rows on end
-
-numrows <- min(which(is.na(data.nonlacune[,1]))) - 1
-data.nonlacune <- data.nonlacune[1:numrows,]
-
-# Randomise and save
-
-data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
-save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
+# # Remove empty rows on end
+# 
+# numrows <- min(which(is.na(data.nonlacune[,1]))) - 1
+# data.nonlacune <- data.nonlacune[1:numrows,]
+# 
+# # Randomise and save
+# 
+# data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
+# save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
 
 
 
 
 
 # Sampling 1 ----------------------------------------------------------------
-
+# Training and testing only.
 load("/srv/scratch/z5016924/data_lacunes.Rda")
 load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
@@ -316,29 +316,31 @@ save(testing, file = "/srv/scratch/z5016924/testing.Rda")
 
 
 # Sampling 2 --------------------------------------------------------------
-
+# 1/3 positives
+load("/srv/scratch/z5016924/data_lacunes.Rda")
+load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
 # To get the 1/3 positives seen in the paper
 # Split data training:validation:testing = 50:25:25
-data.nonlacune2 <- data.nonlacune[sample(47976,7692),]
+data.nonlacune2 <- data.nonlacune[sample(nrow(data.nonlacune),2*nrow(data.lacunes)),]
 data2 <- rbind(data.lacunes, data.nonlacune2)
 n <- nrow(data2)
 data2 <- data2[sample(n),]
 
-training2 <- data2[1:floor(n/2),]
-validation2 <- data2[ceiling(n/2):floor(0.75*n),]
-testing2 <- data2[ceiling(0.75*n):n,]
+training <- data2[1:floor(n/2),]
+validation <- data2[(floor(n/2)+1):floor(0.75*n),]
+testing <- data2[(floor(0.75*n)+1):n,]
 
-save(training2, file = "/srv/scratch/z5016924/training2.Rda")
-save(validation2, file = "/srv/scratch/z5016924/validation2.Rda")
-save(testing2, file = "/srv/scratch/z5016924/testing2.Rda")
+save(training, file = "/srv/scratch/z5016924/training2.Rda")
+save(validation, file = "/srv/scratch/z5016924/validation2.Rda")
+save(testing, file = "/srv/scratch/z5016924/testing2.Rda")
 
 
-dim(training2)
+dim(training)
 #[1] 5769 5208
-dim(validation2)
-#[1] 2885 5208
-dim(testing2)
+dim(validation)
+#[1] 2884 5208
+dim(testing)
 #[1] 2885 5208
 
 
@@ -346,6 +348,9 @@ dim(testing2)
 
 # Use all samples, keeping the positive percentage at 7%.
 # Not too low, in case the model starts outputting non lacune too often, just to inflate accuracy.
+dim(data.lacunes)
+dim(data.nonlacune)
+# Lacunes now make 8.77% of data samples.
 
 load("/srv/scratch/z5016924/data_lacunes.Rda")
 load("/srv/scratch/z5016924/data_nonlacune.Rda")
@@ -364,13 +369,13 @@ testing <- rbind(data.lacunes[(floor(0.75*nl)+1):nl,], data.nonlacune[(floor(0.7
 testing <- testing[sample(nrow(testing)),]
 
 dim(training)
-# [1] 25911  5208
+# [1] 21927  5208
 
 dim(validation)
-# [1] 12955  5208
+# [1] 10963  5208
 
 dim(testing)
-# [1] 12956  5208
+# [1] 10964  5208
 
 save(training, file = "/srv/scratch/z5016924/training3.Rda")
 save(validation, file = "/srv/scratch/z5016924/validation3.Rda")
