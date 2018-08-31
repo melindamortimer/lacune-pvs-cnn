@@ -89,17 +89,25 @@ T1-weighted images are bright in regions with high fat content, such as white ma
 
 In contrast, T2-weighted images are bright in regions with high fat contents and water. This can make it easier to spot abnormalities.
 
-\textit{FLuid-Attenuated Inversion Recovery} (\textsc{flair}) is another commonly used imaging sequence. It is similar to T2-weighted images, except that \textsc{csf} remains dark. This allows for easier identification of abnormalities amongst \textsc{csf}.
+\textit{FLuid-Attenuated Inversion Recovery} (\textsc{flair}) is another commonly used imaging sequence. It is similar to T2-weighted imaging, except that \textsc{csf} remains dark. This allows for easier identification of abnormalities amongst \textsc{csf}.
+
+Each axial image is referred to as a \textit{slice}.
 
 % T1, T2 and FLAIR images
 
-\textsc{mri} scan data is composed of numerous 2D slices, that together form a three dimensional volume. The resolution of a \textsc{mri} scan is higher than that of other scans, such as a \textsc{ct} scanning. Hence \textsc{mri} scanning is frequently preferred for neurological and cancer studies.
+\textsc{mri} scan data is composed of numerous two-dimensional slices, that together form a three-dimensional volume. The resolution of a \textsc{mri} scan is higher than that of other scans, such as a \textsc{ct} scan. Hence \textsc{mri} scanning is frequently preferred for neurological and cancer studies.
 
 \section{Biomarkers of small vessel disease}\label{svd-markers}
 
-\textit{Lacunes} are small brain cavities. They usually appear without symptoms, and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \cite{VanDerFlierM.Wiesje2005SVDa, BenjaminJ.Philip2018LIbN}. In \textsc{mri}, lacunes appear round, with a diameter between 3mm and 15mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of \textsc{csf}. Lacunes also have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in \textsc{flair} imaging.
+In the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of biomarkers that clinicians observe. Each of these is defined in conjunction with the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}.
 
-\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and white matter hyperintensities. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to \textsc{csf}. They are found running parallel to vessels, and are generally found under 3mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but oblong when viewed in parallel to the vessels.
+\textit{White matter hyperintensities} are regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as \textsc{csf}. Their cause is not well understood.
+
+\textit{Lacunes} are small brain cavities. They usually appear without symptoms, and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \cite{BenjaminJ.Philip2018LIbN,VanDerFlierM.Wiesje2005SVDa}. In \textsc{mri}, lacunes appear round, with a diameter between 3 mm and 15 mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of \textsc{csf}. Lacunes have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in \textsc{flair} imaging.
+
+\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and white matter hyperintensities. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to \textsc{csf}. They are found running parallel to vessels, and are generally found under 3 mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but oblong when viewed in parallel to the vessels.
+
+In some instances, perivascular spaces can become enlarged, found up to 10 mm in diameter. As their signal intensity is similar to that of lacunes, they can be difficult to distinguish. 
 
 % Images of lacunes and perivascular spaces from \textsc{strive}
 \begin{figure}[ht]
@@ -109,27 +117,23 @@ In contrast, T2-weighted images are bright in regions with high fat contents and
 	\small Image taken from \cite{WardlawJ.M.2013Nsfr}
 \end{figure}
 
-Other biomarkers of interest include white matter hyperintensities, cerebral microbleeds, recent small subcortical infarcts and brain atrophy. 
+Other biomarkers of interest include cerebral microbleeds, recent small subcortical infarcts and brain atrophy. 
 
-\textit{White matter hyperintensities} are defined as regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as \textsc{csf}. Their cause is not well understood.
+\textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, around 2-5 mm in diameter, though they can be larger. They are not visible on T1-weighted, T2-weighted or \textsc{flair} images, and are instead found in T2*-imaging, constructed as a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
 
-\textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, around 2-5mm in diameter, though they can be larger. They are not visible on T1-weighted, T2-weighted or \textsc{flair} images, and are instead found in T2*-imaging - constructed as a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
+\textit{Recent Small subcortical infarcts}, also called \textit{lacunar strokes}, are the cause of 25\% of ischaemic (oxygen starved) strokes \cite{WardlawJ.M.2013Nsfr}. They are regions of recent oxygen deprivation that have resulted in dying cells. These lesions are usually less than 20 mm in diameter. 
 
-\textit{Recent Small subcortical infarcts}, also called \textit{lacunar strokes}, are the cause of 25\% of ischaemic (oxygen starved) strokes \cite{WardlawJ.M.2013Nsfr}. They are regions of recent oxygen deprivation that have resulted in dying cells. These lesions are usually less than 20mm in diameter. 
-
-\textit{Brain atrophy} refers to the reduction of brain matter, not restricted to particular regions of the brain. It can be identified by the increase in \textsc{csf} volume in T1-weighted, T2-weighted and \textsc{flair} imaging.
+\textit{Brain atrophy} refers to the reduction of brain matter and is not restricted to particular regions of the brain. It can be identified by the increase in \textsc{csf} volume in T1-weighted, T2-weighted and \textsc{flair} imaging.
 
 \section{Existing rating methods}\label{svd-rating}
 
-In the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of biomarkers that clinicians observe. Two of these markers include lacunes and perivascular spaces. Though appearing similar in \textsc{mri}, their origins greatly contrast each other, and so there is a need to differentiate between the two.
+Without a biopsy for confirmation, the identification of \textsc{svd} biomarkers relies on \textsc{mri} analysis. Trained observers examine \textsc{mri} slice by slice and identify any lesions or points of interest.
 
-Prior to 2013, there were no official guidelines for the identification of these events. There were several studies attempting to establish guidelines \cite{PotterGillian2015CPSV, AdamsH.H.Hieab2013RMfD}, however these methods tended to focus on single specific events rather than \textsc{svd} biomarkers in general.
+Prior to 2013, there were no official guidelines for the identification of \textsc{svd} biomarkers. There were several studies attempting to establish rating guidelines \cite{AdamsH.H.Hieab2013RMfD, PotterGillian2015CPSV}, however these methods tended to focus on specific events rather than \textsc{svd} biomarkers in general.
 
-In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces \cite{AdamsH.H.Hieab2013RMfD, WardlawJ.M.2013Nsfr}.
+%In addition, much of the terminology surrounding some biomarkers was inconsistent. For instance, perivascular spaces are also frequently referred to as Virchow-Robin spaces \cite{AdamsH.H.Hieab2013RMfD, WardlawJ.M.2013Nsfr}.
 
-As a result, the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr} were put into place to standardise the terminology and definitions surrounding \textsc{svd} biomakers.
-
-Without a biopsy for confirmation, the identification of \textsc{svd} biomarkers relies on \textsc{mri} analysis. Current rating methods are conducted manually. Trained observers examine \textsc{mri} slice by slice. They then identify any lesions or points of interest in conjunction with the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}. Though the criterion helped to standardise the definition of lacunes and perivascular spaces, their appearances are still highly similar and therefore difficult to distinguish. As a result, manual rating has been found to be highly inconsistent \cite{PotterGillian2015CPSV}. 
+In 2013, the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr} were established to standardise the terminology and definitions. Visual rating was then conducted in conjunction with those guidelines. Though the criterion helped to improve rating consistency, the appearance of lacunes and perivascular spaces are highly similar and therefore remain difficult to distinguish. As a result, manual rating is still highly inconsistent \cite{PotterGillian2015CPSV}. 
 
 In addition, the manual rating process is also time consuming. The checking and logging of an individual scan can take over 10 minutes.
 
