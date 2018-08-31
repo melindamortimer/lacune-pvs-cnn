@@ -3,10 +3,36 @@
 
 \chapter{Literature Review}\label{litrev-intro}
 
-Previous attempts at automated lacune detection in \textsc{mri} have had mixed results. In 2007, Yokoyama et al. \cite{Yokoyama2007} determined candidates via top-hat transforms and multiphase binarisation. To reduce false positives, they then quantified a number of variables and employed regression. Uchiyama et al. \cite{Uchiyama20071554} used the method developed by Yokoyama et al., and additionally reduced false positives by feeding 12 features to a support vector machine. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
+Previous attempts at automated lacune detection in \textsc{mri} have had mixed results. In 2007, Yokoyama et al. \cite{Yokoyama2007} determined candidates via multiphase binarisation. To reduce false positives, they then quantified a number of variables and employed regression. Uchiyama et al. \cite{Uchiyama20071554} used the method developed by Yokoyama et al., and additionally reduced false positives by feeding 12 features to a support vector machine. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
 
 In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adopted a similar method for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
 
+\section{Yokoyama 2007}
+
+Lacunar infarct regions are classified into two types: isolated regions and regions next to hyperintensities. Isolated lacunes found using multiple-phase binarisation. Those next to hyperintense structures are detected by pre-processing and subtracting images. Candidate regions based on area, circularity and gravitational centre. False positives first reduced by removing candidates at the edge of the image. Next compare the candidates against mean pixel values of surrounding circular regions.
+20 lacune samples used to adjust area, circularity and gravitational centre thresholds. 673 images used for testing. Sensitivity 90.1\%, specificity 30.0\%, 1.7 false positives per slice.
+
+\section{Uchiyama 2007a}
+
+Data consists of 1143 of T1 and T2 weighted images each, from 132 scans. The search region was restricted (to what?). Initial candidates found by using top-hat transforms and multiple-phase binarisation to T2 weighted images. False positives eliminated by determining 12 features: x and y coordinates, intensity differences in T1 and T2, and by extracting 4 scales of nodular component images, and 4 scales of nodular and linear component images.
+
+In this first model type, the 12 features were processed through a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false positives per slice.
+
+\section{Uchiyama 2007b}
+
+This model was identical to the first (Uchiyama 2007a), with the difference that the 12 features were passed through a neural network instead of a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.30 false positives per slice.
+
+\section{Uchiyama 2008}
+
+Developed CAD scheme for classification of lacunes and perivascular spaces. 109 MRI scans of T1 and T2-weighted images. 89 lacune images and 20 enlarged perivascular spaces. White top-hat transform to enhance T2 images. Grey-level thresholding to segment lesions. Determine the size, shape, location, and T1 and T2 intensities. These features were input into a neural network to distinguish between lacunes and perivascular spaces. Area under ROC curve (true positive/false positive ratio - only good for discriminant analysis) of 0.945.
+
+\section{Uchiyama 2015}
+
+Improvement on their previous model (96.8\% sensitivity and 0.71 false positives per slice), by template matching in the eigenspace. However, large number of templates needed, and cross-correlation is time consuming. To resolve these issues, template matching was used in a lower dimensional space via principal component analysis. Dataset consisted of 1143 images of T1 and T2, from 132 patients (same dataset as 2007 studies?). 34.1\% of false positives eliminated from previous attempt. Final performance was 96.8\% sensitivity, 0.47 false positives per slice.
+
+\section{Wang 2012}
+
+Automated multi-stage segmentation approach that labels white matter hyperintensities, cortical infarcts and lacunar infarcts. First segment the brain tissue into white matter, grey matter and CSF based on T1. Identify hyperintensities using FLAIR. Use all of T1, T2 and FLAIR to identify WMH, cortical infarcts and lacunes. 272 scans of elderly
 
 \section{Regression}\label{litrev-reg}
 
