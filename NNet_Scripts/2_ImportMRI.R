@@ -346,7 +346,7 @@ dim(testing)
 
 # Sampling 3 --------------------------------------------------------------
 
-# Use all samples, keeping the positive percentage at 7%.
+# Use all samples, keeping the positive percentage at a low percentage.
 # Not too low, in case the model starts outputting non lacune too often, just to inflate accuracy.
 dim(data.lacunes)
 dim(data.nonlacune)

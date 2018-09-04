@@ -1,9 +1,9 @@
 library(tensorflow)
 library(crayon)
 # rm(list = ls())
-load("/srv/scratch/z5016924/training3.Rda")
-load("/srv/scratch/z5016924/validation3.Rda")
-load("/srv/scratch/z5016924/testing3.Rda")
+load("/srv/scratch/z5016924/training2.Rda")
+load("/srv/scratch/z5016924/validation2.Rda")
+load("/srv/scratch/z5016924/testing2.Rda")
 
 
 # 1 -----------------------------------------------------------------------
@@ -203,7 +203,7 @@ while (e < max.epochs) {
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, "/srv/scratch/z5016924/model1/attempt5/model.ckpt")
+    saver$save(sess, "/srv/scratch/z5016924/model1/attempt4/model.ckpt")
   }
     i.train.acc2 <- i.train.acc2 + 1
     
@@ -216,7 +216,8 @@ while (e < max.epochs) {
 # When data was split into train/test only, and positives only made up 7% of data
 
 # 85% of the way through epoch 12, accuracy sudden plummets from around 100%, down to near 0??
-test.up.to <- nrow(testing)
+# test.up.to <- nrow(testing)
+test.up.to <- 1000
 accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
 # Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
 
@@ -240,8 +241,8 @@ mean(testing.accuracy)
 
 
 
-saver$restore(sess, "/srv/scratch/z5016924/model1/attempt5/model.ckpt")
-# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt5"))
+saver$restore(sess, "/srv/scratch/z5016924/model1/attempt4/model.ckpt")
+# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt4"))
 
 sess$close()
 
@@ -250,13 +251,49 @@ nrow.train.acc <- max(which(train.accuracy != 0))
 train.accuracy <- train.accuracy[1:nrow.train.acc]
 
 # Training accuracy
-save(train.accuracy, file = "/srv/scratch/z5016924/model1/attempt5/train_accuracy.Rda")
+# save(train.accuracy, file = "/srv/scratch/z5016924/model1/attempt4/train_accuracy.Rda")
 
 # Epoch validation accuracy
-save(train.accuracy2, file = "/srv/scratch/z5016924/model1/attempt5/train_accuracy2.Rda")
+# save(train.accuracy2, file = "/srv/scratch/z5016924/model1/attempt4/train_accuracy2.Rda")
 
 
 
 # Converting Full to Convolutional ----------------------------------------
 
 # https://tech.hbc.com/2016-05-18-fully-connected-to-convolutional-conversion.html
+
+
+
+# Evaluation --------------------------------------------------------------
+
+
+truepos <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 0L)), tf$float32))
+trueneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 1L)), tf$float32))
+falsepos <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 1L)), tf$float32))
+falseneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 0L)), tf$float32))
+
+# ntest <- 1000
+# truepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# trueneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# falsepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# falseneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+
+
+# Batch True/False Pos/neg evaluation
+tfpn.eval <- numeric(4)
+testseq <- seq(1,nrow(testing), by = 1000)
+
+names(tfpn.eval) <- c("TP","TN","FP","FN")
+
+for (i in testseq) {
+  print(paste(i, "of", nrow(testing)))
+  lower <- i
+  upper <- min(i+999, nrow(testing))
+  tfpn.eval[1] <- tfpn.eval[1] + truepos$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+  tfpn.eval[2] <- tfpn.eval[2] + trueneg$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+  tfpn.eval[3] <- tfpn.eval[3] + falsepos$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+  tfpn.eval[4] <- tfpn.eval[4] + falseneg$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+}
+
+tfpn.eval
+round(tfpn.eval/nrow(testing),4)
