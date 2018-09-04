@@ -3,8 +3,6 @@
 
 \chapter{Introduction}\label{s-intro}
 
-\section{Overview}\label{overview}
-
 {\noindent} Cerebral Small Vessel Disease (SVD) describes a set of abnormalities affecting small blood vessels in the deep grey and white matter of the brain. The changes are particularly prevalent amongst the elderly, with SVD biomarkers appearing in over 90\% of MRI for those aged 60-90 years \cite{deLeeuwF-E2001Pocw}. SVD is the primary cause of over one fifth of ischaemic (oxygen-starved) strokes \cite{SmithStephen2002ARaA} and is a major cause of dementia and cognitive decline \cite{NorrvingBo2008Linb}.
 
 Imaging markers of SVD include lacunes, enlarged perivascular spaces, white matter hyperintensities, microbleeds, recent small subcortical infarcts and brain atrophy \cite{WardlawJ.M.2013Nsfr}.
@@ -19,28 +17,21 @@ Several attempts have been made to improve the reliability of visual rating, wit
 
 Lacunes are of particular interest as the role of lacunes and perivascular spaces is still under consideration. In one instance, Benjamin et al. \cite{BenjaminJ.Philip2018LIbN} argue that it is only lacunes, rather than perivascular spaces, that influence cognitive decline. They suspect that previous observed influence of perivascular spaces may have been the result of incorrect classification during the rating process.
 
-To allow for more accurate, efficient and consistent image rating of lacunes and perivascular spaces, this paper attempts to automate the process via machine learning. As developments with machine learning are fairly recent, there have been a limited number of previous attempts.
+To allow for more accurate, efficient and consistent image rating of lacunes and perivascular spaces, this paper attempts to automate the process via machine learning.
 
-The first attempts at automated lacune detection were conducted by Yokoyama et al. \cite{YokoyamaRyujiro2002Aado}, primarily focussing on the definition of lacunes in identification. Their study showed promising results, but with a high proportion of false-positives - 1.77 per image.
+Previous attempts at automated lacune detection in \textsc{mri} have had mixed results. In 2007, Yokoyama et al. \cite{Yokoyama2007} determined candidates via multiphase binarisation. To reduce false positives, they developed thresholds on candidate area, perimeter, and centre of gravity. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554, Uchiyama2007b} used the method developed by Yokoyama et al., and additionally reduced false positives by feeding 12 features into support vector machines and neural networks. These models were revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
 
-By 2007, their model had undergone a number of revisions. Uchiyama et al. \cite{UchiyamaYoshikazu2007Ioad} used top-hat transforms and principal component determination to reduce false positives down to 0.30 per image, with a sensitivity of 0.968.
+In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a convolutional neural networks method. As with previous models, this model is dependent on input location variables for false positive reduction. 
 
-In 2016, Dou et al. \cite{DouQ.2016ADoC} released a study on the detection of cerebral microbleeds using 3D convolutional neural networks. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} then applied these same techniques to the detection of lacunes, distinctly from perivascular spaces. This algorithm demonstrated a sensitivity of 0.974, with 0.13 false positives per slice.
+Chapter 2 is an introduction to the terminology surrounding MRI and the biomakers involved in SVD. Chapter 3 is an introduction to the workings, structure and equations behind neural networks. Chapter 4 introduces convolutional neural network structure.
 
-Ghafoorian et al.'s model is dependent on input location variables, as well as the MRI itself. In addition, the inclusion of fully connected layers means that extra transformation of those layers to convolution layers is required to ensure that it can be applied with time efficiency. This study attempts to simplify this model by limiting the model to an entirely convolutional structure. In addition, we attempt to identify lacunes and perivascular spaces independent of the brain region being analysed.
-
-Chapter 2 is an introduction to the terminology surrounding MRI and the biomakers involved in SVD. Chapter 3 is an introduction to the workings, structure and equations behind neural networks and convolutional neural networks.
-
-\section{Results}\label{intro-results}
-
-
-- overview
-
-- motivation
-
-- brief results
-
-- structure of thesis
+%- overview
+%
+%- motivation
+%
+%- brief results
+%
+%- structure of thesis
 
 
 

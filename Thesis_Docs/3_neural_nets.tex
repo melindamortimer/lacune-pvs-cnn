@@ -1,9 +1,9 @@
 %\include{packages}
 %\begin{document}
 
-\chapter{Neural Networks}\label{neuralNets-intro}
+\chapter{Neural networks}\label{neuralNets-intro}
 
-To understand the models outlined in \textbf{Chapter}, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks, convolutional neural networks, and 3D convolutional neural networks.
+To understand the models outlined in \textbf{Chapter}, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks.
 
 % - Basic neural networks theory + perceptron
 % - Loss functions
@@ -17,13 +17,11 @@ To understand the models outlined in \textbf{Chapter}, it is necessary to introd
 % 
 % - 3D CNNs overview
 
-\section{Neural Networks}\label{nnets}
-
 Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors and patterns that may not be easily employed using other statistical methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans (see MNIST and ImageNET). They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and AI.
 
 The construction of neural networks has to be conducted with some care, however. The resulting models are difficult to interpret, and are prone to overfitting. 
 
-\subsection{Basic Structure}\label{nnets-structure}
+\section{Basic structure}\label{nnets-structure}
 
 Neural networks are made up of a series of layers of \textit{neurons}, as shown in \textbf{Figure}. The first layer is an input layer, where data is fed into the model. The last layer is an output layer, generating the final result. The central layers are known as \textit{hidden layers}, which conduct most of the processing.
 
@@ -45,7 +43,7 @@ The weights and biases are chosen such that they minimise some \textit{cost func
 
 Instead, this minimisation is approximated via the Gradient Descent algorithm \textbf{(see Section)}. This algorithm is run until the cost falls below a specified margin, or reaches a maximum number of iterations.
 
-\subsection{Notation}\label{nnets-not}
+\section{Notation}\label{nnets-not}
 
 In order to more efficiently and coherantly describe the computations, it is necessary to introduce some notation.
 
@@ -65,7 +63,7 @@ Let $W$ and $B$ be the sets of all weights and biases as before.
 
 Let $\eta$ be the learning rate of the minimiser during training.
 
-\subsection{Activation Functions}\label{nnets-act}
+\section{Activation functions}\label{nnets-act}
 
 Activation functions serve to introduce nonlinearity into the model. 
 
@@ -99,7 +97,7 @@ A common activation function for the final layer is the softmax function,
 \]
 This is used for classification tasks as the output takes on the form of a probability distribution.
 
-\subsection{Cost Functions}\label{nnets-cost}
+\section{Cost functions}\label{nnets-cost}
 
 Weights and biases are chosen such that they approximately minimise some cost function.
 
@@ -137,7 +135,7 @@ Unlike the quadratic cost, when error is high, the learning rate is also high.
 %Changing these can improve a model.
 %Other improvements made by making better initialisations of weights, and better heuristics to choose hyper-parameters.
 
-\subsection{Gradient Descent}\label{nnets-graddesc}
+\section{Gradient descent}\label{nnets-graddesc}
 
 Weights and biases are chosen such that they will minimise the cost function. However, there are too many variables for this to be done analytically, and so they are instead estimated using the Gradient Descent algorithm.
 
@@ -193,7 +191,7 @@ As gradient descent moves the coefficients in the direction of the steepest nega
 
 As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem, which is discussed further in section \ref{nnet-vanishinggradprob}.
 
-\subsection{Stochastic Gradient Descent}\label{nnets-stochgraddesc}
+\subsection*{Stochastic gradient descent}\label{nnets-stochgraddesc}
 
 As the neural network has a very large number of weights, gradient descent is a highly computationally intensive algorithm. To improve training time, Stochastic Gradient Descent is a popular alternative. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from, referred to as a \textit{batch}. After training has been completed for that batch, another batch of training inputs is randomly selected, and the process repeats. When all training batches have been used, it is said that an \textit{epoch} of training has been completed.
 
@@ -206,8 +204,15 @@ In this manner, a relatively small number of samples is used for each weight adj
 %
 %Backpropagation: gradient of the cost function. 
 
+\subsection*{Learning rate}\label{nnets-learningrate}
 
-\subsection{Backpropagation}\label{nnets-backprop}
+The learning rate, given by $\eta$, controls the adjustment of weights during training. As in Section \ref{nnets-graddesc}, the change in gradients, $\Delta\mathbf{v} = -\eta\nabla C$, moves the weights in the direction of the steepest negative gradient. $\eta$ then controls the magnitude of the movement.
+
+The size of $\eta$ controls how quickly the model learns. If $\eta$ is too small, training will take a long time. If $\eta$ is too large, the model may move the weights too far, and the values of $\mathbf{v}$ will move past the local minimum.
+
+To aid in efficient training, learning rates can be adjusted throughout. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision. A common technique is to lower the learning rate only when validation accuracy drops.
+
+\section{Backpropagation}\label{nnets-backprop}
 
 During gradient descent, it is necessary to calculate the gradient of the cost function. This is done through the process of backpropagation. This algorithm determines the $\dfrac{\partial C}{\partial z}$, then relates those values to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$. To describe the algorithm, we first need to derive some results.
 
@@ -317,7 +322,7 @@ Using these equations, the backpropagation algorithm runs as follows:
 \end{enumerate}
 
 
-\subsection{The Vanishing Gradient Problem}\label{nnet-vanishinggradprob}
+\subsection*{Vanishing gradient problem}\label{nnet-vanishinggradprob}
 Note that the error, $\delta^l$, is dependent on the gradient of the activation function. If the gradient of the activation is close to 0, then both the error detected and learning rate also become close to 0.
 
 \noindent For the sigmoid activation function,
@@ -355,36 +360,7 @@ This activation has gradient
 \]
 which avoids the 0 gradient for negative $z$.
 
-\subsection{L2-Regularisation}\label{nnet-l2reg}
-
-% Regularisation & Dropout
-
-One of the main issues with neural networks is the tendency to overfit. One common method to mitigate this is to apply regularisation techniques to the calculation of cost. The most common of these is \textit{L2-regularisation}, also known as Ridge Regression.
-
-This adds an extra penalty term to the cost function, to get
-\[
-	C(W,B) + \dfrac{\lambda}{2n}\sum_{w\in W}w^2.
-\]
-The penalty term is scaled by $\lambda$, known as the regularisation parameter. 
-
-Another common regularisation is L1, or Lasso Regression, which takes the sum of the absolute weights,
-\[
-	C(W,B) + \dfrac{\lambda}{n}\sum_{w\in W}|w|.
-\]
-
-\subsection{Dropout}\label{nnet-dropout}
-
-Through the training process, it is possible for individual neurons to become sensitive to patterns present in specific observations. When a dropout layer is added, each neuron connected to the layer has a preset probability $p$ of being deactivated, regardless of their input.
-
-This ensures that relevant features of the data are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
-
-\subsection{Data Expansion}
-
-As there are a large number of variables, neural networks require a very large sample size to avoid overfitting. Where the number of samples may not be large enough, the data can be augmented and added to the existing dataset, introducing more varied samples.
-
-Common augmentations for image data include flipping horizontally and vertically, rotation and cropping. It should be noted, however, that not all augmentations will be valid for each context. For instance, handwriting cannot be flipped. 
-
-\subsection{Weight Initialisation}
+\section{Weight initialisation}
 
 The initialisation of weights and biases affects the rate and quality of training. Intuitively, if the weights are initialised close to final output values, it will be faster to train. Conversely, weights that are initialised poorly will take a long time to train to the same accuracy, or may not converge to an appropriate solution at all.
 
@@ -410,120 +386,44 @@ where $d_{l-1}$ is the number of nodes in the $(l-1)$th layer.
 %It can be difficult to determine what to change with so many parameters in play at once. This is particularly the case with large amounts of data or complex models. Change the learning rate? Number of hidden neurons? Number of layers? 
 %General strategy is to start simple. First just try to get ANY non-trivial result. E.g. for MNIST, just isolate 0/1 images. Start without hidden layers, just to test it out. Once there are non-trivial results, start building these more complex structures.
 
-\subsection{Learning Rate}\label{nnets-learningrate}
+\section{Regularisation}\label{nnet-reg}
 
-The learning rate, given by $\eta$, controls the adjustment of weights during training. As in Section \ref{nnets-graddesc}, the change in gradients, $\Delta\mathbf{v} = -\eta\nabla C$, moves the weights in the direction of the steepest negative gradient. $\eta$ then controls the magnitude of the movement.
+One of the main issues with neural networks is the tendency to overfit. One common method to mitigate this is to apply regularisation techniques to the calculation of cost.
 
-The size of $\eta$ controls how quickly the model learns. If $\eta$ is too small, training will take a long time. If $\eta$ is too large, the model may move the weights too far, and the values of $\mathbf{v}$ will move past the local minimum.
+\subsection*{L2-regularisation}\label{nnet-l2reg}
 
-To aid in efficient training, learning rates can be adjusted throughout. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision. A common technique is to lower the learning rate only when validation accuracy drops.
+% Regularisation & Dropout
 
-\subsection{Early Stopping}\label{nnets-earlystop}
+The most common regularisation technique is \textit{L2-regularisation}, also known as Ridge Regression.
+
+This adds an extra penalty term to the cost function, to get
+\[
+	C(W,B) + \dfrac{\lambda}{2n}\sum_{w\in W}w^2.
+\]
+The penalty term is scaled by $\lambda$, known as the regularisation parameter. 
+
+Another common regularisation is L1, or Lasso Regression, which takes the sum of the absolute weights,
+\[
+	C(W,B) + \dfrac{\lambda}{n}\sum_{w\in W}|w|.
+\]
+
+\subsection*{Dropout}\label{nnet-dropout}
+
+Through the training process, it is possible for individual neurons to become sensitive to patterns present in specific observations. When a dropout layer is added, each neuron connected to the layer has a preset probability $p$ of being deactivated, regardless of their input.
+
+This ensures that relevant features of the data are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
+
+\subsection*{Data expansion}
+
+As there are a large number of variables, neural networks require a very large sample size to avoid overfitting. Where the number of samples may not be large enough, the data can be augmented and added to the existing dataset, introducing more varied samples.
+
+Common augmentations for image data include flipping horizontally and vertically, rotation and cropping. It should be noted, however, that not all augmentations will be valid for each context. For instance, handwriting cannot be flipped. 
+
+\subsection*{Early stopping}\label{nnets-earlystop}
 
 Lengthy model training can cause extensive overfitting of the training data. To help avoid this, model training can be stopped early, before testing performance drops.
 
 One common method is to stop the training phase once validation accuracy does not improve after some $k$ epochs. Alternatively, a model can be trained over all epochs. The model that performs best on the validation set is selected.
-
-\section{Convolutional Neural Networks}\label{convnets}
-
-Convolutional neural networks (CNNs) are of particular interest when working with image problems. The input data is assumed to be in 2 dimensions. Unlike fully connected layers, convolutional layers look to identify particular features within a subset of the 2D data sample. Collections of these features can be combined and interpreted for image classification.
-
-% Diagram of typical CNN structure
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{Images/3_cnn_structure.png}
-	\caption{Typical CNN Structure. Convolution layers, with ReLU activation (nonlinearity), are followed by pooling layers. Final layers are fully connected, using softmax activation.}
-	\small Image taken from \cite{ADeshpande2016}
-	\label{convnets-structurefig}
-\end{figure}
-
-As shown in Figure \ref{convnets-structurefig}, CNNs typically consist of alternating convolutional layers (Section \ref{convnets-convlayer}) and max pooling layers (Section \ref{convnets-pool}). For classification tasks, the last layers of the network are fully connected. Softmax activation is used for the final output layer, to generate a probability distribution as with other classification tasks.
-
-\subsection{Convolutional Layers}\label{convnets-convlayer}
-
-In a convolutional layer, a \textit{filter} is a matrix of weights that describes a particular visual feature to be identified. These filters have predetermined dimensions, usually set to assess a small subset of the original image. Each filter has the same depth as the original image. For instance, an image that has three colour channels; red, blue and green, will have convolution filters also with a depth of three. Each convolutional layer can have many filters.
-
-The filters are then said to \textit{convolve} around the image. Suppose that a filter $F^{(f)}$ has dimension $M\times N \times C$. Given an input image matrix $X$, the value of the convolution at element $X_{j,k}$ is given by
-\[
-	a_{jk}^{(f)} = \sigma\bigg(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\bigg)
-\]
-where $\sigma(\cdot)$ is some activation function as before, $C$ is the number of input channels and $b^{(f)}$ is the bias to be added when using filter $f$. 
-
-% Diagram of convolution algorithm
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.5]{Images/3_convolution.png}
-	\caption{Convolution algorithm with 2 filters of size 3x3, stride 2, zero padding 1}
-	\small Image adapted from \url{'http://cs231n.github.io/convolutional-networks/'}
-	\label{convnets-conv-alg}
-\end{figure}
-
-As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are point-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
-
-Each filter of a convolutional layer builds a matrix of neurons, where its dimension is a subset of the original image (depending on the size of the zero padding). These matrices are bound together to form a 3D array, with depth depending on the number of filters used.
-
-\subsection{Zero Padding}\label{convnets-pad}
-
-As the filters convolve around the image, the filters can only be placed within the bounds of the input image. This results in some loss of dimension. For a starting image with dimension $J \times K$ and a filter with dimension $M \times N$, the convolutional output will be of dimension $(J - M + 1)\times (K - N + 1)$.
-
-In order to retain the original image dimensions, the input image can be zero padded, with padding given by $P$. The dimension of the original image is increased to $(J+2P) \times (K+2P)$, with the outer $P$ elements all set to zero. When the convolution takes place, the resulting image size will have dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$.
-
-\subsection{Stride}\label{convnets-stride}
-
-As the dimension of images an be quite large, moving a convolutional filter by only one element at a time can make the training process very long. To reduce the number of resulting variables, the filter can be moved by multiple elements at a time. The distanced moved is known as the \textit{stride}, given by $S$.
-
-For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\Big(\Bigl\lfloor \dfrac{J + 2P - M}{S}\Bigr\rfloor + 1\Big) \times \Big(\Bigl\lfloor \dfrac{K + 2P - N}{S} \Bigr\rfloor + 1\Big)$.
-
-\subsection{Max Pooling}\label{convnets-pool}
-
-It is common practise to follow convolution layers with max pooling layers. Pooling is a method of dimension reduction. Pooling layers create a sliding window of specified dimension and stride size. At each sliding window position, the pooling layer outputs a single value. In particular for max pooling, the layer outputs the maximum value at each sliding window location.
-
-The motivation behind this is that convolutional layers output high values in regions where the features of interest have been located. However, the algorithm is only interested in gathering information for classification and does not need the location to be highly specific. To improve computation time, it is then advantageous to remove a large number of variables, while retaining variables that identify significant features.
-
-\subsection{ReLU Activation}\label{convnets-act}
-
-The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. As image data presents a very large number of variables, computation time can become very large. To aid this, the ReLU function is a common choice, as it can be computed very quickly. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}.
-
-
-%Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.
-%The neurons of a convNet are arranged in 3D. 
-%http://cs231n.github.io/convolutional-networks/
-%
-%Input layer: raw pixel values, with width, height and color channels
-%Conv layer: Compute output for regions of input. Each computes a dot product between weights and a region that they are connected to.
-%ReLU: elementwise activation function.
-%Pool: downsampling
-%FC - fully connected: each neuron here is connected to all previous.
-%
-%Conv layer has a set of learnable filters. The filter might have only a small size, but will slide (convolve) across the image, computing dot products at each position.
-
-%https://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications
-%https://pappubahry.com/misc/neural/nielsen_1/
-% http://neuralnetworksanddeeplearning.com/
-
-%Good animated representation: https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
-%
-%https://medium.com/technologymadeeasy/the-best-explanation-of-convolutional-neural-networks-on-the-internet-fbb8b1ad5df8
-%
-%https://tensorflow.rstudio.com/tensorflow/articles/tutorial_mnist_beginners.html
-%
-%https://adeshpande3.github.io/A-Beginner%27s-Guide-To-Understanding-Convolutional-Neural-Networks-Part-2/
-%
-%https://tech.hbc.com/2016-05-18-fully-connected-to-convolutional-conversion.html
-
-
-%\section{R-CNN}
-%Purpose is to take in an image, and draw bounding boxes over all of the objects. Train to find 4D output (x, y, width, height) of object. Use L2 distance loss between prediction and 'ground truth'.
-%
-%Done by attaching a fully connected layer to the last conv layer. Separate classification layers and box coord layers. 
-%Accuracy determined by Intersection over Union (ioU) area. 
-
-
-
-
-\section{3D Convolutional Neural Networks}\label{3dConvNeuralNets}
-
-
 
 
 

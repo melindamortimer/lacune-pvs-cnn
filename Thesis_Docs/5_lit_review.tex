@@ -1,16 +1,18 @@
 %\include{packages}
 %\begin{document}
 
-\chapter{Literature Review}\label{litrev-intro}
+\chapter{Existing methodologies}\label{litrev-intro}
 
-Previous attempts at automated lacune detection in \textsc{mri} have had mixed results. In 2007, Yokoyama et al. \cite{Yokoyama2007} determined candidates via multiphase binarisation. To reduce false positives, they then quantified a number of variables and employed regression. Uchiyama et al. \cite{Uchiyama20071554} used the method developed by Yokoyama et al., and additionally reduced false positives by feeding 12 features to a support vector machine. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
+Previous attempts at automated lacune detection in \textsc{mri} have had mixed results. In 2007, Yokoyama et al. \cite{Yokoyama2007} determined candidates via multiphase binarisation. To reduce false positives, they quantified a number of variables and employed regression on candidates. Also in 2007, Uchiyama et al. \cite{Uchiyama20071554, Uchiyama2007b} used the method developed by Yokoyama et al., and additionally reduced false positives by feeding 12 features into a support vector machine. This model was revised in 2015\cite{Uchiyama2015}, with reduced false-positives via template matching.
 
-In 2016, Dou et al. \cite{DouQ.2016ADoC} developed a convolutional neural networks algorithm for the identification of microbleeds, another SVD biomarker. In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} adopted a similar method for the automated detection of lacunes. These deep learning algorithms employ manually input location-based variables in addition to the image slices.
+In 2017, Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a convolutional neural networks method. As with other previous models, this model included location-based data for the reduction of false-positives.
+
+This chapter outlines previous methods in more detail, and discusses the impact of including location-based variables.
 
 \section{Yokoyama 2007}
 
-Lacunar infarct regions are classified into two types: isolated regions and regions next to hyperintensities. Isolated lacunes found using multiple-phase binarisation. Those next to hyperintense structures are detected by pre-processing and subtracting images. Candidate regions based on area, circularity and gravitational centre. False positives first reduced by removing candidates at the edge of the image. Next compare the candidates against mean pixel values of surrounding circular regions.
-20 lacune samples used to adjust area, circularity and gravitational centre thresholds. 673 images used for testing. Sensitivity 90.1\%, specificity 30.0\%, 1.7 false positives per slice.
+Lacunar infarct regions are classified into two types: isolated regions and regions next to hyperintensities. Isolated lacune candidates are found using multiple-phase binarisation. Candidates next to hyperintense structures are detected by pre-processing and subtracting images. Candidate regions are generated based on area, circularity and gravitational centre. False positives are first reduced by removing candidates at the edge of the image. Next compare the candidates against mean pixel values of surrounding circular regions.
+20 lacune samples were used to adjust area, circularity and gravitational centre thresholds. 673 images used for testing. Sensitivity 90.1\%, specificity 30.0\%, 1.7 false positives per slice.
 
 \section{Uchiyama 2007a}
 
@@ -36,7 +38,7 @@ Automated multi-stage segmentation approach that labels white matter hyperintens
 
 \section{Regression}\label{litrev-reg}
 
-This section describes a previous attempt to automate the identification of lacunes, via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images.
+This section describes a previous attempt to automate the identification of lacunes via regression. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm for the identification of lacunes using both T1 and T2-weighted images.
 
 % Fig 1. from Yokoyama 2007 that shows structure of algorithm
 
@@ -50,7 +52,7 @@ The algorithm is comprised of several stages. In the first phase, T2-weighted im
 	\small Image taken from \cite{Yokoyama2007}
 \end{figure}
 
-Isolated lacune candidates were determined by extracting the cerebral ventricle and determining the mean pixel value of that region. The threshold for lacune identification was set at 70\% of the mean value. Yokoyama et al. claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. As a result, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
+Isolated lacune candidates were determined by considering the mean pixel value of the cerebral ventricle. Lacunes are expected to be of a lower intensity. The threshold for lacune identification was set at 70\% of the mean pixel value. Yokoyama et al. claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. As a result, the detection region was limited to this area. Yokoyama et al. determined the coordinates bounding the cerebral centricle, which were then used to define a circular search region.
 
 Lacunes were identified by considering three properties: area, circularity and gravitational centre.
 
