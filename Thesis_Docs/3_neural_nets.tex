@@ -3,7 +3,7 @@
 
 \chapter{Neural networks}\label{neuralNets-intro}
 
-To understand the models outlined in \textbf{Chapter}, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks.
+To understand the models outlined in Chapter \ref{litrev}, it is necessary to introduce neural networks. This chapter covers the structure and workings behind basic neural networks.
 
 % - Basic neural networks theory + perceptron
 % - Loss functions
@@ -17,13 +17,13 @@ To understand the models outlined in \textbf{Chapter}, it is necessary to introd
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors and patterns that may not be easily employed using other statistical methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans (see MNIST and ImageNET). They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and AI.
+Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans. They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and \textsc{ai}.
 
 The construction of neural networks has to be conducted with some care, however. The resulting models are difficult to interpret, and are prone to overfitting. 
 
 \section{Basic structure}\label{nnets-structure}
 
-Neural networks are made up of a series of layers of \textit{neurons}, as shown in \textbf{Figure}. The first layer is an input layer, where data is fed into the model. The last layer is an output layer, generating the final result. The central layers are known as \textit{hidden layers}, which conduct most of the processing.
+Neural networks are made up of layers of \textit{neurons}, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. The last layer is an output layer that generates the final result. The central layers are known as \textit{hidden layers}, which conduct most of the processing.
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 \begin{figure}[ht]
@@ -31,17 +31,26 @@ Neural networks are made up of a series of layers of \textit{neurons}, as shown 
 	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
 	\caption{Basic neural network structure.}
 	\small Image taken from \url{'https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
+	\label{nnet-structurefig}
 \end{figure}
 
-Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\top$ be a vector of weights, where each $w_i$ is associated with $x_i$. Let $b$ be an additional variable be added, known as the \textit{bias}. This bias is not to be confused with statistical bias. The output of a single neuron is given by
+Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\top$ be a vector of weights, where each $w_i$ corresponds to $x_i$. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias. The output of a single neuron is given by
 \[
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
 \]
 where $\sigma(\cdot)$ is some activation function and $a$ is known as an \textit{activation value}.
 
+% Diagram of single neuron
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.5]{Images/3_neuron.png}
+	\caption{Neuron structure.}
+	\label{nnet-structurefig}
+\end{figure}
+
 The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$ analytically.
 
-Instead, this minimisation is approximated via the Gradient Descent algorithm \textbf{(see Section)}. This algorithm is run until the cost falls below a specified margin, or reaches a maximum number of iterations.
+Instead, this minimisation is approximated via the Gradient Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost falls below a specified margin, or reaches a maximum number of iterations.
 
 \section{Notation}\label{nnets-not}
 
@@ -101,7 +110,7 @@ This is used for classification tasks as the output takes on the form of a proba
 
 Weights and biases are chosen such that they approximately minimise some cost function.
 
-In using gradient descent \textbf{(see Section)}, there are two requirements. First, that the cost, $C_X(\cdot)$, accrued from all samples, $X$, can be expressed as the mean of costs accrued from $n$ distinct subsamples of $X$, denoted $X_i$,
+In using gradient descent (see Section \ref{nnets-graddesc}), there are two requirements. First, that the cost, $C_X(\cdot)$, accrued from all samples, $X$, can be expressed as the mean of costs accrued from $n$ distinct subsamples of $X$, denoted $X_i$,
 \[
 	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
 \]
@@ -114,7 +123,7 @@ One of the most common cost functions for regression is the quadratic cost, or M
 \[
 	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2,
 \]
-where $\|\cdot\|$ is the Euclidean norm. This form is convenient for backpropagation \textbf{(see Section)} as it has an efficiently computable gradient,
+where $\|\cdot\|$ is the Euclidean norm. This form is convenient for backpropagation (see Section \ref{nnets-backprop}) as it has an efficiently computable gradient,
 \[
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
 \]
