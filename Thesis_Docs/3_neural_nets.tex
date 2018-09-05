@@ -1,5 +1,5 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Neural networks}\label{neuralNets-intro}
 
@@ -17,7 +17,7 @@ To understand the models outlined in Chapter \ref{litrev}, it is necessary to in
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models exhibit high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans \cite{ImageNET}. They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and \textsc{ai}.
+Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models exhibit high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans \cite{HeK2016Drlf} and have been proven successful in \textsc{mri} classification tasks \cite{DouQ.2016ADoC, Yokoyama2007b}.
 
 The construction of neural networks has to be conducted with some care. The resulting models are difficult to interpret and prone to overfitting. 
 
@@ -73,7 +73,7 @@ Let $\eta$ be the learning rate of the minimiser during training.
 
 \section{Activation functions}\label{nnets-act}
 
-Activation functions are functions, $\sigma(\cdot)$, applied just before neuron output. Activation functions serve to introduce nonlinearity into the model. Without these functions, a network can be reduced to a linear combination of inputs. 
+Activation functions $\sigma(\cdot)$ are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions serve to introduce nonlinearity into the model.
 
 The simplest neuron type is called the \textit{perceptron}. In this neuron, the activation function is the step function,
 \[
@@ -441,4 +441,4 @@ One common method is to stop the training phase once validation accuracy does no
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}

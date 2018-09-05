@@ -93,7 +93,9 @@ The first attempts were made by Uchiyama et al. in 2007 \cite{Uchiyama20071554, 
 
 These features were input into two different machine learning algorithms. The first was a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false positives per slice. The second model was a neural network. This had a sensitivity of 96.8\%, with 0.30 false positives per slice.
 
-In 2015, Uchiyama et al. \cite{Uchiyama2015} improved the models from 2007 using template matching. These templates were generated from 
+In 2015, Uchiyama et al. \cite{Uchiyama2015} improved their previous models by using template matching. Data was reduced to a lower dimensional space using principal component analysis. Template matching reduced false positives by 34.1\%, with the final model having a sensitivity of 96.8\% and 0.47 false positives per slice.
+
+In 2012, Wang et al. \cite{WangY.2012Msow} conduct a differing approach, labelling three features: white matter hyperintensities, lacunes in the cerebral cortex, and lacunes beneath the cerebral cortex. The model was provided with T1, T2 and \textsc{flair} images. The brain tissue is segmented into white matter, grey matter and \textsc{csf} based on the T1-weighted images. White matter hyperintensities are identified using \textsc{flair}
 
 
 
