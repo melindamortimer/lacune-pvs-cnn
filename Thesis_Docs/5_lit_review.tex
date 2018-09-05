@@ -87,14 +87,13 @@ Finally, the proportion of false positives is still relatively high. The sensiti
 
 \section{Machine learning}\label{litrev-ml}
 
-This section describes a number of models that were developed partially using machine learning techniques. 
+This section describes a number of models that were developed using machine learning techniques. 
 
-The first attempts are made by Uchiyama et al. in 2007 \cite{Uchiyama20071554, Uchiyama2007b}. These models are a continuation of the model completed by Yokoyama et al. \cite{Yokoyama2007}. Once candidates have been identified, the models undergo false positive reduction. 12 location based features are identified: x and y coordinates, intensity differences in T1 and T2, 4 scales of nodular component extraction, and 4 scales of combined nodular and linear component extraction.
+The first attempts were made by Uchiyama et al. in 2007 \cite{Uchiyama20071554, Uchiyama2007b}. The data consisted of 132 scans totalling 1143 images of T1 and T2 weighting. These models are a continuation of the model completed by Yokoyama et al. \cite{Yokoyama2007}. Once candidates have been identified, the models undergo false positive reduction. 12 location based features are identified: x and y coordinates, intensity differences in T1 and T2, 4 levels of nodular component extraction, and 4 levels of combined nodular and linear component extraction.
 
 These features were input into two different machine learning algorithms. The first was a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false positives per slice. The second model was a neural network. This had a sensitivity of 96.8\%, with 0.30 false positives per slice.
 
-In 2015, Uchiyama et al. \cite{Uchiyama2015}, the models from 2007 were improved using template matching. These templates were generated from 
-
+In 2015, Uchiyama et al. \cite{Uchiyama2015} improved the models from 2007 using template matching. These templates were generated from 
 
 
 

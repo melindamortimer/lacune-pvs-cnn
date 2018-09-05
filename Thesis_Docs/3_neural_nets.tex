@@ -17,9 +17,9 @@ To understand the models outlined in Chapter \ref{litrev}, it is necessary to in
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans. They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and \textsc{ai}.
+Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans \cite{ImageNET}. They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and \textsc{ai}.
 
-The construction of neural networks has to be conducted with some care, however. The resulting models are difficult to interpret, and are prone to overfitting. 
+The construction of neural networks has to be conducted with some care. The resulting models are difficult to interpret, and are prone to overfitting. 
 
 \section{Basic structure}\label{nnets-structure}
 
@@ -48,19 +48,19 @@ where $\sigma(\cdot)$ is some activation function and $a$ is known as an \textit
 	\label{nnet-structurefig}
 \end{figure}
 
-The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$ analytically.
+The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$.
 
-Instead, this minimisation is approximated via the Gradient Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost falls below a specified margin, or reaches a maximum number of iterations.
+Instead, this minimisation is approximated via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost falls below a specified tolerance, or reaches a maximum number of iterations.
 
 \section{Notation}\label{nnets-not}
 
 In order to more efficiently and coherantly describe the computations, it is necessary to introduce some notation.
 
-Define $\mathbf{w}_j^l$ to be the vector of weights used by the $j$th neuron of the $l$th layer, where $w_{ji}^l$ is the weight attributed to the $i$th neuron of the $(l-1)$th layer.
+Define $\mathbf{w}^l_j$ to be the vector of weights used by the $j$-th neuron of the $l$-th layer, where $w_{ji}^l$ is the weight attributed to the $i$-th neuron of the $(l-1)$-th layer.
 
-$b_j^l$ is the bias of the $j$th neuron in the $l$th layer.
+$b_j^l$ is the bias of the $j$-th neuron in the $l$th layer.
 
-$\mathbf{a}^l$ is the vector of activation values (outputs) for the $l$th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
+$\mathbf{a}^l$ is the vector of activation values (outputs) for the $l$-th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
 
 Set $z_j^l = \mathbf{w}_j^l\cdot \mathbf{a}^{l-1} + b_j^l= \sum_k w_{jk}^la_k^{l-1} + b_j^l$ to be the values calculated before activation, and $\mathbf{z}^l$ to be the vector of $z_j^l$ for layer $l$. Set $Z$ to be the set of all $z_j^l$ in the whole network.
 
