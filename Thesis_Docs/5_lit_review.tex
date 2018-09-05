@@ -1,15 +1,13 @@
 \include{packages}
 \begin{document}
 
-\chapter{Existing methodologies}\label{litrev-intro}
+\chapter{Existing methodologies}\label{litrev}
 
 This chapter outlines previous methods in more detail, and discusses the impact of including location-based variables. In particular, we examine the models by Yokoyama et al. \cite{Yokoyama2007} and Ghafoorian et al. \cite{GhafoorianM.2017Dml3}.
 
 \section{Thresholding}\label{litrev-threshold}
 
-This section describes a previous attempt to automate the identification of lacunes, with false positives reduced via thresholding. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm that examined lacune candidate area, circularity and gravitational centre. Thresholds are developed and applied, dependent on the candidate's location and surrounding hyperintense structures.
-
-The resulting model exhibited a sensitivity of 90.1\%, averaging 1.7 false positives per axial slice.
+This section describes a previous attempt to automate the identification of lacunes, with false positives reduced via thresholding. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm that examined lacune candidate area, circularity and gravitational centre. Candidates were chosen such that they satisfied particular thresholds. Threshold values were dependent on the candidate's location and surrounding hyperintense structures. The resulting model exhibited a sensitivity of 90.1\% and averaged 1.7 false positives per axial slice.
 
 % Fig 1. from Yokoyama 2007 that shows structure of algorithm
 
@@ -18,7 +16,7 @@ The algorithm is comprised of several stages. In the first phase, T2-weighted im
 % Fig. 3 from Yokoyama 2007
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{Images/4_extract_ventricle.png}
+	\includegraphics[width=\textwidth]{Images/5_extract_ventricle.png}
 	\caption{Extraction of the cerebral ventricle.}
 	\small Image taken from \cite{Yokoyama2007}
 \end{figure}
@@ -64,8 +62,8 @@ The algorithm was trained on 100 scans, containing 832 slices in total. 20 of th
 % Table 1 from Yokoyama 2007. Elimination of false positives - all PVS got through!
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Images/4_yokoyama2007testing.png}
-	\caption{Elimination of false positives. Perivascular spaces (PVS) see no reduction. They make only 4.1\% of false positives under their definition.}
+	\includegraphics[width=0.8\textwidth]{Images/5_yokoyama2007testing.png}
+	\caption{Elimination of false positives. Perivascular spaces (\textsc{pvs}) see no reduction. They make only 4.1\% of false positives under their definition.}
 	\small Image taken from \cite{Yokoyama2007}
 \end{figure}
 
@@ -87,10 +85,87 @@ It should be mentioned that this model is dependent on a number of existing arch
 
 Finally, the proportion of false positives is still relatively high. The sensitivity after the second phase is 90\%, which is substantial but still not accurate enough to warrant full automation of the process. Of particular concern is the proportion of perivascular spaces falsely marked as lacunes. Though they appear similar to lacunes, perivascular spaces do present some slight shape and intensity differences.
 
+\section{Machine learning}\label{litrev-ml}
+
+This section describes a number of models that were developed partially using machine learning techniques. 
+
+The first attempts are made by Uchiyama et al. in 2007 \cite{Uchiyama20071554, Uchiyama2007b}. These models are a continuation of the model completed by Yokoyama et al. \cite{Yokoyama2007}. Once candidates have been identified, the models undergo false positive reduction. 12 location based features are identified: x and y coordinates, intensity differences in T1 and T2, 4 scales of nodular component extraction, and 4 scales of combined nodular and linear component extraction.
+
+These features were input into two different machine learning algorithms. The first was a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false positives per slice. The second model was a neural network. This had a sensitivity of 96.8\%, with 0.30 false positives per slice.
+
+In 2015, Uchiyama et al. \cite{Uchiyama2015}, the models from 2007 were improved using template matching. These templates were generated from 
+
+
+
+
+%\section{Yokoyama 2007}
+%
+%Lacunar infarct regions are classified into two types: isolated regions and regions next to hyperintensities. Isolated lacune candidates are found using multiple-phase binarisation. Candidates next to hyperintense structures are detected by pre-processing and subtracting images. Candidate regions are generated based on area, circularity and gravitational centre. False positives are first reduced by removing candidates at the edge of the image. Next compare the candidates against mean pixel values of surrounding circular regions.
+%20 lacune samples were used to adjust area, circularity and gravitational centre thresholds. 673 images used for testing. Sensitivity 90.1\%, specificity 30.0\%, 1.7 false positives per slice.
+%
+%\section{Uchiyama 2007a}
+%
+%Data consists of 1143 of T1 and T2 weighted images each, from 132 scans. The search region was restricted (to what?). Initial candidates found by using top-hat transforms and multiple-phase binarisation to T2 weighted images. False positives eliminated by determining 12 features: x and y coordinates, intensity differences in T1 and T2, and by extracting 4 scales of nodular component images, and 4 scales of nodular and linear component images.
+%
+%In this first model type, the 12 features were processed through a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false positives per slice.
+%
+%\section{Uchiyama 2007b}
+%
+%This model was identical to the first (Uchiyama 2007a), with the difference that the 12 features were passed through a neural network instead of a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.30 false positives per slice.
+%
+%\section{Uchiyama 2008}
+%
+%Developed CAD scheme for classification of lacunes and perivascular spaces. 109 MRI scans of T1 and T2-weighted images. 89 lacune images and 20 enlarged perivascular spaces. White top-hat transform to enhance T2 images. Grey-level thresholding to segment lesions. Determine the size, shape, location, and T1 and T2 intensities. These features were input into a neural network to distinguish between lacunes and perivascular spaces. Area under ROC curve (true positive/false positive ratio - only good for discriminant analysis) of 0.945.
+%
+%\section{Uchiyama 2015}
+%
+%Improvement on their previous model (96.8\% sensitivity and 0.71 false positives per slice), by template matching in the eigenspace. However, large number of templates needed, and cross-correlation is time consuming. To resolve these issues, template matching was used in a lower dimensional space via principal component analysis. Dataset consisted of 1143 images of T1 and T2, from 132 patients (same dataset as 2007 studies?). 34.1\% of false positives eliminated from previous attempt. Final performance was 96.8\% sensitivity, 0.47 false positives per slice.
+%
+%\section{Wang 2012}
+%
+%Automated multi-stage segmentation approach that labels white matter hyperintensities, cortical infarcts and lacunar infarcts. First segment the brain tissue into white matter, grey matter and CSF based on T1. Identify hyperintensities using FLAIR. Use all of T1, T2 and FLAIR to identify WMH, cortical infarcts and lacunes. 272 scans of elderly
+%
+
+%\section{Uchiyama2007a - support vector machines}
+
+%In 2007, Uchiyama et al. \cite{Uchiyama20071554} used a machine learning algorithm to develop a computer-assisted diagnosis (CAD) program for lacune identification. In particular, false positive reduction took the form of a support vector machine (SVM).
+%
+%Their data consisted of 132 MRI scans, each with T1-weighted and T2-weighted images, giving a total of 1143 axial slices in the dataset. 
+%
+%Similar to the method conducted by Yokoyama et al. \cite{Yokoyama2007}, Uchiyama et al. identified candidate lacunes of two forms: isolated lacunes, and those close to the cerebral ventricle. Isolated lacunes were determined by establishing a threshold, as these points exhibit a higher intensity compared to the surrounding tissue. For lacunes close to the cerebral ventricle, their higher intensity can be masked by the intensity of the surrounding ventricle. To address this, Uchiyama et al. used top-hat transforms on the T2-weighted images, a method that is specialised for extracting small details from image data.
+%
+%% Candidate lacune identification
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=0.8\textwidth]{Images/5_uchiyama_candidates.png}
+%	\caption{Candidate lacune detection. Isolated lacune in a), with resulting top-hat transform shown in c). Lacune in b) is next to the cerebral ventricle, with top-hat transform shown in d).}
+%	\small Image taken from \cite{Uchiyama20071554}
+%\end{figure}
+%
+%False positives were reduced using support vector machines. 12 features were used in false positive reduction, including the candidate's x and y location, signal differences in the T1-weighted and T2-weighted images, and filtered images based on 4 nodular components and 4 combined nodular and linear components. This model produced a sensitivity of 96.8\%, with 0.76 false positives per slice.
+%
+%\subsection*{Concerns}
+%
+%Model sensitivity is high enough to warrant usage of the model, though not high enough for full dependency. As described by Uchiyama et al., the model was designed as a CAD scheme, to run alongside manual rating by clinicians. The model still requires a user to oversee and confirm its results. 
+% 
+%Similar to the model developed by Yokoyama et al. \cite{Yokoyama2007}, the model developed by Uchiyama et al. was not able to distinguish between lacunes and enlarged perivascular spaces. Despite the data containing analysis on the nodular and linear nature of the candidate, the model was unable to make this distinction. Therefore, users of the CAD system must take care to confirm that the suggested candidates are not enlarged perivascular spaces.
+%
+%Many of the variables included in the method are dependent on other existing techniques. For instance, Uchiyama et al. explain that the nodular and linear components were determined via a newly explored filter bank technique. This technique was not well described, and as such, the model may be difficult to recreate.
+%
+%Another issue is the coordinate system. The model uses the x and y coordinates of the candidate to reduce false positives. The coordinates themselves do not have any innate information about the structure of the brain. It is possible for the same x and y values to link to differing regions across brain scans. It is not certain that particular coordinates will align with a brain structure that has a significant influence on the presence of lacunes. This is especially the case for candidates deep in the brain, as many brain structures sit close together. 
+%
+%Under the assumption that the x and y coordinates are indicative of lacune probability, the usage of location data may still incorrectly influence outcomes. Lacunes can be found throughout the brain, including in the cerebrum. 
+%
+%\section{Neural Networks}
+%
+%Uchiyama et al. \cite{Uchiyama2007b} improve their previous model \cite{Uchiyama20071554} by altering the method used for reducing false positives. The support vector machine was swapped with a neural network, using the same 12 input features.
+%
+%The sensitivity of the model to lacunar infarcts remains the same, at 96.8\%. The number of false positives drops to 0.30 false positives per slice.
+
 
 \section{Convolutional neural networks}\label{litrev-cnn}
 
-We will now discuss the convolutional neural network structure utilised by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. 
+We will now discuss the convolutional neural network structure utilised by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. This model consists of two phases: candidate generation, followed by false positive reduction. This model resulted in 
 
 %
 %Entire model is made up of two neural networks.
@@ -181,70 +256,7 @@ We will now discuss the convolutional neural network structure utilised by Ghafo
 
 \section{Proposed changes}\label{litrev-changes}
 
-%\section{Yokoyama 2007}
-%
-%Lacunar infarct regions are classified into two types: isolated regions and regions next to hyperintensities. Isolated lacune candidates are found using multiple-phase binarisation. Candidates next to hyperintense structures are detected by pre-processing and subtracting images. Candidate regions are generated based on area, circularity and gravitational centre. False positives are first reduced by removing candidates at the edge of the image. Next compare the candidates against mean pixel values of surrounding circular regions.
-%20 lacune samples were used to adjust area, circularity and gravitational centre thresholds. 673 images used for testing. Sensitivity 90.1\%, specificity 30.0\%, 1.7 false positives per slice.
-%
-%\section{Uchiyama 2007a}
-%
-%Data consists of 1143 of T1 and T2 weighted images each, from 132 scans. The search region was restricted (to what?). Initial candidates found by using top-hat transforms and multiple-phase binarisation to T2 weighted images. False positives eliminated by determining 12 features: x and y coordinates, intensity differences in T1 and T2, and by extracting 4 scales of nodular component images, and 4 scales of nodular and linear component images.
-%
-%In this first model type, the 12 features were processed through a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false positives per slice.
-%
-%\section{Uchiyama 2007b}
-%
-%This model was identical to the first (Uchiyama 2007a), with the difference that the 12 features were passed through a neural network instead of a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.30 false positives per slice.
-%
-%\section{Uchiyama 2008}
-%
-%Developed CAD scheme for classification of lacunes and perivascular spaces. 109 MRI scans of T1 and T2-weighted images. 89 lacune images and 20 enlarged perivascular spaces. White top-hat transform to enhance T2 images. Grey-level thresholding to segment lesions. Determine the size, shape, location, and T1 and T2 intensities. These features were input into a neural network to distinguish between lacunes and perivascular spaces. Area under ROC curve (true positive/false positive ratio - only good for discriminant analysis) of 0.945.
-%
-%\section{Uchiyama 2015}
-%
-%Improvement on their previous model (96.8\% sensitivity and 0.71 false positives per slice), by template matching in the eigenspace. However, large number of templates needed, and cross-correlation is time consuming. To resolve these issues, template matching was used in a lower dimensional space via principal component analysis. Dataset consisted of 1143 images of T1 and T2, from 132 patients (same dataset as 2007 studies?). 34.1\% of false positives eliminated from previous attempt. Final performance was 96.8\% sensitivity, 0.47 false positives per slice.
-%
-%\section{Wang 2012}
-%
-%Automated multi-stage segmentation approach that labels white matter hyperintensities, cortical infarcts and lacunar infarcts. First segment the brain tissue into white matter, grey matter and CSF based on T1. Identify hyperintensities using FLAIR. Use all of T1, T2 and FLAIR to identify WMH, cortical infarcts and lacunes. 272 scans of elderly
-%
 
-%
-%\section{Support Vector Machines}
-%
-%In 2007, Uchiyama et al. \cite{Uchiyama20071554} used a machine learning algorithm to develop a computer-assisted diagnosis (CAD) program for lacune identification. In particular, false positive reduction took the form of a support vector machine (SVM).
-%
-%Their data consisted of 132 MRI scans, each with T1-weighted and T2-weighted images, giving a total of 1143 axial slices in the dataset. 
-%
-%Similar to the method conducted by Yokoyama et al. \cite{Yokoyama2007}, Uchiyama et al. identified candidate lacunes of two forms: isolated lacunes, and those close to the cerebral ventricle. Isolated lacunes were determined by establishing a threshold, as these points exhibit a higher intensity compared to the surrounding tissue. For lacunes close to the cerebral ventricle, their higher intensity can be masked by the intensity of the surrounding ventricle. To address this, Uchiyama et al. used top-hat transforms on the T2-weighted images, a method that is specialised for extracting small details from image data.
-%
-%% Candidate lacune identification
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=0.8\textwidth]{Images/4_uchiyama_candidates.png}
-%	\caption{Candidate lacune detection. Isolated lacune in a), with resulting top-hat transform shown in c). Lacune in b) is next to the cerebral ventricle, with top-hat transform shown in d).}
-%	\small Image taken from \cite{Uchiyama20071554}
-%\end{figure}
-%
-%False positives were reduced using support vector machines. 12 features were used in false positive reduction, including the candidate's x and y location, signal differences in the T1-weighted and T2-weighted images, and filtered images based on 4 nodular components and 4 combined nodular and linear components. This model produced a sensitivity of 96.8\%, with 0.76 false positives per slice.
-%
-%\subsection*{Concerns}
-%
-%Model sensitivity is high enough to warrant usage of the model, though not high enough for full dependency. As described by Uchiyama et al., the model was designed as a CAD scheme, to run alongside manual rating by clinicians. The model still requires a user to oversee and confirm its results. 
-% 
-%Similar to the model developed by Yokoyama et al. \cite{Yokoyama2007}, the model developed by Uchiyama et al. was not able to distinguish between lacunes and enlarged perivascular spaces. Despite the data containing analysis on the nodular and linear nature of the candidate, the model was unable to make this distinction. Therefore, users of the CAD system must take care to confirm that the suggested candidates are not enlarged perivascular spaces.
-%
-%Many of the variables included in the method are dependent on other existing techniques. For instance, Uchiyama et al. explain that the nodular and linear components were determined via a newly explored filter bank technique. This technique was not well described, and as such, the model may be difficult to recreate.
-%
-%Another issue is the coordinate system. The model uses the x and y coordinates of the candidate to reduce false positives. The coordinates themselves do not have any innate information about the structure of the brain. It is possible for the same x and y values to link to differing regions across brain scans. It is not certain that particular coordinates will align with a brain structure that has a significant influence on the presence of lacunes. This is especially the case for candidates deep in the brain, as many brain structures sit close together. 
-%
-%Under the assumption that the x and y coordinates are indicative of lacune probability, the usage of location data may still incorrectly influence outcomes. Lacunes can be found throughout the brain, including in the cerebrum. 
-%
-%\section{Neural Networks}
-%
-%Uchiyama et al. \cite{Uchiyama2007b} improve their previous model \cite{Uchiyama20071554} by altering the method used for reducing false positives. The support vector machine was swapped with a neural network, using the same 12 input features.
-%
-%The sensitivity of the model to lacunar infarcts remains the same, at 96.8\%. The number of false positives drops to 0.30 false positives per slice.
 %
 %\section{Convolutional Neural Networks}
 % 
