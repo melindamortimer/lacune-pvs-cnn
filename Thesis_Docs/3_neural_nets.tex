@@ -17,14 +17,13 @@ To understand the models outlined in Chapter \ref{litrev}, it is necessary to in
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models have exhibited a high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans \cite{ImageNET}. They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and \textsc{ai}.
+Neural networks have become increasingly popular with the advancement of computing power. They have the ability to detect and utilise predictors that may not be easily employed using other methods. Given enough data, computational power, and training time, neural network models exhibit high accuracy in solving complex problems. In some cases, recorded accuracies have been found to be higher than that of humans \cite{ImageNET}. They have been implemented in a number of commonplace technologies, such as face and voice recognition, language translation, and \textsc{ai}.
 
-The construction of neural networks has to be conducted with some care. The resulting models are difficult to interpret, and are prone to overfitting. 
+The construction of neural networks has to be conducted with some care. The resulting models are difficult to interpret and prone to overfitting. 
 
 \section{Basic structure}\label{nnets-structure}
 
-Neural networks are made up of layers of \textit{neurons}, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. The last layer is an output layer that generates the final result. The central layers are known as \textit{hidden layers}, which conduct most of the processing.
-
+Neural networks are made up of layers of \textit{neurons}, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model and the last layer is an output which generates the final result. The central layers, which conduct most of the processing, are known as \textit{hidden layers}.
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 \begin{figure}[ht]
 	\centering
@@ -34,11 +33,11 @@ Neural networks are made up of layers of \textit{neurons}, as shown in Figure \r
 	\label{nnet-structurefig}
 \end{figure}
 
-Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\top$ be a vector of weights, where each $w_i$ corresponds to $x_i$. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias. The output of a single neuron is given by
+Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\top$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\top$ be a vector of weights, where each $w_i$ corresponds to $x_i$. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the network with a constant that is trainable. The output of a single neuron is given by
 \[
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
 \]
-where $\sigma(\cdot)$ is some activation function and $a$ is known as an \textit{activation value}.
+where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is known as an \textit{activation value}.
 
 % Diagram of single neuron
 \begin{figure}[ht]
@@ -48,25 +47,25 @@ where $\sigma(\cdot)$ is some activation function and $a$ is known as an \textit
 	\label{nnet-structurefig}
 \end{figure}
 
-The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, where $W$ is the set of all weights and $B$ the set of all biases in the neural network. However, as there can be a very large number of variables, it is not feasible to minimise $C(W,B)$.
+The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, with respect to the set of weights $W$ and biases $B$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$.
 
-Instead, this minimisation is approximated via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost falls below a specified tolerance, or reaches a maximum number of iterations.
+We can instead approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost falls with some tolerance $\tau$, or reaches a maximum number of iterations $n_T$.
 
 \section{Notation}\label{nnets-not}
 
-In order to more efficiently and coherantly describe the computations, it is necessary to introduce some notation.
+We now introduce some notation to describe the computation more coherently.
 
-Define $\mathbf{w}^l_j$ to be the vector of weights used by the $j$-th neuron of the $l$-th layer, where $w_{ji}^l$ is the weight attributed to the $i$-th neuron of the $(l-1)$-th layer.
+Define $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
 
-$b_j^l$ is the bias of the $j$-th neuron in the $l$th layer.
+$b_j^\ell$ is the bias of the $j$-th neuron in the $\ell$-th layer.
 
-$\mathbf{a}^l$ is the vector of activation values (outputs) for the $l$-th layer, where $a_j^l$ is the activation value of the $j$th neuron of that layer.
+$\mathbf{a}^\ell$ is the vector of activation values (outputs) for the $\ell$-th layer, where $a_j^\ell$ is the activation value of the $j$-th neuron of that layer.
 
-Set $z_j^l = \mathbf{w}_j^l\cdot \mathbf{a}^{l-1} + b_j^l= \sum_k w_{jk}^la_k^{l-1} + b_j^l$ to be the values calculated before activation, and $\mathbf{z}^l$ to be the vector of $z_j^l$ for layer $l$. Set $Z$ to be the set of all $z_j^l$ in the whole network.
+Set $z_j^\ell = \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$ to be the values calculated before activation, and $\mathbf{z}^\ell$ to be the vector of $z_j^\ell$ for the $\ell$-th layer. Set $Z$ to be the set of all $z_j^\ell$ in the whole network.
 
 Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ are the activation values of the final output layer.
 
-Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$th variable of $\mathbf{y}_i$.
+Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$-th variable of $\mathbf{y}_i$.
 
 Let $W$ and $B$ be the sets of all weights and biases as before.
 
@@ -74,9 +73,9 @@ Let $\eta$ be the learning rate of the minimiser during training.
 
 \section{Activation functions}\label{nnets-act}
 
-Activation functions serve to introduce nonlinearity into the model. 
+Activation functions are functions, $\sigma(\cdot)$, applied just before neuron output. Activation functions serve to introduce nonlinearity into the model. Without these functions, a network can be reduced to a linear combination of inputs. 
 
-For the perceptron, a basic neuron, we have the step function,
+The simplest neuron type is called the \textit{perceptron}. In this neuron, the activation function is the step function,
 \[
 	x_i \in \{0,1\} \text{ and } \sigma(z) = \begin{cases}
 		1 & z > 0 \\
@@ -84,11 +83,11 @@ For the perceptron, a basic neuron, we have the step function,
 	\end{cases}.
 \]
 
-To allow for continuous outputs, other common activation functions include the sigmoid,
+To allow for continuous outputs, other common activation functions include the sigmoid function
 \[
 	\sigma(z) = \dfrac{1}{1+e^{-z}},
 \]
-and tanh functions,
+and hyperbolic tan function,
 \[
 	\sigma(z) = \tanh(z),
 \]
