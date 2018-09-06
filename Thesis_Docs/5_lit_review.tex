@@ -1,5 +1,5 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Existing methodologies}\label{litrev}
 
@@ -11,7 +11,7 @@ This section describes a previous attempt to automate the identification of lacu
 
 % Fig 1. from Yokoyama 2007 that shows structure of algorithm
 
-The algorithm is comprised of several stages. In the first phase, T2-weighted images are used to identify candidate lacunes. These candidates are one of two types: lacunes that are isolated, and those that are found next to white matter hyperintensities.
+The algorithm is comprised of several stages. In the first phase, T2-weighted images are used to identify candidate lacunes. These candidates are one of two types: lacunes that are isolated, and those that are found next to \textsc{wmh}.
 
 % Fig. 3 from Yokoyama 2007
 \begin{figure}[ht]
@@ -48,9 +48,9 @@ Candidate lacunes satisfy
 \end{align*}
 where $(c_x, c_y)$ is the center of the circular region of interest.
 
-For lacunes that appear next to white matter hyperintensities, the candidate region is more difficult to extract. To detect lacunes, Yokoyama et al. use the difference between two circular filters of radii 1 and 8 pixels. False-positives are eliminated by taking the difference in intensity between candidate lacunes and cerebral ventricle \textsc{csf}.
+For lacunes that appear next to \textsc{wmh}, the candidate region is more difficult to extract. To detect lacunes, Yokoyama et al. use the difference between two circular filters of radii 1 and 8 pixels. False-positives are eliminated by taking the difference in intensity between candidate lacunes and cerebral ventricle \textsc{csf}.
 
-Using the same definitions for area and circularity as with isolated lacunes, candidates next to white matter hyperintensities satisfy
+Using the same definitions for area and circularity as with isolated lacunes, candidates next to \textsc{wmh} satisfy
 \[
 	25 \le A \le 100\text{ and } 0.48 \le C.
 \]
@@ -85,6 +85,8 @@ It should be mentioned that this model is dependent on a number of existing arch
 
 Finally, the proportion of false positives is still relatively high. The sensitivity after the second phase is 90\%, which is substantial but still not accurate enough to warrant full automation of the process. Of particular concern is the proportion of perivascular spaces falsely marked as lacunes. Though they appear similar to lacunes, perivascular spaces do present some slight shape and intensity differences.
 
+%In 2012, Wang et al. \cite{WangY.2012Msow} developed an algorithm that labels three features: \textsc{wmh}, lacunes in the cerebral cortex (cortical infarcts), and lacunes beneath the cerebral cortex (lacunar infarcts). The model was provided with 272 scans, each capturing T1-weighted, T2-weighted and \textsc{flair} images. In the first stage of the algorithm, the T1-weighted images are used to segment the brain into white matter, grey matter and \textsc{csf}. Average intensities are calculated for each segmented region and for each image type. Candidate features are identified based on their intensity relative to these these averages. The resulting sensitivity rate for lacunes is 80.6\% and 006 false positives per slice.
+
 \section{Machine learning}\label{litrev-ml}
 
 This section describes a number of models that were developed using machine learning techniques. 
@@ -95,7 +97,7 @@ These features were input into two different machine learning algorithms. The fi
 
 In 2015, Uchiyama et al. \cite{Uchiyama2015} improved their previous models by using template matching. Data was reduced to a lower dimensional space using principal component analysis. Template matching reduced false positives by 34.1\%, with the final model having a sensitivity of 96.8\% and 0.47 false positives per slice.
 
-In 2012, Wang et al. \cite{WangY.2012Msow} conduct a differing approach, labelling three features: white matter hyperintensities, lacunes in the cerebral cortex, and lacunes beneath the cerebral cortex. The model was provided with T1, T2 and \textsc{flair} images. The brain tissue is segmented into white matter, grey matter and \textsc{csf} based on the T1-weighted images. White matter hyperintensities are identified using \textsc{flair}
+
 
 
 
@@ -124,7 +126,10 @@ In 2012, Wang et al. \cite{WangY.2012Msow} conduct a differing approach, labelli
 %
 %\section{Wang 2012}
 %
-%Automated multi-stage segmentation approach that labels white matter hyperintensities, cortical infarcts and lacunar infarcts. First segment the brain tissue into white matter, grey matter and CSF based on T1. Identify hyperintensities using FLAIR. Use all of T1, T2 and FLAIR to identify WMH, cortical infarcts and lacunes. 272 scans of elderly
+%Wang et al. label all three: \textsc{wmh}, cortical infarcts and lacunar infarcts. They first segment the brain tissues into white matter, grey matter and CSF using the T1-weighted scans. Hyperintense structures identified using FLAIR images. The three features are labelled based on all three weighted images, T1, T2 and FLAIR. 
+
+
+%Wang et al. (2012) detect lacunes by dilating the white matter mask and using a rule-based pruning of false positives considering their intensity levels compared to the surrounding white matter tissue.
 %
 
 %\section{Uchiyama2007a - support vector machines}
@@ -166,7 +171,11 @@ In 2012, Wang et al. \cite{WangY.2012Msow} conduct a differing approach, labelli
 
 \section{Convolutional neural networks}\label{litrev-cnn}
 
-We will now discuss the convolutional neural network structure utilised by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. This model consists of two phases: candidate generation, followed by false positive reduction. This model resulted in 
+We will now discuss the convolutional neural network structure utilised by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. This model consists of two phases: candidate generation using a \textsc{cnn}, followed by false positive reduction using a 3D \textsc{cnn}.
+
+\subsection*{Candidate Detection}
+
+The \textsc{cnn} is made up seven layers. Its structure is shown in \textbf{Figure}. The input samples are image slices of dimension 51$\times$51.
 
 %
 %Entire model is made up of two neural networks.
@@ -271,4 +280,4 @@ We will now discuss the convolutional neural network structure utilised by Ghafo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
