@@ -205,6 +205,10 @@ As the neural network has a very large number of weights, gradient descent is a 
 
 In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed, while still utilising all the information provided by the whole set of samples by the end of training time.
 
+\subsection*{Adam optimiser}\label{nnets-adam}
+
+The stochastic gradient algorithm maintains one learning rate for all of the weights in the network. The Adam Optimiser alters this algorithm by storing different learning rates for each of the parameters. 
+
 %
 %We attempt to choose weights and biases that will minimise the cost function. As we cannot use calculus, we must estimate - by gradient descent. Move all the estimates a little, in the direction of decrease. The amount of movement is dependent on a learning rate parameter.
 %
@@ -420,6 +424,10 @@ Another common regularisation is L1, or Lasso Regression, which takes the sum of
 Through the training process, it is possible for individual neurons to become sensitive to patterns present in specific observations. When a dropout layer is added, each neuron connected to the layer has a preset probability $p$ of being deactivated, regardless of their input.
 
 This ensures that relevant features of the data are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
+
+\subsection*{Batch normalisation}
+
+After a large amount of training time, particular activation values can become very large or very small. Normalising the activations within each batch stops the values from becoming too extreme, allowing for some additional features to train. Similarly to dropout, batch normalisation also avoids overfitting by adding some noise to the weights and ensuring that critical features are spread across nodes.
 
 \subsection*{Data expansion}
 

@@ -192,7 +192,20 @@ The four convolution layers contain 20, 40, 80 and 110 filters, with filter size
 
 The convolution is followed by three fully connected layers of 300, 200 and 2 neurons.
 
-All layers apply ReLU activation to prevent the vanishing gradient problem. The final layer applies softmax activation to ensure the output follows a probability distribution.
+Batch normalisation and ReLU activation is applied to all neurons. Dropout is applied to the fully connected layers, with a rate of 0.3.
+
+All weights are intialised using the He method. Training is conducted by stochastic gradient descent with Adam Optimiser. Each training batch has a sample size of 128. A decaying learning rate is used, from $5\times10^{-4}$ to $10^{-6}$ by the last epoch.
+
+Cross-entropy loss is used to assess the model for each batch. L2-regularisation is used, with the penalty term set to $10^{-4}$. 
+
+The final layer applies softmax activation to ensure the output follows a probability distribution.
+
+An early stopping algorithm is used so that the model with the highest validation accuracy is saved. 
+
+Using this model can be computationally slow. Speed is improved by converting the fully connected layers into convolutional layers.
+
+To extract candidate lacunes, 51$\times$51 samples of a scan are fed through the resulting model. Local maximum lacune probabilites are found using a 10$\times$10 sliding window. Samples with lacune probabilities below 0.1 are removed and the remaining samples are lacune candidates to be input into the second phase of the model.
+
 
 %
 %Entire model is made up of two neural networks.
@@ -234,6 +247,16 @@ All layers apply ReLU activation to prevent the vanishing gradient problem. The 
 %
 %
 %Didn't mention: number of epochs to train. How pooling and convolutions were padded. Diagram implied no padding, but diagram dimensions weren't correct. 
+
+\subsection*{False-positive reduction}
+
+The second phase of the model serves to reduce the number of false-positives returned by the first stage of the model. This model uses a 3D \textsc{cnn}, allowing for additional contextual information.
+
+The input data captures the same point at three different resolutions. The original scales for each sample are 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5. These samples are reduced to dimensions 32$\times$32$\times$5. In total, there were 385K samples for training, and 35K for validation. 
+
+Each resolution is fed through its own 3D \textsc{cnn}, as shown in \textbf{Figure}. Each \textsc{cnn} branch contains six convolution layers, which have 64, 64, 128, 128, 256 and 256 filters of sizes 3$\times$3$\times$2, 3$\times$3$\times$2, 3$\times$3$\times$3$\times$1, 3$\times$3$\times$1, 3$\times$3$\times$1 and 3$\times$3$\times$1 respectively.
+
+
 %
 %\subsection{Second Phase - False Positive Reduction}
 %
