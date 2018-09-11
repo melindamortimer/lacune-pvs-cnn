@@ -18,11 +18,11 @@ As shown in Figure \ref{convnets-structurefig}, CNNs typically consist of altern
 
 \section{Convolutional layers}\label{convnets-convlayer}
 
-In a convolutional layer, a \textit{filter} is a matrix of weights that describes a particular visual feature to be identified. These filters have predetermined dimensions, usually set to assess a small subset of the original image. Each filter has the same depth as the original image. For instance, an image that has three colour channels; red, blue and green, will have convolution filters also with a depth of three. Each convolutional layer can have many filters.
+In a convolutional layer, a \textit{filter} is a matrix of weights that describes a particular visual feature to be identified. These filters have predetermined dimensions, usually chosen to assess a small subset of the original image. Each filter has the same depth as the original image. For example, we take an image that has three colour channels; red, blue and green. This will have convolution filters also with a depth of three. Each convolutional layer can have many filters.
 
 The filters are then said to \textit{convolve} around the image. Suppose that a filter $F^{(f)}$ has dimension $M\times N \times C$. Given an input image matrix $X$, the value of the convolution at element $X_{j,k}$ is given by
 \[
-	a_{jk}^{(f)} = \sigma\bigg(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\bigg)
+	a_{jk}^{(f)} = \sigma\left(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\right)
 \]
 where $\sigma(\cdot)$ is some activation function as before, $C$ is the number of input channels and $b^{(f)}$ is the bias to be added when using filter $f$. 
 
@@ -31,11 +31,11 @@ where $\sigma(\cdot)$ is some activation function as before, $C$ is the number o
 	\centering
 	\includegraphics[scale=0.5]{Images/4_convolution.png}
 	\caption{Convolution algorithm with 2 filters of size 3x3, stride 2, zero padding 1}
-	\small Image adapted from \url{'http://cs231n.github.io/convolutional-networks/'}
+	\small Image adapted from \url{`http://cs231n.github.io/convolutional-networks/'}
 	\label{convnets-conv-alg}
 \end{figure}
 
-As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are point-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
+As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are entry-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
 
 Each filter of a convolutional layer builds a matrix of neurons, where its dimension is a subset of the original image (depending on the size of the zero padding). These matrices are bound together to form a 3D array, with depth depending on the number of filters used.
 
@@ -49,17 +49,17 @@ In order to retain the original image dimensions, the input image can be zero pa
 
 As the dimension of images an be quite large, moving a convolutional filter by only one element at a time can make the training process very long. To reduce the number of resulting variables, the filter can be moved by multiple elements at a time. The distanced moved is known as the \textit{stride}, given by $S$.
 
-For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\Big(\Bigl\lfloor \dfrac{J + 2P - M}{S}\Bigr\rfloor + 1\Big) \times \Big(\Bigl\lfloor \dfrac{K + 2P - N}{S} \Bigr\rfloor + 1\Big)$.
+For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\left(\left\lfloor (J + 2P - M)/S\right\rfloor + 1\right) \times \left(\left\lfloor (K + 2P - N)/S \right\rfloor + 1\right)$.
 
 \section{Pooling layers}\label{convnets-pool}
 
-It is common practise to follow convolution layers with max pooling layers. Pooling is a method of dimension reduction. Pooling layers create a sliding window of specified dimension and stride size. At each sliding window position, the pooling layer outputs a single value. In particular for max pooling, the layer outputs the maximum value at each sliding window location.
+It is common practice to follow convolution layers with max pooling layers as a method of dimension reduction\cite{ADeshpande2016}. Pooling layers create a sliding window of specified dimension and stride size. At each sliding window position, the pooling layer outputs a single value. In particular for max pooling, the layer outputs the maximum value at each sliding window location.
 
 The motivation behind this is that convolutional layers output high values in regions where the features of interest have been located. However, the algorithm is only interested in gathering information for classification and does not need the location to be highly specific. To improve computation time, it is then advantageous to remove a large number of variables, while retaining variables that identify significant features.
 
 \section{ReLU activation}\label{convnets-act}
 
-The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. As image data presents a very large number of variables, computation time can become very large. To aid this, the ReLU function is a common choice, as it can be computed very quickly. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}.
+The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. As image data presents a very large number of variables, computation time can become very large. The ReLU function can be computed very quickly and so is a common choice \cite{ADeshpande2016}. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
 
 
 %Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.

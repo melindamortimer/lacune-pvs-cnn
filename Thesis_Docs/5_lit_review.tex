@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Existing methodologies}\label{litrev}
 
@@ -7,7 +7,7 @@ This chapter outlines previous methods in more detail, and discusses the impact 
 
 \section{Thresholding}\label{litrev-threshold}
 
-This section describes a previous attempt to automate the identification of lacunes, with false positives reduced via thresholding. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm that examined lacune candidate area, circularity and gravitational centre. Candidates were chosen such that they satisfied particular thresholds. Threshold values were dependent on the candidate's location and surrounding hyperintense structures. The resulting model exhibited a sensitivity of 90.1\% and averaged 1.7 false positives per axial slice.
+This section describes a previous attempt to automate the identification of lacunes, with false positives reduced by establishing variable thresholds. In 2007, Yokoyama et al. \cite{Yokoyama2007} developed an algorithm that examined lacune candidate area, circularity and gravitational centre. Candidates were chosen such that they satisfied particular thresholds. Threshold values were dependent on the candidate's location and surrounding hyperintense structures. The resulting model exhibited a sensitivity of 90.1\% and averaged 1.7 false positives per axial slice.
 
 % Fig 1. from Yokoyama 2007 that shows structure of algorithm
 
@@ -29,9 +29,9 @@ Lacunes were identified by considering three properties: area, circularity and g
 
 \textit{Circularity} is given by
 \[
-	C = 4\pi \times \dfrac{A}{l^2},
+	C = 4\pi \times \dfrac{A}{\ell^2},
 \]
-where $l$ is the perimeter of the candidate lacune.
+where $\ell$ is the perimeter of the candidate lacune.
 
 The \textit{gravitational centre} is the mean intensity of the pixels in the candidate lacune,
 \[
@@ -320,4 +320,4 @@ Each resolution is fed through its own 3D \textsc{cnn}, as shown in \textbf{Figu
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}
