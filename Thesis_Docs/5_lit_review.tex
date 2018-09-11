@@ -253,9 +253,9 @@ To extract candidate lacunes, 51$\times$51 samples of a scan are fed through the
 
 The second phase of the model serves to reduce the number of false-positives returned by the first stage of the model. This model uses a 3D \textsc{cnn}, allowing for additional contextual information.
 
-The input data captures the same point at three different resolutions. The original scales for each sample are 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5. These samples are reduced to dimensions 32$\times$32$\times$5. In total, there were $3.85\times10^5$ samples for training, and $3.5\times10^4$ for validation. 
+Each data point is captured at three different resolutions, 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5, to capture varying levels of contextual information. These samples are reduced to dimension 32$\times$32$\times$5. In total, there were $3.85\times10^5$ samples for training, and $3.5\times10^4$ for validation. 
 
-Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{litrev-ghafoorian_model2fig}. Each \textsc{cnn} branch contains six convolution layers, which have 64, 64, 128, 128, 256 and 256 filters of sizes 3$\times$3$\times$2, 3$\times$3$\times$2, 3$\times$3$\times$1, 3$\times$3$\times$1, 3$\times$3$\times$1 and 3$\times$3$\times$1 respectively.
+Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{litrev-ghafoorian_model2fig}. Each \textsc{cnn} branch contains six convolution layers and a fully connected layer. The convolution layers have 64, 64, 128, 128, 256 and 256 filters of sizes 3$\times$3$\times$2, 3$\times$3$\times$2, 3$\times$3$\times$1, 3$\times$3$\times$1, 3$\times$3$\times$1 and 3$\times$3$\times$1 respectively.
 
 % False-positive reduction model structure
 \begin{figure}[ht]
@@ -266,7 +266,19 @@ Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{
 	\label{litrev-ghafoorian_model2fig}
 \end{figure}
 
+A single max pooling layer is placed after the second convolution layer. This layer has size $2\times2\times1$.
 
+The final convolution layer is followed by a fully connected layer of 300 neurons. The $3\times300$ fully connected neurons are concatenated, and also joined by seven additional location variables. For each candidate lacune, these location features include the $x$,$y$ and $z$ coordinates, and distances to the left and right ventricle, cortex, and midsaggital brain surface.
+
+The 907 fully connect neurons are connected to two final fully connected layers, of size 200 and 2 neurons. The final layer consists of a softmax activation to output the lacune probabilities.
+
+As with the first model, all weights are He initialised. All neurons, excepting the output layer, have ReLU activation and are batch normalised. The fully connected layers have a dropout of 0.5. 
+
+The cost function chosen was cross-entropy with L2-regularisation and penalty parameter $2\times10^{-15}$. This was minimised using stochastic gradient descent with an Adam optimiser. The learning rate is initialised as $5\times10^{-4}$. If training accuracy drops, the learning rate decays by a factor of 2. Each training batch contained 128 samples.
+
+The model was trained for 40 epochs, with the final model chosen to maximise validation accuracy.
+
+A number of hyper-parameters were chosen by maximising validation accuracy. These included network depth, batch size, the initial learning rate and decay factor, penalty parameter, and dropout rate.
 
 
 %
