@@ -72,15 +72,15 @@ The second phase of training reduced the number of false-positives by 68\%. Howe
 
 Yokoyama et al. suggest that further reductions in false-positives could be attained through the use of FLAIR imaging. Lacunes are found to have a low intensity in T1-weighted imaging and a high intensity in T2-weighted imaging. In FLAIR imaging, lacunes are also found to have a low intensity, but not as low as the surrounding CSF, and often have a hyperintense rim \cite{WardlawJ.M.2013Nsfr}. 
 
-Further improvements could be made by using multiple slices for each candidate, increasing image context. Using 3D information, the axial slices above and below a candidate could be used to further eliminate false-positives. This is particularly relevant when a candidate lacune appears on only a single axial slice, or when the candidate diverges from the indicative ovoid shape in surrounding slices. Including this information would assist in differentiation between lacunes and perivascular spaces, since perivascular spaces can appear oblong along the coronial or saggital plane.
+Further improvements could be made by using multiple slices for each candidate, increasing image context. Using 3D information, the axial slices above and below a candidate could be used to further eliminate false-positives. This is particularly relevant when a candidate lacune appears on only a single axial slice, or when the candidate diverges from the indicative ovoid shape in surrounding slices. Including this information would assist in differentiation between lacunes and perivascular spaces, since perivascular spaces can appear rectangular along the coronial or saggital plane.
 
 \subsection*{Concerns}
 
 Although the testing sensitivity was high, it was not high enough for the model to be usable on its own. Model improvement is required before it can be used to aid clinicians reliably.
 
-Yokoyama et al. made the assumption that lacunes only occur deep within the brain, within and surrounding the basal ganglia. This was the motivation behind extracting the cerebral ventricle. However, this assumption is not always satisfied. Though less common, lacunes have been found in other brain regions, including the cerebrum. As such, the analysis of only the deep central structures eliminates the possibility of identifying lacunes outside of that region.
+Yokoyama et al. made the assumption that lacunes only occur deep within the brain, within and surrounding the basal ganglia. This was the motivation behind extracting data around the cerebral ventricle. However, this assumption is not always satisfied. Though less common, lacunes have been found in other brain regions, including the cerebrum.
 
-The feature definitions used for the model also make it difficult to identify perivascular spaces. In this model, perivascular spaces were defined as small, circular regions of diameter less than 3mm, located at the lower basal ganglia. This specification meant that the model was not sensitive to enlarged perivascular spaces, which can have a diameter up to 10mm and can occur anywhere in the grey and white matter of the brain. This change in definition contributes to the seemingly low false-positive presence that PVS exhibit in the data.
+The feature definitions used for the model also make it difficult to identify perivascular spaces. In this model, perivascular spaces were defined as small, circular regions of diameter less than 3 mm, located at the lower basal ganglia. This specification meant that the model was not sensitive to enlarged perivascular spaces, which can have a diameter up to 10 mm and can occur anywhere in the grey and white matter of the brain \cite{WardlawJ.M.2013Nsfr}. This change in definition contributes to the seemingly low false-positive presence that PVS exhibit in the data.
 
 It should be mentioned that this model is dependent on a number of existing architectures. The first is the identification and extraction of particular brain regions. In this model, Yokoyama et al. were able to use existing binarisation techniques to extract the cerebral ventricle. Each sample also requires a calculated area, circularity and gravitational centre. Each of these calculations requires sufficient time and resources, particularly if these calculations are to be conducted manually.
 
@@ -92,7 +92,7 @@ Finally, the proportion of false-positives is still relatively high. The sensiti
 
 This section describes a number of models that were developed using machine learning techniques. 
 
-The first attempts were made by Uchiyama et al. in 2007 \cite{Uchiyama20071554, Uchiyama2007b}. The data consisted of 132 scans totalling 1143 images of T1 and T2 weighting. These models are a continuation of the model completed by Yokoyama et al. \cite{Yokoyama2007}. Once candidates have been identified, the models undergo false-positive reduction. 12 location based features are identified: x and y coordinates, intensity differences in T1 and T2, 4 levels of nodular component extraction, and 4 levels of combined nodular and linear component extraction.
+The first attempts were made by Uchiyama et al. in 2007 \cite{Uchiyama20071554, Uchiyama2007b}. The data consisted of 132 scans totalling 1143 images of T1 and T2 weighting. These models are a continuation of the model completed by Yokoyama et al. \cite{Yokoyama2007}. Once candidates have been identified, the models undergo false-positive reduction. Twelve location based features are identified: x and y coordinates, intensity differences in T1 and T2, four levels of nodular component extraction, and four levels of combined nodular and linear component extraction.
 
 These features were input into two different machine learning algorithms. The first was a support vector machine. This resulted in a sensitivity of 96.8\%, with 0.76 false-positives per slice. The second model was a neural network. This had a sensitivity of 96.8\%, with 0.30 false-positives per slice.
 
@@ -172,11 +172,11 @@ In 2015, Uchiyama et al. \cite{Uchiyama2015} improved their previous models by u
 
 \section{Convolutional neural networks}\label{litrev-cnn}
 
-We will now discuss the convolutional neural network structure utilised by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. This model forms the basis of our adjusted location-independent model. This model consists of two phases. The first phase generates candidates via \textsc{cnn}T candidate generation using a \textsc{cnn}, followed by false-positive reduction using a 3D \textsc{cnn}.
+We will now discuss the convolutional neural network structure utilised by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. This model forms the basis of our adjusted location-independent model. This model consists of two phases. The first phase generates candidates using a \textsc{cnn}. The second phase reduces false-positives using a 3D \textsc{cnn} and candidate location data.
 
 \subsection*{Candidate Detection}
 
-The dataset consists of 1075 MRI scans split into training, validation and testing sets of size 868, 96 and 111 respectively. Each scan contains two images: T1-weighted and \textsc{flair}. Input samples are generated by randomly sampling axial slices of dimension 51$\times$51 pixels. The model is trained to detect lacunes at the centre of the image slice. The response value for a positive response is the vector $(1, 0)^\top$ and $(0, 1)^\top$ for a negative response. The resulting samples each contain two 51$\times$51 pixel images and a response vector in $\mathbb{R}^2$. For use in convolution, the T1-weighted image and the \textsc{flair} image are treated as separate colour channels. Samples were generated such that there were twice as many negatives as positives, giving a total of 320K training samples.
+The dataset consists of 1075 MRI scans split into training, validation and testing sets of size 868, 96 and 111 respectively. Each scan contains two images: T1-weighted and \textsc{flair}. Input samples are generated by randomly sampling axial slices of dimension 51$\times$51 pixels. The model is trained to detect lacunes at the centre of the image slice. The response value for a positive response is the vector $(1, 0)^\intercal$ and $(0, 1)^\intercal$ for a negative response. The resulting samples each contain two 51$\times$51 pixel images and a response vector in $\mathbb{R}^2$. For use in convolution, the T1-weighted image and the \textsc{flair} image are treated as separate colour channels. Samples were generated such that there were twice as many negatives as positives, giving a total of $3.2\times10^5$ training samples.
 
 % Candidate model structure
 \begin{figure}[ht]
@@ -195,7 +195,7 @@ The convolution is followed by three fully connected layers of 300, 200 and 2 ne
 
 Batch normalisation and ReLU activation is applied to all neurons. Dropout is applied to the fully connected layers, with a rate of 0.3.
 
-All weights are intialised using the He method. Training is conducted by stochastic gradient descent with Adam Optimiser. Each training batch has a sample size of 128. A decaying learning rate is used, from $5\times10^{-4}$ to $10^{-6}$ by the last epoch.
+All weights are intialised using the He method. Training is conducted by stochastic gradient descent with Adam Optimiser. Each training batch has a sample size of 128. A decaying learning rate is used, from $5\cdot10^{-4}$ to $10^{-6}$ by the last epoch.
 
 Cross-entropy loss is used to assess the model for each batch. L2-regularisation is used, with the penalty term set to $10^{-4}$. 
 
@@ -253,9 +253,9 @@ To extract candidate lacunes, 51$\times$51 samples of a scan are fed through the
 
 The second phase of the model serves to reduce the number of false-positives returned by the first stage of the model. This model uses a 3D \textsc{cnn}, allowing for additional contextual information.
 
-The input data captures the same point at three different resolutions. The original scales for each sample are 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5. These samples are reduced to dimensions 32$\times$32$\times$5. In total, there were 385K samples for training, and 35K for validation. 
+The input data captures the same point at three different resolutions. The original scales for each sample are 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5. These samples are reduced to dimensions 32$\times$32$\times$5. In total, there were $3.85\times10^5$ samples for training, and $3.5\times10^4$ for validation. 
 
-Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{litrev-ghafoorian_model2fig}. Each \textsc{cnn} branch contains six convolution layers, which have 64, 64, 128, 128, 256 and 256 filters of sizes 3$\times$3$\times$2, 3$\times$3$\times$2, 3$\times$3$\times$3$\times$1, 3$\times$3$\times$1, 3$\times$3$\times$1 and 3$\times$3$\times$1 respectively.
+Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{litrev-ghafoorian_model2fig}. Each \textsc{cnn} branch contains six convolution layers, which have 64, 64, 128, 128, 256 and 256 filters of sizes 3$\times$3$\times$2, 3$\times$3$\times$2, 3$\times$3$\times$1, 3$\times$3$\times$1, 3$\times$3$\times$1 and 3$\times$3$\times$1 respectively.
 
 % False-positive reduction model structure
 \begin{figure}[ht]
@@ -265,6 +265,8 @@ Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{
 	\small Image taken from \cite{GhafoorianM.2017Dml3}
 	\label{litrev-ghafoorian_model2fig}
 \end{figure}
+
+
 
 
 %
