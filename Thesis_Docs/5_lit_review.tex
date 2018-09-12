@@ -281,6 +281,8 @@ The model was trained for 40 epochs, with the final model chosen to maximise val
 A number of hyper-parameters were chosen by maximising validation accuracy. These included network depth, batch size, the initial learning rate and decay factor, penalty parameter, and dropout rate.
 
 
+
+
 %
 %\subsection{Second Phase - false-positive Reduction}
 %
@@ -329,6 +331,14 @@ A number of hyper-parameters were chosen by maximising validation accuracy. Thes
 %\subsection{Model performance}
 
 \section{Proposed changes}\label{litrev-changes}
+
+The models trained by Uchiyama et. al. \cite{UchiyamaYoshikazu2007Ioad}, Yokoyama et. al. \cite{Yokoyama2007} and Ghafoorian et al. \cite{GhafoorianM.2017Dml3} rely on location variables generated for each candidate lacune. These location variables require additional calculation beyond the \textsc{mri} scans.  
+
+
+%- All previous models have made some use of location data. In particular, Ghafoorian used x/y/z, and distances from the candidate to particular brain structures. However, lacunes can appear in other regions of the brain, including regions far from the basal ganglia. The location data requires the location of the ventricles, cortex and midsaggital plane. To do this in an automated fashion requires an algorithm that can find these brain features. This requires additional estimation. Try to develop an algorithm that is independent of location data. Rely more on the image.
+%
+%- Instead of trimming candidates in a second phase, try to determine strong candidates from just the first phase to create an accurate CAD program. Then clinicians can be presented with candidate lacunes, and still conduct false-positive reduction themselves
+%
 
 
 %
