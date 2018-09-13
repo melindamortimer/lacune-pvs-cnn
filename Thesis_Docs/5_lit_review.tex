@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Existing methodologies}\label{litrev}
 
@@ -334,9 +334,9 @@ A number of hyper-parameters were chosen by maximising validation accuracy. Thes
 
 The models trained by Uchiyama et. al. \cite{UchiyamaYoshikazu2007Ioad}, Yokoyama et. al. \cite{Yokoyama2007} and Ghafoorian et al. \cite{GhafoorianM.2017Dml3} rely on location variables generated for each candidate lacune. Ghafoorian et al. \cite{GhafoorianM.2017Dml3} claimed that the inclusion of location variables increased the amount of contextual information and was hence beneficial to neuro-imaging analysis. However, the location of lacunes is not limited to particular brain structures \cite{WardlawJm2013Mosc} and so adding these location variables could result in incorrect classification should lacunes occur in less frequently observed regions.
 
-The inclusion of location data requires extra data pre-processing. These variables are calculated in relation to other located brain structures, however these locations are not inherently included within \textsc{mri} scan data. Instead these variables are generated prior to model usage and require either visual estimation or developed feature extraction algorithms \cite{UchiyamaYoshikazu2007Ioad, Uchiyama2007b}. If the variables are to be determined visually, the variables for each candidate lacune have to be determined separately and this would require significant extra data preparation time. If location variable extraction algorithms exist, as in the model by Uchiyama et al. \cite{UchiyamaYoshikazu2007Ioad}, additional measurement error could also make location-based inference inaccurate.
+The inclusion of location data requires extra data pre-processing. These variables are calculated in relation to other located brain structures, however these locations are not inherently included within \textsc{mri} scan data. Instead these variables are generated prior to model usage and require either visual estimation or developed feature extraction algorithms \cite{Uchiyama2007b, UchiyamaYoshikazu2007Ioad}. If the variables are to be determined visually, the variables for each candidate lacune have to be determined separately and this would require significant extra data preparation time. If location variable extraction algorithms exist, as in the model by Uchiyama et al. \cite{UchiyamaYoshikazu2007Ioad}, additional measurement error could also make location-based inference inaccurate.
 
-In this study, we attempt to simplify the model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. A key component of the model is the removal of false-positives by analysing the 3D context and location based variables. These variables include the $x$, $y$ and $z$ coordinates, and distances between the candidate and the ventricles, cortex and midsaggital plane. Without the architecture to determine these distances, the variables would have to be determined manually. In addition, the  $x$, $y$ and $z$ coordinates are not standardised between scans. This means that coordinates across images do not necessarily align with the same brain structures. We therefore propose to remove the location-based variables from the model and use only the nformation provided in the \textsc{mri}.
+In this study, we attempt to simplify the model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. A key component of the model is the removal of false-positives by analysing the 3D context and location-based variables. These variables include the $x$, $y$ and $z$ coordinates, and distances between the candidate and the ventricles, cortex and midsaggital plane. Without the architecture to determine these distances, the variables would have to be determined manually. In addition, the  $x$, $y$ and $z$ coordinates are not standardised between scans. This means that coordinates across images do not necessarily align with the same brain structures. We therefore propose to remove the location-based variables from the model and use only the information provided in the \textsc{mri}.
 
 
 %- All previous models have made some use of location data. In particular, Ghafoorian used x/y/z, and distances from the candidate to particular brain structures. However, lacunes can appear in other regions of the brain, including regions far from the basal ganglia. The location data requires the location of the ventricles, cortex and midsaggital plane. To do this in an automated fashion requires an algorithm that can find these brain features. This requires additional estimation. Try to develop an algorithm that is independent of location data. Rely more on the image.
@@ -358,4 +358,4 @@ In this study, we attempt to simplify the model by Ghafoorian et al. \cite{Ghafo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}

@@ -1,13 +1,31 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{The Data}\label{model}
 
 \section{\textsc{mri} and preprocessing}\label{data-mri}
 
+The \textsc{mri} and lacune location data sets were collected as part of the Sydney Memory and Aging Study (Sydney \textsc{mas}) conducted at the University of New South Wales' Centre for Healthy Brain Ageing. Data came from Wave 2 of the \textsc{mas} scans. They were acquired from a Philips 3T Achieva Quasar Dual scanner (Philips Medical Systems, The Netherlands). Scanning parameters for the T1-weighted and \textsc{flair} images are:
+
+T1-weighted \textsc{mri} - TR = 6.39 ms, TE = 2.9 ms, flip angle = 8$^\circ$, matrix size = 256$\times$256, field of view = 256 $\times$ 256 $\times$ 190, and slice thickness = 1 mm with no gap in between, yielding 1 $\times$ 1 $\times$ 1 mm$^3$ isotropic voxels.
+
+\textsc{flair} - TR = 10 000 ms, TE = 110 ms, TI = 2800 ms, matrix size = 512 $\times$ 512, slice thickness = 3.5 mm without gap, and in plane resolution = 0.488 $\times$ 0.488 mm.
+
+\textsc{flair} images were transformed such that their coordinates correspond to those from the T1 scans. This was done using \textsc{spm12} software (\url{https://www.fil.ion.ucl.ac.uk/spm/software/spm12/}).
+
 \section{Soft-tissue masks}\label{data-soft}
 
+T1-weighted images are detailed enough to potentially identify patients through their face structure and eyes. Brain matter (soft-tissue) masks were generated to remove the features that are not part of the brain tissue and thus de-identify the data.
+
+Individual T1 images were segmented into grey matter, white matter, and \textsc{csf} probability maps using the segmentation tool in \textsc{spm12}. Grey matter and white matter probability maps were summed and thresholded at the level of 0.5 to generate the soft tissue mask. Individual soft tissue masks were then applied to individual T1.
+
 \section{Lacune identification}\label{data-lacune}
+
+The T1-weighted and \textsc{flair} \textsc{mri} were rated visually by a number of trained clinicians in accordance to the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}. The identification of biomarkers including lacunes was logged using Microsoft Excel, which details the scan id and number of lacunes for each \textsc{mri} scan. For each lacune detected, the spreadsheet lists the axial slice ($z$ coordinate), diameter (mm), enveloping brain structure and whether the lacune occurs on the left or right side of the brain.
+
+% Screen shot the excel document and CHECK. What parameters are there, including the brain regions that are listed.
+
+The lacune locations logged in the Excel document were descriptive rather than as precise coordinates. 
 
 \section{Sample generation}\label{data-samples}
 
@@ -29,7 +47,7 @@
 %
 %Brief outline of structure.
 %
-%Different number of samples. Far fewer lacunes in our dataset. Paper had 2/3 negaatives, 1/3 positives. Our data consists of just under 10\% positives. Proposed model paper had 320K total samples. Our data has 50K, far fewer samples than the proposed model.
+%Different number of samples. Far fewer lacunes in our dataset. Paper had 2/3 negatives, 1/3 positives. Our data consists of just under 10\% positives. Proposed model paper had 320K total samples. Our data has 50K, far fewer samples than the proposed model.
 %
 %In addition, around the 11th epoch, the training accuracy drops from near 100\% to near 0\%. This could be since the cross entropy has a log, and the algorithm attempts to take log(0). Introduce a small constant to achieve log(y + 1e-10).
 %Getting NANs from the cross entropy function.
@@ -41,8 +59,8 @@
 %
 %Explain structure of model, including diagram similar to that from Ghafoorian. Number of layers, number of neurons in each layer. What each layer was and the order. Method for chosen hyper-parameters. 
 
-
+\cite{Yokoyama2007}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
