@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{The Data}\label{model}
 
@@ -17,7 +17,7 @@ T1-weighted \textsc{mri} - TR = 6.39 ms, TE = 2.9 ms, flip angle = 8$^\circ$, ma
 
 T1-weighted images are detailed enough to potentially identify patients through their face structure and eyes. Brain matter (soft-tissue) masks were generated to remove the features that are not part of the brain tissue and thus de-identify the data.
 
-Individual T1 images were segmented into grey matter, white matter, and \textsc{csf} probability maps using the segmentation tool in \textsc{spm12}. Grey matter and white matter probability maps were summed and thresholded at the level of 0.5 to generate the soft tissue mask. Individual soft tissue masks were then applied to individual T1.
+Individual T1 images were segmented into grey matter, white matter, and \textsc{csf} probability maps using the segmentation tool in \textsc{spm12}. Grey matter and white matter probability maps were summed and thresholded at the level of 0.5 to generate the soft tissue mask. Individual soft tissue masks were applied to individual T1.
 
 \section{Lacune identification}\label{data-lacune}
 
@@ -63,4 +63,4 @@ The lacune locations logged in the Excel document were descriptive rather than a
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}
