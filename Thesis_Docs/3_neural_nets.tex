@@ -48,7 +48,8 @@ Basic neural networks arrange a number of these neurons into layers, as shown in
 %	\small Image taken from \url{`https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
 %	\label{nnet-structurefig}
 %\end{figure}
-
+\begin{figure}
+\centering
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
     \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
@@ -86,7 +87,10 @@ Basic neural networks arrange a number of these neurons into layers, as shown in
     \node[annot,left of=hl] {Input layer};
     \node[annot,right of=hl] {Output layer};
 \end{tikzpicture}
-
+\caption{Basic neural network structure.}
+\small Image taken from \url{`https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
+\label{nnet-structurefig}
+\end{figure}
 
 The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, with respect to the set of weights $W$ and biases $B$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$.
 
