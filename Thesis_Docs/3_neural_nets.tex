@@ -70,7 +70,7 @@ Basic neural networks arrange a number of these neurons into layers, as shown in
             node[hidden neuron] (H-\name) at (\layersep,-\y cm) {};
 
     % Draw the output layer node
-    \node[output neuron,pin={[pin edge={->}]right:Output}, right of=H-3] (O) {};
+    \node[output neuron,pin={[pin edge={->}]right:Output}] (O) at (2*\layersep, -2) {};
 
     % Connect every node in the input layer with every node in the
     % hidden layer.
@@ -88,7 +88,6 @@ Basic neural networks arrange a number of these neurons into layers, as shown in
     \node[annot,right of=hl] {Output layer};
 \end{tikzpicture}
 \caption{Basic neural network structure.}
-\small Image taken from \url{`https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
 \label{nnet-structurefig}
 \end{figure}
 
