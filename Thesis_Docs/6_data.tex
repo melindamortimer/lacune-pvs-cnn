@@ -13,19 +13,19 @@ T1-weighted \textsc{mri} - TR = 6.39 ms, TE = 2.9 ms, flip angle = 8$^\circ$, ma
 
 \textsc{flair} images were transformed such that their coordinates correspond to those from the T1 scans. This was done using \textsc{spm12} software (\url{https://www.fil.ion.ucl.ac.uk/spm/software/spm12/}).
 
-\section{Soft-tissue masks}\label{data-soft}
+\section{Extracting brain tissue}\label{data-soft}
 
 T1-weighted images are detailed enough to potentially identify patients through their face structure and eyes. Brain matter (soft-tissue) masks were generated to remove the features that are not part of the brain tissue and de-identify the data.
 
 Individual T1 images were segmented into grey matter, white matter, and \textsc{csf} probability maps using the segmentation tool in \textsc{spm12}. Grey matter and white matter probability maps were summed and voxels at a threshold of 0.5 or greater were included in the soft tissue mask. Individual soft tissue masks were applied to individual T1-weighted images.
 
-% Image of T1, the mask itself, and the resulting image.
+\todo[inline]{Image of T1, the mask itself, and the resulting image. Crop so that it does not include skull etc. Just brain matter}
 
-\section{Lacune identification}\label{data-lacune}
+\section{Generating response arrays}\label{data-lacune}
 
 The T1-weighted and \textsc{flair} scans were rated visually by trained clinicians in accordance to the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}. The clinicians visually analysed the scans slice by slice, identifying possible lacunes, perivascular spaces, and other lesions. Each lesion was analysed by a team of clinicians to confirm the identification. The rating of lacunes was logged in Microsoft Excel, which details the scan id and number of lacunes in each \textsc{mri} scan. For each lacune detected, the spreadsheet lists the diameter in millimetres, axial slice ($z$ coordinate), the id of the surrounding brain structure, and whether the lacune occurs on the left or right side of the brain.
 
-% Screen shot the excel document and CHECK. What parameters are there, including the brain regions that are listed.
+\todo[inline]{Add a latex table with the column names. Add some of the data and use '...' for rows. What parameters are there, including the brain regions that are listed. Should a screenshot of this data be included?}
 
 The provided data describes the approximate anatomical location of lacunes. This format is not immediately useable to the model as it lacks precise coordinates. To resolve this, an overlay for the T1-weighted scans was generated such that each pixel in the image corresponds to a binary response value.
 
@@ -33,21 +33,25 @@ The responses were generated in FSLView. This program is used by to view and ann
 
 For each brain scan described in the Excel spreadsheet, FSLView was used to generate a zero-initialised 3D array of the same dimensions as the corresponding T1-weighted scan. Lacunes were visually identified by examining the indicated brain structure for lesions that appear dark in the T1-weighted images and with a hyperintense rim in the \textsc{flair} images. The empty arrays are opened in FSLView such that they overlay the T1-weighted image. The pixels that form the identified lacunes are filled with 1s using the Brush tool. These overlays are saved as \texttt{.nifti} files so they can be imported alongside the soft-tissue and \textsc{flair} \texttt{.nifti} files.
 
-% Image of T1, FLAIR and a lacune mask coloured in red
+\todo[inline]{Corresponding images: T1, FLAIR and a lacune mask coloured in red}
 
 % Start descriptions of data - where it came from. Rating process and wave reviews. Data itself consisted of t1 and flair scans, and excel spreadhseet of slice numbers and sizes. To build the response values, an overlay was made for each scan. Overlays were built in fslview in the nifti format. Lacunes were identified using the guidance spreadsheet. A brush tool was used to fill 1s for lacunes. 0 elsewhere.
 
-\section{Sample generation}\label{data-samples}
+\section{Generating samples}\label{data-samples}
 
-The candidate generation model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3} specifies each sample to be 51$\times$51 axial slices of both T1-weighting and \textsc{flair}. In their model, samples were chosen randomly such that positive lacune samples encompassed one third of the data set. Data augmentation was used to increase the number of samples. In total, Ghafoorian et al. collected $3.2\times10^5$ training samples from 1075 scans.
+The candidate generation model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3} specifies each sample to be 51$\times$51 axial images of both T1-weighting and \textsc{flair}. In their model, samples were chosen randomly such that positive lacune samples encompassed one third of the data set. Data augmentation was used to increase the number of samples. In total, Ghafoorian et al. collected $3.2\times10^5$ training samples from 1075 scans.
 
-Our dataset contains significantly fewer scans, totalling 411, of which 35 contain lacunes. The data was extracted using the AnalyzeFMRI package in R. This package was used to open the images and convert them into 3D arrays, where each value in the array is the signal intensity of the \textsc{mri} at that voxel.
+Our dataset contains significantly fewer scans. In total the dataset contains 411 \textsc{mri} scans, of which 35 contain lacunes. The extraction of data samples was coordinated in R using the AnalyzeFMRI package. The image files (\texttt{.nifti}) were imported into R for conversion into 3D arrays. The elements
 
-Lacunes were extracted using the lacune overlays generated in FSLView. The indices that contained lacunes were identified, and each of these voxels is treated as a sample point. A 51$\times$51 2D array is extracted from the T1-weighted and \textsc{flair} images for each of these samples such that the sample occurs in the centre of the arrays. To increase sample size, these images were augmented by flipping the image horizontally and adding them to the dataset. This gave 3846 lacune samples in total.
+Each value in an array is the signal intensity of the image at that voxel. Regions external to the scanned brain are given 0 intensities.
 
-Negative (non-lacune) samples were generated by sampling for points that returned 0 in the lacune overlay. As only around 10\% of the soft-tissue matrices are non-zero, random samples were conducted by randomising a starting pixel near the edge of the array and chosen sequentially 25 voxels apart in all three dimensions. Samples were discarded if they had a positive lacune response. As the soft-tissue arrays are very sparse, samples were also discarded if the centre 4$\times$4$\times$4 volume was entirely empty. This was used to generate a total of 47976 negative samples. As a result, positives samples make up \textbf{CHECK} \% of the dataset.
+Lacunes were extracted using the overlays generated in FSLView. Each nonzero value in the overlay was used to generate a positive (lacune) data sample. The array indices of positives were stored in a list. Two 51$\times$51 dimensional arrays were extracted from the T1-weighted and \textsc{flair} images such that the sample point occurs at the array centres. To increase sample size, these images were augmented by flipping the image horizontally and adding them to the dataset. This method of sampling returned 3846 lacune samples in total.
 
-\todo[inline]{CHECK THE SAMPLE NUMBERS AGAIN! IMPORTMRI.R COMMENTS ARE FOR THE OLD TOTALS.}
+\todo[inline]{Image of some positive samples: soft-tissue and flair}
+
+Negative (non-lacune) samples were generated by sampling for points that returned 0 in the lacune overlay. As only around 10\% of the soft-tissue matrices are non-zero, random samples were conducted by choosing sequential points. A random starting pixel was chosen near the edge of the array. Further samples were 25 voxels apart in all three dimensions. Samples were discarded if they had a positive lacune response. As the soft-tissue arrays are very sparse, samples were also discarded if the centre 4$\times$4$\times$4 volume was entirely empty. This was used to generate a total of 40008 negative samples. As a result, positives samples make up 8.77\% of the dataset.
+
+\todo[inline]{Image of negative samples: soft-tissue and flair}
 
 %\section{The Data}
 %
@@ -79,7 +83,6 @@ Negative (non-lacune) samples were generated by sampling for points that returne
 %
 %Explain structure of model, including diagram similar to that from Ghafoorian. Number of layers, number of neurons in each layer. What each layer was and the order. Method for chosen hyper-parameters. 
 
-\cite{Yokoyama2007}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
