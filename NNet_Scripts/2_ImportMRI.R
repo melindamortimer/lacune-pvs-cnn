@@ -287,7 +287,7 @@ dim(data.lacunes)
 # [1] 3846 5208
 
 dim(data.nonlacune)
-# [1] 47976  5208
+# [1] 40008  5208
 
 # Paper has 320K patches in total. 2/3 of these are negatives
 # In our data, only 7% are positives, with around 52000 samples in total.
@@ -316,7 +316,7 @@ save(testing, file = "/srv/scratch/z5016924/testing.Rda")
 
 
 # Sampling 2 --------------------------------------------------------------
-# 1/3 positives
+# 1/3 positives: training, validation and testing sets
 load("/srv/scratch/z5016924/data_lacunes.Rda")
 load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
@@ -347,6 +347,7 @@ dim(testing)
 # Sampling 3 --------------------------------------------------------------
 
 # Use all samples, keeping the positive percentage at a low percentage.
+# Training, validation and testing sets
 # Not too low, in case the model starts outputting non lacune too often, just to inflate accuracy.
 dim(data.lacunes)
 dim(data.nonlacune)
