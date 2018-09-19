@@ -1,21 +1,41 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Results}\label{results}
 
 \section{Final model structure}
 
+The final simplified model has a similar structure to that of Ghafoorian et. al's candidate detection model \cite{GhafoorianM.2017Dml3}. The model structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: soft-tissue extracted T1 and FLAIR, each of resolution 51$\times$51 pixels around the same point. The model classifies the central pixel as either a positive or negative reading, formatted as a 2-dimensional vector. A response of $(1,0)^\intercal$ indicates a positive (lacune) and $(0,1)^\intercal$ a negative (non-lacune).
+
+% Simplified model structure
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/7_simplified_model.png}
+	\caption{Simplified model structure.}
+	\small Image adapted from \cite{GhafoorianM.2017Dml3}
+	\label{results-model-fig}
+\end{figure}
+
+The model consists of four convolutional layers of size 20, 40, 80 and 110, with filter sizes 7$\times$7, 5$\times$5, 3$\times$3 and 3$\times$3 respectively. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200 and 2. The final layer has softmax activation to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
+
+All neurons undergo batch normalisation and are initialised using the He method \cite{HeK2016Drlf}. A dropout rate of 0.3 was applied to the fully connected layers.
+
+Training was conducted using stoachastic gradient descent with Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy loss was used with L2-regularisation. The penalty rate was set to $1\times10^{-4}$. 
+
+An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, the final saved model will have the highest validation accuracy.
+
+Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}: one third positive and two thirds negative. There are only 3846 positive samples in the MAS dataset, allowing for a random selection of 7692 negative samples. The total sample size is 11538. These samples are split into three datasets: training, validation and testing. Splitting the data into these groups with a ratio of 50:25:25 yields sample sizes 5769, 2884 and 2885 respectively.
+
+The second model used the entire developed set of positive and negative lacune samples. This consisted of 3846 positive and 40008 negative samples to give a total sample size of 43854. Positives encompassed 8.77\% of data samples. Similarly to the first dataset, the data was split into training, validation and testing sets using a ratio of 50:25:25. This yielded sample sizes 21927, 10963 and 10964 respectively. All datasets were saved as R data files (\texttt{.Rda}).
 
 
 \section{Training environment}
 
-% R: RStudio - tensorflow, Linux, 
+Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural network was built and trained using Tensorflow (v1.10.0) through the R interface \texttt{tensorflow} (v1.8). The model was trained on a Linux machine running Ubuntu (release 16.04). 
 
 \section{Results}
 
 
-
-\citep{AdamsH.H.Hieab2013RMfD}
 
 %\section{Reference Model Results}
 %
@@ -71,4 +91,4 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
