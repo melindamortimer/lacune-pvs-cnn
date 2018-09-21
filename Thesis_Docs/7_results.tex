@@ -5,7 +5,7 @@
 
 \section{Final model structure}
 
-The final simplified model has a similar structure to that of Ghafoorian et. al's candidate detection model \cite{GhafoorianM.2017Dml3}. The model structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: soft-tissue extracted T1 and FLAIR, each of resolution 51$\times$51 pixels around the same point. The model classifies the central pixel as either a positive or negative reading, formatted as a 2-dimensional vector. A response of $(1,0)^\intercal$ indicates a positive (lacune) and $(0,1)^\intercal$ a negative (non-lacune).
+The final simplified model has a similar structure to that of Ghafoorian et. al's candidate detection model \cite{GhafoorianM.2017Dml3}. The model structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: soft-tissue extracted T1 and FLAIR images. Each of the images has resolution 51$\times$51 pixels and is centered at the same coordinate. The model classifies the central pixel as either a positive or negative reading, formatted as a 2-dimensional vector. A response of $(1,0)^\intercal$ indicates a positive (lacune) sample and $(0,1)^\intercal$ a negative (non-lacune) sample.
 
 % Simplified model structure
 \begin{figure}[ht]
@@ -120,6 +120,15 @@ Applying this best validation accuracy model to the test set achieved an accurac
 \end{table}
 
 
+Between the two trained model, the model that was trained on more data had slightly less sensitivity but much greater specificity. 
+
+\todo[inline]{Hypothesis tested the difference between the two models' sensitivities}
+
+\todo[inline]{Discussion of model comparisons. Which one is truly preferred and why}
+
+\todo[inline]{Show examples of false positives and true negatives. What do these tend to look like?}
+
+\todo[inline]{What happens when the scan is run on a whole brain?}
 
 %\section{Reference Model Results}
 %
