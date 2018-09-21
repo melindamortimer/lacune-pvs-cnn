@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Results}\label{results}
 
@@ -35,30 +35,33 @@ Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural netw
 
 \section{Results}
 
+\subsection*{One Third Positives}
+
 The first model generated had the same positive-negative sample ratio as outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. The data consisted of one third positives and two thirds negatives. The resulting samples were split into three datasets: training, validation and testing in the ratio of 50:25:25.
 
-Each epoch of training uses the entire training dataset. The model is trained for 40 epochs, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training dataset is very high, whereas the accuracy of the validation and testing datasets are low. Hence assessing model training accuracy can efficiently convey early model improvement however is not indicative of the model's performance when given new data.
-
 % Training accuracy
-\begin{figure}[ht]
+\begin{figure}[b]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_train_acc4.pdf}
 	\caption{Training data accuracy logged every 5 batches}
 	\label{results-train-acc4-fig}
 \end{figure}
 
-Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches, reaching 100\% before batch 250. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
+Each epoch of training uses the entire training dataset. The model is trained for 40 epochs over 23 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training dataset is very high, whereas the accuracy of the validation and testing datasets are low. Hence assessing model training accuracy can efficiently convey early model improvement however is not indicative of the model's performance when given new data.
 
-The model's validation set accuracy was tested after each epoch. This dataset was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly for the first 10 epochs before a plateau at 20 epochs. The maximum validation accuracy occurred at epoch 31, achieving an accuracy of 0.9899445.
+Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches, reaching 100\% before batch 250. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \cite{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
+
 % Validation accuracy
-\begin{figure}[ht]
+\begin{figure}[b]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_valid_acc4.pdf}
 	\caption{Validation data accuracy logged after each epoch}
 	\label{results-valid-acc4-fig}
 \end{figure}
 
-Applying this best validation accuracy model to the test dataset resulted in an accuracy of 0.9885615. This testing set contained 2885 samples. The number of true and false positives was collated and formatted into a table. The resulting \textit{confusion matrix} is shown in Table \ref{results-confmat4-tab}.
+The model's validation set accuracy was tested after each epoch. This dataset was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly for the first 10 epochs before a plateau at 20 epochs. The maximum validation accuracy occurred at epochs 31 and 34, achieving an accuracy of 0.9899445. The model was saved at epoch 31 to help minimise overfitting that may occur at later epochs.
+
+Applying this best validation accuracy model to the test dataset resulted in an accuracy of 0.9885615. Though overall accuracy is a strong indicator of model performance, some types of inaccuracy can be more detrimental than others. In the identification of lacunes, it is preferable to have a larger number of false candidate lacunes than misclassify a true lacune. As a result, models will be compared by considering actual and predicted classification differences. Using this scheme, there are four outcomes: true positives, true negatives, false positives, and false negatives. These outcomes can be formatted into a \textit{confusion matrix}, as shown in Table \ref{results-confmat4-tab}.
 
 \begin{table}[ht]
 	\centering
@@ -73,6 +76,50 @@ Applying this best validation accuracy model to the test dataset resulted in an 
 	\caption{Confusion matrix of the testing dataset.}
 	\label{results-confmat4-tab}
 \end{table}
+
+The sensitivity of the model to lacunes is 99.6\% and specificity for non-lacunes is 98.4\%.
+
+\subsection*{8.77\% Positives}
+
+The second model was built using all of the generated positive and negative samples as described in Section \ref{data-samples}.
+
+The resulting training accuracy is shown in Figure \ref{results-train-acc5-fig}. The additional noise present in comparison to the previous model is the result of the larger sample size, rising from 5769 to 21927 samples. Note that the batch size and number of training epochs remained at 128 and 40 respectively, resulting in a larger number of batches processed during training. Model training duration was 1 hour and 13 minutes. The behaviour of this model was similar to that of the previous model, with a steep increase in training accuracy in early epochs followed by consistent correct classifications. Training accuracy first reached 100\% at batch 205 and was consistently 100\% by batch 750. 
+
+% Training accuracy
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/7_train_acc5.pdf}
+	\caption{Training data accuracy logged every 5 batches}
+	\label{results-train-acc5-fig}
+\end{figure}
+
+The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epoch 22, achieving an accuracy of 0.9983581. 
+
+% Validation accuracy
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/7_valid_acc5.pdf}
+	\caption{Validation data accuracy logged after each epoch}
+	\label{results-valid-acc5-fig}
+\end{figure}
+
+Applying this best validation accuracy model to the test set achieved an accuracy of 0.9968989. The confusion matrix is given by Table \ref{results-confmat5-tab}, to give a sensitivity of 99.3\% and specificity of 99.7\%.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{@{}lll@{}}
+	\toprule[1.5pt]
+	& Positive & Negative\\
+	\midrule
+	True & 955 & 9969\\
+	False & 33 & 7\\
+	\bottomrule[1.5pt]\\
+	\end{tabular}
+	\caption{Confusion matrix of the testing dataset.}
+	\label{results-confmat5-tab}
+\end{table}
+
+
 
 %\section{Reference Model Results}
 %
@@ -116,7 +163,7 @@ Applying this best validation accuracy model to the test dataset resulted in an 
 %
 %\subsection*{Attempt5}
 %
-%training/validation/testing with 8.77\% positives. 43854 samples in total. Training time: 01:13:17. Training accuracy achieved 100\% at batch 41x5. Consistently 100\% at batch 150x5. Validation accuracy peaked at epoch 22, which achieved an accuracy of 0.9983581. Applying this best validation accuracy model to the test set achieved an accuracy of 0.9968989.
+%training/validation/testing with 8.77\% positives. 43854 samples in total. Training time: 01:13:17. Training accuracy achieved 100\% at batch 41x5=205. Consistently 100\% at batch 150x5=750. Validation accuracy peaked at epoch 22, which achieved an accuracy of 0.9983581. Applying this best validation accuracy model to the test set achieved an accuracy of 0.9968989.
 %Testing set comprised of 10964 samples. Of these, the number of true/false positives and negatives were calculated:
 %
 %TP: 955
@@ -128,4 +175,4 @@ Applying this best validation accuracy model to the test dataset resulted in an 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}
