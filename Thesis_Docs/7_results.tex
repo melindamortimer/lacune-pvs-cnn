@@ -35,7 +35,16 @@ Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural netw
 
 \section{Results}
 
-The first model generated had a positive-negative sample ratio of 1:2 to match the sample structure outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. 
+The first model generated had the same positive-negative sample ratio as outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. The data consisted of one third positives and two thirds negatives. The resulting samples were split into three datasets: training, validation and testing in the ratio of 50:25:25.
+
+Training accuracy was calculated every 5 batches, where each batch contains 128 samples. Validation accuracy was calculated at the end of each epoch. The model trained for 40 epochs in 23 minutes. Training accuracy, shown in Figure \ref{results-train-acc-fig}, increased rapidly in the first 100 batches. Training accuracy first reach 100\% by batch 
+% Training accuracy
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Images/7_train_acc4.pdf}
+	\caption{Training data accuracy logged every 5 batches}
+	\label{results-train-acc-fig}
+\end{figure}
 
 %\section{Reference Model Results}
 %
