@@ -1,7 +1,8 @@
 
 # Data prep ---------------------------------------------------------------
 
-setwd("/srv/scratch/z5016924/model1/attempt4")
+# setwd("/srv/scratch/z5016924/model1/attempt4")
+setwd("~/hdrive/Honours/lacune-pvs-cnn/attempt4")
 
 load("train_accuracy.Rda")
 load("train_accuracy2.Rda")
@@ -24,6 +25,12 @@ plot((1:length(train.accuracy))*5+1, train.accuracy,
      ylab = "Training Accuracy",
      main = "Training Accuracy")
 # attempt4: Consistently at 100% by batch 300
+lines(smooth.spline((1:length(train.accuracy))*5+1, train.accuracy,
+                    spar = 0.4),col = "red")
+legend("bottomright",
+       c("Training Accuracy", "Cubic Spline"),
+       lty = c(2, 1),
+       col = c("black","red"))
 
 
 plot(train.accuracy2,
@@ -47,7 +54,8 @@ legend('bottomright',
 # Plots Attempt 5 ---------------------------------------------------------
 
 
-setwd("/srv/scratch/z5016924/model1/attempt5")
+# setwd("/srv/scratch/z5016924/model1/attempt5")
+setwd("~/hdrive/Honours/lacune-pvs-cnn/attempt5")
 
 load("train_accuracy.Rda")
 load("train_accuracy2.Rda")
