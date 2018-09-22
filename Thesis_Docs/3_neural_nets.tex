@@ -3,7 +3,7 @@
 
 \chapter{Neural networks}\label{neuralNets-intro}
 
-This chapter outlines the structure and workings of basic neural network models. For those who have a basic understanding of neural networks and wish to avoid the details surrounding loss functions and minimisation algorithms can proceed to Chapter \ref{convnets} for an overview of convolutional neural networks or Chapter \ref{litrev} for existing lacune model attempts.
+This chapter outlines the structure and workings of basic neural network models. Those who have a basic understanding of neural networks and wish to avoid the details surrounding loss functions and minimisation algorithms can proceed to Chapter \ref{convnets} for an overview of convolutional neural networks and Chapter \ref{litrev} for existing lacune model attempts.
 
 % - Basic neural networks theory + perceptron
 % - Loss functions
@@ -190,7 +190,7 @@ Unlike the quadratic cost, when the error is high, the learning rate is also hig
 
 Weights and biases are chosen to minimise the cost function. \textbf{However the large number of variables makes minimisation slow. Minimising the weights analytically has time complexity}  for this to be done analytically; instead they are estimated using the Gradient Descent algorithm.
 
-\todo{Find supporting sources for gradient descent as opposed to solving analytically. ie that there is no closed form solution and that grad desc saves time.}
+\todo[inline]{Find supporting sources for gradient descent as opposed to solving analytically. ie that there is no closed form solution and that grad desc saves time.}
 
 Gradient Descent works by considering the gradient of the cost given the current weights and biases \cite{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
 
