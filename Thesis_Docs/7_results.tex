@@ -1,5 +1,5 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Results}\label{results}
 
@@ -119,12 +119,19 @@ Applying this best validation accuracy model to the test set achieved an accurac
 	\label{results-confmat5-tab}
 \end{table}
 
+\subsection*{Model comparisons}
 
-Between the two trained model, the model that was trained on more data had slightly less sensitivity but much greater specificity. 
+Between the two trained models, the model that was trained on more data had slightly less sensitivity but much greater specificity. A hypothesis test comparing the sensitivity and specificity rates between the two models is conducted.
 
-\todo[inline]{Hypothesis tested the difference between the two models' sensitivities}
+First test the difference in sensitivity rates. The Central Limit Theorem (\textsc{clt}) does not apply as the number of false negatives is less than 10 for both models. Consider the pooled sensitivity probability $p_{pooled} = \dfrac{972+955}{972+4+955+7} = 0.994324$. Test the hypothesis that both models exhibit sensitivities at the rate of $p_{pooled}$. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. The models classify each sample independently and the data are sampled randomly. Under these assumptions we can model $X_1$ and $X_2$ using the Binomial distribution. Under the null hypothesis, $X_1 \sim Bin(976, p_{pooled})$ and $X_2 \sim Bin(962, p_{pooled})$. The probability of the first model exceeding 972 correct classifications out of 976 is $P(X_1 \geq 972) = 0.19643$. The probability of the second model having fewer than 955 correct classifications out of 962 is $P(X_2 \leq 955) = 0.30749$. At the 5\% level, neither of these sensitivities are significantly different from $p_{pooled}$ and so are not significantly different from each other.
 
-\todo[inline]{Discussion of model comparisons. Which one is truly preferred and why}
+Now test the difference in specificity rates. Hypothesise that both sample proportions come from sampling distributions with the same probability. The number of true negatives and false positives are above 10 for both models. The data was sampled randomly and lacune classifications were made independently of other samples. Under these assumptions, the two-proportion z-test can be applied. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples so that $\hat{p}_1 = \dfrac{X_1}{n_1}$ and $\hat{p}_2 = \dfrac{X_2}{n_2}$ are the observed specificities. The observed pooled specificity proportion is $\hat p_{pooled} = \dfrac{9969+1879}{9969+33+1879+30} = 0.99471$. From the \textsc{clt},
+\[
+	Z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{p_{pooled}(1 - p_{pooled})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} \approx \mathcal{N}(0,1).
+\]
+The resulting test statistic is $z = -6.8533$. The probability of the observed proportion difference or lower is given by $P(Z < z) = 3.61\times10^{-12}$. This is well below the 5\% significance level and it is concluded that the specificity of the second model is higher than that of the first.
+
+It has been proven that the model trained with the larger sample size and smaller proportion of positives did not affect sensitivity rates and increased specificity. 
 
 \todo[inline]{Show examples of false positives and true negatives. What do these tend to look like?}
 
@@ -184,4 +191,4 @@ Between the two trained model, the model that was trained on more data had sligh
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
