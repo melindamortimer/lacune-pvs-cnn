@@ -3,7 +3,7 @@
 
 \chapter{Neural networks}\label{neuralNets-intro}
 
-This chapter outlines the structure and workings of basic neural network models. Those who have a basic understanding of neural networks and wish to avoid the details surrounding loss functions and minimisation algorithms can proceed to Chapter \ref{convnets} for an overview of convolutional neural networks and Chapter \ref{litrev} for existing lacune model attempts.
+This chapter outlines the structure and workings of basic neural network models. Those who have a basic understanding of neural networks and wish to avoid the details surrounding model structure and minimisation algorithms can proceed to Chapter \ref{convnets} for an overview of convolutional neural networks and Chapter \ref{litrev} for existing lacune model attempts.
 
 % - Basic neural networks theory + perceptron
 % - Loss functions
@@ -17,29 +17,107 @@ This chapter outlines the structure and workings of basic neural network models.
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \cite{Goodfellow-et-al-2016}. Neural networks have been found to exhibit higher image classification accuracies than humans \cite{HeK2016Drlf} and have been proven successful in \textsc{mri} discrimination tasks \cite{DouQ.2016ADoC,Yokoyama2007}.
+Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \cite{Goodfellow-et-al-2016}. They have been proven successful with \textsc{mri} discrimination tasks \cite{DouQ.2016ADoC, Yokoyama2007} and image classification tasks \cite{AlexNet2012, GoogLeNet2015, HeKaiming2015DDiR}. In some instances, neural networks have exhibited a higher image recognition accuracy than humans \cite{HeKaiming2015DDiR}.
 
-The construction of neural networks has to be conducted with care. The resulting models are difficult to interpret and prone to overfitting. 
+The construction of neural networks has to be conducted with care. The resulting models are difficult to interpret and prone to overfitting. We now discuss the underlying structure of neural networks, loss minimisation, and techniques to avoid overfitting the data.
 
 \section{Basic structure}\label{nnets-structure}
 
 The structure of neural networks can be compared to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence. Neural networks adopt a similar structure. Individual nodes receive variables, apply a transformation, and pass the result to the next node. For this reason, the nodes are referred to as \textit{neurons}.
 
-The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let $\mathbf{x} = (x_1, x_2, \ldots, x_k)^\intercal$ be a vector of $k$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_k)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. The output of a single neuron is given by
+The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. The output of a single neuron is given by
 \[
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
 \]
 where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is an \textit{activation value}.
 
-% Diagram of single neuron
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.5]{Images/3_neuron.png}
-	\caption{Neuron structure.}
-	\label{nnet-neuronfig}
+
+
+% Neuron structure diagram
+\begin{figure}
+\centering
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+
+%Shape: Circle [id:dp7806506925261892] 
+\draw   (270,154) .. controls (270,125.28) and (293.28,102) .. (322,102) .. controls (350.72,102) and (374,125.28) .. (374,154) .. controls (374,182.72) and (350.72,206) .. (322,206) .. controls (293.28,206) and (270,182.72) .. (270,154) -- cycle ;
+%Straight Lines [id:da48045113953293783] 
+\draw    (191,76) -- (270,154) ;
+
+
+%Straight Lines [id:da20730706323067383] 
+\draw    (190.92,117.33) -- (270,154) ;
+
+
+%Straight Lines [id:da19390293965519045] 
+\draw    (191.59,224.67) -- (270,154) ;
+
+
+%Straight Lines [id:da5499170807272789] 
+\draw    (374,154) -- (466.51,154) ;
+\draw [shift={(468.51,154)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Straight Lines [id:da7426731370805287] 
+\draw    (270,154) -- (190.92,152.67) ;
+
+
+%Straight Lines [id:da35133187079282135] 
+\draw    (254,80.33) -- (270,154) ;
+
+
+
+% Text Node
+\draw (324,156) node   {$\mathbf{x} \cdot \mathbf{w} +b$};
+% Text Node
+\draw (180,72.33) node   {$x_{1}$};
+% Text Node
+\draw (180,113.33) node   {$x_{2}$};
+% Text Node
+\draw (180,185) node   {$\vdots $};
+% Text Node
+\draw (180,225.33) node   {$x_{n}$};
+% Text Node
+\draw (180,150.33) node   {$x_{3}$};
+% Text Node
+\draw (219,87) node   {$w_{1}$};
+% Text Node
+\draw (219,120) node   {$w_{2}$};
+% Text Node
+\draw (219,145) node   {$w_{3}$};
+% Text Node
+\draw (219,185) node   {$w_{n}$};
+% Text Node
+\draw (219,163) node   {$\vdots $};
+% Text Node
+\draw (254.67,70.33) node   {$b$};
+% Text Node
+\draw (408,145) node   {$\sigma ( \cdot )$};
+% Text Node
+\draw (480,155) node   {$a$};
+
+
+\end{tikzpicture}
+\caption{Neuron structure.}
+\label{nnet-neuronfig}
 \end{figure}
 
-Basic neural networks arrange a number of these neurons into layers, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. Each neuron in this first layer represents a variable. The last layer is an output layer is an output which generates the final result. The central layers, which conduct most of the processing, are known as \textit{hidden layers}.
+
+
+
+
+
+%% Diagram of single neuron
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[scale=0.5]{Images/3_neuron.png}
+%	\caption{Neuron structure.}
+%	\label{nnet-neuronfig}
+%\end{figure}
+
+A large number of these neurons can be arranged to form a neural network. The generated outputs of these neurons can be fed as inputs into later neurons. Basic neural networks arrange a number of these neurons into layers, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. Each neuron in this first layer represents a variable. The last layer is an output layer which generates the final result. The central layers, which conduct most of the processing, are known as \textit{hidden layers}.
+
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 %\begin{figure}[ht]
 %	\centering
@@ -62,58 +140,70 @@ Basic neural networks arrange a number of these neurons into layers, as shown in
     % Draw the input layer nodes
     \foreach \name / \y in {1,...,3}
     % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
-        \node[input neuron, pin=left:Input \#\y] (I-\name) at (0,-\y) {};
+        \node[input neuron, pin=left:$x_\y$] (I-\name) at (0,-\y) {};
 
-    % Draw the hidden layer nodes
+    % Draw the hidden layer1 nodes
     \foreach \name / \y in {1,...,4}
         \path[yshift=0.5cm]
-            node[hidden neuron] (H-\name) at (\layersep,-\y cm) {};
+            node[hidden neuron] (Ha-\name) at (\layersep,-\y cm) {};
+            
+    % Draw the hidden layer2 nodes
+    \foreach \name / \y in {1,...,4}
+        \path[yshift=0.5cm]
+            node[hidden neuron] (Hb-\name) at (2*\layersep,-\y cm) {};
 
     % Draw the output layer node
-    \node[output neuron,pin={[pin edge={->}]right:Output}] (O) at (2*\layersep, -2) {};
+    \node[output neuron,pin={[pin edge={->}]right:Output}] (O) at (3*\layersep, -2) {};
 
     % Connect every node in the input layer with every node in the
     % hidden layer.
     \foreach \source in {1,...,3}
         \foreach \dest in {1,...,4}
-            \path (I-\source) edge (H-\dest);
+            \path (I-\source) edge (Ha-\dest);
+            
+    % Connect every node in the hidden layer 1 with every node in
+    % hidden layer 2.
+    \foreach \source in {1,...,4}
+        \foreach \dest in {1,...,4}
+            \path (Ha-\source) edge (Hb-\dest);
 
     % Connect every node in the hidden layer with the output layer
     \foreach \source in {1,...,4}
-        \path (H-\source) edge (O);
+        \path (Hb-\source) edge (O);
 
     % Annotate the layers
-    \node[annot,above of=H-1, node distance=1cm] (hl) {Hidden layer};
-    \node[annot,left of=hl] {Input layer};
-    \node[annot,right of=hl] {Output layer};
+    \node[annot,above of=Ha-1, node distance=1cm] (hla) {Hidden layer \#1};
+    \node[annot,above of=Hb-1, node distance=1cm] (hlb) {Hidden layer \#2};
+    \node[annot,left of=hla] {Input layer};
+    \node[annot,right of=hlb] {Output layer};
+    
+    \node[annot,below of=Ha-4, node distance=1cm] (fa) {$f_1(\mathbf{v}_1)$};
+    \node[annot,below of=Hb-4, node distance=1cm] (fb) {$f_2(\mathbf{v}_2)$};
+    \node[annot,right of=fb, node distance=\layersep] (fo) {$f(\mathbf{v})$};
+
 \end{tikzpicture}
-\caption{Basic neural network structure.}
+\caption{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases have been hidden.}
 \label{nnet-structurefig}
 \end{figure}
 
-The weights and biases are chosen such that they minimise some \textit{cost function} $C(W,B)$, with respect to the set of weights $W$ and biases $B$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$.
+Let the weights and biases of layer $\ell$ be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
+\[
+	f(\mathbf{v}) = f_L(\mathbf{v}_L) \circ f_{L-1}(\mathbf{v}_{L-1}) \circ \ldots \circ f_1(\mathbf{v}_1).
+\]
 
-We can instead approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost falls with some tolerance $\tau$, or reaches a maximum number of iterations $n_T$.
+All the weights $W$ and biases $B$ of the network are chosen such that they minimise some \textit{cost function} $C(W,B)$ with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$.
+
+We can instead approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
 
 \section{Notation}\label{nnets-not}
 
-We now introduce some notation to describe the computation more coherently.
+\todo[inline]{Restructure notation like a glossary. Two columns, notation on left and definition on right.}
 
-Define $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
+Let $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
 
 Let $b_j^\ell$ be the bias of the $j$-th neuron in the $\ell$-th layer.
 
-Let $\mathbf{a}^\ell$ be the vector of activation values (outputs) for the $\ell$-th layer, where $a_j^\ell$ is the activation value of the $j$-th neuron of that layer.
-
-Set $z_j^\ell := \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$ to be the values calculated before activation, and $\mathbf{z}^\ell$ to be the vector of $z_j^\ell$ for the $\ell$-th layer. Set $Z$ to be the set of all $z_j^\ell$ in the whole network.
-
-Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ is the vector of activation values of the final output layer.
-
-Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$-th variable of $\mathbf{y}_i$.
-
-Let $W$ and $B$ be the sets of all weights and biases as before.
-
-Let $\eta$ be the learning rate of the network. 
+Let $\mathbf{a}^\ell$ be the vector of activation values (outputs) for the $\ell$-th layer, where $a_j^\ell$ is the activation value of the $j$-th neuron of that layer. Set $z_j^\ell := \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$ to be the values calculated before activation, and $\mathbf{z}^\ell$ to be the vector of $z_j^\ell$ for the $\ell$-th layer. Set $Z$ to be the set of all $z_j^\ell$ in the whole network. Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ is the vector of activation values of the final output layer. Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$-th variable of $\mathbf{y}_i$. Let $W$ and $B$ be the sets of all weights and biases as before. Let $\eta$ be the learning rate of the network. 
 
 \section{Activation functions}\label{nnets-act}
 
@@ -145,27 +235,23 @@ which allows for some neurons to output 0 and be essentially deactivated.
 
 A common activation function for the final layer is the softmax function,
 \[
-	\sigma(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}}.
+	\sigma(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
 \]
+as the output takes the form of a probability distribution.
+
 
 \section{Cost functions}\label{nnets-cost}
 
-Weights and biases are chosen such that they approximately minimise some cost function.
-
-In using gradient descent (see Section \ref{nnets-graddesc}), there are two requirements. The first requirement is that the cost, $C_X(\cdot)$, accrued from all samples, $X$, equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
+Weights and biases are chosen such that they approximately minimise some cost function. To use the gradient descent algorithm (see Section \ref{nnets-graddesc}) to minimise cost, Nielson \cite{Nielson2015} describes two requirements. The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
 \[
 	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
 \]
 
-The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$.
-
-There are a number of cost functions in frequent use, and the choice of cost function is dependent on the context of the problem.
-
-One of the most common cost functions for regression is the quadratic cost, or Mean Squared Error cost, given by
+The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$. There are a number of cost functions in frequent use, and the choice of cost function is dependent on the context of the problem. A common cost function for regression is the quadratic cost, or Mean Squared Error (\textsc{mse}) cost. Denote $\|\cdot\|$ to be the Euclidean norm. The \textsc{mse} cost function is given by
 \[
-	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2,
+	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2.
 \]
-where $\|\cdot\|$ is the Euclidean norm. This form is convenient for backpropagation (see Section \ref{nnets-backprop}) as it has an efficiently computable gradient,
+This form is convenient for backpropagation (see Section \ref{nnets-backprop}) as it has an efficiently computable gradient,
 \[
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
 \]
@@ -188,9 +274,7 @@ Unlike the quadratic cost, when the error is high, the learning rate is also hig
 
 \section{Gradient descent}\label{nnets-graddesc}
 
-Weights and biases are chosen to minimise the cost function. \textbf{However the large number of variables makes minimisation slow. Minimising the weights analytically has time complexity}  for this to be done analytically; instead they are estimated using the Gradient Descent algorithm.
-
-\todo[inline]{Find supporting sources for gradient descent as opposed to solving analytically. ie that there is no closed form solution and that grad desc saves time.}
+Weights and biases are chosen to minimise the cost function. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. To improve computation speed, the weights are instead estimated using the Gradient Descent algorithm.
 
 Gradient Descent works by considering the gradient of the cost given the current weights and biases \cite{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
 
@@ -249,7 +333,7 @@ As the updated weights and biases rely on the gradient, it should be noted that 
 
 \subsection*{Stochastic gradient descent}\label{nnets-stochgraddesc}
 
-As the neural network has a very large number of weights, gradient descent is a highly computationally intensive algorithm. To improve training time, Stochastic Gradient Descent is a popular alternative. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from, referred to as a \textit{batch}. After training has been completed for that batch, another batch of training inputs is randomly selected, and the process repeats. When all training batches have been used, it is said that an \textit{epoch} of training has been completed.
+As the neural network has a very large number of weights, gradient descent is a highly computationally intensive algorithm. To improve training time, Stochastic Gradient Descent is a popular alternative, shown to have a time complexity of $O(n)$ \cite{Robbins1951}. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from, referred to as a \textit{batch}. After training has been completed for that batch, another batch of training inputs is randomly selected, and the process repeats. When all training batches have been used, it is said that an \textit{epoch} of training has been completed.
 
 In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed, while still utilising all the information provided by the whole set of samples by the end of training time.
 
