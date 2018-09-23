@@ -82,8 +82,9 @@ data.dir <- "/srv/scratch/z5016924/MAS_W2/"
 # ALTERNATIVELY store for both models by just storing for the second, then retrieving variables for the first by taking the middle slice of the 32x32x5 block.
 
 # View Functions ----------------------------------------------------------
+data.dir <- "/srv/scratch/z5016924/MAS_W2/"
 
-ViewPatch <- function(id, x, y, z, type = "soft") {
+ViewPatch <- function(id, x, y, z, type = "soft", point = T) {
   id <- sprintf("%04d", id)
   if (type == "soft") {
     file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
@@ -91,20 +92,35 @@ ViewPatch <- function(id, x, y, z, type = "soft") {
     file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
   } else if (type == "flair") {
     file.name <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  } else if (type == "lacune") {
+    file.name <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
   } else {
     stop("Type needs to be one of 'soft', 't1' or 'flair'")
   }
   img <- f.read.nifti.volume(file.name)
   subimg <- img[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
   image(subimg, col = grey.colors(100))
+  if (point) points(0.5, 0.5, col = "red")
 }
 
-ViewSlice <- function(id,z) {
+ViewSlice <- function(id,z, type = "soft", point = T) {
   id <- sprintf("%04d", id)
-  file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
+  if (type == "soft") {
+    file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  } else if (type == "t1") {
+    file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
+  } else if (type == "flair") {
+    file.name <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  } else if (type == "lacune") {
+    file.name <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  } else {
+    stop("Type needs to be one of 'soft', 't1' or 'flair'")
+  }
   img <- f.read.nifti.volume(file.name)
   subimg <- img[,,z, 1]
   image(subimg, col = grey.colors(100))
+  if (point) points(0.5, 0.5, col = "red")
+  
 }
 
 
