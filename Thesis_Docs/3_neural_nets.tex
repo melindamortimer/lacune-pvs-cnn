@@ -1,5 +1,5 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Neural networks}\label{neuralNets-intro}
 
@@ -17,15 +17,15 @@ This chapter outlines the structure and workings of basic neural network models.
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \cite{Goodfellow-et-al-2016}. They have been proven successful with \textsc{mri} discrimination tasks \cite{DouQ.2016ADoC, Yokoyama2007} and image classification tasks \cite{AlexNet2012, GoogLeNet2015, HeKaiming2015DDiR}. In some instances, neural networks have exhibited a higher image recognition accuracy than humans \cite{HeKaiming2015DDiR}.
+Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \cite{Goodfellow-et-al-2016}. They have been proven successful with \textsc{mri} discrimination tasks \cite{DouQ.2016ADoC, Yokoyama2007} and image classification tasks \cite{HeKaiming2015DDiR, AlexNet2012, GoogLeNet2015}. In some instances, neural networks have exhibited a higher image recognition accuracy than humans \cite{HeKaiming2015DDiR}.
 
 The construction of neural networks has to be conducted with care. The resulting models are difficult to interpret and prone to overfitting. We now discuss the underlying structure of neural networks, loss minimisation, and techniques to avoid overfitting the data.
 
 \section{Basic structure}\label{nnets-structure}
 
-The structure of neural networks can be compared to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence. Neural networks adopt a similar structure. Individual nodes receive variables, apply a transformation, and pass the result to the next node. For this reason, the nodes are referred to as \textit{neurons}.
+The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence. Neural networks adopt a similar structure. Individual nodes receive variables, apply a transformation, and pass the result to the next node. For this reason, the nodes are referred to as \textit{neurons}.
 
-The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. The output of a single neuron is given by
+The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. This additional weight can be used to leverage the value of the neuron just before output, independent of the input variables. The output of a single neuron is given by
 \[
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
 \]
@@ -66,8 +66,6 @@ where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is an \textit{a
 %Straight Lines [id:da35133187079282135] 
 \draw    (254,80.33) -- (270,154) ;
 
-
-
 % Text Node
 \draw (324,156) node   {$\mathbf{x} \cdot \mathbf{w} +b$};
 % Text Node
@@ -103,11 +101,6 @@ where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is an \textit{a
 \label{nnet-neuronfig}
 \end{figure}
 
-
-
-
-
-
 %% Diagram of single neuron
 %\begin{figure}[ht]
 %	\centering
@@ -116,7 +109,19 @@ where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is an \textit{a
 %	\label{nnet-neuronfig}
 %\end{figure}
 
-A large number of these neurons can be arranged to form a neural network. The generated outputs of these neurons can be fed as inputs into later neurons. Basic neural networks arrange a number of these neurons into layers, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. Each neuron in this first layer represents a variable. The last layer is an output layer which generates the final result. The central layers, which conduct most of the processing, are known as \textit{hidden layers}.
+\begin{example}
+A logical \textsc{and} gate of two inputs can be expressed as a neuron. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0, so that $x_i \in \{0,1\}$ for $i=1,2$. Set $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Set the activation function to be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
+\[
+	a = \begin{cases}
+		1 & x_1 + x_2 - 1.5 > 0\\
+		0 & else
+	\end{cases},
+\] 
+which will output 1 only when $\mathbf{x} = (1, 1)^\intercal$.
+\end{example}
+
+
+A large number of these neurons can be arranged to form a neural network. The generated outputs of these neurons can be fed as inputs into later neurons. Basic neural networks arrange a number of these neurons into layers, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. Each neuron in this first layer represents a variable. The last layer is an output layer which generates the final result. The central layers, which conduct most of the processing, are known as \textit{hidden layers} and are shown as Hidden layer 1 and Hidden layer 2 in Figure \ref{nnet-structurefig}.
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 %\begin{figure}[ht]
@@ -172,8 +177,8 @@ A large number of these neurons can be arranged to form a neural network. The ge
         \path (Hb-\source) edge (O);
 
     % Annotate the layers
-    \node[annot,above of=Ha-1, node distance=1cm] (hla) {Hidden layer \#1};
-    \node[annot,above of=Hb-1, node distance=1cm] (hlb) {Hidden layer \#2};
+    \node[annot,above of=Ha-1, node distance=1cm] (hla) {Hidden layer 1};
+    \node[annot,above of=Hb-1, node distance=1cm] (hlb) {Hidden layer 2};
     \node[annot,left of=hla] {Input layer};
     \node[annot,right of=hlb] {Output layer};
     
@@ -186,16 +191,19 @@ A large number of these neurons can be arranged to form a neural network. The ge
 \label{nnet-structurefig}
 \end{figure}
 
-Let the weights and biases of layer $\ell$ be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
+Let the weights and biases of the $\ell$-th layer be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
 \[
-	f(\mathbf{v}) = f_L(\mathbf{v}_L) \circ f_{L-1}(\mathbf{v}_{L-1}) \circ \ldots \circ f_1(\mathbf{v}_1).
+	f(\mathbf{v}) = f_L(\mathbf{v}_L) \circ f_{L-1}(\mathbf{v}_{L-1}) \circ \cdots \circ f_1(\mathbf{v}_1).
 \]
 
-All the weights $W$ and biases $B$ of the network are chosen such that they minimise some \textit{cost function} $C(W,B)$ with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$.
-
-We can instead approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
+The set of weights $W$ and set of biases $B$ are chosen such that they minimise some \textit{cost function} $C(W,B)$ with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
 
 \section{Notation}\label{nnets-not}
+
+\begin{tabular}{rl}
+$\mathbf{w}^\ell_j$ & vector of weights used to compute the $j$-th neuron of the $\ell$-th layer\\
+$w_{ji}^\ell$ & weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
+\end{tabular}
 
 \todo[inline]{Restructure notation like a glossary. Two columns, notation on left and definition on right.}
 
@@ -577,4 +585,4 @@ One common method is to stop the training phase once validation accuracy does no
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}

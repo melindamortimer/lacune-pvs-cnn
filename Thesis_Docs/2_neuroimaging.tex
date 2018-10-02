@@ -5,7 +5,7 @@
 
 \chapter{Neuroimaging background}\label{mri_svd_intro}
 
-An overview of magnetic resonance imaging (\textsc{mri}) and small vessel disease (\textsc{svd}) is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, \textsc{mri}, \textsc{svd} biomarkers, and existing rating standards.
+An overview of Magnetic Resonance Imaging (\textsc{mri}) and small vessel disease (\textsc{svd}) is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, \textsc{mri}, \textsc{svd} biomarkers, and existing rating standards.
 
 \section{Terminology and structure}
 
@@ -14,12 +14,12 @@ By convention, the \textsc{mri} axis planes are referred to as axial, coronal, a
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.8]{Images/2_axes2.jpg}
-	\caption{\textsc{mri} axis planes.}
+	\caption{\textsc{mri} axis planes [sic]: coronal, sagittal and axial.}
 	\small Image taken from \cite{Bean2014}.
 	\label{svd-axes}
 \end{figure}
 
-As shown in Figure \ref{svd-term-fig}, \textit{volume} refers to a three-dimensional region of the scan, a \textit{point} is a single voxel in the volume, and a \textit{slice} is a cross-sectional image taken from the volume. Axial slices are taken by fixing the $z$ coordinate.
+As shown in Figure \ref{svd-term-fig}, \textit{volume} refers to a three-dimensional region of the scan, a \textit{point} is a single voxel in the volume, and a \textit{slice} is a cross-sectional image taken from the volume. Axial slices are taken by fixing the $z$ coordinate. Note that \textit{lines} will not be used in this thesis.
 
 \begin{figure}[ht]
 	\centering
@@ -31,9 +31,9 @@ As shown in Figure \ref{svd-term-fig}, \textit{volume} refers to a three-dimensi
 
 Directional terminology in \textsc{mri} include:
 \begin{itemize}
-	\item \textit{anterior} and \textit{posterior}, referring to objects situated towards the front and back of the body;
-	\item \textit{superior} and \textit{inferior}, referring to objects situated above and below other parts of the body; and
-	\item \textit{interior} and \textit{exterior}, referring to objects situated closer to and further from the $x=0$ sagittal plane.
+	\item \textit{anterior} and \textit{posterior}, referring to objects situated towards the front and back of the body respectively;
+	\item \textit{superior} and \textit{inferior}, referring to objects situated above and below other parts of the body respectively; and
+	\item \textit{interior} and \textit{exterior}, referring to objects situated closer to and further from the $x=0$ sagittal plane respectively.
 \end{itemize}
 
 \subsection*{Structure of the brain}\label{svd-brain}
@@ -47,7 +47,7 @@ Directional terminology in \textsc{mri} include:
 	\label{svd-cerebrumfig}
 \end{figure}
 
-Information from throughout the body is communicated via nerves through the spinal chord to the brain. The brain is the most complex organ in the body, tasked with receiving, interpreting, and responding to nerve signals. It can be segmented into a number of regions, each responsible for different roles.
+Information from throughout the body is communicated via nerves through the spinal cord to the brain. The brain is the most complex organ in the body, tasked with receiving, interpreting, and responding to nerve signals. It can be segmented into a number of regions, each responsible for different roles.
 
 The largest region is the \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfig}, which forms the outer surface of the brain. It is responsible for voluntary actions, senses, thought and memory, and is divided into two hemispheres - left and right. Each hemisphere is divided into four lobes:
  \begin{itemize}
@@ -57,15 +57,13 @@ The largest region is the \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfi
 	\item The \textit{occipital lobe}, located posterior to the parietal lobe, is responsible for visual information.
 \end{itemize}
 
-The outer surface of the brain consists of a layer of neurons referred to as \textit{grey matter}. This layer has a thickness of around 4 mm, where much of the brain processes occur. Grey matter also occurs in the cerebellum, brainstem, and within the spinal chord.
-
-Underneath the grey matter is a network of fibres that connects these grey matter neurons together. Collectively, they form the \textit{white matter}. The grey and white matter are shown in Figure \ref{svd-greywhitefig}.
+The outer surface of the brain consists of a layer of neurons referred to as \textit{grey matter}. It is here that much of the brain processes occur \cite{Dafny1997}. Underneath the grey matter is a network of fibres that connects the grey matter neurons together. Collectively they form the \textit{white matter}. The grey and white matter are shown in Figure \ref{svd-greywhitefig}.
 
 % Gray vs white matter diagram
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\textwidth]{Images/2_white_vs_grey.png}
-	\caption{Grey matter occurs at the surface and within central structures such as the spinal chord. The white matter connects these structures together.}
+	\caption{Grey matter occurs at the surface and within central structures such as the spinal cord. The white matter connects these structures together.}
 	\small Image taken from \url{`https://medlineplus.gov/ency/imagepages/18117.htm'}.
 	\label{svd-greywhitefig}
 \end{figure}
@@ -98,11 +96,11 @@ At the base of the brain lies the \textit{cerebellum}, responsible for coordinat
 	\label{svd-t1-vs-t2}
 \end{figure}
 
-T1-weighted images are \textit{hyperintense} (bright) in regions with high fat content and are \textit{hypointense} (dark) in regions with high water content. They therefore return high intensities for brain matter and low intensities for \textsc{csf}. T2-weighted images are hyperintense in regions that contain both high fat and water content \cite{Bitar2006}. This can make it easier to spot abnormalities. \textsc{flair} is an imaging sequence similar to T2-weighted imaging, excepting that \textsc{csf} remains hypointense. Abnormalities will appear bright amongst the darker \textsc{csf}, allowing for easier identification.
+T1-weighted images are \textit{hyperintense} (bright) in regions with high fat content and are \textit{hypointense} (dark) in regions with high water content \cite{Bitar2006}. They therefore return high intensities for brain matter and low intensities for \textsc{csf}. T2-weighted images are hyperintense in regions that contain both high fat and water content \cite{Bitar2006}. This can make it easier to spot abnormalities. \textsc{flair} is an imaging sequence similar to T2-weighted imaging, excepting that \textsc{csf} remains hypointense. Abnormalities will appear bright amongst the darker \textsc{csf}, allowing for easier identification.
 
 \section{\textsc{svd} biomarkers}\label{svd-markers}
 
-In the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of biomarkers that clinicians observe. Each of these is defined in conjunction with the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr} shown in Figure \ref{svd-biomarkers-fig}.
+During the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of biomarkers that clinicians observe. Each of these is defined in conjunction with the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr} shown in Figure \ref{svd-biomarkers-fig}. The schematics show a simplified representation of each biomarker for particular imaging types. Diffusion-weighted imaging (\textsc{dwi}) will not be discussed in this thesis. 
 
 % Images of lacunes and perivascular spaces from \textsc{strive}
 \begin{figure}[ht]
@@ -115,13 +113,13 @@ In the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of bi
 
 \textit{White matter hyperintensities} (\textsc{wmh}) are regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as \textsc{csf}. Their cause is not well understood \cite{Gouw2011}.
 
-\textit{Lacunes} are small brain cavities. They usually appear without symptoms, and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \cite{BenjaminJ.Philip2018LIbN,VanDerFlierM.Wiesje2005SVDa}. In \textsc{mri}, lacunes appear round, with a diameter between 3 mm and 15 mm. As they are filled with fluid, they tend to give off a darker signal intensity, similar to that of \textsc{csf}. Lacunes have a tendency to occur in regions of white matter hyperintensity, so will frequently have a hyperintense rim in \textsc{flair} imaging.
+\textit{Lacunes} are small brain cavities. They usually appear without symptoms, and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \cite{BenjaminJ.Philip2018LIbN, VanDerFlierM.Wiesje2005SVDa}. In \textsc{mri}, lacunes appear round, with a diameter between 3 mm and 15 mm. They tend to give off a darker signal intensity, similar to that of \textsc{csf}, as they are filled with fluid. Lacunes have a tendency to occur in regions of white matter hyperintensity, so they will frequently have a hyperintense rim in \textsc{flair} imaging.
 
-\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and \textsc{wmh}. As they are fluid-filled, perivascular spaces also take on a similar signal intensity to \textsc{csf}. They are found running parallel to vessels, and are generally found under 3 mm in diameter. As they are tubular, they can be identified by appearing circular cross-sectionally, but rectangular when viewed in parallel to the vessels. In some instances, perivascular spaces can become enlarged, found up to 10 mm in diameter. As their signal intensity is similar to that of lacunes, they can be difficult to distinguish. 
+\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and \textsc{wmh}. Perivascular spaces also take on a signal intensity similar to \textsc{csf} as they are fluid-filled. They are found running parallel to vessels, and are generally found under 3 mm in diameter. They can be identified by appearing circular cross-sectionally and rectangular when viewed in parallel to the vessels. In some instances, perivascular spaces can become enlarged, up to 10 mm in diameter. They can be difficult to distinguish from lacunes as their signal intensities are similar.
 
-\textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, usually around 2-5 mm in diameter though they can be larger. They are not visible on T1-weighted, T2-weighted or \textsc{flair} images, and are instead found in T2*-weighted images constructed from a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
+\textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, usually around 2--5 mm in diameter though they can be larger. They are not visible on T1-weighted, T2-weighted or \textsc{flair} images, and are instead found in T2*-weighted images constructed from a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
 
-\textit{Recent small subcortical infarcts}, also called \textit{lacunar strokes}, are regions of recent oxygen deprivation that have resulted in dying cells. They are the cause of 25\% of ischaemic (oxygen starved) strokes \cite{WardlawJ.M.2013Nsfr}. These lesions are usually less than 20 mm in diameter. 
+\textit{Recent small subcortical infarcts}, are regions of recent oxygen deprivation that have resulted in cell death. They are the cause of 25\% of ischaemic (oxygen starved) strokes \cite{WardlawJ.M.2013Nsfr}. These lesions are usually less than 20 mm in diameter. 
 
 \textit{Brain atrophy} refers to the reduction of brain matter and is not restricted to particular regions of the brain. It can be identified by the increase in \textsc{csf} volume in T1-weighted, T2-weighted and \textsc{flair} imaging.
 
@@ -129,7 +127,7 @@ In the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of bi
 
 Without a biopsy for confirmation, the identification of \textsc{svd} biomarkers relies on \textsc{mri} analysis. Trained observers examine \textsc{mri} volumes slice by slice and identify any lesions or points of interest. A number of rating guidelines exist in order to establish rating consistency \cite{AdamsH.H.Hieab2013RMfD, PotterGillian2015CPSV, WardlawJ.M.2013Nsfr}.
 
-Though standardised criterion help to improve rating consistency, the appearance of lacunes and perivascular spaces are highly similar and therefore remain difficult to distinguish. As a result, manual rating is still highly inconsistent \cite{PotterGillian2015CPSV}. Additionally, the manual rating process is time consuming. Heuvel et. al \cite{Heuvel2016} report that the rating of a single scan for microbleeds takes an average of one hour. Datasets with many scans then take many hours to process and the resulting identified biomarkers may not be consistent enough to warrant proper inference \cite{BenjaminJ.Philip2018LIbN, WardlawJ.M.2013Nsfr}.
+Though standardised criterion help to improve rating consistency, the appearance of lacunes and perivascular spaces are highly similar and therefore remain difficult to distinguish. As a result, manual rating is still highly inconsistent \cite{PotterGillian2015CPSV}. Additionally, the manual rating process is time consuming. Heuvel et. al \cite{Heuvel2016} report that the rating of a single scan for microbleeds takes one hour on average. Datasets with many scans can take many hours to process and the resulting identified biomarkers may not be consistent enough to warrant proper inference \cite{BenjaminJ.Philip2018LIbN, WardlawJ.M.2013Nsfr}.
 
 In order to assist clinicians in rating quality, consistency, and speed, machine learning algorithms have been built to identify biomarkers. These algorithms can be built to work either alongside clinicians as computer-aided design (\textsc{cad}) programs \cite{Heuvel2016, Uchiyama20071554, Yokoyama2007} or as fully automated systems \cite{DouQ.2016ADoC, GhafoorianM.2017Dml3}.
 
@@ -142,8 +140,6 @@ In order to assist clinicians in rating quality, consistency, and speed, machine
 %In addition, the manual rating process is also time consuming. The checking and logging of an individual scan can take over 10 minutes.
 
 %It is only recently that machine learning algorithms have begun to improve the rating process. Dou et al. \cite{DouQ.2016ADoC} developed a machine learning algorithm for the detection of cerebral microbleeds. This algorithm exhibited a sensitivity of 93.16\%, with an average of 2.74 false positives per slice. 
-%
-\todo[inline]{Explain sensitivity and specificity}
 %
 %Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a machine learning algorithm for the automated detection of lacunes. This algorithm was able to achieve a sensitivity of 97.4\%, with 0.13 false positives per slice. This algorithm will be discussed further in Section \ref{litrev-ghafoorian}.
 
