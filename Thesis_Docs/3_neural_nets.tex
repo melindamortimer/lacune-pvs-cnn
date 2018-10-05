@@ -26,10 +26,10 @@ The construction of neural networks has to be conducted with care. The resulting
 The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence. Neural networks adopt a similar structure. Individual nodes receive variables, apply a transformation, and pass the result to the next node. For this reason, the nodes are referred to as \textit{neurons}.
 
 The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. This additional weight can be used to leverage the value of the neuron just before output, independent of the input variables. The output of a single neuron is given by
-\[
+\begin{align}
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
-\]
-where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is an \textit{activation value}.
+\end{align}
+where $\sigma(\cdot)$ is some function known as an \textit{activation function} and $a$ is an \textit{activation value}.
 
 
 
@@ -110,13 +110,14 @@ where $\sigma(\cdot)$ is an \textit{activation function} and $a$ is an \textit{a
 %\end{figure}
 
 \begin{example}
-A logical \textsc{and} gate of two inputs can be expressed as a neuron. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0, so that $x_i \in \{0,1\}$ for $i=1,2$. Set $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Set the activation function to be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
-\[
-	a = \begin{cases}
+\label{nnets-and-eg}
+A logical \textsc{and} gate of two inputs can be expressed as a neuron. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0, so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function to be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
+\begin{align}
+	a(\mathbf{x}) = \begin{cases}
 		1 & x_1 + x_2 - 1.5 > 0\\
-		0 & else
+		0 & otherwise
 	\end{cases},
-\] 
+\end{align}
 which will output 1 only when $\mathbf{x} = (1, 1)^\intercal$.
 \end{example}
 
@@ -192,88 +193,146 @@ A large number of these neurons can be arranged to form a neural network. The ge
 \end{figure}
 
 Let the weights and biases of the $\ell$-th layer be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
-\[
+\begin{align}
 	f(\mathbf{v}) = f_L(\mathbf{v}_L) \circ f_{L-1}(\mathbf{v}_{L-1}) \circ \cdots \circ f_1(\mathbf{v}_1).
-\]
+\end{align}
 
-The set of weights $W$ and set of biases $B$ are chosen such that they minimise some \textit{cost function} $C(W,B)$ with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is run until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
+During model fitting, the quality of the model is quantified using some \textit{cost function} $C(W,B)$, where a cost of 0 describes a perfect model fit. The set of weights $W$ and set of biases $B$ are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
 
 \section{Notation}\label{nnets-not}
 
-\begin{tabular}{rl}
-$\mathbf{w}^\ell_j$ & vector of weights used to compute the $j$-th neuron of the $\ell$-th layer\\
-$w_{ji}^\ell$ & weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
+
+
+\begin{tabular}{p{1cm}p{13cm}}
+$\mathbf{a}^\ell$ & vector of activation values (outputs) of the $\ell$-th layer.\\
+$a_j^\ell$ & $j$-th element of $\mathbf{a}^\ell$, the activation value of the $j$-th neuron of the $\ell$-th layer.\\
+$\mathbf{w}^\ell_j$ & vector of weights used to compute $a_j^\ell$.\\
+$w_{ji}^\ell$ & $i$-th element of $\mathbf{w}^\ell_j$, to be multiplied with $a_i^{\ell-1}$.\\
+$b_j^\ell$ & bias of the $j$-th neuron of the $\ell$-th layer.\\
+$z_j^\ell$ & $:= \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$. The value of the $j$-th neuron of the $\ell$-th layer before the activation function $\sigma(\cdot)$ is applied.\\
+$\mathbf{z}^\ell$ & vector of $z_j^\ell$ of the $\ell$-th layer.\\
+$Z$ & set of all $z_j^\ell$ in the network. \\
+$W$ & set of all weights $w_{jk}^\ell$ in the network.\\
+$B$ & set of all biases $b_j^\ell$ in the network. \\
+$L$ & number of layers in the network.\\
+$X$ & set of $n$ training inputs $\{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$. \\
+$Y$ & set of $n$ training responses $\{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$.\\
+$y_{ij}$ &  $j$-th element of $\mathbf{y}_i$.\\
+$\eta$ & learning rate, controls the magnitude of adjustments made to weights during training.
 \end{tabular}
 
-\todo[inline]{Restructure notation like a glossary. Two columns, notation on left and definition on right.}
+%Let $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
 
-Let $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
+%Let $b_j^\ell$ be the bias of the $j$-th neuron in the $\ell$-th layer.
 
-Let $b_j^\ell$ be the bias of the $j$-th neuron in the $\ell$-th layer.
-
-Let $\mathbf{a}^\ell$ be the vector of activation values (outputs) for the $\ell$-th layer, where $a_j^\ell$ is the activation value of the $j$-th neuron of that layer. Set $z_j^\ell := \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$ to be the values calculated before activation, and $\mathbf{z}^\ell$ to be the vector of $z_j^\ell$ for the $\ell$-th layer. Set $Z$ to be the set of all $z_j^\ell$ in the whole network. Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ is the vector of activation values of the final output layer. Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$-th variable of $\mathbf{y}_i$. Let $W$ and $B$ be the sets of all weights and biases as before. Let $\eta$ be the learning rate of the network. 
-
+%Let $\mathbf{a}^\ell$ be the vector of activation values (outputs) for the $\ell$-th layer, where $a_j^\ell$ is the activation value of the $j$-th neuron of that layer. Set $z_j^\ell := \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$ to be the values calculated before activation, and $\mathbf{z}^\ell$ to be the vector of $z_j^\ell$ for the $\ell$-th layer. 
+%Set $Z$ to be the set of all $z_j^\ell$ in the whole network. 
+%Let $L$ be the number of layers in the network so that $\mathbf{a}^L$ is the vector of activation values of the final output layer. 
+%Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. 
+%Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$-th variable of $\mathbf{y}_i$. 
+%Let $W$ and $B$ be the sets of all weights and biases as before. Let $\eta$ be the learning rate of the network. 
+\pagebreak
 \section{Activation functions}\label{nnets-act}
 
-Activation functions, denoted by $\sigma(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions serve to introduce nonlinearity into the model.
+Activation functions, denoted by $\sigma(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions avoid this by introducing nonlinearity into the model.
 
-The simplest neuron type is called the \textit{perceptron}. In this neuron, the activation function is the step function,
-\[
+The simplest neuron type is the \textit{perceptron}, used in Example \ref{nnets-and-eg}. It is characterised by,
+\begin{align}
 	x_i \in \{0,1\} \text{ and } \sigma(z) = \begin{cases}
 		1 & z > 0 \\
 		0 & z \le 0
 	\end{cases}.
-\]
+\end{align}
 
-To allow for continuous outputs, other common activation functions include the sigmoid function
-\[
+To allow for continuous outputs, other common activation functions include the sigmoids, which are monotonically increasing, smooth approximations to the step function. Examples of these include the sigmoid function
+\begin{align}
 	\sigma(z) = \dfrac{1}{1+e^{-z}},
-\]
-and hyperbolic tan function,
-\[
-	\sigma(z) = \tanh(z),
-\]
-which are smooth approximations to a step activation function.
+\end{align}
+and hyperbolic tan function
+\begin{align}
+	\sigma(z) = \tanh(z).
+\end{align}
+Both the sigmoid and hyperbolic tan functions are common activation functions \cite{Goodfellow-et-al-2016}, however they are computationally expensive and so are not preferred for image recognition tasks as they contain a large number of variables \cite{LeCun2012, Nielson2015}.
 
 The Rectified Linear Unit (ReLU) activation is given by,
-\[
-	\sigma(z) = \max(0, z),
-\]
-which allows for some neurons to output 0 and be essentially deactivated.
+\begin{align}
+	\sigma(z) = \max(0, z).
+\end{align}
+The ReLU activation function is suitable for neural network optimisation as the function and its derivative are simplistic \cite{Goodfellow-et-al-2016}. The neuron is said to be \textit{active} for $z > 0$. In this region, the gradient is constant and large for positive input values, promoting training of the neuron's weights (see Section \ref{nnets-graddesc} on Gradient Descent). For $z \leq 0$, the neuron has a gradient of 0 and is deactivated, avoiding unnecessary parameter adjustments and computation. 
 
-A common activation function for the final layer is the softmax function,
-\[
+The softmax activation function,
+\begin{align}
 	\sigma(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
-\]
-as the output takes the form of a probability distribution.
+\end{align}
+is used to structure the output layer as a discrete probability distribution over $k$ classes.
 
 
 \section{Cost functions}\label{nnets-cost}
 
-Weights and biases are chosen such that they approximately minimise some cost function. To use the gradient descent algorithm (see Section \ref{nnets-graddesc}) to minimise cost, Nielson \cite{Nielson2015} describes two requirements. The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
-\[
+Weights and biases are chosen such that they approximately minimise some cost function. Nielson \cite{Nielson2015} describes two restrictions on cost functions for them to be minimised using the Gradient Descent Algorithm (see Section \ref{nnets-graddesc}). The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
+\begin{align}
 	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
-\]
+\end{align}
 
-The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$. There are a number of cost functions in frequent use, and the choice of cost function is dependent on the context of the problem. A common cost function for regression is the quadratic cost, or Mean Squared Error (\textsc{mse}) cost. Denote $\|\cdot\|$ to be the Euclidean norm. The \textsc{mse} cost function is given by
-\[
+The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$. There are a number of cost functions in frequent use, and the choice of cost function depends on the structure of the response. A common cost function for regression is the \textit{quadratic cost}, or Mean Squared Error (\textsc{mse}) cost \cite{Nielson2015}. Denote $\|\cdot\|$ to be the Euclidean norm. The \textsc{mse} cost function is given by
+\begin{align}
 	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2.
-\]
+\end{align}
 This form is convenient for backpropagation (see Section \ref{nnets-backprop}) as it has an efficiently computable gradient,
-\[
+\begin{align}
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
-\]
-In using quadratic cost, if the amount of error is large, the learning rate is low.
+\end{align}
+%In using quadratic cost, if the amount of error is large, the learning rate is low.
 
-The most common cost function for classification tasks is cross entropy, given by
-\[
+The most common cost function for classification tasks is \textit{cross entropy} \cite{Nielson2015}, given by
+\begin{align}\label{nnets-cross-entropy-eq}
 	C(W,B) = -\dfrac{1}{n}\sum_{i=1}^n\sum_j\big[y_{ij}\log\big(a_j^L(\mathbf{x}_i,W,B)\big) + (1 - y_{ij})\log\big( (1 - a_j^L(\mathbf{x}_i,W,B))\big)\big],
-\]
+\end{align}
 with gradient
-\[
+\begin{align}
 	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n\sum_j\dfrac{a_j^L(\mathbf{x}_i,W,B) - y_{ij}}{a_j^L(\mathbf{x}_i,W,B)(1-a_j^L(\mathbf{x}_i,W,B))}.
-\]
-Unlike the quadratic cost, when the error is high, the learning rate is also high.
+\end{align}
+
+The efficacy of cross-entropy as a measure of misclassification cost can be shown through the Maximum Likelihood Estimator (\textsc{mle}) of the weights $(W, B)$ and also by considering distributional similarities between the data and the proposed model.
+
+Let ${p}_{data}(\mathbf{x})$ be the unknown probability distribution of the data points $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n$. Let $p_{model}(\mathbf{x}; \mathbf{\theta})$ be a family of probability distributions estimating the true $p_{data}(\mathbf{x})$. The \textsc{mle} of $\mathbf{\theta}$ is defined as
+\begin{align}
+	\hat{\mathbf{\theta}}_{MLE} = \arg\max_{\mathbf{\theta}}\prod_{i=1}^np_{model}(\mathbf{x}_i;\mathbf{\theta}).
+\end{align}
+This can be reformulated using the log-likelihood,
+\begin{align}
+	\hat{\mathbf{\theta}}_{MLE} = \arg\max_{\mathbf{\theta}}\sum_{i=1}^n\log p_{model}(\mathbf{x}_i;\mathbf{\theta}).
+\end{align}
+Dividing by $n$, the expression to be written in terms of expectation,
+\begin{align}\label{nnets-mle-eq}
+	\hat{\mathbf{\theta}}_{MLE} = \arg\max_{\mathbf{\theta}}\mathbb{E}_{\mathbf{x}\sim \hat{p}_{data}}\left[\log p_{model}(\mathbf{x}; \mathbf{\theta})\right].
+\end{align}
+
+\begin{definition}
+	\textbf{Kullback-Leibler (KL)-divergence} is a measure of difference between two probability distributions $P(x)$ and $Q(x)$ given by
+	\begin{align}
+		D_{KL}(P||Q) = \mathbb{E}_{x\sim P}\left[\log\dfrac{P(x)}{Q(x)}\right] = \mathbb{E}_{x\sim P}[\log P(x) - \log Q(x)],
+	\end{align}
+	where $\cdot||\cdot$ denotes necessary ordering of the function inputs. Note that \textsc{kl}-divergence is not symmetric and is therefore not a metric.	
+\end{definition}
+
+Minimisation of the \textsc{kl}-divergence between $\hat{p}_{data}$ and $p_{model}$ is given by
+\begin{align}\label{nnets-kl-eq}
+	\hat{\theta}_{KL} = \arg\min_\theta\mathbb{E}_{\mathbf{x}\sim\hat{p}_{data}}\left[\log \hat{p}_{data}(\mathbf{x}) - \log p_{model}(\mathbf{x};\mathbf{\theta})\right].
+\end{align}
+
+Since $\hat{p}_{data}$ is not a function of $\mathbf{\theta}$, Equation \ref{nnets-kl-eq} is equivalent to 
+\begin{align}\label{nnets-kl-eq2}
+	\hat\theta_{KL} = \arg\min_\theta-\mathbb{E}_{\mathbf{x}\sim\hat{p}_{data}}\left[\log p_{model}(\mathbf{x};\theta)\right].
+\end{align}
+Both the \textsc{mle} of $\theta$ (Equation \ref{nnets-mle-eq}) and the minimiser of \textsc{kl}-divergence (Equation \ref{nnets-kl-eq2}) are equivalent to the minimiser of cross-entropy (Equation \ref{nnets-cross-entropy-eq}). 
+
+% https://www.deeplearningbook.org/contents/ml.html P130
+%The KL divergence between the empirical distribution $\hat{p}_{data}$ and 
+
+
+
+%Unlike the quadratic cost, when the error is high, the learning rate is also high.
 
 %Cost functions can include: the quadratic (simple), cross-entropy, regularisation (L1, L2, dropout, artificial expansion of training data).
 %In using cross-entropy, the learning rate of the weight is controlled by the amount of error. This is unlike the quadratic cost function, which has a very slow learning rate when there is high error.
@@ -282,7 +341,7 @@ Unlike the quadratic cost, when the error is high, the learning rate is also hig
 
 \section{Gradient descent}\label{nnets-graddesc}
 
-Weights and biases are chosen to minimise the cost function. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. To improve computation speed, the weights are instead estimated using the Gradient Descent algorithm.
+Weights and biases are chosen to minimise the cost function. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
 
 Gradient Descent works by considering the gradient of the cost given the current weights and biases \cite{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
 
