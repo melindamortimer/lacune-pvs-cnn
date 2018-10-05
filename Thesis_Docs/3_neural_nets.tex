@@ -214,6 +214,7 @@ $\mathbf{z}^\ell$ & vector of $z_j^\ell$ of the $\ell$-th layer.\\
 $Z$ & set of all $z_j^\ell$ in the network. \\
 $W$ & set of all weights $w_{jk}^\ell$ in the network.\\
 $B$ & set of all biases $b_j^\ell$ in the network. \\
+$\mathbf{v}$ & $:= (W,B)$. The set of all weights and biases.\\
 $L$ & number of layers in the network.\\
 $X$ & set of $n$ training inputs $\{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$. \\
 $Y$ & set of $n$ training responses $\{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$.\\
@@ -269,7 +270,7 @@ is used to structure the output layer as a discrete probability distribution ove
 
 \section{Cost functions}\label{nnets-cost}
 
-Weights and biases are chosen such that they approximately minimise some cost function. Nielson \cite{Nielson2015} describes two restrictions on cost functions for them to be minimised using the Gradient Descent Algorithm (see Section \ref{nnets-graddesc}). The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
+Weights and biases are chosen such that they approximately minimise some cost function. Nielson \cite{Nielson2015} describes two restrictions on cost functions for them to be minimised using the Gradient Descent algorithm (see Section \ref{nnets-graddesc}). The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
 \begin{align}
 	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
 \end{align}
@@ -280,17 +281,18 @@ The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for 
 \end{align}
 This form is convenient for backpropagation (see Section \ref{nnets-backprop}) as it has an efficiently computable gradient,
 \begin{align}
-	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||.
+	\nabla_aC(W,B) = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||,
 \end{align}
+where $\nabla C(\mathbf{v}) = \Big(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\ldots, \dfrac{\partial C}{\partial v_N}\Big)$.
 %In using quadratic cost, if the amount of error is large, the learning rate is low.
 
-The most common cost function for classification tasks is \textit{cross entropy} \cite{Nielson2015}, given by
+The most common cost function for classification tasks is \textit{cross-entropy} \cite{Nielson2015}, given by
 \begin{align}\label{nnets-cross-entropy-eq}
 	C(W,B) = -\dfrac{1}{n}\sum_{i=1}^n\sum_j\big[y_{ij}\log\big(a_j^L(\mathbf{x}_i,W,B)\big) + (1 - y_{ij})\log\big( (1 - a_j^L(\mathbf{x}_i,W,B))\big)\big],
 \end{align}
 with gradient
 \begin{align}
-	\nabla_aC = \dfrac{1}{n}\sum_{i=1}^n\sum_j\dfrac{a_j^L(\mathbf{x}_i,W,B) - y_{ij}}{a_j^L(\mathbf{x}_i,W,B)(1-a_j^L(\mathbf{x}_i,W,B))}.
+	\nabla_aC(W,B) = \dfrac{1}{n}\sum_{i=1}^n\sum_j\dfrac{a_j^L(\mathbf{x}_i,W,B) - y_{ij}}{a_j^L(\mathbf{x}_i,W,B)(1-a_j^L(\mathbf{x}_i,W,B))}.
 \end{align}
 
 The efficacy of cross-entropy as a measure of misclassification cost can be shown through the Maximum Likelihood Estimator (\textsc{mle}) of the weights $(W, B)$ and also by considering distributional similarities between the data and the proposed model.
@@ -321,11 +323,11 @@ Minimisation of the \textsc{kl}-divergence between $\hat{p}_{data}$ and $p_{mode
 	\hat{\theta}_{KL} = \arg\min_\theta\mathbb{E}_{\mathbf{x}\sim\hat{p}_{data}}\left[\log \hat{p}_{data}(\mathbf{x}) - \log p_{model}(\mathbf{x};\mathbf{\theta})\right].
 \end{align}
 
-Since $\hat{p}_{data}$ is not a function of $\mathbf{\theta}$, Equation \ref{nnets-kl-eq} is equivalent to 
+Since $\hat{p}_{data}$ is not a function of $\mathbf{\theta}$, Equation \eqref{nnets-kl-eq} is equivalent to 
 \begin{align}\label{nnets-kl-eq2}
 	\hat\theta_{KL} = \arg\min_\theta-\mathbb{E}_{\mathbf{x}\sim\hat{p}_{data}}\left[\log p_{model}(\mathbf{x};\theta)\right].
 \end{align}
-Both the \textsc{mle} of $\theta$ (Equation \ref{nnets-mle-eq}) and the minimiser of \textsc{kl}-divergence (Equation \ref{nnets-kl-eq2}) are equivalent to the minimiser of cross-entropy (Equation \ref{nnets-cross-entropy-eq}). 
+Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimiser of \textsc{kl}-divergence (Equation \eqref{nnets-kl-eq2}) are equivalent to the minimiser of cross-entropy (Equation \eqref{nnets-cross-entropy-eq}). 
 
 % https://www.deeplearningbook.org/contents/ml.html P130
 %The KL divergence between the empirical distribution $\hat{p}_{data}$ and 
@@ -339,89 +341,77 @@ Both the \textsc{mle} of $\theta$ (Equation \ref{nnets-mle-eq}) and the minimise
 %Changing these can improve a model.
 %Other improvements made by making better initialisations of weights, and better heuristics to choose hyper-parameters.
 
-\section{Gradient descent}\label{nnets-graddesc}
+\section{Gradient Descent}\label{nnets-graddesc}
 
-Weights and biases are chosen to minimise the cost function. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
+Weights $W$ and biases $B$ are chosen such that they approximately minimise the cost function $C(W,B)$. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
 
-Gradient Descent works by considering the gradient of the cost given the current weights and biases \cite{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost will decrease. The amount that the values shift by is referred to as the learning rate, denoted $\eta$ as before.
-
-Let $N$ be a positive integer. For all weights and biases denoted $\mathbf{v}$, the change in cost $C(\mathbf{v})$ is given by the \textit{Total Differential Approximation},
-\begin{align*}
+Gradient Descent considers the gradient of the cost given the current weights and biases \cite{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost decreases. The amount that the values are shifted by is referred to as the learning rate, denoted as $\eta$. Let $N$ be a positive integer and let $\mathbf{v} = (W,B)$. The approximate change in the cost function $C(\mathbf{v})$ as a result of the shifted $\mathbf{v}$ is given by the \textit{Total Differential Approximation}
+\begin{align}
 	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\\
-	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v},
-\end{align*}
-where $\nabla C(\mathbf{v}) = \Big(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\ldots, \dfrac{\partial C}{\partial v_N}\Big)$.
+	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.\label{nnets-total-diff-eq}
+\end{align}
 
-We define $\mathbf{v}'$ to be the updated value of $\mathbf{v}$. We update $\mathbf{v}'$ inductively such that the cost decreases by an amount proportional to $\eta$.
 
-The next values of $\mathbf{v}$ are chosen such that the cost will decrease by an amount controlled by $\eta$, such that
-\[
+Define $\mathbf{v}':= \mathbf{v} + \Delta\mathbf{v}$ to be the updated value of $\mathbf{v}$. We update $\mathbf{v}'$ inductively such that the cost decreases by an amount proportional to $\eta$. At the next iteration, $\mathbf{v}$ is chosen such that the cost function decreases by an amount controlled by $\eta$, such that
+\begin{align}
 	\Delta\mathbf{v} = -\eta \nabla C(\mathbf{v}), \quad \text{ where }\eta > 0.
-\]
-By substitution, we can write
-\[
-	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0,
-\]
-where $\|\cdot\|$ is the Euclidean norm.
+\end{align}
+By substitution, Equation \eqref{nnets-total-diff-eq} can be written as
+\begin{align}
+	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0.
+\end{align}
 
-Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost will decrease.
-
-In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \varepsilon$, for some $\varepsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\varepsilon$ and $\nabla C$ \cite{Nielson2015}.
+Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost function will decrease. In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \varepsilon$, for some $\varepsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\varepsilon$ and $\nabla C$ \cite{Nielson2015}.
 
 \begin{proposition}\label{nnets-graddescminproof}
 	Let $\varepsilon > 0$ and suppose the size of the shift is constrained such that $\|\Delta\mathbf{v}\| = \varepsilon$. Then $\nabla C \cdot \Delta\mathbf{v}$ is minimised by $\Delta\mathbf{v} = -\eta\nabla C$, where $\eta = \dfrac{\varepsilon}{\|\nabla C\|}$.
 \end{proposition}
 
 \begin{proof}
-	Using the Cauchy-Schwarz Inequality,
-	\[
-			|\nabla C\cdot\Delta\mathbf{v}| \le \|\nabla C\|\cdot\|\Delta\mathbf{v}\|.
-	\]
-	Then the minimum is given by, \begin{align*}
-		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\|\nabla C\|\times\|\Delta\mathbf{v}\| \\
-		& = -\varepsilon\|\nabla C\| \\
-		& = -\dfrac{\varepsilon\|\nabla C\|^2}{\|\nabla C\|} \\
-		& = -\dfrac{\varepsilon\nabla C\cdot\nabla C}{\|\nabla C\|}.
-	\end{align*}
-	Then by equating the coefficients of $\nabla C$,
-	\begin{align*}
+	By the Cauchy-Schwarz Inequality, we have
+	\begin{align}
+			|\nabla C\cdot\Delta\mathbf{v}| \le \|\nabla C\|\times\|\Delta\mathbf{v}\|.
+	\end{align}
+	The minimum is given by,
+	\begin{align}\label{nnets-bprop-eq1}
+		\min(\nabla C\cdot\Delta\mathbf{v}) = -\|\nabla C\|\times\|\Delta\mathbf{v}\|.
+	\end{align}
+	Substituting $||\Delta\mathbf{v}|| = \epsilon$ into Equation 	\eqref{nnets-bprop-eq1}, we have
+	\begin{align}\label{nnets-bprop-eq2}
+		\min(\nabla C\cdot\Delta\mathbf{v}) = -\varepsilon\|\nabla C\|.
+	\end{align}
+	Multiplying the numerator and denominator of Equation \eqref{nnets-bprop-eq2} by $||\nabla C||$ gives
+	\begin{align}\label{nnets-bprop-eq3}
+		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\|\nabla C\|^2}{\|\nabla C\|}\\[1em]
+		& = -\dfrac{\varepsilon\nabla C\cdot\nabla C}{\|\nabla C\|} \label{nnets-bprop-eq4}.
+	\end{align}
+	By equating the coefficients of $\nabla C$ between Equations \eqref{nnets-bprop-eq1} and \eqref{nnets-bprop-eq4}, and noting that $\eta = \epsilon / ||\nabla C||$,
+	\begin{align}
 		\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\nabla C}{\|\nabla C\|} \\
-		& = -\eta\nabla C,\quad\text{ where }\eta = \dfrac{\varepsilon}{\|\nabla C\|}.
-	\end{align*}
+		& = -\eta\nabla C.
+	\end{align}	
 \end{proof}
 
-As gradient descent moves the coefficients in the direction of the steepest negative gradient, it assumes that the starting values are close enough to the global minimum to converge. If this assumption is not satistifed, the algorithm will instead converge to the local minimum. However, it is not possible to confirm whether the weights are converging to the global minimum or not.
+The Gradient Descent algorithm moves the coefficients in the direction of the steepest negative gradient. It assumes that the starting values are close enough to the global minimum to converge. If this assumption is not satistifed, the algorithm will instead converge to the local minimum. In this thesis, we are only concerned about estimating the local minimum.
 
-%To address this, it is commonplace to initialise the weights randomly.
-%
-%A common distribution for initialising weights is the truncated normal distribution, which has the shape of the normal distribution $\mathcal{N}(\mu, \sigma^2)$, but is bounded such that $X\in(a,b),-\infty\le a < b\le \infty$.
+Since the updated weights and biases rely on the gradient, it should be noted that these gradients are required to be significantly different from zero. When this is not the case, the weights and biases stagnate and we have what is known as the Vanishing gradient problem, which is discussed further in Section \ref{nnet-vanishinggradprob}.
 
-As the updated weights and biases rely on the gradient, it should be noted that these gradients are then required to be significantly different from zero. When this is not the case, we have what is called the Vanishing Gradient Problem, which is discussed further in section \ref{nnet-vanishinggradprob}.
+\subsection*{Stochastic Gradient Descent}\label{nnets-stochgraddesc}
 
-\subsection*{Stochastic gradient descent}\label{nnets-stochgraddesc}
-
-As the neural network has a very large number of weights, gradient descent is a highly computationally intensive algorithm. To improve training time, Stochastic Gradient Descent is a popular alternative, shown to have a time complexity of $O(n)$ \cite{Robbins1951}. This algorithm improves learning speed by randomly selecting a small number of training inputs to learn from, referred to as a \textit{batch}. After training has been completed for that batch, another batch of training inputs is randomly selected, and the process repeats. When all training batches have been used, it is said that an \textit{epoch} of training has been completed.
-
-In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed, while still utilising all the information provided by the whole set of samples by the end of training time.
-
-\subsection*{Adam optimiser}\label{nnets-adam}
-
-The stochastic gradient algorithm maintains one learning rate for all of the weights in the network. The Adam Optimiser alters this algorithm by storing different learning rates for each of the parameters. 
-
-%
-%We attempt to choose weights and biases that will minimise the cost function. As we cannot use calculus, we must estimate - by gradient descent. Move all the estimates a little, in the direction of decrease. The amount of movement is dependent on a learning rate parameter.
-%
-%This takes a long time with all inputs. Stochastic gradient descent instead randomly choosing $m$ training inputs, known as a mini-batch. It trains with the mini-batch, then rechooses $m$ different, unused inputs, re-trains, etc. When there are no more inputs to choose from, the algorithm has completed an 'epoch' of training.
-%
-%Backpropagation: gradient of the cost function. 
+Gradient Descent is a highly computationally intensive algorithm as the neural network has a very large number of weights. To improve training time, Stochastic Gradient Descent is a popular alternative as it has a time complexity $O(n)$ \cite{Robbins1951}. This algorithm improves learning speed by randomly selecting a small subset of the training set to learn from, referred to as a \textit{batch}. When training has been completed for that batch, a new batch of training inputs is randomly selected and the process repeats. Once training has occurred over all batches, it is said that an \textit{epoch} of training has been completed. In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed whilst utilising all the information provided by the entire training set.
 
 \subsection*{Learning rate}\label{nnets-learningrate}
 
-The learning rate, given by $\eta$, controls the adjustment of weights during training. As in Section \ref{nnets-graddesc}, the change in gradients, $\Delta\mathbf{v} = -\eta\nabla C$, moves the weights in the direction of the steepest negative gradient. $\eta$ then controls the magnitude of the movement.
+During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla C$ moves the weights in the direction of the steepest negative gradient (see Section \ref{nnets-graddesc}). The learning rate $\eta$ controls the magnitude of the movement. If $\eta$ is too small, the adjustment of weights is also small and model training will take a long time. If $\eta$ is too large, the weights may be shifted too far and the values of $\mathbf{v}$ will continuously move past the local minimum.
 
-The size of $\eta$ controls how quickly the model learns. If $\eta$ is too small, training will take a long time. If $\eta$ is too large, the model may move the weights too far, and the values of $\mathbf{v}$ will move past the local minimum.
+\todo[inline]{Image of attempted minimisation when the learning rate is too high}
 
-To aid in efficient training, learning rates can be adjusted throughout. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision. A common technique is to lower the learning rate only when validation accuracy drops.
+To aid in efficient training, learning rates can be adjusted throughout model training. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision.
+
+\subsection*{Adam Optimiser}\label{nnets-adam}
+
+The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to the weights of the neural network, improving training efficiency \cite{Kingma2014}.
+
 
 \section{Backpropagation}\label{nnets-backprop}
 
