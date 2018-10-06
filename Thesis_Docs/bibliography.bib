@@ -328,6 +328,19 @@ keywords = {Brain Injuries – Complications and Side Effects ; Brain Injuries �
 
 
 
+
+@article{IoffeSergey2015,
+abstract = {Training Deep Neural Networks is complicated by the fact that the distribution of each layer's inputs changes during training, as the parameters of the previous layers change. This slows down the training by requiring lower learning rates and careful parameter initialization, and makes it notoriously hard to train models with saturating nonlinearities. We refer to this phenomenon as internal covariate shift, and address the problem by normalizing layer inputs. Our method draws its strength from making normalization a part of the model architecture and performing the normalization for each training mini-batch. Batch Normalization allows us to use much higher learning rates and be less careful about initialization. It also acts as a regularizer, in some cases eliminating the need for Dropout. Applied to a state-of-the-art image classification model, Batch Normalization achieves the same accuracy with 14 times fewer training steps, and beats the original model by a significant margin. Using an ensemble of batch-normalized networks, we improve upon the best published result on ImageNet classification: reaching 4.9% top-5 validation error (and 4.8% test error), exceeding the accuracy of human raters.},
+year = {2015},
+title = {Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift},
+author = {Ioffe, Sergey and Szegedy, Christian},
+keywords = {Computer Science - Learning},
+}
+
+
+
+
+
 @article{Kingma2014,
   author    = {Diederik P. Kingma and
                Jimmy Ba},
@@ -378,6 +391,11 @@ author = {LeCun, Y.A. and Bottou, L. and Orr, G.B. and Müller, K.-R.},
 
 
 
+@inproceedings{Maas2013,
+  title={Rectifier Nonlinearities Improve Neural Network Acoustic Models},
+  author={Andrew L. Maas, Awni Y. Hannun, Andrew Y. Ng},
+  year={2013}
+}
 
 
 
@@ -418,6 +436,22 @@ year = "2017",
 }
 
 
+@article{Mishkin2016,
+abstract = {Layer-sequential unit-variance (LSUV) initialization - a simple method for weight initialization for deep net learning - is proposed. The method consists of the two steps. First, pre-initialize weights of each convolution or inner-product layer with orthonormal matrices. Second, proceed from the first to the final layer, normalizing the variance of the output of each layer to be equal to one. Experiment with different activation functions (maxout, ReLU-family, tanh) show that the proposed initialization leads to learning of very deep nets that (i) produces networks with test accuracy better or equal to standard methods and (ii) is at least as fast as the complex schemes proposed specifically for very deep nets such as FitNets (Romero et al. (2015)) and Highway (Srivastava et al. (2015)). Performance is evaluated on GoogLeNet, CaffeNet, FitNets and Residual nets and the state-of-the-art, or very close to it, is achieved on the MNIST, CIFAR-10/100 and ImageNet datasets.},
+journal = {arXiv.org},
+publisher = {Cornell University Library, arXiv.org},
+year = {2016},
+title = {All you need is a good init},
+language = {eng},
+address = {Ithaca},
+author = {Mishkin, Dmytro and Matas, Jiri},
+url = {http://search.proquest.com/docview/2078281523/},
+}
+
+
+
+
+
 
 @article{Nielson2015,
 title = "Neural networks and deep learning",
@@ -444,6 +478,21 @@ month = "August",
 }
 
 
+@article{PerezLuis2017,
+abstract = {In this paper, we explore and compare multiple solutions to the problem of data augmentation in image classification. Previous work has demonstrated the effectiveness of data augmentation through simple techniques, such as cropping, rotating, and flipping input images. We artificially constrain our access to data to a small subset of the ImageNet dataset, and compare each data augmentation technique in turn. One of the more successful data augmentations strategies is the traditional transformations mentioned above. We also experiment with GANs to generate images of different styles. Finally, we propose a method to allow a neural net to learn augmentations that best improve the classifier, which we call neural augmentation. We discuss the successes and shortcomings of this method on various datasets.},
+journal = {arXiv.org},
+publisher = {Cornell University Library, arXiv.org},
+year = {2017},
+title = {The Effectiveness of Data Augmentation in Image Classification using Deep Learning},
+language = {eng},
+address = {Ithaca},
+author = {Perez, Luis and Wang, Jason},
+url = {http://search.proquest.com/docview/2076822833/},
+}
+
+
+
+
 
 
 @article{PotterGillian2015CPSV,
@@ -462,6 +511,22 @@ author = "Potter, Gillian and Chappell, Francesca and Morris, Zoe and Wardlaw, J
 month = "April",
 url = "http://search.proquest.com/docview/1689661217/?pq-origsite=primo",
 }
+
+
+@article{Prechelt2012,
+issn = {03029743},
+journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+pages = {53--67},
+volume = {7700},
+isbn = {9783642352881},
+year = {2012},
+title = {Early stopping - But when?},
+copyright = {Copyright 2013 Elsevier B.V., All rights reserved.},
+author = {Prechelt, L.},
+}
+
+
+
 
 
 @misc{Preston2006,
@@ -541,6 +606,24 @@ keywords = "Structural Brain Analysis ; Atrophy Measurement ; Normalized Registr
 month = "September",
 url = "http://search.proquest.com/docview/1506589939/",
 }
+
+
+@article{Srivastava2014,
+issn = {15324435},
+journal = {Journal of Machine Learning Research},
+pages = {1929--1958},
+volume = {15},
+publisher = {Microtome Publishing},
+year = {2014},
+title = {Dropout: A simple way to prevent neural networks from overfitting},
+copyright = {Copyright 2014 Elsevier B.V., All rights reserved.},
+author = {Srivastava, N. and Hinton, G. and Krizhevsky, A. and Sutskever, I. and Salakhutdinov, R.},
+keywords = {Deep Learning ; Model Combination ; Neural Networks ; Regularization},
+}
+
+
+
+
 
 
 @article{Uchiyama20071554,
@@ -678,6 +761,7 @@ author = "Wardlaw, J.M. and Smith, C. and Dichgans, M.",
 keywords = "Public Health ; Dementia ; Diagnostic Imaging;",
 month = "May",
 }
+
 
 
 @article{YokoyamaRyujiro2002Aado,
