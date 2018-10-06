@@ -1,0 +1,22 @@
+\section*{Notation}
+
+\begin{tabular}{p{1cm}p{13cm}}
+$\mathbf{a}^\ell$ & vector of activation values (outputs) of the $\ell$-th layer.\\
+$a_j^\ell$ & $j$-th element of $\mathbf{a}^\ell$, the activation value of the $j$-th neuron of the $\ell$-th layer.\\
+$\mathbf{w}^\ell$ & matrix of weights used to compute the vector $\mathbf{a}^\ell$.\\
+$\mathbf{w}^\ell_j$ & vector of weights used to compute $a_j^\ell$.\\
+$w_{ji}^\ell$ & $i$-th element of $\mathbf{w}^\ell_j$, to be multiplied with $a_i^{\ell-1}$.\\
+$b_j^\ell$ & bias of the $j$-th neuron of the $\ell$-th layer.\\
+$z_j^\ell$ & $:= \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$. The value of the $j$-th neuron of the $\ell$-th layer before the activation function $\sigma(\cdot)$ is applied.\\
+$\mathbf{z}^\ell$ & vector of $z_j^\ell$ of the $\ell$-th layer.\\
+$\delta_j^\ell$ & $:=\dfrac{\partial C}{\partial z_j^\ell}$. The gradient error in the $j$-th neuron of the $\ell$-th layer when minimising the cost function $C$.\\
+$\delta^\ell$ & Vector of errors $\delta_j^\ell$ for the $\ell$-th layer.\\
+$Z$ & set of all $z_j^\ell$ in the network. \\
+$W$ & set of all weights $w_{jk}^\ell$ in the network.\\
+$B$ & set of all biases $b_j^\ell$ in the network. \\
+$\mathbf{v}$ & $:= (W,B)$. The set of all weights and biases.\\
+$L$ & number of layers in the network.\\
+$X$ & set of $n$ training inputs $\{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$. \\
+$Y$ & set of $n$ training responses $\{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$.\\
+$\eta$ & learning rate, controls the magnitude of adjustments made to weights during training.
+\end{tabular}
