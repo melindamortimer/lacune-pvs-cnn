@@ -206,11 +206,14 @@ During model fitting, the quality of the model is quantified using some \textit{
 \begin{tabular}{p{1cm}p{13cm}}
 $\mathbf{a}^\ell$ & vector of activation values (outputs) of the $\ell$-th layer.\\
 $a_j^\ell$ & $j$-th element of $\mathbf{a}^\ell$, the activation value of the $j$-th neuron of the $\ell$-th layer.\\
+$\mathbf{w}^\ell$ & matrix of weights used to compute the vector $\mathbf{a}^\ell$.\\
 $\mathbf{w}^\ell_j$ & vector of weights used to compute $a_j^\ell$.\\
 $w_{ji}^\ell$ & $i$-th element of $\mathbf{w}^\ell_j$, to be multiplied with $a_i^{\ell-1}$.\\
 $b_j^\ell$ & bias of the $j$-th neuron of the $\ell$-th layer.\\
 $z_j^\ell$ & $:= \mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$. The value of the $j$-th neuron of the $\ell$-th layer before the activation function $\sigma(\cdot)$ is applied.\\
 $\mathbf{z}^\ell$ & vector of $z_j^\ell$ of the $\ell$-th layer.\\
+$\delta_j^\ell$ & $:=\dfrac{\partial C}{\partial z_j^\ell}$. The gradient error in the $j$-th neuron of the $\ell$-th layer when minimising the cost function $C$.\\
+$\delta^\ell$ & Vector of errors $\delta_j^\ell$ for the $\ell$-th layer.\\
 $Z$ & set of all $z_j^\ell$ in the network. \\
 $W$ & set of all weights $w_{jk}^\ell$ in the network.\\
 $B$ & set of all biases $b_j^\ell$ in the network. \\
@@ -218,7 +221,6 @@ $\mathbf{v}$ & $:= (W,B)$. The set of all weights and biases.\\
 $L$ & number of layers in the network.\\
 $X$ & set of $n$ training inputs $\{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$. \\
 $Y$ & set of $n$ training responses $\{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$.\\
-$y_{ij}$ &  $j$-th element of $\mathbf{y}_i$.\\
 $\eta$ & learning rate, controls the magnitude of adjustments made to weights during training.
 \end{tabular}
 
@@ -341,7 +343,7 @@ Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimi
 %Changing these can improve a model.
 %Other improvements made by making better initialisations of weights, and better heuristics to choose hyper-parameters.
 
-\section{Gradient Descent}\label{nnets-graddesc}
+\section{The Gradient Descent algorithm}\label{nnets-graddesc}
 
 Weights $W$ and biases $B$ are chosen such that they approximately minimise the cost function $C(W,B)$. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
 
@@ -363,9 +365,9 @@ By substitution, Equation \eqref{nnets-total-diff-eq} can be written as
 
 Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost function will decrease. In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \varepsilon$, for some $\varepsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\varepsilon$ and $\nabla C$ \cite{Nielson2015}.
 
-\begin{proposition}\label{nnets-graddescminproof}
+\begin{lemma}\label{nnets-graddescminproof}
 	Let $\varepsilon > 0$ and suppose the size of the shift is constrained such that $\|\Delta\mathbf{v}\| = \varepsilon$. Then $\nabla C \cdot \Delta\mathbf{v}$ is minimised by $\Delta\mathbf{v} = -\eta\nabla C$, where $\eta = \dfrac{\varepsilon}{\|\nabla C\|}$.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
 	By the Cauchy-Schwarz Inequality, we have
@@ -373,19 +375,19 @@ Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost functi
 			|\nabla C\cdot\Delta\mathbf{v}| \le \|\nabla C\|\times\|\Delta\mathbf{v}\|.
 	\end{align}
 	The minimum is given by,
-	\begin{align}\label{nnets-bprop-eq1}
+	\begin{align}\label{nnets-gdesc-eq1}
 		\min(\nabla C\cdot\Delta\mathbf{v}) = -\|\nabla C\|\times\|\Delta\mathbf{v}\|.
 	\end{align}
-	Substituting $||\Delta\mathbf{v}|| = \epsilon$ into Equation 	\eqref{nnets-bprop-eq1}, we have
-	\begin{align}\label{nnets-bprop-eq2}
+	Substituting $||\Delta\mathbf{v}|| = \epsilon$ into Equation 	\eqref{nnets-gdesc-eq1}, we have
+	\begin{align}\label{nnets-gdesc-eq2}
 		\min(\nabla C\cdot\Delta\mathbf{v}) = -\varepsilon\|\nabla C\|.
 	\end{align}
-	Multiplying the numerator and denominator of Equation \eqref{nnets-bprop-eq2} by $||\nabla C||$ gives
-	\begin{align}\label{nnets-bprop-eq3}
+	Multiplying the numerator and denominator of Equation \eqref{nnets-gdesc-eq2} by $||\nabla C||$ gives
+	\begin{align}\label{nnets-gdesc-eq3}
 		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\|\nabla C\|^2}{\|\nabla C\|}\\[1em]
-		& = -\dfrac{\varepsilon\nabla C\cdot\nabla C}{\|\nabla C\|} \label{nnets-bprop-eq4}.
+		& = -\dfrac{\varepsilon\nabla C\cdot\nabla C}{\|\nabla C\|} \label{nnets-gdesc-eq4}.
 	\end{align}
-	By equating the coefficients of $\nabla C$ between Equations \eqref{nnets-bprop-eq1} and \eqref{nnets-bprop-eq4}, and noting that $\eta = \epsilon / ||\nabla C||$,
+	By equating the coefficients of $\nabla C$ between Equations \eqref{nnets-gdesc-eq1} and \eqref{nnets-gdesc-eq4}, and noting that $\eta = \epsilon / ||\nabla C||$,
 	\begin{align}
 		\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\nabla C}{\|\nabla C\|} \\
 		& = -\eta\nabla C.
@@ -402,125 +404,187 @@ Gradient Descent is a highly computationally intensive algorithm as the neural n
 
 \subsection*{Learning rate}\label{nnets-learningrate}
 
-During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla C$ moves the weights in the direction of the steepest negative gradient (see Section \ref{nnets-graddesc}). The learning rate $\eta$ controls the magnitude of the movement. If $\eta$ is too small, the adjustment of weights is also small and model training will take a long time. If $\eta$ is too large, the weights may be shifted too far and the values of $\mathbf{v}$ will continuously move past the local minimum.
+During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla C$ moves the weights in the direction of the steepest negative gradient (see Section \ref{nnets-graddesc}). The learning rate $\eta$ controls the magnitude of the movement. If $\eta$ is too small, the adjustment of weights is also small and model training will take a long time. If $\eta$ is too large, the weights may be shifted too far and the values of $\mathbf{v}$ will continuously move past the local minimum. This is shown in Figure \ref{nnets-high-learn-fig}.
 
-\todo[inline]{Image of attempted minimisation when the learning rate is too high}
+\begin{figure}[h]
+\centering
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,291); %set diagram left start at 0, and has height of 291
+\clip (85,15) rectangle (380,280);
+%Straight Lines [id:da887590123175323] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (107,71) -- (337,126) ;
+
+
+%Straight Lines [id:da9052100651701044] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (138,158) -- (337,126) ;
+
+
+%Straight Lines [id:da30101863302529275] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (138,158) -- (315,179) ;
+
+
+%Straight Lines [id:da06604062534938782] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (161,207) -- (315,179) ;
+
+
+%Straight Lines [id:da6697786125314551] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (161,207) -- (293,221) ;
+
+
+%Straight Lines [id:da4053203519455636] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (178,232) -- (293,221) ;
+
+
+%Straight Lines [id:da553912866083977] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (178,232) -- (278,242) ;
+
+
+%Straight Lines [id:da1577171267791595] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (195,252) -- (278,242) ;
+
+
+%Straight Lines [id:da21468778984608516] 
+\draw [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (195,252) -- (267,253) ;
+
+
+%Shape: Parabola [id:dp09742535750627612] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=2.25]  (90,18) .. controls (184.33,350) and (278.67,350) .. (373,18) ;
+
+\end{tikzpicture}
+
+\caption{High learning rates adjust weights past the local minimum}
+\label{nnets-high-learn-fig}
+\end{figure}
 
 To aid in efficient training, learning rates can be adjusted throughout model training. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision.
 
 \subsection*{Adam Optimiser}\label{nnets-adam}
 
-The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to the weights of the neural network, improving training efficiency \cite{Kingma2014}.
+The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to each of the weights in the neural network, allowing the cost function to converge to the minimum more quickly \cite{Kingma2014}.
 
 
-\section{Backpropagation}\label{nnets-backprop}
+\section{The Backpropagation algorithm}\label{nnets-backprop}
 
-During gradient descent, it is necessary to calculate the gradient of the cost function. This is done through backpropagation. This algorithm determines $\dfrac{\partial C}{\partial z}$, then relates those values to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$. To describe the algorithm, we first need to derive some results.
+During gradient descent, it is necessary to calculate the gradient of the cost function with respect to the weights $(W,B)$. The backpropagation algorithm is an efficient algorithm that determines $\dfrac{\partial C}{\partial z}$ and relates them to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$ \cite{Nielson2015}. The following lemmas are necessary to understand the backpropagation algorithm.
 
 % http://neuralnetworksanddeeplearning.com/chap2.html
 
-\begin{proposition}
-	The error of the jth neuron of the final output layer is
-	\[
+\begin{lemma}
+	The error of the $j$-th neuron of the final output layer is
+	\begin{align}
 		\delta_j^L = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
-	\]
-	This can be expressed in the matrix form,
-	\[
+	\end{align}
+	The vector of output layer errors can be expressed in the matrix form,
+	\begin{align}\label{nnets-bprop-eq1}
 		\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC,
-	\]
-where $\Sigma'(\cdot)$ is a matrix where the $j$-th diagonal entry is $\sigma'(z_j^L)$ and all non-diagonal entries are 0.
-\end{proposition}
+	\end{align}
+where $\Sigma'(\cdot)$ is a matrix such that the $j$-th diagonal entry is $\sigma'(z_j^L)$ and all non-diagonal entries are 0.
+\end{lemma}
 
 \begin{proof}
-	\begin{align*}
-		\delta_j^L & = \dfrac{\partial C}{\partial z_j^L} \\
-		& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
-		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\text{, as }z_j^L\text{ is only a function of }a_k^L\text{ for }k = j \\
+
+Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
+	\begin{align}
+		\delta_j^L = \dfrac{\partial C}{\partial z_j^L} & = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
+		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\\
 		& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
-	\end{align*}
+	\end{align}
 \end{proof}
 
-\begin{proposition}
-	The error $\delta^\ell_j$ can be written in terms of the errors in the next layer, 
-	\begin{align*}
+\begin{lemma}
+	The error $\delta^\ell_j$ of the $\ell$-th layer can be written in terms of the errors of the $(\ell + 1)$-th layer, 
+	\begin{align}
 		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}\sigma'(z_j^\ell).
-	\end{align*}
-\end{proposition}
+	\end{align}
+	The vector of errors $\delta^\ell$ for the $\ell$-th layer can be expressed in the matrix form,
+	\begin{align}\label{nnets-bprop-eq2}
+		\delta^\ell & = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}
+	\end{align}
+		%& = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\cdots\Sigma'(\mathbf{z}^{L-1})(w^L)^\intercal\Sigma'(\mathbf{z}^L)\nabla_aC.
+\end{lemma}
 
 \begin{proof}
 	Using the chain rule,
-	\begin{align*}
-		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell} \\
-		& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\
+	\begin{align}
+		\delta_j^\ell = \dfrac{\partial C}{\partial z_j^\ell}& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\
 		& = \sum_k\delta_k^{\ell+1}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell}.
-	\end{align*}
-	Then as $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot\sigma(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}\sigma'(z_j^\ell)$,
-	\begin{align*}
+	\end{align}
+	Since $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot\sigma(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}\sigma'(z_j^\ell)$, $\delta_j^\ell$ can be written
+	\begin{align}
 		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}\sigma'(z_j^\ell).
-	\end{align*}
+	\end{align}
 \end{proof}
 
-
-Together, the errors of layer $l$ can be written
-\begin{align*}
-	\delta^\ell & = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1} \\
-	& = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\ldots\Sigma'(\mathbf{z}^{L-1})(w^L)^\intercal\Sigma'(\mathbf{z}^L)\nabla_aC.
-\end{align*}
-
-\begin{proposition}
-	The error $\delta_j^\ell$ is equivalent to the rate of change in cost with respect to the bias, so that
-	\[
+\begin{lemma}
+	The error $\delta_j^\ell$ is equivalent to the rate of change in the cost function with respect to the bias, such that
+	\begin{align}\label{nnets-bprop-eq3}
 		\delta_j^\ell = \dfrac{\partial C}{\partial b_j^\ell}.
-	\]
-\end{proposition}
+	\end{align}
+\end{lemma}
 \begin{proof}
-	By definition,
-	\[
-		\delta_j^\ell = \dfrac{\partial C}{\partial z_j^\ell}.
-	\]
-	Then by the chain rule,
-	\[
-		\delta_j^\ell = \sum_k\dfrac{\partial C}{\partial b_k^\ell}\dfrac{\partial b_k^\ell}{\partial z_j^\ell}.
-	\]
-	Then as $z_j^\ell$ is only a function of $b_k^\ell$ for $j = k$,
-	\begin{align*}
-		\delta_j^\ell & = \dfrac{\partial C}{\partial b_j^\ell}\dfrac{\partial b_j^\ell}{\partial z_j^\ell} \\
+	Since $z_j^\ell$ is only a function of $b_k^\ell$ for $j = k$,
+	\begin{align}
+		\delta_j^\ell = \dfrac{\partial C}{\partial z_j^\ell} & = \sum_k\dfrac{\partial C}{\partial b_k^\ell}\dfrac{\partial b_k^\ell}{\partial z_j^\ell}\\
+		& = \dfrac{\partial C}{\partial b_j^\ell}\dfrac{\partial b_j^\ell}{\partial z_j^\ell} \\
 		& = \dfrac{\partial C}{\partial b_j^\ell}.
-	\end{align*}
+	\end{align}
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 	The rate of change in cost with respect to any single weight value is given by
-	\[
+	\begin{align}\label{nnets-bprop-eq4}
 		\dfrac{\partial C}{\partial w_{jk}^\ell} = a_k^{\ell-1}\delta_j^\ell.
-	\]
-\end{proposition}
+	\end{align}
+\end{lemma}
 \begin{proof}
 	By definition,
-	\begin{align*}
-		z_k^\ell & = \mathbf{w}_k^\ell\cdot\mathbf{a}^{\ell-1} + b_k^\ell \\
-		& = \sum_jw_{kj}^\ell a_j^{\ell-1} + b_k^\ell.
-	\end{align*}
-	Then differentiating with respect to some weight $w_{km}^\ell$,
-	\[
+	\begin{align}
+		z_k^\ell & = \mathbf{w}_k^\ell\cdot\mathbf{a}^{\ell-1} + b_k^\ell
+	\end{align}
+	Differentiating with respect to some weight $w_{km}^\ell$,
+	\begin{align}
 		\dfrac{\partial z_k^\ell}{\partial w_{km}^\ell} = a_m^{\ell-1}.
-	\]
-	Then using the Chain Rule,
-	\begin{align*}	
-		\dfrac{\partial C}{\partial w_{jk}^\ell} & = \dfrac{\partial C}{\partial z_j^\ell}\dfrac{\partial z_j^\ell}{\partial w_{jk}^\ell} \\
-		& = \delta_j^\ell a_k^{\ell-1}.
-	\end{align*}
+	\end{align}
+	Using the chain rule,
+	\begin{align}	
+		\dfrac{\partial C}{\partial w_{jk}^\ell} & = \dfrac{\partial C}{\partial z_j^\ell}\dfrac{\partial z_j^\ell}{\partial w_{jk}^\ell} = \delta_j^\ell a_k^{\ell-1}.
+	\end{align}
 \end{proof}
 
 
-Using these equations, the backpropagation algorithm runs as follows:
-\begin{enumerate}
-	\item \textbf{Inputs}. Enter observations $x$ to retrieve $\mathbf{a}^1$.
-	\item \textbf{Feedforward}. Compute the $\mathbf{z}^\ell = \mathbf{w}^\ell\mathbf{a}^{\ell-1} + \mathbf{b}^\ell$ for each $l = 2, 3,\ldots,L$.
-	\item \textbf{Output error}. Compute $\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$.
-	\item \textbf{Backpropagation}. For $\ell = L-1, \ldots, 2$, compute $\delta^\ell =  \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}$.
-	\item \textbf{Gradients}. Compute $\dfrac{\partial C}{\partial b_j^\ell} = \delta_j^\ell$ and $\dfrac{\partial C}{\partial w_{jk}^\ell} = a_k^{\ell-1}\delta_j^\ell$.
-\end{enumerate}
+The backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the network to determine the final layer error $\delta^L$ (Equation \eqref{nnets-bprop-eq1}).  The algorithm moves backwards from the final layer through to the first hidden layer to determine the other $\delta^\ell$ (Equation \eqref{nnets-bprop-eq2}). From these errors, the cost gradients in terms of the weights and biases can be calculated (Equations \eqref{nnets-bprop-eq3} and \eqref{nnets-bprop-eq4}). The complete algorithm is detailed in Algorithm \ref{nnets-bprop-alg}.
+%\begin{enumerate}
+%	\item \textbf{Inputs}. Enter observations $x_1,\ldots,x_n$ to retrieve $\mathbf{a}^1$.
+%	\item \textbf{Feedforward}. Compute $\mathbf{z}^\ell = \mathbf{w}^\ell\mathbf{a}^{\ell-1} + \mathbf{b}^\ell$ for each $l = 2, 3,\ldots,L$.
+%	\item \textbf{Output error}. Compute $\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$.
+%	\item \textbf{Backpropagation}. For $\ell = L-1, \ldots, 2$, compute $\delta^\ell =  \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}$.
+%	\item \textbf{Gradients}. Compute $\dfrac{\partial C}{\partial b_j^\ell} = \delta_j^\ell$ and $\dfrac{\partial C}{\partial w_{jk}^\ell} = a_k^{\ell-1}\delta_j^\ell$.
+%\end{enumerate}
+
+\begin{algorithm}[H]
+\label{nnets-bprop-alg}
+\SetAlgoLined
+\For{$\mathbf{x}$ in $\mathbf{x}_1, \mathbf{x}_2,\ldots,\mathbf{x}_n$}{
+	$\mathbf{a}^1 = \mathbf{w}^1\cdot\mathbf{x}+\mathbf{b}^1$\\
+	\underline{\textsc{Feedforward}}\\
+	\For{$\ell$ in $2,3,\ldots,L$} {
+		$\mathbf{z}^\ell = \mathbf{w}^\ell\cdot\mathbf{a}^{\ell-1} + \mathbf{b}^\ell$
+	}
+	$\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC$\\
+	\underline{\textsc{Backpropagation}}\\
+	\For{$\ell$ in $L-1, L-2, \ldots, 2$} {
+		$\delta^\ell =  \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}$
+	}
+	$\dfrac{\partial C}{\partial b_j^\ell} = \delta_j^\ell$\\
+	$\dfrac{\partial C}{\partial w_{jk}^\ell} = a_k^{\ell-1}\delta_j^\ell$
+}
+\caption{Backpropagation algorithm}
+\end{algorithm}
+
+
 
 
 \subsection*{Vanishing gradient problem}\label{nnet-vanishinggradprob}
