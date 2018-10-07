@@ -1,39 +1,70 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Convolutional neural networks}\label{convnets}
 
-Convolutional neural networks (CNNs) are of particular interest when working with image problems. The input data is assumed to be in 2 dimensions. Unlike fully connected layers, convolutional layers look to identify particular features within a subset of the 2D data sample. Collections of these features can be combined and interpreted for image classification.
+Convolutional neural networks (\textsc{cnn}s) are of particular interest when working with image problems as the input data is assumed to be two-dimensional. In regular neural networks (see Chapter \ref{neuralNets-intro}), the neurons in each layer are connected to all the neurons of the previous layer. These layers are known as \textit{fully connected layers}. In \textsc{cnn}s, convolutional layers examine only small subimages of the entire image sample. Each pixel of an image forms a neuron, which is connected to nearby pixels and not all pixels of the image. The \textsc{cnn} is trained to identify a set of visual features which can be combined and interpreted for image classification tasks.
 
 % Diagram of typical CNN structure
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/4_cnn_structure.png}
-	\caption{Typical CNN Structure. Convolution layers, with ReLU activation (nonlinearity), are followed by pooling layers. Final layers are fully connected, using softmax activation.}
+	\caption{Typical CNN Structure. Convolution layers with ReLU activation (nonlinearity) are followed by pooling layers. The final layers are fully connected, using softmax activation to generate a probability distribution.}
 	\small Image taken from \cite{ADeshpande2016}
 	\label{convnets-structurefig}
 \end{figure}
 
-As shown in Figure \ref{convnets-structurefig}, CNNs typically consist of alternating convolutional layers (Section \ref{convnets-convlayer}) and max pooling layers (Section \ref{convnets-pool}). For classification tasks, the last layers of the network are fully connected. Softmax activation is used for the final output layer, to generate a probability distribution as with other classification tasks.
+CNNs typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. The convolutional layers identify significant visual features, however they introduce a large number of variables into the network. Max pooling layers occur after convolutional layers to reduce network dimensionality. For classification tasks, the last layers of the network are fully connected to restructure the variables as a one-dimensional vector. Softmax activation is used for the final output layer to generate a probability distribution.
 
 \section{Convolutional layers}\label{convnets-convlayer}
 
-In a convolutional layer, a \textit{filter} is a matrix of weights that describes a particular visual feature to be identified. These filters have predetermined dimensions, usually chosen to assess a small subset of the original image. Each filter has the same depth as the original image. For example, we take an image that has three colour channels; red, blue and green. This will have convolution filters also with a depth of three. Each convolutional layer can have many filters.
+The neurons of convolutional layers have a similar overall structure to that of regular neurons (see Section \ref{nnets-structure}). The input variables $X$ are multiplied with weights $W$, summed and added to a bias variable $b$. The resulting linear combination is passed through an activation function $\sigma(\cdot)$ to give the output of the neuron, activation value $a$.
 
-The filters are then said to \textit{convolve} around the image. Suppose that a filter $F^{(f)}$ has dimension $M\times N \times C$. Given an input image matrix $X$, the value of the convolution at element $X_{j,k}$ is given by
-\[
-	a_{jk}^{(f)} = \sigma\left(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\right)
-\]
-where $\sigma(\cdot)$ is some activation function as before, $C$ is the number of input channels and $b^{(f)}$ is the bias to be added when using filter $f$. 
+The major difference between convolutional layers and regular neural network layers is the structure of the inputs and weights. Image data is two-dimensional and generally has multiple colour \textit{channels}. For example, a coloured image contains three channels: red, green, and blue. The intensity of each pixel in each channel is represented as a number such that the image forms a three-dimensional array. 
+
+The weights of convolutional layers are element-wise multiplied with the input variables. The weights are three-dimensional arrays to accommodate this, having the same number of colour channels as the input variables. Unlike fully connected layers, convolutional layers do not apply weights to all of the input variables at once. Instead, the weights have an array height and width much smaller than that of the input image, designed to identify particular visual features in smaller subimages. A single matrix of weights that describes a particular feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
+
+The filters are said to \textit{convolve} around the image, multiplying with subimages chosen sequentially, starting from the top-left of the image, and moving towards the bottom-right. Let $F^{(f)}$ be the $f$-th filter of the convolultion layer, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
+\begin{align}
+	a_{jk}^{(f)} = \sigma\left(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\right).
+\end{align}
+
+
+%\begin{tikzpicture}
+%\draw[step=0.5cm] (1-0.001, -2.5) grid (2.5+0.001, -1);
+%\draw[step=0.5cm] (1-0.001, -4.5) grid (2.5+0.001, -3);
+%
+%\draw[step=0.5cm] (3-0.001, -2) grid (4+0.001, -1);
+%\draw[step=0.5cm] (3-0.001, -4) grid (4+0.001, -3);
+%
+%\draw[step=0.5cm] (4.5-0.001, -1.5) grid (5+0.001, -1);
+%\end{tikzpicture}
+%
+\begin{example}
+Consider the following simple convolution.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Images/4_conv_eg2.png}
+\label{convnets-conv-eg}
+\end{figure}
+
+The filter in red is multiplied element-wise with the inputs given in blue. The sum of the products is taken and added to the bias in purple. This gives activation value $(1\times1 + 0\times0 + 2\times-1 + 0\times1) + 1 = 0$. This process is iterated for all $2\times2$ subimages in the input. This gives the following output.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Images/4_conv_eg2_2.png}
+\end{figure}
+
+\end{example}
 
 % Diagram of convolution algorithm
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.5]{Images/4_convolution.png}
-	\caption{Convolution algorithm with 2 filters of size 3x3, stride 2, zero padding 1}
-	\small Image adapted from \url{`http://cs231n.github.io/convolutional-networks/'}
-	\label{convnets-conv-alg}
-\end{figure}
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[scale=0.5]{Images/4_convolution.png}
+%	\caption{Convolution algorithm with 2 filters of size 3x3, stride 2, zero padding 1}
+%	\small Image adapted from \url{`http://cs231n.github.io/convolutional-networks/'}
+%	\label{convnets-conv-alg}
+%\end{figure}
 
 As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are entry-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
 
@@ -102,4 +133,4 @@ The ReLU activation function, as defined in Section \ref{nnets-act}, is frequent
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
