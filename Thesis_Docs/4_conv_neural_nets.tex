@@ -22,37 +22,81 @@ The neurons of convolutional layers have a similar overall structure to that of 
 
 The major difference between convolutional layers and regular neural network layers is the structure of the inputs and weights. Image data is two-dimensional and generally has multiple colour \textit{channels}. For example, a coloured image contains three channels: red, green, and blue. The intensity of each pixel in each channel is represented as a number such that the image forms a three-dimensional array. 
 
-The weights of convolutional layers are element-wise multiplied with the input variables. The weights are three-dimensional arrays to accommodate this, having the same number of colour channels as the input variables. Unlike fully connected layers, convolutional layers do not apply weights to all of the input variables at once. Instead, the weights have an array height and width much smaller than that of the input image, designed to identify particular visual features in smaller subimages. A single matrix of weights that describes a particular feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
+The weights of convolutional layers are formatted as three-dimensional arrays to accommodate for the number of colour channels. These weight arrays are element-wise multiplied with a subset of the whole image. Unlike fully connected layers, convolutional layers do not apply weights to all of the input variables at once. Instead, the weights have an array height and width much smaller than that of the input image, designed to identify particular visual features in smaller subimages. A single matrix of weights that describes a feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
 
-The filters are said to \textit{convolve} around the image, multiplying with subimages chosen sequentially, starting from the top-left of the image, and moving towards the bottom-right. Let $F^{(f)}$ be the $f$-th filter of the convolultion layer, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
+The filters are said to \textit{convolve} around the image, multiplying with subimages chosen sequentially, starting from the top-left of the image, and moving towards the bottom-right. Let the $f$-th filter of the convolultional layer be $F^{(f)}$, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
 \begin{align}
 	a_{jk}^{(f)} = \sigma\left(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\right).
 \end{align}
 
 
-%\begin{tikzpicture}
-%\draw[step=0.5cm] (1-0.001, -2.5) grid (2.5+0.001, -1);
-%\draw[step=0.5cm] (1-0.001, -4.5) grid (2.5+0.001, -3);
-%
-%\draw[step=0.5cm] (3-0.001, -2) grid (4+0.001, -1);
-%\draw[step=0.5cm] (3-0.001, -4) grid (4+0.001, -3);
-%
-%\draw[step=0.5cm] (4.5-0.001, -1.5) grid (5+0.001, -1);
-%\end{tikzpicture}
-%
 \begin{example}
 Consider the following simple convolution.
+%\begin{figure}[h]
+%\centering
+%\includegraphics[scale=0.5]{Images/4_conv_eg2.png}
+%\label{convnets-conv-eg}
+%\end{figure}
+
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{Images/4_conv_eg2.png}
-\label{convnets-conv-eg}
+\begin{tikzpicture}[font=\sffamily]
+\draw[step=1cm] (0, 0) grid (3, 3);
+\draw[step=1cm] (5, 1) grid (7, 3);
+\draw[step=1cm] (9, 2) grid (10, 3);
+
+\node at (0.5, 2.5) {\color{blue}1};
+\node at (1.5, 2.5) {\color{blue}0};
+\node at (2.5, 2.5) {1};
+\node at (0.5, 1.5) {\color{blue}2};
+\node at (1.5, 1.5) {\color{blue}0};
+\node at (2.5, 1.5) {2};
+\node at (0.5, 0.5) {1};
+\node at (1.5, 0.5) {1};
+\node at (2.5, 0.5) {-1};
+
+\node at (5.5, 2.5) {\color{red}1};
+\node at (6.5, 2.5) {\color{red}0};
+\node at (5.5, 1.5) {\color{red}-1};
+\node at (6.5, 1.5) {\color{red}1};
+
+\node at (9.5, 2.5) {\textcolor[rgb]{0.56,0.07,1}{1}};
+
+\node at (1.5, 3.5) {Input $3\times3\times1$};
+\node at (6, 3.5) {Filter $2\times2\times1$};
+\node at (9.5, 3.5) {Bias};
+
+\end{tikzpicture}
 \end{figure}
 
-The filter in red is multiplied element-wise with the inputs given in blue. The sum of the products is taken and added to the bias in purple. This gives activation value $(1\times1 + 0\times0 + 2\times-1 + 0\times1) + 1 = 0$. This process is iterated for all $2\times2$ subimages in the input. This gives the following output.
+The filter in red is multiplied element-wise with the inputs given in blue. This gives:
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\draw[step=1cm] (0,0) grid (2, 2);
+\node at (0.5,1.5) {1};
+\node at (1.5,1.5) {0};
+\node at (0.5,0.5) {-2};
+\node at (1.5,0.5) {0};
+\end{tikzpicture}
+\end{figure}
+
+Taking the sum of the products and adding the bias in purple gives the activation value $(1 + 0 + -2 + 0) + 1 = 0$. This process is iterated for all $2\times2$ subimages in the original input, giving the following output:
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{Images/4_conv_eg2_2.png}
+%\includegraphics[scale=0.5]{Images/4_conv_eg2_2.png}
+\begin{tikzpicture}
+
+\draw[step=1cm] (0,0) grid (2, 2);
+\node at (0.5,1.5) {0};
+\node at (1.5,1.5) {3};
+\node at (0.5,0.5) {3};
+\node at (1.5,0.5) {-1};
+
+\node at (1, 2.5) {Output $2\times2\times1$};
+
+\end{tikzpicture}
 \end{figure}
 
 \end{example}
@@ -66,31 +110,31 @@ The filter in red is multiplied element-wise with the inputs given in blue. The 
 %	\label{convnets-conv-alg}
 %\end{figure}
 
-As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are entry-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
+%As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are entry-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
 
-Each filter of a convolutional layer builds a matrix of neurons, where its dimension is a subset of the original image (depending on the size of the zero padding). These matrices are bound together to form a 3D array, with depth depending on the number of filters used.
+Each filter of a convolutional layer outputs an array of reduced dimension compared to the input. These arrays are bound together to form a three-dimensional array, with depth dependent on the number of filters in the layer.
 
 \subsection*{Zero padding}\label{convnets-pad}
 
-As the filters convolve around the image, the filters can only be placed within the bounds of the input image. This results in some loss of dimension. For a starting image with dimension $J \times K$ and a filter with dimension $M \times N$, the convolutional output will be of dimension $(J - M + 1)\times (K - N + 1)$.
+During convolution, the filters are only placed within the boundaries of the input image, resulting in loss of dimension. For an input image with dimension $J \times K$ and a filter with dimension $M \times N$, the filter output will be of dimension $(J - M + 1)\times (K - N + 1)$.
 
-In order to retain the original image dimensions, the input image can be zero padded, with padding given by $P$. The dimension of the original image is increased to $(J+2P) \times (K+2P)$, with the outer $P$ elements all set to zero. When the convolution takes place, the resulting image size will have dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$.
+\textit{Zero padding} surrounds the edges of the input image with $P$ layers of zeros, increasing the input dimension to  $(J+2P) \times (K+2P)$. When convolution takes place, the resulting image size will have dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$. The value of $P$ can be set such that the convolution maintains the original image dimension.
 
 \subsection*{Stride}\label{convnets-stride}
 
-As the dimension of images an be quite large, moving a convolutional filter by only one element at a time can make the training process very long. To reduce the number of resulting variables, the filter can be moved by multiple elements at a time. The distanced moved is known as the \textit{stride}, given by $S$.
+The dimension of the input images can be large, hence convolving filters at all possible locations results in lengthy training time. To reduce the number of resulting variables and improve training time, the filter can convolve at every $S$ location of the input. The magnitude of the filter movement is known as the \textit{stride}.
 
 For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\left(\left\lfloor (J + 2P - M)/S\right\rfloor + 1\right) \times \left(\left\lfloor (K + 2P - N)/S \right\rfloor + 1\right)$.
 
 \section{Pooling layers}\label{convnets-pool}
 
-It is common practice to follow convolution layers with max pooling layers as a method of dimension reduction\cite{ADeshpande2016}. Pooling layers create a sliding window of specified dimension and stride size. At each sliding window position, the pooling layer outputs a single value. In particular for max pooling, the layer outputs the maximum value at each sliding window location.
+Convolutional layers are followed by pooling layers to reduce dimensionality of the data \cite{ADeshpande2016}. A sliding window of size $M\times M$ and stride $S$ is applied to the top-left of the image input and moves across the image similarly to the convolutional layers. At each location, the pooling layer outputs a single value which collectively form a matrix of reduced dimension to the input. For \textit{max pooling}, the values output are the maximum values of all inputs in each sliding window.
 
-The motivation behind this is that convolutional layers output high values in regions where the features of interest have been located. However, the algorithm is only interested in gathering information for classification and does not need the location to be highly specific. To improve computation time, it is then advantageous to remove a large number of variables, while retaining variables that identify significant features.
+Max pooling is a preferred pooling method as it emphasises features of interest located by the previous convolutional layer. The algorithm is only interested in gathering information for classification and does not need the location to be highly specific. To improve computation time, it is advantageous to remove a large number of variables, while retaining variables that identify significant features.
 
 \section{ReLU activation}\label{convnets-act}
 
-The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. As image data presents a very large number of variables, computation time can become very large. The ReLU function can be computed very quickly and so is a common choice \cite{ADeshpande2016}. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
+The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. Computation time can become very large as there are a large number of variables. The ReLU function can be computed very quickly and so is a common choice for convolutional neural networks \cite{ADeshpande2016}. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
 
 
 %Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.

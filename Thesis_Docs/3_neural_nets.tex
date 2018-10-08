@@ -189,7 +189,7 @@ A large number of these neurons can be arranged to form a neural network. The ge
 
 \end{tikzpicture}
 \caption{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases have been hidden.}
-\label{nnet-structurefig}
+%\label{nnet-structurefig}
 \end{figure}
 
 Let the weights and biases of the $\ell$-th layer be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
@@ -209,7 +209,6 @@ During model fitting, the quality of the model is quantified using some \textit{
 %Let $X = \{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$ be the set of $n$ training inputs. 
 %Let the responses be $Y = \{\mathbf{y}_1, \mathbf{y}_2, \ldots, \mathbf{y}_n\}$, with $y_{ij}$ the $j$-th variable of $\mathbf{y}_i$. 
 %Let $W$ and $B$ be the sets of all weights and biases as before. Let $\eta$ be the learning rate of the network. 
-\pagebreak
 \section{Activation functions}\label{nnets-act}
 
 Activation functions, denoted by $\sigma(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions avoid this by introducing nonlinearity into the model.
