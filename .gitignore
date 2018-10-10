@@ -21,6 +21,10 @@
 tenSubjects/
 NNet_Scripts/my-model
 NNet_Scripts/ex
+y_attempt4/
+y_attempt5/
+z_attempt4/
+z_attempt5/
 
 # Ignore texmaker compile files
 *.aux

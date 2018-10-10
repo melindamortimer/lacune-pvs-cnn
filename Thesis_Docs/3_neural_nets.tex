@@ -189,7 +189,7 @@ A large number of these neurons can be arranged to form a neural network. The ge
 
 \end{tikzpicture}
 \caption{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases have been hidden.}
-%\label{nnet-structurefig}
+\label{nnet-structurefig}
 \end{figure}
 
 Let the weights and biases of the $\ell$-th layer be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
@@ -555,7 +555,7 @@ The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the ne
 	$\dfrac{\partial C}{\partial b_j^\ell} = \delta_j^\ell$\\[1em]
 	$\dfrac{\partial C}{\partial w_{jk}^\ell} = a_k^{\ell-1}\delta_j^\ell$
 }
-\caption{The Backpropagation algorithm}
+\caption{Calculation of gradients for the Backpropagation algorithm}
 \end{algorithm}
 
 
