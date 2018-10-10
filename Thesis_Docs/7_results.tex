@@ -35,27 +35,27 @@ Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural netw
 
 The first model generated has the same positive-negative sample ratio as outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. The data consists of one-third positives and two-thirds negatives.
 
+The model was trained for 40 epochs over 24 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training data set becomes very high, whereas the accuracy of the validation and testing data sets are low. Hence assessing model training accuracy can efficiently convey early model improvement; however it is not indicative of the model's performance when given new data.
+
+Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \cite{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
+
 % Training accuracy
 \begin{figure}[hb]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_train_acc4.pdf}
-	\caption{Training data accuracy logged every 5 batches}
+	\caption{Training data accuracy logged every 5 batches.}
 	\label{results-train-acc4-fig}
 \end{figure}
 
-The model was trained for 40 epochs over 24 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training data set becomes very high, whereas the accuracy of the validation and testing data sets are low. Hence assessing model training accuracy can efficiently convey early model improvement; however it is not indicative of the model's performance when given new data.
-
-Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \cite{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
+The model's validation set accuracy was tested after each epoch. This data set was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly within the first 10 epochs. The maximum validation accuracy occurred at epochs 18, 22 and 25, achieving an accuracy of 0.992. The model was saved at epoch 18 to help minimise overfitting that may occur at later epochs. Applying this best validation accuracy model to the test data set resulted in an accuracy of 0.994.
 
 % Validation accuracy
 \begin{figure}[hb]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_valid_acc4.pdf}
-	\caption{Validation data accuracy logged after each epoch}
+	\caption{Validation data accuracy logged after each epoch.}
 	\label{results-valid-acc4-fig}
 \end{figure}
-
-The model's validation set accuracy was tested after each epoch. This data set was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly within the first 10 epochs. The maximum validation accuracy occurred at epochs 18, 22 and 25, achieving an accuracy of 0.9923717. The model was saved at epoch 18 to help minimise overfitting that may occur at later epochs. Applying this best validation accuracy model to the test data set resulted in an accuracy of 0.9937608.
 
 Though overall accuracy is a strong indicator of model performance, some types of inaccuracy can be more detrimental than others. In the identification of lacunes, it is preferable to have a larger number of false candidate lacunes than misclassify a true lacune. As a result, models will be compared by considering actual and predicted classification differences. Using this scheme, there are four outcomes: true-positive, true-negative, false-positive, and false-negative. These outcomes can be formatted into a \textit{confusion matrix}, as shown in Table \ref{results-confmat4-tab}.
 
@@ -69,7 +69,7 @@ Though overall accuracy is a strong indicator of model performance, some types o
 	False & 16 & 2\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{Confusion matrix of the testing data set.}
+	\caption{Confusion matrix of the Model 1 testing data set.}
 	\label{results-confmat4-tab}
 \end{table}
 
@@ -83,11 +83,11 @@ The second model was built using all of the generated positive and negative samp
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_train_acc5.pdf}
-	\caption{Training data accuracy logged every 5 batches}
+	\caption{Training data accuracy logged every 5 batches.}
 	\label{results-train-acc5-fig}
 \end{figure}
 
-The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epochs 28 and 34, achieving an accuracy of 0.9983333. The model was saved at the earlier epoch 28 to reduce overfitting.
+The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epochs 28 and 34, achieving an accuracy of 0.998. The model was saved at the earlier epoch 28 to reduce overfitting.
 
 % Validation accuracy
 \begin{figure}[ht]
@@ -97,7 +97,7 @@ The performance of the model on the validation set is given in Figure \ref{resul
 	\label{results-valid-acc5-fig}
 \end{figure}
 
-Applying this best validation accuracy model to the test set achieved an accuracy of 0.998. The confusion matrix is given by Table \ref{results-confmat5-tab}, to give a sensitivity of 99.9\% and specificity of 99.7\%.
+Applying this best validation accuracy model to the test set achieved an accuracy of 99.8\%. The confusion matrix is given by Table \ref{results-confmat5-tab}, to give a sensitivity of 99.9\% and specificity of 99.7\%.
 
 \begin{table}[ht]
 	\centering
@@ -109,25 +109,45 @@ Applying this best validation accuracy model to the test set achieved an accurac
 	False & 19 & 1\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{Confusion matrix of the testing data set.}
+	\caption{Confusion matrix of the Model 2 testing data set.}
 	\label{results-confmat5-tab}
 \end{table}
 
 \subsection*{Model comparisons}
 
+The sensitivities and specificities of the two models are given in Table \ref{results-sens-spec-tab}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{@{}lll@{}}
+	\toprule[1.5pt]
+	& Sensitivity & Specificity\\
+	\midrule
+	Model 1 & 0.9980 (1004/1006) & 0.9915 (1863/1879)\\
+	Model 2 & 0.9990 (961/962) & 0.9981 (9977/9996)\\
+	\bottomrule[1.5pt]\\
+	\end{tabular}
+	\caption{Sensitivities and specificities of both models.}
+	\label{results-sens-spec-tab}
+\end{table}
+
+
 Between the two trained models, the model that was trained on more data had slightly less sensitivity but much greater specificity. A hypothesis test comparing the sensitivity and specificity rates between the two models is conducted.
 
-First test the difference in sensitivity rates. The Central Limit Theorem (\textsc{clt}) does not apply as the number of false negatives is less than 10 for both models. Consider the pooled sensitivity probability $p_{pooled} = \dfrac{972+955}{972+4+955+7} = 0.994324$. Test the hypothesis that both models exhibit sensitivities at the rate of $p_{pooled}$. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. The models classify each sample independently and the data are sampled randomly. Under these assumptions we can model $X_1$ and $X_2$ using the Binomial distribution. Under the null hypothesis, $X_1 \sim Bin(976, p_{pooled})$ and $X_2 \sim Bin(962, p_{pooled})$. The probability of the first model exceeding 972 correct classifications out of 976 is $P(X_1 \geq 972) = 0.19643$. The probability of the second model having fewer than 955 correct classifications out of 962 is $P(X_2 \leq 955) = 0.30749$. At the 5\% level, neither of these sensitivities are significantly different from $p_{pooled}$ and so are not significantly different from each other.
+First test the difference in sensitivity rates. The Central Limit Theorem (\textsc{clt}) does not apply as the number of false-negatives is less than 10 for both models. Consider the pooled sensitivity probability $p_{pooled} = \dfrac{1004+961}{1006+962} = 0.9985$.
 
-Now test the difference in specificity rates. Hypothesise that both sample proportions come from sampling distributions with the same probability. The number of true negatives and false positives are above 10 for both models. The data was sampled randomly and lacune classifications were made independently of other samples. Under these assumptions, the two-proportion z-test can be applied. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples so that $\hat{p}_1 = \dfrac{X_1}{n_1}$ and $\hat{p}_2 = \dfrac{X_2}{n_2}$ are the observed specificities. The observed pooled specificity proportion is $\hat p_{pooled} = \dfrac{9969+1879}{9969+33+1879+30} = 0.99471$. From the \textsc{clt},
+We test the hypothesis that both models exhibit sensitivities at the rate of $p_{pooled}$. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. The models classify each sample independently and the data are sampled randomly. Under these assumptions we can model $X_1$ and $X_2$ using the Binomial distribution.
+
+Under the null hypothesis, $X_1 \sim Bin(1006, p_{pooled})$ and $X_2 \sim Bin(962, p_{pooled})$. The observed $X_1$ has a p-value of $P(X_1 \geq 1004) = 0.5465296$, and the observed value of $X_2$ has the p-value $P(X_2 \leq 961) = 0.7695179$. At the 5\% level, neither of these sensitivities are significantly different from $p_{pooled}$ and so are not significantly different from each other.
+
+We now test the difference in specificity rates. Hypothesise that both sample proportions come from sampling distributions with the same probability. The number of true-negatives and false-positives are above 10 for both models. The data was sampled randomly and lacune classifications were made independently of other samples. Under these assumptions, the two-proportion z-test can be applied. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples so that $\hat{p}_1 = \dfrac{X_1}{n_1}$ and $\hat{p}_2 = \dfrac{X_2}{n_2}$ are the observed specificities. The observed pooled specificity proportion is $\hat p_{pooled} = \dfrac{1863+9977}{1879+9996} = 0.9970526$. From the \textsc{clt},
 \[
 	Z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{p_{pooled}(1 - p_{pooled})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} \approx \mathcal{N}(0,1).
 \]
-The resulting test statistic is $z = -6.8533$. The probability of the observed proportion difference or lower is given by $P(Z < z) = 3.61\times10^{-12}$. This is well below the 5\% significance level and it is concluded that the specificity of the second model is higher than that of the first.
+The resulting test statistic is $z = -4.852599$. The probability of the observed proportion difference or lower is given by $P(Z < z) = 6.09\times10^{-7}$. This is well below the 5\% significance level and it is concluded that the specificity of the second model is higher than that of the first.
 
 It has been proven that the model trained with the larger sample size and smaller proportion of positives did not affect sensitivity rates and increased specificity. 
 
-\todo[inline]{Show examples of false positives and true negatives. What do these tend to look like?}
+\todo[inline]{Show examples of false-positives and true-negatives. What do these tend to look like?}
 
 \todo[inline]{What happens when the scan is run on a whole brain?}
 
@@ -161,7 +181,7 @@ It has been proven that the model trained with the larger sample size and smalle
 %training/validation/testing in ratio 50:25:25. 1/3 of data was positives. 11538 samples in total. Training time: 00:22:51.
 %Training accuracy achieved 100\% at batch 28x5. Consistent 100\% by batch 50x5. Validation accuracy peaked at epochs 31 and 34, achieving an accuracy of 0.9899445. Applying this best validation accuracy model to the test set achieved an accuracy of 0.9885615.
 %
-%Testing set was only 2885 samples. The number of true/false positives and negatives were:
+%Testing set was only 2885 samples. The number of true/false-positives and negatives were:
 %TP: 972
 %TN: 1879
 %FP: 30
@@ -174,7 +194,7 @@ It has been proven that the model trained with the larger sample size and smalle
 %\subsection*{Attempt5}
 %
 %training/validation/testing with 8.77\% positives. 43854 samples in total. Training time: 01:13:17. Training accuracy achieved 100\% at batch 41x5=205. Consistently 100\% at batch 150x5=750. Validation accuracy peaked at epoch 22, which achieved an accuracy of 0.9983581. Applying this best validation accuracy model to the test set achieved an accuracy of 0.9968989.
-%Testing set comprised of 10964 samples. Of these, the number of true/false positives and negatives were calculated:
+%Testing set comprised of 10964 samples. Of these, the number of true/false-positives and negatives were calculated:
 %
 %TP: 955
 %TN: 9969
