@@ -1,9 +1,9 @@
 library(tensorflow)
 library(crayon)
 # rm(list = ls())
-load("/srv/scratch/z5016924/training2.Rda")
-load("/srv/scratch/z5016924/validation2.Rda")
-load("/srv/scratch/z5016924/testing2.Rda")
+load("/srv/scratch/z5016924/training3.Rda")
+load("/srv/scratch/z5016924/validation3.Rda")
+load("/srv/scratch/z5016924/testing3.Rda")
 
 
 # 1 -----------------------------------------------------------------------
@@ -191,8 +191,9 @@ while (e < max.epochs) {
     cat("\n")
   }
   # Reporting testing accuracy
+  n.valid <- 3000
     train.accuracy2[i.train.acc2] <- accuracy$eval(feed_dict = dict(
-      x = validation[,5:5206], y_ = validation[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+      x = validation[1:n.valid,5:5206], y_ = validation[1:n.valid,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
     cat(sprintf("epoch %d, testing accuracy %g\n", e, train.accuracy2[i.train.acc2]))
     
     # MANUAL ACCURACY TESTING
@@ -203,7 +204,7 @@ while (e < max.epochs) {
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, "/srv/scratch/z5016924/model1/attempt4/model.ckpt")
+    saver$save(sess, "/srv/scratch/z5016924/y_model/attempt5/model.ckpt")
   }
     i.train.acc2 <- i.train.acc2 + 1
     
@@ -237,12 +238,12 @@ mean(testing.accuracy)
 # Testing Set -------------------------------------------------------------
 # Positives now make 1/3 of the data. Data split into training/validation/testing
 
-# accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
 
 
 
-saver$restore(sess, "/srv/scratch/z5016924/model1/attempt4/model.ckpt")
-# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt4"))
+saver$restore(sess, "/srv/scratch/z5016924/y_model/attempt5/model.ckpt")
+# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt5"))
 
 sess$close()
 
@@ -251,10 +252,10 @@ nrow.train.acc <- max(which(train.accuracy != 0))
 train.accuracy <- train.accuracy[1:nrow.train.acc]
 
 # Training accuracy
-# save(train.accuracy, file = "/srv/scratch/z5016924/model1/attempt4/train_accuracy.Rda")
+save(train.accuracy, file = "/srv/scratch/z5016924/y_model/attempt5/train_accuracy.Rda")
 
 # Epoch validation accuracy
-# save(train.accuracy2, file = "/srv/scratch/z5016924/model1/attempt4/train_accuracy2.Rda")
+save(train.accuracy2, file = "/srv/scratch/z5016924/y_model/attempt5/train_accuracy2.Rda")
 
 
 
@@ -272,11 +273,11 @@ trueneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), 
 falsepos <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 1L)), tf$float32))
 falseneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 0L)), tf$float32))
 
-# ntest <- 1000
-# truepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-# trueneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-# falsepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-# falseneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+ntest <- dim(testing)[1]
+truepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+trueneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+falsepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+falseneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
 
 
 # Batch True/False Pos/neg evaluation

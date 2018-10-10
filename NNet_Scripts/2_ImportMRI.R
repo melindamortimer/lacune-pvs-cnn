@@ -103,7 +103,7 @@ ViewPatch <- function(id, x, y, z, type = "soft", point = T) {
   if (point) points(0.5, 0.5, col = "red")
 }
 
-ViewSlice <- function(id,z, type = "soft", point = T) {
+ViewSlice <- function(id,y, type = "soft", point = T) {
   id <- sprintf("%04d", id)
   if (type == "soft") {
     file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
@@ -117,7 +117,7 @@ ViewSlice <- function(id,z, type = "soft", point = T) {
     stop("Type needs to be one of 'soft', 't1' or 'flair'")
   }
   img <- f.read.nifti.volume(file.name)
-  subimg <- img[,,z, 1]
+  subimg <- img[,y,, 1]
   image(subimg, col = grey.colors(100))
   if (point) points(0.5, 0.5, col = "red")
   
@@ -147,74 +147,74 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 # - response = nonlacune
 # Total of 5208 variables per sample
 
-# max.rows <- 6000
-# data.lacunes <- array(NA, dim = c(max.rows, 5208))
-# i <- 1
-# for (id in list.id.lacune) {
-#   cat(white$bgBlack(paste("Processing",id,"\n")))
-# 
-#   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
-#   soft <- f.read.nifti.volume(file.soft)
-# 
-#   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
-#   flair <- f.read.nifti.volume(file.flair)
-# 
-#   file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
-#   lacune <- f.read.nifti.volume(file.lacune)
-# 
-#   for (x in 1:dim(soft)[1]) {
-#     for (y in 1:dim(soft)[2]) {
-#       for (z in 1:dim(soft)[3]) {
-#         if (lacune[x,y,z,1] == 0) next
-#         print(paste("Lacune at [", x, y, z, "]"))
-#         data.lacunes[i, 1] <- as.numeric(id)
-#         data.lacunes[i, 2] <- x
-#         data.lacunes[i, 3] <- y
-#         data.lacunes[i, 4] <- z
-# 
-#         patch.t1 <- soft[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
-#         patch.flair <- flair[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
-# 
-#         data.lacunes[i, 5:2605] <- patch.t1
-#         data.lacunes[i, 2606:5206] <- patch.flair
-# 
-#         data.lacunes[i, 5207] <- 1
-#         data.lacunes[i, 5208] <- 0
-# 
-#         i <- i + 1
-#         if (i > max.rows) break
-# 
-# 
-#         # Also save the reverse image
-#         data.lacunes[i, 1] <- as.numeric(id)
-#         data.lacunes[i, 2] <- x
-#         data.lacunes[i, 3] <- y
-#         data.lacunes[i, 4] <- z
-# 
-#         patch.t1 <- soft[(x + 25):(x - 25), (y - 25):(y + 25), z, 1]
-#         patch.flair <- flair[(x + 25):(x - 25), (y - 25):(y + 25), z, 1]
-# 
-#         data.lacunes[i, 5:2605] <- patch.t1
-#         data.lacunes[i, 2606:5206] <- patch.flair
-# 
-#         data.lacunes[i, 5207] <- 1
-#         data.lacunes[i, 5208] <- 0
-# 
-#         i <- i + 1
-#         if (i > max.rows) break
-#       }
-#     }
-#   }
-# 
-# }
-# 
-# numrows <- max(which(!is.na(data.lacunes[,1])))
-# data.lacunes <- data.lacunes[1:numrows,]
-# 
-# # Randomise and save
-# data.lacunes <- data.lacunes[sample(nrow(data.lacunes)),]
-# 
-# save(data.lacunes, file = "/srv/scratch/z5016924/data_lacunes.Rda")
+max.rows <- 6000
+data.lacunes <- array(NA, dim = c(max.rows, 5208))
+i <- 1
+for (id in list.id.lacune) {
+  cat(white$bgBlack(paste("Processing",id,"\n")))
+
+  file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  soft <- f.read.nifti.volume(file.soft)
+
+  file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  flair <- f.read.nifti.volume(file.flair)
+
+  file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  lacune <- f.read.nifti.volume(file.lacune)
+
+  for (x in 1:dim(soft)[1]) {
+    for (y in 1:dim(soft)[2]) {
+      for (z in 1:dim(soft)[3]) {
+        if (lacune[x,y,z,1] == 0) next
+        print(paste("Lacune at [", x, y, z, "]"))
+        data.lacunes[i, 1] <- as.numeric(id)
+        data.lacunes[i, 2] <- x
+        data.lacunes[i, 3] <- y
+        data.lacunes[i, 4] <- z
+
+        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+
+        data.lacunes[i, 5:2605] <- patch.t1
+        data.lacunes[i, 2606:5206] <- patch.flair
+
+        data.lacunes[i, 5207] <- 1
+        data.lacunes[i, 5208] <- 0
+
+        i <- i + 1
+        if (i > max.rows) break
+
+
+        # Also save the reverse image
+        data.lacunes[i, 1] <- as.numeric(id)
+        data.lacunes[i, 2] <- x
+        data.lacunes[i, 3] <- y
+        data.lacunes[i, 4] <- z
+
+        patch.t1 <- soft[(x + 25):(x - 25), y, (z-25):(z+25), 1]
+        patch.flair <- flair[(x + 25):(x - 25), y, (z-25):(z+25), 1]
+
+        data.lacunes[i, 5:2605] <- patch.t1
+        data.lacunes[i, 2606:5206] <- patch.flair
+
+        data.lacunes[i, 5207] <- 1
+        data.lacunes[i, 5208] <- 0
+
+        i <- i + 1
+        if (i > max.rows) break
+      }
+    }
+  }
+
+}
+
+numrows <- max(which(!is.na(data.lacunes[,1])))
+data.lacunes <- data.lacunes[1:numrows,]
+
+# Randomise and save
+data.lacunes <- data.lacunes[sample(nrow(data.lacunes)),]
+
+save(data.lacunes, file = "/srv/scratch/z5016924/data_lacunes.Rda")
 
 
 
@@ -226,69 +226,69 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 # Try to collect 200 points per scan (1 per z slice?)
 # Randomise x/y. If lacune, pass.
 # If scan value 0, pass.
-# max.rows2 <- 50000
-# data.nonlacune <- array(NA, dim = c(max.rows2, 5208))
-# i <- 1
-# for (id in list.id) {
-#   cat(white$bgBlack(paste("Processing",id,"\n")))
-# 
-#   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
-#   soft <- f.read.nifti.volume(file.soft)
-# 
-#   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
-#   flair <- f.read.nifti.volume(file.flair)
-# 
-#   file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
-#   if (file_test("-f", file.lacune)) {
-#     lacune <- f.read.nifti.volume(file.lacune)
-#   } else {
-#     lacune <- array(data = 0, dim = dim(soft))
-#   }
-# 
-#   # Instead, take every kth pixel of matter? Skip if not matter or if a lacune. Sequence starts randomly between 26 and 76
-# 
-#   for (x in seq(round(runif(1, 26, 76)), dim(soft)[1] - 25, by = 25)) {
-#     for (y in seq(round(runif(1, 26, 76)), dim(soft)[2] - 25, by = 25)) {
-#       for (z in seq(round(runif(1, 26, 76)), dim(soft)[3] - 25, by = 25)) {
-#   
-#         # Isolate a 5x5 square in the middle of the sample. If the whole square is 0, skip
-#         midregion <- sum(soft[(x-4):(x+4), (y-4):(y+4), (z-4):(z+4),1])
-#         # Skip if pixel is not in brain matter, or is a lacune
-#         if (lacune[x,y,z,1] == 1 | midregion == 0) next
-#     
-#         print(paste("Non-lacune at [", x, y, z, "]"))
-#         data.nonlacune[i, 1] <- as.numeric(id)
-#         data.nonlacune[i, 2] <- x
-#         data.nonlacune[i, 3] <- y
-#         data.nonlacune[i, 4] <- z
-#     
-#         patch.t1 <- soft[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
-#         patch.flair <- flair[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
-#     
-#         data.nonlacune[i, 5:2605] <- patch.t1
-#         data.nonlacune[i, 2606:5206] <- patch.flair
-#     
-#         data.nonlacune[i, 5207] <- 0
-#         data.nonlacune[i, 5208] <- 1
-#     
-#         i <- i + 1
-#         if (i > max.rows2) {
-#           stop(paste("Reached max number of rows", max.rows2))
-#         }
-#       }
-#     }
-#   }
-# }
+max.rows2 <- 50000
+data.nonlacune <- array(NA, dim = c(max.rows2, 5208))
+i <- 1
+for (id in list.id) {
+  cat(white$bgBlack(paste("Processing",id,"\n")))
+
+  file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  soft <- f.read.nifti.volume(file.soft)
+
+  file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  flair <- f.read.nifti.volume(file.flair)
+
+  file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  if (file_test("-f", file.lacune)) {
+    lacune <- f.read.nifti.volume(file.lacune)
+  } else {
+    lacune <- array(data = 0, dim = dim(soft))
+  }
+
+  # Instead, take every kth pixel of matter? Skip if not matter or if a lacune. Sequence starts randomly between 26 and 76
+
+  for (x in seq(round(runif(1, 26, 76)), dim(soft)[1] - 25, by = 25)) {
+    for (y in seq(round(runif(1, 26, 76)), dim(soft)[2] - 25, by = 25)) {
+      for (z in seq(round(runif(1, 26, 76)), dim(soft)[3] - 25, by = 25)) {
+
+        # Isolate a 5x5 square in the middle of the sample. If the whole square is 0, skip
+        midregion <- sum(soft[(x-4):(x+4), (y-4):(y+4), (z-4):(z+4),1])
+        # Skip if pixel is not in brain matter, or is a lacune
+        if (lacune[x,y,z,1] == 1 | midregion == 0) next
+
+        print(paste("Non-lacune at [", x, y, z, "]"))
+        data.nonlacune[i, 1] <- as.numeric(id)
+        data.nonlacune[i, 2] <- x
+        data.nonlacune[i, 3] <- y
+        data.nonlacune[i, 4] <- z
+
+        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+
+        data.nonlacune[i, 5:2605] <- patch.t1
+        data.nonlacune[i, 2606:5206] <- patch.flair
+
+        data.nonlacune[i, 5207] <- 0
+        data.nonlacune[i, 5208] <- 1
+
+        i <- i + 1
+        if (i > max.rows2) {
+          stop(paste("Reached max number of rows", max.rows2))
+        }
+      }
+    }
+  }
+}
 # 
 # # Remove empty rows on end
 # 
-# numrows <- min(which(is.na(data.nonlacune[,1]))) - 1
-# data.nonlacune <- data.nonlacune[1:numrows,]
+numrows <- min(which(is.na(data.nonlacune[,1]))) - 1
+data.nonlacune <- data.nonlacune[1:numrows,]
 # 
 # # Randomise and save
 # 
-# data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
-# save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
+data.nonlacune <- data.nonlacune[sample(nrow(data.nonlacune)),]
+save(data.nonlacune, file = "/srv/scratch/z5016924/data_nonlacune.Rda")
 
 
 
@@ -296,13 +296,13 @@ list.id.lacune <- str_extract(list.lacune, "^[0-9]{4}")
 
 # Sampling 1 ----------------------------------------------------------------
 # Training and testing only.
-load("/srv/scratch/z5016924/data_lacunes.Rda")
-load("/srv/scratch/z5016924/data_nonlacune.Rda")
+# load("/srv/scratch/z5016924/data_lacunes.Rda")
+# load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
-dim(data.lacunes)
+# dim(data.lacunes)
 # [1] 3846 5208
 
-dim(data.nonlacune)
+# dim(data.nonlacune)
 # [1] 40008  5208
 
 # Paper has 320K patches in total. 2/3 of these are negatives
@@ -313,28 +313,28 @@ dim(data.nonlacune)
 # training: 2692 pos, 33583 neg. 36275 total
 # testing: 1154 pos, 14393 neg. 15544 total
 
-training <- rbind(data.lacunes[1:2692,], data.nonlacune[1:33583,])
-training <- training[sample(36275),]
+# training <- rbind(data.lacunes[1:2692,], data.nonlacune[1:33583,])
+# training <- training[sample(36275),]
+# 
+# testing <- rbind(data.lacunes[2693:3846,], data.nonlacune[33584:47976,])
+# testing <- testing[sample(15544),]
 
-testing <- rbind(data.lacunes[2693:3846,], data.nonlacune[33584:47976,])
-testing <- testing[sample(15544),]
-
-dim(training)
+# dim(training)
 # [1] 36275  5208
-dim(testing)
+# dim(testing)
 # [1] 15544  5208
 
 # 7.4% positives
-save(training, file = "/srv/scratch/z5016924/training.Rda") 
-save(testing, file = "/srv/scratch/z5016924/testing.Rda")
+# save(training, file = "/srv/scratch/z5016924/training.Rda") 
+# save(testing, file = "/srv/scratch/z5016924/testing.Rda")
 
 
 
 
 # Sampling 2 --------------------------------------------------------------
 # 1/3 positives: training, validation and testing sets
-load("/srv/scratch/z5016924/data_lacunes.Rda")
-load("/srv/scratch/z5016924/data_nonlacune.Rda")
+# load("/srv/scratch/z5016924/data_lacunes.Rda")
+# load("/srv/scratch/z5016924/data_nonlacune.Rda")
 
 # To get the 1/3 positives seen in the paper
 # Split data training:validation:testing = 50:25:25
@@ -353,7 +353,7 @@ save(testing, file = "/srv/scratch/z5016924/testing2.Rda")
 
 
 dim(training)
-#[1] 5769 5208
+# [1] 5769 5208
 dim(validation)
 #[1] 2884 5208
 dim(testing)
@@ -365,9 +365,10 @@ dim(testing)
 # Use all samples, keeping the positive percentage at a low percentage.
 # Training, validation and testing sets
 # Not too low, in case the model starts outputting non lacune too often, just to inflate accuracy.
-dim(data.lacunes)
-dim(data.nonlacune)
-# Lacunes now make 8.77% of data samples.
+dim(data.lacunes) # [1] 3846 5208
+dim(data.nonlacune) # [1] 39983  5208
+# 43829 samples total
+# Lacunes now make 8.78% of data samples.
 
 load("/srv/scratch/z5016924/data_lacunes.Rda")
 load("/srv/scratch/z5016924/data_nonlacune.Rda")
@@ -386,13 +387,13 @@ testing <- rbind(data.lacunes[(floor(0.75*nl)+1):nl,], data.nonlacune[(floor(0.7
 testing <- testing[sample(nrow(testing)),]
 
 dim(training)
-# [1] 21927  5208
+# [1] 21914  5208
 
 dim(validation)
-# [1] 10963  5208
+# [1] 10957  5208
 
 dim(testing)
-# [1] 10964  5208
+# [1] 10958  5208
 
 save(training, file = "/srv/scratch/z5016924/training3.Rda")
 save(validation, file = "/srv/scratch/z5016924/validation3.Rda")

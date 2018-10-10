@@ -1,11 +1,11 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Results}\label{results}
 
 \section{Final model structure}
 
-The final simplified model has a similar structure to that of Ghafoorian et. al's candidate detection model \cite{GhafoorianM.2017Dml3}. The model structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: soft-tissue extracted T1 and FLAIR images. Each of the images has resolution 51$\times$51 pixels and is centered at the same coordinate. The model classifies the central pixel as either a positive or negative reading, formatted as a 2-dimensional vector. A response of $(1,0)^\intercal$ indicates a positive (lacune) sample and $(0,1)^\intercal$ a negative (non-lacune) sample.
+The final simplified model has a similar structure to that of Ghafoorian et al.'s candidate detection model \cite{GhafoorianM.2017Dml3}. The model structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: soft tissue extracted T1 and \textsc{flair} images. Each of the images has resolution 51$\times$51 pixels and is centred at the same coordinate. The model classifies the central pixel as either a positive or negative reading, formatted as a two-dimensional vector. A response of $(1,0)^\intercal$ indicates a positive (lacune) sample and $(0,1)^\intercal$ a negative (non-lacune) sample.
 
 % Simplified model structure
 \begin{figure}[ht]
@@ -16,52 +16,48 @@ The final simplified model has a similar structure to that of Ghafoorian et. al'
 	\label{results-model-fig}
 \end{figure}
 
-The model consists of four convolutional layers of size 20, 40, 80 and 110, with filter sizes 7$\times$7, 5$\times$5, 3$\times$3 and 3$\times$3 respectively. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200 and 2. The final layer has softmax activation to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
+The model consists of four convolutional layers of size 20, 40, 80 and 110, with filter sizes 7$\times$7, 5$\times$5, 3$\times$3 and 3$\times$3 respectively. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200 and 2. The final layer has softmax activation to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}). All neurons undergo batch normalisation and are initialised using the He method \cite{HeKaiming2015DDiR}. A dropout rate of 0.3 was applied to the fully connected layers.
 
-All neurons undergo batch normalisation and are initialised using the He method \cite{HeKaiming2015DDiR}. A dropout rate of 0.3 was applied to the fully connected layers.
+Training was conducted using stochastic gradient descent with the Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy loss was used with L2-regularisation, with the penalty rate set to $1\times10^{-4}$. An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, the final saved model will have the highest validation accuracy.
 
-Training was conducted using stoachastic gradient descent with Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy loss was used with L2-regularisation. The penalty rate was set to $1\times10^{-4}$. 
+Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}: one third positive and two thirds negative. There are only 3846 positive samples in the MAS data set, allowing for a random selection of 7692 negative samples, thus giving a total sample size of 11538. These samples were split into three data sets: training, validation and testing. Splitting the data into these groups at a ratio of 50:25:25 yielded sample sizes 5769, 2884 and 2885 respectively.
 
-An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, the final saved model will have the highest validation accuracy.
-
-Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}: one third positive and two thirds negative. There are only 3846 positive samples in the MAS dataset, allowing for a random selection of 7692 negative samples. The total sample size is 11538. These samples are split into three datasets: training, validation and testing. Splitting the data into these groups with a ratio of 50:25:25 yields sample sizes 5769, 2884 and 2885 respectively.
-
-The second model used the entire developed set of positive and negative lacune samples. This consisted of 3846 positive and 40008 negative samples to give a total sample size of 43854. Positives encompassed 8.77\% of data samples. Similarly to the first dataset, the data was split into training, validation and testing sets using a ratio of 50:25:25. This yielded sample sizes 21927, 10963 and 10964 respectively. All datasets were saved as R data files (\texttt{.Rda}).
+The second model used the entire developed set of positive and negative lacune samples. This consisted of 3846 positive and 39983 negative samples to give a total sample size of 43829. Positive samples encompass 8.78\% of data samples. Similarly to the first data set, the data was split into training, validation and testing sets using a ratio of 50:25:25. This yielded sample sizes 21914, 10957 and 10958 respectively. All data sets were saved as R data files (\texttt{.Rda}).
 
 
 \section{Training environment}
 
-Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural network was built and trained using Tensorflow (v1.10.0) through the R interface \texttt{tensorflow} (v1.8). The model was trained on a Linux machine running Ubuntu (release 16.04). 
+Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural network was built and trained using Tensorflow (v1.10.0) through the R interface \texttt{tensorflow} (v1.8). The model was trained on a Linux machine running Ubuntu (release 16.04). The Tensorflow model was trained on the machine's CPU, an Intel(R) Core(TM) i7-4790 CPU 3.60GHz, with 16GB of RAM. 
 
 \section{Results}
 
-\subsection*{One Third Positives}
+\subsection*{First model}
 
-The first model generated had the same positive-negative sample ratio as outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. The data consisted of one third positives and two thirds negatives. The resulting samples were split into three datasets: training, validation and testing in the ratio of 50:25:25.
+The first model generated has the same positive-negative sample ratio as outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. The data consists of one-third positives and two-thirds negatives.
 
 % Training accuracy
-\begin{figure}[b]
+\begin{figure}[hb]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_train_acc4.pdf}
 	\caption{Training data accuracy logged every 5 batches}
 	\label{results-train-acc4-fig}
 \end{figure}
 
-Each epoch of training uses the entire training dataset. The model is trained for 40 epochs over 23 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training dataset is very high, whereas the accuracy of the validation and testing datasets are low. Hence assessing model training accuracy can efficiently convey early model improvement however is not indicative of the model's performance when given new data.
+The model was trained for 40 epochs over 24 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training data set becomes very high, whereas the accuracy of the validation and testing data sets are low. Hence assessing model training accuracy can efficiently convey early model improvement; however it is not indicative of the model's performance when given new data.
 
-Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches, reaching 100\% before batch 250. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \cite{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
+Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \cite{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
 
 % Validation accuracy
-\begin{figure}[b]
+\begin{figure}[hb]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_valid_acc4.pdf}
 	\caption{Validation data accuracy logged after each epoch}
 	\label{results-valid-acc4-fig}
 \end{figure}
 
-The model's validation set accuracy was tested after each epoch. This dataset was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly for the first 10 epochs before a plateau at 20 epochs. The maximum validation accuracy occurred at epochs 31 and 34, achieving an accuracy of 0.9899445. The model was saved at epoch 31 to help minimise overfitting that may occur at later epochs.
+The model's validation set accuracy was tested after each epoch. This data set was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly within the first 10 epochs. The maximum validation accuracy occurred at epochs 18, 22 and 25, achieving an accuracy of 0.9923717. The model was saved at epoch 18 to help minimise overfitting that may occur at later epochs. Applying this best validation accuracy model to the test data set resulted in an accuracy of 0.9937608.
 
-Applying this best validation accuracy model to the test dataset resulted in an accuracy of 0.9885615. Though overall accuracy is a strong indicator of model performance, some types of inaccuracy can be more detrimental than others. In the identification of lacunes, it is preferable to have a larger number of false candidate lacunes than misclassify a true lacune. As a result, models will be compared by considering actual and predicted classification differences. Using this scheme, there are four outcomes: true positives, true negatives, false positives, and false negatives. These outcomes can be formatted into a \textit{confusion matrix}, as shown in Table \ref{results-confmat4-tab}.
+Though overall accuracy is a strong indicator of model performance, some types of inaccuracy can be more detrimental than others. In the identification of lacunes, it is preferable to have a larger number of false candidate lacunes than misclassify a true lacune. As a result, models will be compared by considering actual and predicted classification differences. Using this scheme, there are four outcomes: true-positive, true-negative, false-positive, and false-negative. These outcomes can be formatted into a \textit{confusion matrix}, as shown in Table \ref{results-confmat4-tab}.
 
 \begin{table}[ht]
 	\centering
@@ -69,21 +65,19 @@ Applying this best validation accuracy model to the test dataset resulted in an 
 	\toprule[1.5pt]
 	& Positive & Negative\\
 	\midrule
-	True & 972 & 1879\\
-	False & 30 & 4\\
+	True & 1004 & 1863\\
+	False & 16 & 2\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{Confusion matrix of the testing dataset.}
+	\caption{Confusion matrix of the testing data set.}
 	\label{results-confmat4-tab}
 \end{table}
 
-The sensitivity of the model to lacunes is 99.6\% and specificity for non-lacunes is 98.4\%.
+The sensitivity of the model to lacunes is 99.6\% and specificity (correct classification of negative samples) of non-lacunes is 98.4\%.
 
-\subsection*{8.77\% Positives}
+\subsection*{Second model}
 
-The second model was built using all of the generated positive and negative samples as described in Section \ref{data-samples}.
-
-The resulting training accuracy is shown in Figure \ref{results-train-acc5-fig}. The additional noise present in comparison to the previous model is the result of the larger sample size, rising from 5769 to 21927 samples. Note that the batch size and number of training epochs remained at 128 and 40 respectively, resulting in a larger number of batches processed during training. Model training duration was 1 hour and 13 minutes. The behaviour of this model was similar to that of the previous model, with a steep increase in training accuracy in early epochs followed by consistent correct classifications. Training accuracy first reached 100\% at batch 205 and was consistently 100\% by batch 750. 
+The second model was built using all of the generated positive and negative samples as described in Section \ref{data-samples}. The resulting training accuracy is shown in Figure \ref{results-train-acc5-fig}. The additional noise present in comparison to the previous model is the result of the larger sample size, rising from 5769 to 21914 samples. Note that the batch size and number of training epochs remained at 128 and 40 respectively, resulting in a larger number of batches processed during training. Model training duration was 85 minutes. The behaviour of this model was similar to that of the previous model, with a steep increase in training accuracy in early epochs followed by consistent correct classifications. Training accuracy was consistently at 100\% by batch 1000. 
 
 % Training accuracy
 \begin{figure}[ht]
@@ -93,7 +87,7 @@ The resulting training accuracy is shown in Figure \ref{results-train-acc5-fig}.
 	\label{results-train-acc5-fig}
 \end{figure}
 
-The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epoch 22, achieving an accuracy of 0.9983581. 
+The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epochs 28 and 34, achieving an accuracy of 0.9983333. The model was saved at the earlier epoch 28 to reduce overfitting.
 
 % Validation accuracy
 \begin{figure}[ht]
@@ -103,7 +97,7 @@ The performance of the model on the validation set is given in Figure \ref{resul
 	\label{results-valid-acc5-fig}
 \end{figure}
 
-Applying this best validation accuracy model to the test set achieved an accuracy of 0.9968989. The confusion matrix is given by Table \ref{results-confmat5-tab}, to give a sensitivity of 99.3\% and specificity of 99.7\%.
+Applying this best validation accuracy model to the test set achieved an accuracy of 0.998. The confusion matrix is given by Table \ref{results-confmat5-tab}, to give a sensitivity of 99.9\% and specificity of 99.7\%.
 
 \begin{table}[ht]
 	\centering
@@ -111,11 +105,11 @@ Applying this best validation accuracy model to the test set achieved an accurac
 	\toprule[1.5pt]
 	& Positive & Negative\\
 	\midrule
-	True & 955 & 9969\\
-	False & 33 & 7\\
+	True & 961 & 9977\\
+	False & 19 & 1\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{Confusion matrix of the testing dataset.}
+	\caption{Confusion matrix of the testing data set.}
 	\label{results-confmat5-tab}
 \end{table}
 
@@ -149,7 +143,7 @@ It has been proven that the model trained with the larger sample size and smalle
 %\subsection*{Attempt2}
 %
 %training/validation/testing in ratio 50:25:25. 1/3 of data was positives. 11539 samples in total. Training time: 00:23:11.
-%Training accuracy achieved 100\% before batch 50x5. Validation accuracy peaked at epoch 21, which achieved an accuracy of 0.984055. Applying this best validation model to testing data achieved an accuracy of 0.9833622. Lower accuracy could be the result of fewer data points for training - caused by having only a limited number of positives in the original dataset compared to the abundant negatives.
+%Training accuracy achieved 100\% before batch 50x5. Validation accuracy peaked at epoch 21, which achieved an accuracy of 0.984055. Applying this best validation model to testing data achieved an accuracy of 0.9833622. Lower accuracy could be the result of fewer data points for training - caused by having only a limited number of positives in the original data set compared to the abundant negatives.
 %
 %\subsection*{Attempt3}
 %
@@ -191,4 +185,4 @@ It has been proven that the model trained with the larger sample size and smalle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
