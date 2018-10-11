@@ -273,11 +273,11 @@ trueneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), 
 falsepos <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 1L)), tf$float32))
 falseneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 0L)), tf$float32))
 
-ntest <- dim(testing)[1]
-truepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-trueneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-falsepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-falseneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# ntest <- dim(testing)[1]
+# truepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# trueneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# falsepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# falseneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
 
 
 # Batch True/False Pos/neg evaluation
@@ -286,7 +286,7 @@ testseq <- seq(1,nrow(testing), by = 1000)
 
 names(tfpn.eval) <- c("TP","TN","FP","FN")
 
-for (i in testseq) {
+for (i in testseq[1]) {
   print(paste(i, "of", nrow(testing)))
   lower <- i
   upper <- min(i+999, nrow(testing))
@@ -298,3 +298,26 @@ for (i in testseq) {
 
 tfpn.eval
 round(tfpn.eval/nrow(testing),4)
+
+
+# Search for true positive samples etc
+
+tp.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 0L))
+tn.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 1L))
+fp.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 1L))
+fn.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 0L))
+
+found <- 0
+for (i in 1:1000) {
+  found <- tn.test$eval(feed_dict = dict(x = array(testing[i, 5:5206], dim = c(1, 5202)), y_ = array(testing[i, 5207:5208], dim = c(1, 2)), keep.prob = 1.0, learn.rate = learning.rates[1]))
+  
+  if (found) break
+}
+
+lower <- 450
+upper <- 455
+falsepos$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+
+fp.test$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+
+y$eval(feed_dict = dict(x = testing[1:100, 5:5206], y_ = testing[1:100, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))

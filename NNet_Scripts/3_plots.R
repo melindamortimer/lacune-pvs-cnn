@@ -105,3 +105,55 @@ legend('bottomright',
        col = c("black","red", "blue"))
 
 
+
+# T1 vs FLAIR vs lacune  -------------------------------------------------------------
+
+#dev.off()
+
+par(mfrow = c(2,2), mar = c(2.1,2.1,1.5,0.5))
+ViewSlice(7921, 144, point = F, type = "soft")
+title(main = "T1-Weighted")
+ViewSlice(7921, 144, point = F, type = "flair")
+title(main = "FLAIR")
+ViewSlice(7921, 144, point = F, type = "lacune", col = c("grey","red"))
+title(main = "Lacune")
+
+
+
+
+# Positive Samples: Soft + FLAIR --------------------------------------------
+
+par(mfrow = c(2,2), mar = c(2.1,2.1,1.5,0.5))
+ViewPatch(1224, 98, 147, 77, point = T, type = "soft")
+title(main = "Positive: T1")
+ViewPatch(1224, 98, 147, 77, point = T, type = "flair")
+title(main = "Positive: FLAIR")
+ViewPatch(8609, 140, 183, 87, point = T, type = "soft")
+title(main = "Positive: T1")
+ViewPatch(8609, 140, 183, 87, point = T, type = "flair")
+title(main = "Positive: FLAIR")
+
+
+# Negative Samples: Soft + FLAIR --------------------------------------------
+
+par(mfrow = c(2,2), mar = c(2.1,2.1,1.5,0.5))
+ViewPatch(8651,126,144,147, point = T, type = "soft")
+title(main = "Negative: T1")
+ViewPatch(8651,126,144,147, point = T, type = "flair")
+title(main = "Negative: FLAIR")
+ViewPatch(4532,135,188,119, point = T, type = "soft")
+title(main = "Negative: T1")
+ViewPatch(4532,135,188,119, point = T, type = "flair")
+title(main = "Negative: FLAIR")
+
+
+
+# Detected ----------------------------------------------------------------
+
+# True Positive
+ViewPatch(7921, 168, 143, 126)
+ViewPatch(7921, 168, 143, 126, type = "flair")
+
+
+# False Positive
+

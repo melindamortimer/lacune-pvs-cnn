@@ -103,7 +103,7 @@ ViewPatch <- function(id, x, y, z, type = "soft", point = T) {
   if (point) points(0.5, 0.5, col = "red")
 }
 
-ViewSlice <- function(id,y, type = "soft", point = T) {
+ViewSlice <- function(id,y, type = "soft", point = T, col = grey.colors(100)) {
   id <- sprintf("%04d", id)
   if (type == "soft") {
     file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
@@ -118,7 +118,7 @@ ViewSlice <- function(id,y, type = "soft", point = T) {
   }
   img <- f.read.nifti.volume(file.name)
   subimg <- img[,y,, 1]
-  image(subimg, col = grey.colors(100))
+  image(subimg, col = col)
   if (point) points(0.5, 0.5, col = "red")
   
 }
