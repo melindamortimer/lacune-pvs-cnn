@@ -314,10 +314,17 @@ for (i in 1:1000) {
   if (found) break
 }
 
-lower <- 450
-upper <- 455
-falsepos$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+lower <- 20
+upper <- 25
+truepos$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
 
-fp.test$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+tp.test$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
 
 y$eval(feed_dict = dict(x = testing[1:100, 5:5206], y_ = testing[1:100, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+
+
+for(tmp in 1:100) {
+  print(y$eval(feed_dict = dict(x = array(testing[tmp, 5:5206], dim = c(1, 5202)), y_ = array(testing[tmp, 5207:5208], dim = c(1,2)), keep.prob = 1.0, learn.rate = learning.rates[1])))
+  readline(prompt = "enter")
+}
+
