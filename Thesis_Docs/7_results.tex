@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Results}\label{results}
 
@@ -10,7 +10,7 @@ The final simplified model has a similar structure to that of Ghafoorian et al.'
 % Simplified model structure
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{Images/7_simplified_model.png}
+	\includegraphics[width=\linewidth]{Images/7_simplified_model.png}
 	\caption{Simplified model structure.}
 	\small Image adapted from \cite{GhafoorianM.2017Dml3}
 	\label{results-model-fig}
@@ -115,7 +115,8 @@ Applying this best validation accuracy model to the test set achieved an accurac
 
 \subsection*{Model comparisons}
 
-The sensitivities and specificities of the two models are given in Table \ref{results-sens-spec-tab}
+The sensitivities and specificities of the two models are given in Table \ref{results-sens-spec-tab}. We observe that the second trained model has a higher sensitivity and specificity than that of the first model. We conduct a hypothesis test on the differences between the two models.
+
 \begin{table}[ht]
 	\centering
 	\begin{tabular}{@{}lll@{}}
@@ -130,19 +131,21 @@ The sensitivities and specificities of the two models are given in Table \ref{re
 	\label{results-sens-spec-tab}
 \end{table}
 
+First, we test the difference in sensitivity proportions. The Central Limit Theorem (\textsc{clt}) is not applicable as the number of false-negatives is too small in both models. Instead, we use Fisher's Exact test. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. Let $n_1$ and $n_2$ be their respective sample sizes. Under the null hypothesis, for fixed $X_1 + X_2$, $X_1$ and $X_2$ have a hypergeometric distribution with probability
+\begin{align*}
+	P(X_1 = x_1, X_2 = x_2) = \dfrac{\dbinom{n_1}{x_1}\dbinom{n_2}{x_2}}{\dbinom{n_1 + n_2}{x_1 + x_2}}.
+\end{align*}
 
-Between the two trained models, the model that was trained on more data had slightly less sensitivity but much greater specificity. A hypothesis test comparing the sensitivity and specificity rates between the two models is conducted.
+The resulting p-value is 1, and we conclude that the two sensitivity proportions are not significantly different.
 
-First test the difference in sensitivity rates. The Central Limit Theorem (\textsc{clt}) does not apply as the number of false-negatives is less than 10 for both models. Consider the pooled sensitivity probability $p_{pooled} = \dfrac{1004+961}{1006+962} = 0.9985$.
-
-We test the hypothesis that both models exhibit sensitivities at the rate of $p_{pooled}$. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. The models classify each sample independently and the data are sampled randomly. Under these assumptions we can model $X_1$ and $X_2$ using the Binomial distribution.
-
-Under the null hypothesis, $X_1 \sim Bin(1006, p_{pooled})$ and $X_2 \sim Bin(962, p_{pooled})$. The observed $X_1$ has a p-value of $P(X_1 \geq 1004) = 0.5465296$, and the observed value of $X_2$ has the p-value $P(X_2 \leq 961) = 0.7695179$. At the 5\% level, neither of these sensitivities are significantly different from $p_{pooled}$ and so are not significantly different from each other.
-
-We now test the difference in specificity rates. Hypothesise that both sample proportions come from sampling distributions with the same probability. The number of true-negatives and false-positives are above 10 for both models. The data was sampled randomly and lacune classifications were made independently of other samples. Under these assumptions, the two-proportion z-test can be applied. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples so that $\hat{p}_1 = \dfrac{X_1}{n_1}$ and $\hat{p}_2 = \dfrac{X_2}{n_2}$ are the observed specificities. The observed pooled specificity proportion is $\hat p_{pooled} = \dfrac{1863+9977}{1879+9996} = 0.9970526$. From the \textsc{clt},
-\[
+We now test the difference in specificity rates. We hypothesise that both sample proportions come from sampling distributions with the same probability. We can apply a $z$-test since we have sufficiently large number of observations and the data are independent. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples, so that $\hat{p}_1 = \dfrac{X_1}{n_1}$ and $\hat{p}_2 = \dfrac{X_2}{n_2}$ are the observed specificities. The observed pooled specificity proportion is
+\begin{align*}
+	\hat p_{pooled} = \dfrac{1863+9977}{1879+9996} = 0.9970526.
+\end{align*}
+From the \textsc{clt},
+\begin{align*}
 	Z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{p_{pooled}(1 - p_{pooled})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} \approx \mathcal{N}(0,1).
-\]
+\end{align*}
 The resulting test statistic is $z = -4.852599$. The probability of the observed proportion difference or lower is given by $P(Z < z) = 6.09\times10^{-7}$. This is well below the 5\% significance level and it is concluded that the specificity of the second model is higher than that of the first.
 
 It has been proven that the model trained with the larger sample size and smaller proportion of positives did not affect sensitivity rates and increased specificity. 
@@ -205,4 +208,4 @@ It has been proven that the model trained with the larger sample size and smalle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}
