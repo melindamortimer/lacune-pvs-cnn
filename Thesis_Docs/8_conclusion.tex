@@ -3,12 +3,23 @@
 
 \chapter{Conclusion}\label{conclusion}
 
-R
+In this thesis, we propose a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. The proposed model greatly simplifies the existing machine learning model created by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. The original model is comprised of two stages: candidate detection using a convolutional neural network, and false-positive reduction using three-dimensional convolutional neural networks with added location-based variables.
 
-\citep{AdamsH.H.Hieab2013RMfD}
+Our proposed model makes three major changes. The first is the pre-processing applied to the input T1-weighted images. Soft tissue is extracted to remove features outside the brain, such as eyes and skull, and to de-identify the data. The algorithm also has the effect of masking regions of possible \textsc{csf} content, which has an appearance similar to that of lacunes. The voxel intensity of some positive responses may be reduced to zero as a result.
 
+The second change examined the impact of positive to negative sample ratios. The original model consisted of twice as many negative samples as positive. On our smaller data set, the sensitivity and specificity both improved when given a greater number of samples, regardless of the ratio of training.
 
+The third change was the removal of the false-positive reduction model. Upon examining the performance of the initial model, the sensitivity and specificity rates were 99.9\% and 99.8\% respectively. To maintain model simplicity, and reduce computation time and resources, the model was consolidated after candidate generation.
 
+\section{Improvements and further research}
+
+Due to time constraints and limitations of the available data, the effect of location information could not be tested. It still remains to be tested whether location data is beneficial to the model, or in fact detrimental. It is also possible that running a three-dimensional \textsc{cnn} on the candidate lacunes could introduce greater context and further reduce false-positives. This was not included in this thesis due to time constraints, to maintain model simplicity, and to reduce training and usage time.
+
+Soft tissue extraction on the T1-weighted scans resulted in very distinct edges between the brain matter and surrounding structures. It is possible that the mask is removing some of the contextual brain matter, or removing information inherant in the voxels of lacunes. Raising the soft tissue probability thresholds used during extraction could reduce any information lost.
+
+The large number of variables required for \textsc{cnn}s makes them computationally and storage intensive. Further research could be conducted by considering other computer algorithms and model types, such as gradient boosting.
+
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\include{bibliography}
