@@ -3,7 +3,7 @@
 
 \chapter{Conclusion}\label{conclusion}
 
-In this thesis, we propose a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. The proposed model greatly simplifies the existing machine learning model created by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}. The original model is comprised of two stages: candidate detection using a convolutional neural network, and false-positive reduction using three-dimensional convolutional neural networks with added location-based variables.
+In this thesis, we propose a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. The proposed model greatly simplifies the existing machine learning model created by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}.
 
 Our proposed model makes three major changes. The first is the pre-processing applied to the input T1-weighted images. Soft tissue is extracted to remove features outside the brain, such as eyes and skull, and to de-identify the data. The algorithm also has the effect of masking regions of possible \textsc{csf} content, which has an appearance similar to that of lacunes. The voxel intensity of some positive responses may be reduced to zero as a result.
 
@@ -17,7 +17,7 @@ Due to time constraints and limitations of the available data, the effect of loc
 
 Soft tissue extraction on the T1-weighted scans resulted in very distinct edges between the brain matter and surrounding structures. It is possible that the mask is removing some of the contextual brain matter, or removing information inherant in the voxels of lacunes. Raising the soft tissue probability thresholds used during extraction could reduce any information lost.
 
-The large number of variables required for \textsc{cnn}s makes them computationally and storage intensive. Further research could be conducted by considering other computer algorithms and model types, such as gradient boosting.
+The large number of variables required for \textsc{cnn}s makes them computationally and space intensive. Further research could be conducted by considering other more efficient computer algorithms and model types, such as gradient boosting in XGBoost.
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

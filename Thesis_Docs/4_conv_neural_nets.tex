@@ -1,9 +1,9 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Convolutional neural networks}\label{convnets}
 
-Convolutional neural networks (\textsc{cnn}s) are of particular interest when working with image problems as the input data is assumed to be two-dimensional. In regular neural networks (see Chapter \ref{neuralNets-intro}), the neurons in each layer are connected to all the neurons of the previous layer. These layers are known as \textit{fully connected layers}. In \textsc{cnn}s, convolutional layers examine only small subimages of the entire image sample. Each pixel of an image forms a neuron, which is connected to nearby pixels and not all pixels of the image. The \textsc{cnn} is trained to identify a set of visual features which can be combined and interpreted for image classification tasks.
+Convolutional neural networks (\textsc{cnn}s) are of particular interest when working with image problems as the input data is assumed to be two-dimensional. In regular neural networks (see Chapter \ref{neuralNets-intro}), the neurons in each layer are connected to all the neurons of the previous layer. These layers are known as \textit{fully connected layers}. In \textsc{cnn}s, convolutional layers examine only small subimages of the entire image sample. Each pixel of an image forms a neuron, which is connected only to nearby pixels, rather than all pixels in the image. The \textsc{cnn} is trained to identify a set of visual features which can be combined and interpreted for image classification tasks.
 
 % Diagram of typical CNN structure
 \begin{figure}[ht]
@@ -14,24 +14,21 @@ Convolutional neural networks (\textsc{cnn}s) are of particular interest when wo
 	\label{convnets-structurefig}
 \end{figure}
 
-CNNs typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. The convolutional layers identify significant visual features, however they introduce a large number of variables into the network. Max pooling layers occur after convolutional layers to reduce network dimensionality. For classification tasks, the last layers of the network are fully connected to restructure the variables as a one-dimensional vector. Softmax activation is used for the final output layer to generate a probability distribution.
+CNNs typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. The convolutional layers identify significant visual features, however they introduce a large number of variables into the network. Max pooling layers occur after convolutional layers to reduce network dimensionality. For classification tasks, the last layers of the network are fully connected to ensure the final outputs match the structure of the given responses. Softmax activation (see Section \ref{nnets-act}) is used for the final output layer to generate a probability distribution of the classifications.
 
 \section{Convolutional layers}\label{convnets-convlayer}
 
-The neurons of convolutional layers have a similar overall structure to that of regular neurons (see Section \ref{nnets-structure}). The input variables $X$ are multiplied with weights $W$, summed and added to a bias variable $b$. The resulting linear combination is passed through an activation function $\sigma(\cdot)$ to give the output of the neuron, activation value $a$.
+The neurons of convolutional layers have a similar overall structure to that of regular neurons (see Section \ref{nnets-structure}). The input variables $X$ are multiplied with weights $W$, summed and added to a bias variable $b$. The resulting linear combination is passed through an activation function $\sigma(\cdot)$ to give the output of the neuron with activation value $a$.
 
-The major difference between convolutional layers and regular neural network layers is the structure of the inputs and weights. Image data is two-dimensional and generally has multiple colour \textit{channels}. For example, a coloured image contains three channels: red, green, and blue. The intensity of each pixel in each channel is represented as a number such that the image forms a three-dimensional array. 
+The major difference between convolutional layers and regular neural network layers is the structure of the inputs and weights. Image data is two-dimensional and generally has multiple colour \textit{channels}. For example, a coloured image contains three channels: red, green, and blue. The intensity of each pixel in each channel is represented as a number such that the image forms a three-dimensional array. The weights of convolutional layers are formatted as three-dimensional arrays to accommodate for the number of colour channels. These weight arrays are element-wise multiplied with a subset of the whole image. Unlike fully connected layers, convolutional layers do not apply weights to all of the input variables at once. Instead, the weights have an array height and width much smaller than that of the input image, designed to identify particular visual features in smaller subimages. A single matrix of weights that describes a feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
 
-The weights of convolutional layers are formatted as three-dimensional arrays to accommodate for the number of colour channels. These weight arrays are element-wise multiplied with a subset of the whole image. Unlike fully connected layers, convolutional layers do not apply weights to all of the input variables at once. Instead, the weights have an array height and width much smaller than that of the input image, designed to identify particular visual features in smaller subimages. A single matrix of weights that describes a feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
-
-The filters are said to \textit{convolve} around the image, multiplying with subimages chosen sequentially, starting from the top-left of the image, and moving towards the bottom-right. Let the $f$-th filter of the convolultional layer be $F^{(f)}$, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
+Each filter processes the whole image by multiplying with subimages chosen sequentially. The process, known as \textit{convolution}, begins at the top-left of the image and moves towards the bottom-right. Let the $f$-th filter of the convolultional layer be $F^{(f)}$, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
 \begin{align}
 	a_{jk}^{(f)} = \sigma\left(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\right).
 \end{align}
 
-
+Let us consider an example.
 \begin{example}
-Consider the following simple convolution.
 %\begin{figure}[h]
 %\centering
 %\includegraphics[scale=0.5]{Images/4_conv_eg2.png}
@@ -112,25 +109,29 @@ Taking the sum of the products and adding the bias in purple gives the activatio
 
 %As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are entry-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
 
-Each filter of a convolutional layer outputs an array of reduced dimension compared to the input. These arrays are bound together to form a three-dimensional array, with depth dependent on the number of filters in the layer.
+The arrays output by the convolutional filters are bound together to form a three-dimensional array, with depth dependent on the number of filters in the layer.
+
+\todo[inline]{Explain the need for zero padding, stride, pooling and relu layers. Convolution involves a large number of variables, many of which are redundant when identifying important features. These methods work to reduce the number of redundant variables, speed up processing and provide flexibility in network design.}
+
+During regular convolution, the output arrays are of reduced dimension to the input. We now discuss zero padding and stride, techniques that control how the subimages are chosen and the resulting image dimensions.
 
 \subsection*{Zero padding}\label{convnets-pad}
 
-During convolution, the filters are only placed within the boundaries of the input image, resulting in loss of dimension. For an input image with dimension $J \times K$ and a filter with dimension $M \times N$, the filter output will be of dimension $(J - M + 1)\times (K - N + 1)$.
+During convolution, the filters are only placed within the boundaries of the input image, resulting in loss of dimension from the borders. For an input image with dimension $J \times K$ and a filter with dimension $M \times N$, the filter output will be of dimension $(J - M + 1)\times (K - N + 1)$. This places a limit on the number of convolutional layers used before the image dimension becomes too small for further convolution.
 
-\textit{Zero padding} surrounds the edges of the input image with $P$ layers of zeros, increasing the input dimension to  $(J+2P) \times (K+2P)$. When convolution takes place, the resulting image size will have dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$. The value of $P$ can be set such that the convolution maintains the original image dimension.
+\textit{Zero padding} surrounds the edges of the input image with $P$ layers of zeros, increasing the input dimension to  $(J+2P) \times (K+2P)$. When convolution takes place, the resulting image size has dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$. The value of $P$ can be set such that the convolution maintains the original image dimension, allowing for the network to contain a large number of convolutional layers \cite{GoogLeNet2015}.
 
 \subsection*{Stride}\label{convnets-stride}
 
-The dimension of the input images can be large, hence convolving filters at all possible locations results in lengthy training time. To reduce the number of resulting variables and improve training time, the filter can convolve at every $S$ location of the input. The magnitude of the filter movement is known as the \textit{stride}.
+Convolving filters at all possible locations of large input images results in lengthy training time and large outputs. Applying the convolution of filters at every $S$-th subimage reduces the number of variables whilst maintaining use of the whole input image. The magnitude of the filter movement is known as the \textit{stride}.
 
-For an input image with dimension $J \times K$, a filter with dimension $M \times N$, with padding $P$ and stride $S$, the output given by convolution will have dimension $\left(\left\lfloor (J + 2P - M)/S\right\rfloor + 1\right) \times \left(\left\lfloor (K + 2P - N)/S \right\rfloor + 1\right)$.
+An input image with dimension $J \times K$ convolved with a filter with dimension $M \times N$, with padding $P$ and stride $S$, will have an output dimension of $\left(\left\lfloor (J + 2P - M)/S\right\rfloor + 1\right) \times \left(\left\lfloor (K + 2P - N)/S \right\rfloor + 1\right)$.
 
 \section{Pooling layers}\label{convnets-pool}
 
-Convolutional layers are followed by pooling layers to reduce dimensionality of the data \cite{ADeshpande2016}. A sliding window of size $M\times M$ and stride $S$ is applied to the top-left of the image input and moves across the image similarly to the convolutional layers. At each location, the pooling layer outputs a single value which collectively form a matrix of reduced dimension to the input. For \textit{max pooling}, the values output are the maximum values of all inputs in each sliding window.
+Convolutional layers are followed by pooling layers to reduce dimensionality whilst retaining variables that identify significant features \cite{ADeshpande2016}. The model is only interested in identifying variables for classification and does not need the location to be highly specific. A sliding window of size $M\times M$ and stride $S$ is applied to the top-left of the image input and moves across the image similarly to the convolutional layers. At each location, the pooling layer outputs a single value, which collectively form a matrix of reduced dimension to the input.
 
-Max pooling is a preferred pooling method as it emphasises features of interest located by the previous convolutional layer. The algorithm is only interested in gathering information for classification and does not need the location to be highly specific. To improve computation time, it is advantageous to remove a large number of variables, while retaining variables that identify significant features.
+For \textit{max pooling}, the values output are the maximum values of all inputs in each sliding window. Max pooling is a preferred pooling method as it emphasises features of interest located by the previous convolutional layer.
 
 \section{ReLU activation}\label{convnets-act}
 
@@ -177,4 +178,4 @@ The ReLU activation function, as defined in Section \ref{nnets-act}, is frequent
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
