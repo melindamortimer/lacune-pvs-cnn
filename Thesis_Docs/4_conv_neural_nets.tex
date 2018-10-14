@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Convolutional neural networks}\label{convnets}
 
@@ -111,15 +111,13 @@ Taking the sum of the products and adding the bias in purple gives the activatio
 
 The arrays output by the convolutional filters are bound together to form a three-dimensional array, with depth dependent on the number of filters in the layer.
 
-\todo[inline]{Explain the need for zero padding, stride, pooling and relu layers. Convolution involves a large number of variables, many of which are redundant when identifying important features. These methods work to reduce the number of redundant variables, speed up processing and provide flexibility in network design.}
-
-During regular convolution, the output arrays are of reduced dimension to the input. We now discuss zero padding and stride, techniques that control how the subimages are chosen and the resulting image dimensions.
+The convolution process involves a very large number of variables, many of which are redundant when identifying important features. A number of techniques have been developed to control how the subimages are chosen, reduce image dimensionality, speed up processing, and provide flexiblity in network design. We now discuss some of these methods.
 
 \subsection*{Zero padding}\label{convnets-pad}
 
 During convolution, the filters are only placed within the boundaries of the input image, resulting in loss of dimension from the borders. For an input image with dimension $J \times K$ and a filter with dimension $M \times N$, the filter output will be of dimension $(J - M + 1)\times (K - N + 1)$. This places a limit on the number of convolutional layers used before the image dimension becomes too small for further convolution.
 
-\textit{Zero padding} surrounds the edges of the input image with $P$ layers of zeros, increasing the input dimension to  $(J+2P) \times (K+2P)$. When convolution takes place, the resulting image size has dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$. The value of $P$ can be set such that the convolution maintains the original image dimension, allowing for the network to contain a large number of convolutional layers \cite{GoogLeNet2015}.
+\textit{Zero padding} surrounds the edges of the input image with $P$ layers of zeros, increasing the input dimension to  $(J+2P) \times (K+2P)$. When convolution takes place, the resulting image size has dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$. The value of $P$ can be set such that the convolution maintains the original image dimension, allowing the network to continue applying convolution to outputs, thus producing very deep networks \cite{GoogLeNet2015}.
 
 \subsection*{Stride}\label{convnets-stride}
 
@@ -178,4 +176,4 @@ The ReLU activation function, as defined in Section \ref{nnets-act}, is frequent
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}
