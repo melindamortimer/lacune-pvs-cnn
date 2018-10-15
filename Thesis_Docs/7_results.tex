@@ -1,5 +1,5 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Results}\label{results}
 
@@ -20,7 +20,7 @@ The model consists of four convolutional layers of size 20, 40, 80 and 110, with
 
 Training was conducted using stochastic gradient descent with the Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy loss was used with L2-regularisation, with the penalty rate set to $1\times10^{-4}$. An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, the final saved model will have the highest validation accuracy.
 
-Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}: one third positive and two thirds negative. There are only 3846 positive samples in the MAS data set, allowing for a random selection of 7692 negative samples, thus giving a total sample size of 11538. These samples were split into three data sets: training, validation and testing. Splitting the data into these groups at a ratio of 50:25:25 yielded sample sizes 5769, 2884 and 2885 respectively.
+Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}: one-third positive and two-thirds negative. There are only 3846 positive samples in the MAS data set, allowing for a random selection of 7692 negative samples, thus giving a total sample size of 11538. These samples were split into three data sets: training, validation and testing. Splitting the data into these groups at a ratio of 50:25:25 yielded sample sizes 5769, 2884 and 2885 respectively.
 
 The second model used the entire developed set of positive and negative lacune samples. This consisted of 3846 positive and 39983 negative samples to give a total sample size of 43829. Positive samples encompass 8.78\% of data samples. Similarly to the first data set, the data was split into training, validation and testing sets using a ratio of 50:25:25. This yielded sample sizes 21914, 10957 and 10958 respectively. All data sets were saved as R data files (\texttt{.Rda}).
 
@@ -115,7 +115,7 @@ Applying this best validation accuracy model to the test set achieved an accurac
 
 \subsection*{Model comparisons}
 
-The sensitivities and specificities of the two models are given in Table \ref{results-sens-spec-tab}. We observe that the second trained model has a higher sensitivity and specificity than that of the first model. We conduct a hypothesis test on the differences between the two models.
+We now discuss the effect of the positive-negative sample ratio and sample size on model sensitivities and specificities. An outline of the models is given in Table \ref{results-sens-spec-tab}. We observe that the second trained model has a higher sensitivity and specificity than that of the first model. We conduct a hypothesis test on the differences between the two models.
 
 \begin{table}[ht]
 	\centering
@@ -148,11 +148,13 @@ From the \textsc{clt},
 \end{align*}
 The resulting test statistic is $z = -4.852599$. The probability of the observed proportion difference or lower is given by $P(Z < z) = 6.09\times10^{-7}$. This is well below the 5\% significance level and it is concluded that the specificity of the second model is higher than that of the first.
 
-It has been proven that the model trained with the larger sample size and smaller proportion of positives did not affect sensitivity rates and increased specificity. 
+It has been shown that the second model did not have a significantly different sensitivity rate, but had an increased specificity. It is likely that this increase is due to the larger sample size rather than the effect of the positive-negative ratio. The model was exposed to a larger number of negative samples and so is able to correctly classify more of them.
 
 \todo[inline]{Show examples of false-positives and true-negatives. What do these tend to look like?}
 
 \todo[inline]{What happens when the scan is run on a whole brain?}
+
+The resulting sensitivity and specificity rates of the second model are very high. The false-positive reduction model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3} introduces a three separate three-dimensional \textsc{cnn}s, along with seven additional location-based variables. 
 
 %\section{Reference Model Results}
 %
@@ -208,4 +210,4 @@ It has been proven that the model trained with the larger sample size and smalle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+\include{bibliography}
