@@ -314,11 +314,13 @@ for (i in 1:1000) {
   if (found) break
 }
 
-lower <- 20
-upper <- 25
-truepos$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+lower <- 3630
+upper <- 3640
+# Number of TRUE in range
+falseneg$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
 
-tp.test$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+# Showing TRUE and FALSE values in range
+fn.test$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
 
 y$eval(feed_dict = dict(x = testing[1:100, 5:5206], y_ = testing[1:100, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
 

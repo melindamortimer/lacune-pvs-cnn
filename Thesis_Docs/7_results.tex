@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Results}\label{results}
 
@@ -150,11 +150,39 @@ The resulting test statistic is $z = -4.852599$. The probability of the observed
 
 It has been shown that the second model did not have a significantly different sensitivity rate, but had an increased specificity. It is likely that this increase is due to the larger sample size rather than the effect of the positive-negative ratio. The model is exposed to a larger number of negative samples and so is able to correctly classify a greater number of them.
 
-\todo[inline]{Show examples of false-positives and true-negatives. What do these tend to look like?}
+The resulting sensitivity and specificity rates of the final model are very high, therefore the simplicity of the final model can be maintained by removing the false-positive reduction model. Ghafoorian et al. \cite{GhafoorianM.2017Dml3} reduced false-positives by training three separate three-dimensional \textsc{cnn}s on candidate lacune samples. These outputs were concatenated with seven additional location-based variables into a fully-connected neural network. This process introduces a large number of extra weights, and training and usage time. Additionally, extra data processing is required to generate the three-dimensional samples and to retrieve the location-based variables.
 
-\todo[inline]{What happens when the scan is run on a whole brain?}
+Our model therefore removes the false-positive reduction component of Ghafoorian et al.'s model \cite{GhafoorianM.2017Dml3}, and achieves a final sensitivity rate of 99.9\% and specificity rate of 99.8\%.
 
-The resulting sensitivity and specificity rates of the final model are very high. The false-positive reduction model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3} introduces a three separate three-dimensional \textsc{cnn}s, along with seven additional location-based variables. 
+We now discuss the features of samples classified correctly and incorrectly. Figure \ref{results-tp} demonstrates an example of a sample that was correctly classified as a lacune. True-positive samples generally consist of a low or zero intensity in the T1-weighted image, and a dark region surrounded by a hyperintense rim in the \textsc{flair} image. False-positive classifications, as shown in Figures \ref{results-fp1} and \ref{results-fp2}, occurred with samples that were near low or zero intensities in the T1-weighted image, and also appeared close to a dark structure with hyperintense rim in the \textsc{flair}. However, the hyperintense rims visible in these samples were not the result of lacunes, often occurring near the outer edge of the brain matter or adjacent to the cerebral ventricles. False-negative samples, shown in Figure \ref{results-fn}, are rare and generally occur at the edges of small lacunes that have little presence in the \textsc{flair} imaging.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Images/7_TP_t1_flair.png}
+\caption{True-positive sample. The sample has a zero intensity in the T1-weighted image. A distinct dark region with hyperintense rim is visible in the \textsc{flair} image.}
+\label{results-tp}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Images/7_FP_t1_flair.png}
+\caption{False-positive sample. The sample occurs near the edge of the brain matter and so has a low intensity in the T1-weighted scans. The false-positive classification may arise from the small amount of hyperintensity visible in the \textsc{flair} image.}
+\label{results-fp1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Images/7_FP_t1_flair2.png}
+\caption{False-positive sample. The sample occurs next to the cerebral ventricles, which have a zero intensity in the T1-weighted image. A dark region with a hyperintense edge is visible in the \textsc{flair} image.}
+\label{results-fp2}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Images/7_FN_t1_flair.png}
+\caption{False-negative sample. The lacune has a diameter of only 3 mm, and is visible in the T1-weighted image. The \textsc{flair} image has no visible dark region around the lacune or hyperintense rim.}
+\label{results-fn}
+\end{figure}
 
 %\section{Reference Model Results}
 %
@@ -210,4 +238,4 @@ The resulting sensitivity and specificity rates of the final model are very high
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
+%\include{bibliography}

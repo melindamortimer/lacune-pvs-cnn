@@ -150,10 +150,27 @@ title(main = "Negative: FLAIR")
 
 # Detected ----------------------------------------------------------------
 
+# IMAGE DIMENSIONS 900 X 500
 # True Positive
-ViewPatch(7921, 168, 143, 126)
-ViewPatch(7921, 168, 143, 126, type = "flair")
-
+par(mfrow = c(1,2))
+ViewPatch(2777, 153, 177, 85, type = "soft")
+title(main = "True-Positive T1")
+ViewPatch(2777, 153, 177, 85, type = "flair")
+title(main = "True-Positive FLAIR")
 
 # False Positive
+ViewPatch(8743, 141, 199, 108, type = "soft")
+title(main = "False-Positive T1")
+ViewPatch(8743, 141, 199, 108, type = "flair")
+title(main = "False-Positive FLAIR")
 
+ViewPatch(4612,146,171,93, type = "soft")
+title(main = "False-Positive T1")
+ViewPatch(4612,146,171,93, type = "flair")
+title(main = "False-Positive FLAIR")
+
+# False Negative
+ViewPatch(8840,144,151,109, type = "soft")
+title(main = "False-Negative T1")
+ViewPatch(8840,144,151,109, type = "flair")
+title(main = "False-Negative FLAIR")

@@ -107,7 +107,7 @@ saver <- tf$train$Saver()
 
 sess <- tf$InteractiveSession()
 
-saver$restore(sess, "/srv/scratch/z5016924/model1/attempt5/model.ckpt")
+saver$restore(sess, "/srv/scratch/z5016924/y_model/attempt5/model.ckpt")
 
 model.response <- tf$equal(tf$argmax(y, 1L), 0L)
 
