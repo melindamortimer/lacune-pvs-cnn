@@ -17,7 +17,7 @@ This chapter outlines the structure and workings of basic neural network models.
 % 
 % - 3D CNNs overview
 
-Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \cite{Goodfellow-et-al-2016}. They have been proven successful with \textsc{mri} discrimination tasks \cite{DouQ.2016ADoC, Yokoyama2007} and image classification tasks \cite{HeKaiming2015DDiR, AlexNet2012, GoogLeNet2015}. In some instances, neural networks have exhibited a higher image recognition accuracy than humans \cite{HeKaiming2015DDiR}.
+Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \citep{Goodfellow-et-al-2016}. They have been proven successful with \textsc{mri} discrimination tasks \citep{DouQ.2016ADoC, Yokoyama2007} and image classification tasks \citep{HeKaiming2015DDiR, AlexNet2012, GoogLeNet2015}. In some instances, neural networks have exhibited a higher image recognition accuracy than humans \citep{HeKaiming2015DDiR}.
 
 The construction of neural networks has to be conducted with care. The resulting models are difficult to interpret and prone to overfitting. We now discuss the underlying structure of neural networks, loss minimisation, and techniques to avoid overfitting the data.
 
@@ -25,7 +25,7 @@ The construction of neural networks has to be conducted with care. The resulting
 
 The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence. Neural networks adopt a similar structure. Individual nodes receive variables, apply a transformation, and pass the result to the next node. For this reason, the nodes are referred to as \textit{neurons}.
 
-The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let $\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. This additional weight can be used to leverage the value of the neuron just before output, independent of the input variables. The output of a single neuron is given by
+The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let \\${\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal}$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. This additional weight can be used to leverage the value of the neuron just before output, independent of the input variables. The output of a single neuron is given by
 \begin{align}
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
 \end{align}
@@ -34,7 +34,7 @@ where $\sigma(\cdot)$ is some function known as an \textit{activation function} 
 
 
 % Neuron structure diagram
-\begin{figure}
+\begin{figure}[hb]
 \centering
 \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
@@ -132,7 +132,7 @@ A large number of these neurons can be arranged to form a neural network. The ge
 %	\small Image taken from \url{`https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
 %	\label{nnet-structurefig}
 %\end{figure}
-\begin{figure}
+\begin{figure}[hb]
 \centering
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
@@ -229,13 +229,13 @@ and hyperbolic tan function
 \begin{align}
 	\sigma(z) = \tanh(z).
 \end{align}
-Both the sigmoid and hyperbolic tan functions are common activation functions \cite{Goodfellow-et-al-2016}, however they are computationally expensive and so are not preferred for image recognition tasks as they contain a large number of variables \cite{LeCun2012, Nielson2015}.
+Both the sigmoid and hyperbolic tan functions are common activation functions \citep{Goodfellow-et-al-2016}, however they are computationally expensive and so are not preferred for image recognition tasks as they contain a large number of variables \citep{LeCun2012, Nielson2015}.
 
-The Rectified Linear Unit (ReLU) activation \cite{Maas2013} is given by,
+The Rectified Linear Unit (ReLU) activation \citep{Maas2013} is given by,
 \begin{align}
 	\sigma(z) = \max(0, z).
 \end{align}
-The ReLU activation function is suitable for neural network optimisation as the function and its derivative are simplistic \cite{Goodfellow-et-al-2016}. The neuron is said to be \textit{active} for $z > 0$. In this region, the gradient is constant and large for positive input values, promoting training of the neuron's weights (see Section \ref{nnets-graddesc} on Gradient Descent). For $z \leq 0$, the neuron has a gradient of 0 and is deactivated, avoiding unnecessary parameter adjustments and computation. 
+The ReLU activation function is suitable for neural network optimisation as the function and its derivative are simplistic \citep{Goodfellow-et-al-2016}. The neuron is said to be \textit{active} for $z > 0$. In this region, the gradient is constant and large for positive input values, promoting training of the neuron's weights (see Section \ref{nnets-graddesc} on Gradient Descent). For $z \leq 0$, the neuron has a gradient of 0 and is deactivated, avoiding unnecessary parameter adjustments and computation. 
 
 The softmax activation function,
 \begin{align}
@@ -246,12 +246,12 @@ is used to structure the output layer as a discrete probability distribution ove
 
 \section{Cost functions}\label{nnets-cost}
 
-Weights and biases are chosen such that they approximately minimise some cost function. Nielson \cite{Nielson2015} describes two restrictions on cost functions for them to be minimised using the Gradient Descent algorithm (see Section \ref{nnets-graddesc}). The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
+Weights and biases are chosen such that they approximately minimise some cost function. \cite{Nielson2015} describes two restrictions on cost functions for them to be minimised using the Gradient Descent algorithm (see Section \ref{nnets-graddesc}). The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
 \begin{align}
 	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
 \end{align}
 
-The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$. There are a number of cost functions in frequent use, and the choice of cost function depends on the structure of the response. A common cost function for regression is the \textit{quadratic cost}, or Mean Squared Error (\textsc{mse}) cost \cite{Nielson2015}. Denote $\|\cdot\|$ to be the Euclidean norm. The \textsc{mse} cost function is given by
+The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$. There are a number of cost functions in frequent use, and the choice of cost function depends on the structure of the response. A common cost function for regression is the \textit{quadratic cost}, or Mean Squared Error (\textsc{mse}) cost \citep{Nielson2015}. Denote $\|\cdot\|$ to be the Euclidean norm. The \textsc{mse} cost function is given by
 \begin{align}
 	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2.
 \end{align}
@@ -262,7 +262,7 @@ This form is convenient for backpropagation (see Section \ref{nnets-backprop}) a
 where $\nabla C(\mathbf{v}) = \Big(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\ldots, \dfrac{\partial C}{\partial v_N}\Big)$.
 %In using quadratic cost, if the amount of error is large, the learning rate is low.
 
-The most common cost function for classification tasks is \textit{cross-entropy} \cite{Nielson2015}, given by
+The most common cost function for classification tasks is \textit{cross-entropy} \citep{Nielson2015}, given by
 \begin{align}\label{nnets-cross-entropy-eq}
 	C(W,B) = -\dfrac{1}{n}\sum_{i=1}^n\sum_j\big[y_{ij}\log\big(a_j^L(\mathbf{x}_i,W,B)\big) + (1 - y_{ij})\log\big( (1 - a_j^L(\mathbf{x}_i,W,B))\big)\big],
 \end{align}
@@ -319,9 +319,9 @@ Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimi
 
 \section{The Gradient Descent algorithm}\label{nnets-graddesc}
 
-Weights $W$ and biases $B$ are chosen such that they approximately minimise the cost function $C(W,B)$. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \cite{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
+Weights $W$ and biases $B$ are chosen such that they approximately minimise the cost function $C(W,B)$. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \citep{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
 
-Gradient Descent considers the gradient of the cost given the current weights and biases \cite{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost decreases. The amount that the values are shifted by is referred to as the learning rate, denoted as $\eta$. Let $N$ be a positive integer and let $\mathbf{v} = (W,B)$. The approximate change in the cost function $C(\mathbf{v})$ as a result of the shifted $\mathbf{v}$ is given by the \textit{Total Differential Approximation}
+Gradient Descent considers the gradient of the cost given the current weights and biases \citep{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost decreases. The amount that the values are shifted by is referred to as the learning rate, denoted as $\eta$. Let $N$ be a positive integer and let $\mathbf{v} = (W,B)$. The approximate change in the cost function $C(\mathbf{v})$ as a result of the shifted $\mathbf{v}$ is given by the \textit{Total Differential Approximation}
 \begin{align}
 	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\\
 	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.\label{nnets-total-diff-eq}
@@ -337,7 +337,7 @@ By substitution, Equation \eqref{nnets-total-diff-eq} can be written as
 	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0.
 \end{align}
 
-Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost function will decrease. In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \varepsilon$, for some $\varepsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\varepsilon$ and $\nabla C$ \cite{Nielson2015}.
+Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost function will decrease. In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \varepsilon$, for some $\varepsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\varepsilon$ and $\nabla C$ \citep{Nielson2015}.
 
 \begin{lemma}\label{nnets-graddescminproof}
 	Let $\varepsilon > 0$ and suppose the size of the shift is constrained such that $\|\Delta\mathbf{v}\| = \varepsilon$. Then $\nabla C \cdot \Delta\mathbf{v}$ is minimised by $\Delta\mathbf{v} = -\eta\nabla C$, where $\eta = \dfrac{\varepsilon}{\|\nabla C\|}$.
@@ -374,13 +374,13 @@ The Gradient Descent algorithm moves the coefficients in the direction of the st
 
 \subsection*{Stochastic Gradient Descent}\label{nnets-stochgraddesc}
 
-Gradient Descent is a highly computationally intensive algorithm as the neural network has a very large number of weights. To improve training time, Stochastic Gradient Descent is a popular alternative as it has a time complexity $O(n)$ \cite{Robbins1951}. This algorithm improves learning speed by randomly selecting a small subset of the training set to learn from, referred to as a \textit{batch}. When training has been completed for that batch, a new batch of training inputs is randomly selected and the process repeats. Once training has occurred over all batches, it is said that an \textit{epoch} of training has been completed. In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed whilst utilising all the information provided by the entire training set.
+Gradient Descent is a highly computationally intensive algorithm as the neural network has a very large number of weights. To improve training time, Stochastic Gradient Descent is a popular alternative as it improves the time complexity from $O(n^3)$ \citep{Marquardt1963} to $O(n)$ \citep{Robbins1951}. This algorithm improves learning speed by randomly selecting a small subset of the training set to learn from, referred to as a \textit{batch}. When training has been completed for that batch, a new batch of training inputs is randomly selected and the process repeats. Once training has occurred over all batches, it is said that an \textit{epoch} of training has been completed. In this manner, a relatively small number of samples is used for each weight adjustment. This drastically increases training speed whilst utilising all the information provided by the entire training set.
 
 \subsection*{Learning rate}\label{nnets-learningrate}
 
 During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla C$ moves the weights in the direction of the steepest negative gradient (see Section \ref{nnets-graddesc}). The learning rate $\eta$ controls the magnitude of the movement. If $\eta$ is too small, the adjustment of weights is also small and model training will take a long time. If $\eta$ is too large, the weights may be shifted too far and the values of $\mathbf{v}$ will continuously move past the local minimum. This is shown in Figure \ref{nnets-high-learn-fig}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 
 \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
@@ -437,12 +437,12 @@ To aid in efficient training, learning rates can be adjusted throughout model tr
 
 \subsection*{Adam Optimiser}\label{nnets-adam}
 
-The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to each of the weights in the neural network, allowing the cost function to converge to the minimum more quickly \cite{Kingma2014}.
+The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to each of the weights in the neural network, allowing the cost function to converge to the minimum more quickly \citep{Kingma2014}.
 
 
 \section{The Backpropagation algorithm}\label{nnets-backprop}
 
-During gradient descent, it is necessary to calculate the gradient of the cost function with respect to the weights $(W,B)$. The Backpropagation algorithm is an efficient algorithm that determines $\dfrac{\partial C}{\partial z}$ and relates them to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$ \cite{Nielson2015}. The following lemmas are necessary to understand the Backpropagation algorithm.
+During gradient descent, it is necessary to calculate the gradient of the cost function with respect to the weights $(W,B)$. The Backpropagation algorithm is an efficient algorithm that determines $\dfrac{\partial C}{\partial z}$ and relates them to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$ \citep{Nielson2015}. The following lemmas are necessary to understand the Backpropagation algorithm.
 
 % http://neuralnetworksanddeeplearning.com/chap2.html
 
@@ -555,7 +555,7 @@ The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the ne
 	$\dfrac{\partial C}{\partial b_j^\ell} = \delta_j^\ell$\\[1em]
 	$\dfrac{\partial C}{\partial w_{jk}^\ell} = a_k^{\ell-1}\delta_j^\ell$
 }
-\caption{Calculation of gradients for the Backpropagation algorithm}
+\caption{Calculation of gradients during backpropagation}
 \end{algorithm}
 
 
@@ -585,7 +585,7 @@ Very large positive or negative $z_j^\ell$ will have an activation gradient near
 	\end{cases}.
 \end{align}
 % Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
-Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \cite{Goodfellow-et-al-2016}. Neurons that return a positive $z_j^\ell$ have a large gradient and so remain actively trained. If the value of $z_j^\ell$ becomes negative, the activation will have a gradient of 0 and the neuron will cease training. 
+Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \citep{Goodfellow-et-al-2016}. Neurons that return a positive $z_j^\ell$ have a large gradient and so remain actively trained. If the value of $z_j^\ell$ becomes negative, the activation will have a gradient of 0 and the neuron will cease training. 
 
 
 %If this occurs in the whole network, the ReLU activation can be replaced with the \textit{leaky ReLU},
@@ -603,15 +603,15 @@ Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \
 
 \section{Weight initialisation}
 
-The initialisation of weights and biases affects the rate and quality of training \cite{Mishkin2016}. Intuitively, if the weights are initialised close to the final output values, it will be faster to train. Conversely, weights that are initialised poorly may take a longer time to train to the same accuracy, or the local minimum of the cost function may not converge close to the global minimum and produce a poor model.
+The initialisation of weights and biases affects the rate and quality of training \citep{Mishkin2016}. Intuitively, if the weights are initialised close to the final output values, it will be faster to train. Conversely, weights that are initialised poorly may take a longer time to train to the same accuracy, or the local minimum of the cost function may not converge close to the global minimum and produce a poor model.
 
-If the weights in two neurons are similar, using the same activation function will result in similar outputs. Therefore, initialising weights and biases with the same values introduces a lot of redundant calculations. It is commonplace for weights and biases to be initialised randomly \cite{Nielson2015}. An example of an initialisation distribution is the truncated normal distribution. Let $X\sim\mathcal{N}(\mu,\sigma^2)$ and $-\infty \le a < b \le \infty$. For $x \in (a,b)$, the truncated normal $X$ has probability density function (\textsc{pdf})
+If the weights in two neurons are similar, using the same activation function will result in similar outputs. Therefore, initialising weights and biases with the same values introduces a lot of redundant calculations. It is commonplace for weights and biases to be initialised randomly \citep{Nielson2015}. An example of an initialisation distribution is the truncated normal distribution. Let $X\sim\mathcal{N}(\mu,\sigma^2)$ and $-\infty \le a < b \le \infty$. For $x \in (a,b)$, the truncated normal $X$ has probability density function (\textsc{pdf})
 \begin{align}
 	f_X(x;\mu, \sigma^2,a,b) = \dfrac{\phi\big(\frac{x-\mu}{\sigma}\big)}{\sigma\bigg(\Phi\big(\frac{b-\mu}{\sigma}\big) - \Phi\big(\frac{a-\mu}{\sigma}\big)\bigg)},
 \end{align}
 where $\phi$ and $\Phi$ are the standard Normal \textsc{pdf} and cumulative density function (\textsc{cdf}) respectively. This method initialises the weights with a small amount of noise, with truncation of the Normal distribution helping to avoid vanishing gradients (see Section \ref{nnet-vanishinggradprob}) should the sigmoid or hyperbolic tan activation functions be used.
 
-In the case that the ReLU activation function is used, the He Method \cite{HeKaiming2015DDiR} is a common initialisation algorithm. This method recognises the use of the ReLU activation function and scales its initialisations dependent on the size of the previous layer. According to He et al. \cite{HeKaiming2015DDiR}, the method helps to constrain the variance of the weights during training and thus improves training time and quality. The He Method samples from the Normal distribution $\mathcal{N}\left(0, 2/d_{\ell-1}\right)$, where $d_{\ell-1}$ is the number of neurons in the $(\ell-1)$-th layer.
+In the case that the ReLU activation function is used, the He Method \citep{HeKaiming2015DDiR} is a common initialisation algorithm. This method recognises the use of the ReLU activation function and scales its initialisations dependent on the size of the previous layer. According to \cite{HeKaiming2015DDiR}, the method helps to constrain the variance of the weights during training and thus improves training time and quality. The He Method samples from the Normal distribution $\mathcal{N}\left(0, 2/d_{\ell-1}\right)$, where $d_{\ell-1}$ is the number of neurons in the $(\ell-1)$-th layer.
 
 %\begin{align}
 %	w = Z\times\sqrt{\dfrac{2}{d_{\ell-1}}},\quad Z\sim\mathcal{N}(0,1),
@@ -625,7 +625,7 @@ In the case that the ReLU activation function is used, the He Method \cite{HeKai
 
 \section{Regularisation}\label{nnet-reg}
 
-Due to the large number of parameters to be estimated, parameters generally outnumber observations. During training, observations must be reused and so neural network models have a tendency to overfit the data \cite{Nielson2015}. \textit{Regularisation} is the process of mitigating the tendency to overfit data by applying penalties to the network as it trains.
+Due to the large number of parameters to be estimated, parameters generally outnumber observations. During training, observations must be reused and so neural network models have a tendency to overfit the data \citep{Nielson2015}. \textit{Regularisation} is the process of mitigating the tendency to overfit data by applying penalties to the network as it trains.
 
 \subsection*{L2-regularisation}\label{nnet-l2reg}
 
@@ -642,19 +642,19 @@ Due to the large number of parameters to be estimated, parameters generally outn
 %\end{align}
 
 \subsection*{Dropout}\label{nnet-dropout}
-During training, it is possible for individual neurons to become sensitive to patterns present in specific observations. Dropout layers \cite{Srivastava2014} assign each connected neuron connected with a preset probability $p$ of being deactivated, regardless of their input. This ensures that relevant data features are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
+During training, it is possible for individual neurons to become sensitive to patterns present in specific observations. Dropout layers \citep{Srivastava2014} assign each connected neuron connected with a preset probability $p$ of being deactivated, regardless of their input. This ensures that relevant data features are spread through several neurons, and that the impact of an individual neuron does not strongly affect the final result.
 
 \subsection*{Batch normalisation}
 
-Deep neural network models have a large number of variables and so require a longer training time. Training through many epochs can cause some activation values to become very large. Batch normalisation involves normalising the activation values within each training batch. This stops the activations from becoming too large and also avoids overfitting by adding some noise to the weights and ensuring that critical features are spread across nodes \cite{IoffeSergey2015}.
+Deep neural network models have a large number of variables and so require a longer training time. Training through many epochs can cause some activation values to become very large. Batch normalisation involves normalising the activation values within each training batch. This stops the activations from becoming too large and also avoids overfitting by adding some noise to the weights and ensuring that critical features are spread across nodes \citep{IoffeSergey2015}.
 
 \subsection*{Data expansion}
 
-Neural networks require a very large sample size to avoid overfitting as there are a large number of variables. If the number of samples is not large enough, additional data samples can be created by augmenting the existing data set \cite{PerezLuis2017}. Common augmentations for image data include flipping horizontally and vertically, rotation and cropping. Note that not all augmentations will be valid for each context. For instance, images of text should not be flipped. 
+Neural networks require a very large sample size to avoid overfitting as there are a large number of variables. If the number of samples is not large enough, additional data samples can be created by augmenting the existing data set \citep{PerezLuis2017}. Common augmentations for image data include flipping horizontally and vertically, rotation and cropping. Note that not all augmentations will be valid for each context. For instance, images of text should not be flipped. 
 
 \subsection*{Early stopping}\label{nnets-earlystop}
 
-Lengthy model training can cause extensive overfitting of the data. Early stopping of finalises the model before severe overfitting takes place and testing performance drops \cite{Prechelt2012}. A common early stopping method is to save snapshots of the model during the training process and select the model that performs the best on the validation set.
+Lengthy model training can cause extensive overfitting of the data. Early stopping of finalises the model before severe overfitting takes place and testing performance drops \citep{Prechelt2012}. A common early stopping method is to save snapshots of the model during the training process and select the model that performs the best on the validation set.
 
 
 
