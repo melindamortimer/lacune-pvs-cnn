@@ -67,7 +67,7 @@ The responses were generated in FSLView, a program used by neuroscientists to vi
 
 \section{Generating samples}\label{data-samples}
 
-The candidate generation model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3} specifies each sample to be 51$\times$51 axial images of both T1-weighting and \textsc{flair}. In their model, samples were chosen randomly such that positive lacune samples encompassed one-third of the data set. Data augmentation was used to increase the number of samples. In total, Ghafoorian et al. collected $3.2\times10^5$ training samples from 1075 scans.
+The candidate generation model by \cite{GhafoorianM.2017Dml3} specifies each sample to be 51$\times$51 axial images of both T1-weighting and \textsc{flair}. In their model, samples were chosen randomly such that positive lacune samples encompassed one-third of the data set. Data augmentation was used to increase the number of samples. In total, Ghafoorian et al. collected $3.2\times10^5$ training samples from 1075 scans.
 
 Our data set contains significantly fewer scans. In total the data set contains 411 \textsc{mri} scans, of which 35 contain lacunes. The scans were imported into R and converted into three-dimensional arrays using the AnalyzeFMRI package (v1.1-17). Each value of an array is the signal intensity of the scan at that voxel. Regions external to the scanned brain are given an intensity of zero.
 

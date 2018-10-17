@@ -9,7 +9,7 @@ This chapter outlines existing models in more detail, and discusses the impact o
 
 This section describes an existing attempt to automate the identification of lacunes by developing and applying thresholds for certain variables. In 2007, \cite{Yokoyama2007} developed an algorithm that identifies lacune candidates by examining their \textit{area}, \textit{circularity} and \textit{gravitational centre}. Area $A$ is the number of pixels that the candidate lacune covers. Circularity is given by $C = 4\pi\times\dfrac{A}{\ell^2}$, where $\ell$ is the perimeter of the candidate lacune. The gravitational centre is given by $(g_x, g_y) = \bigg(\dfrac{1}{n}\sum_{i=1}^nx_i, \dfrac{1}{n}\sum_{i=1}^ny_i\bigg)$.
 
-\cite{Yokoyama2007} claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. Thus the search for lacunes was limited to a central circular region with the coordinates of the centre and the radius specified for each scan.
+\cite{Yokoyama2007} claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. Thus the search for lacunes was limited to a central circular region with the coordinates of the centre and the radius determined for each scan.
 
 Candidate lacunes satisfy thresholds based on area, circularity and gravitational centre. The thresholds are established dependent on the intensity of the surrounding structures. For this reason, candidates are separated into two categories: isolated lacunes and those surrounded by \textsc{wmh}. Isolated lacune candidates are determined by extracting the cerebral ventricle and calculating the mean pixel intensity. Candidates are determined as regions with an intensity below 70\% of the mean value. Isolated candidate lacunes satisfy the inequalities
 \begin{align*}
@@ -117,9 +117,9 @@ The comparatively low sensitivity may also be the result of too few variables. A
 
 \section{Machine learning}\label{litrev-ml}
 
-This section describes a number of models that were developed using machine learning techniques. The model by Yokoyama et al. \citep{Yokoyama2007} suffered from a lower sensitivity rate, possibly caused by lack of information extracted from the images. Machine learning techniques seek to identify features that are not always easily interpreted, but have had promising results. 
+This section describes a number of models that were developed using machine learning techniques. The model by \cite{Yokoyama2007} suffered from a lower sensitivity rate, possibly caused by lack of information extracted from the images. Machine learning techniques seek to identify features that are not always easily interpreted, but have had promising results. 
 
-The first attempts were made by \cite{Uchiyama20071554, Uchiyama2007b} as a continuation of the model by \cite{Yokoyama2007}. The data consisted of 132 scans totalling 1143 images of T1 and T2 weighting. Once candidates have been identified, the models undergo false-positive reduction. Twelve location based features are identified: x and y coordinates, intensity differences in T1 and T2, four nodule shape variables, and four combined nodule and linear shape variables.
+The first attempts were made by \cite{Uchiyama20071554, Uchiyama2007b} as a continuation of the model by \cite{Yokoyama2007}. The data consisted of 132 scans totalling 1143 images of T1 and T2 weighting. Once candidates have been identified, the models undergo false-positive reduction. Twelve location based features are identified: $x$ and $y$ coordinates, intensity differences in T1 and T2, four nodule shape variables, and four combined nodule and linear shape variables.
 
 These features were input into two different machine learning algorithms: a support vector machine (machine learning algorithm for discrimination tasks) and a neural network. The support vector machine resulted in a sensitivity of 96.8\%, with 0.76 false-positives per slice. The second model was a neural network, with a sensitivity of 96.8\% and 0.30 false-positives per slice.
 
@@ -279,7 +279,7 @@ Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{
 	\label{litrev-ghafoorian_model2fig}
 \end{figure}
 
-A single max pooling layer is placed after the second convolution layer, of size $2\times2\times1$. In each resolution branch, the final convolution layer is followed by a fully connected layer of 300 neurons. The $3\times300$ fully connected neurons are concatenated together with seven additional location variables. For each candidate, these location features include the $x$,$y$ and $z$ coordinates, and distances to the left and right ventricles, cortex, and midsagittal brain surface.
+A single max pooling layer is placed after the second convolution layer, of size $2\times2\times1$. In each resolution branch, the final convolution layer is followed by a fully connected layer of 300 neurons. The $3\times300$ fully connected neurons are concatenated together with seven additional location variables. For each candidate, these location features include the $x$, $y$ and $z$ coordinates, and distances to the left and right ventricles, cortex, and midsagittal brain surface.
 
 The 907 fully connected neurons are passed to two final fully connected layers of size 200 and 2 neurons. The final layer consists of a softmax activation to output the lacune probabilities. All weights are He initialised. All neurons, excepting the output layer, have ReLU activation and are batch normalised. The fully connected layers have a dropout rate of 0.5. 
 
