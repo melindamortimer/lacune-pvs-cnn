@@ -419,7 +419,7 @@
         \pagestyle{empty}%
         \null\vskip2.5cm%
         \begin{center}
-                {\rmfamily\Large\uppercase\expandafter{\@title}}
+                {\rmfamily\Large\expandafter{\@title}}
         \end{center}
         \vfill
         \begin{center}
@@ -444,7 +444,7 @@
         \pagestyle{empty}%
         \null\vskip2.5cm%
         \begin{center}
-                {\rmfamily\Large\uppercase\expandafter{\@title}}
+                {\rmfamily\Large\expandafter{\@title}}
         \end{center}
         \vfill
         \begin{center}
@@ -471,7 +471,7 @@
         \pagestyle{empty}%
         \null\vskip2.5cm%
         \begin{center}
-                {\rmfamily\Large\uppercase\expandafter{\@title}}
+                {\rmfamily\Large\expandafter{\@title}}
         \end{center}
         \vfill
         \begin{center}
@@ -496,7 +496,7 @@
         \pagestyle{empty}%
         \null\vskip2.5cm%
         \begin{center}
-                {\rmfamily\Large\uppercase\expandafter{\@title}}
+                {\rmfamily\Large\expandafter{\@title}}
         \end{center}
         \vfill
         \begin{center}
@@ -548,7 +548,7 @@
         \pagestyle{empty}%
         \null\vskip2.5cm%
         \begin{center}
-                {\rmfamily\Large\uppercase\expandafter{\@title}}
+                {\rmfamily\Large\expandafter{\@title}}
         \end{center}
         \vfill
         \begin{center}
@@ -574,7 +574,7 @@
         \pagestyle{empty}%
         \null\vskip2.5cm%
         \begin{center}
-                {\rmfamily\Large\uppercase\expandafter{\@title}}
+                {\rmfamily\Large\expandafter{\@title}}
         \end{center}
         \vfill
         \begin{center}
