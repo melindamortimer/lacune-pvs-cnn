@@ -39,3 +39,8 @@ z_attempt5/
 *.xml
 
 .Rproj.user
+
+# Beamer
+*.nav
+*.out
+*.snm

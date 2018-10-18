@@ -1,0 +1,217 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+\usepackage[numbers]{natbib}
+\usepackage{todonotes}
+
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\title{Deep learning methods for lacune detection in MRI}
+
+\author{Melinda Mortimer}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[UNSW] % (optional, but mostly needed)
+{
+  Supervisors: Dr Pierre Lafaye de Micheaux and A/Prof. Wei Wen
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date{24 October, 2018}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle\hspace*{3em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+% Let's get started
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+
+% Section and subsections will appear in the presentation overview
+% and table of contents.
+
+
+\begin{frame}{Overview}
+    
+\end{frame}
+
+% Over the past year, I have been collaborating with Neuroscientists at the school of medicine to aid in the study of graceful aging. As the human brain ages, it becomes susceptible to damage that can affect cognition and motor function. Forgetfulness and absentmindedness become more apparent, perhaps it becomes more difficult to maintain balance. And these pathogens are visible in brain imaging as a collective set of abnormalities, known as cerebral svd.
+%Intro to problem. SVD, significance of lacunes. 
+\begin{frame}{Introduction}
+    \begin{itemize}
+    \item Cerebral Small Vessel Disease (\textsc{svd}) describes a set of abnormalities in the brain.
+    \item Biomarkers of \textsc{svd} are visible in the \textsc{mri} of over 90\% of 60--90 year olds \citep{deLeeuwF-E2001Pocw}, and is a leading cause of stroke \citep{WardlawJ.M.2013Nsfr}, dementia, and cognitive decline \citep{NorrvingBo2008Linb}.
+    \item Lacunes are one such biomarker and are of particular interest for their involvement in the incidence of stroke.
+    \end{itemize}
+\end{frame}
+
+
+
+% Go through some medical terminology. Current methods (define flair and t1, how to spot lacunes included in definition) and what's wrong with it.
+\begin{frame}{Neuroscience Terminology}
+	\begin{itemize}
+	\item Lacunes are formally defined as small brain cavities, appearing round in \textsc{mri} with a diameter of 3--15 mm.
+	\item \textsc{mri} scans have multiple imaging types: \textit{T1-weighted} and \textit{FLuid-Attenuated Inversion Recovery} (\textsc{flair}).
+	\item Lacunes appear dark in T1-weighted images, with a bright rim in \textsc{flair}.
+	\end{itemize}
+	\todo[inline]{image of lacune in t1 and corresponding flair. gif?}
+	
+\end{frame}
+
+
+% Go through existing classification model by yokoyama2007. Brief. Final performance: sensitivity and specificity (define). Diffult to capture the appearance of something with so few variables, and these variables take time to create. Therefore we attempt machine learning techniques.
+\begin{frame}{}
+    \begin{itemize}
+    
+    \end{itemize}
+\end{frame}
+
+% NNets background. Go through basic neuron structure (bunch of inputs, single output) and simple example. These neurons are arranged into layers. Inputs are fed into several neurons. Each output is fed into the inputs of the next layer of neurons, and so on until the final output layer. The final layer can have several outputs, useful for classification probabilities.
+\begin{frame}{}
+    
+\end{frame}
+
+% How to choose weights? Similarly to regression, create some cost function to minimise. However there are a large number of weights. It is possible to minimise analytically, however the complexity of the problem increases very quickly. As a result, we instead aim to approximate the minimum via the gradient descent algorithm. This algorithm runs the model with some given initial weights, calculates the gradient of the cost function with respect to all the weights and shifts them in the direction of the greatest decrease. NNets present two main problems. The first is that there is no method to determine whether the minimum being converged to is a global minimum or just the local minimum. The second and most recurring problem is the large number of weights. The main cause for model overfitting. There are a number of techniques to mitigate overfitting, but we will not discuss these now. Covered in greater detail in my thesis.
+\begin{frame}{}
+    
+\end{frame}
+
+% Link back to the problem. This is a machine learning structure, but image identification involves pattern recognition throughout all variables, rather than the behaviour of a select few. Looking for a visual feature, like a colour, can be anywhere in the image, not just say in the bottom corner. This motivates the use of convolutional neural networks.
+% Convolutional layers have a similar structure to fully connected layers in that they contain weights to be multiplied with input variables, added to a bias and applied to an activation function. However, unlike the fully connected layers, these weights are not multplied with all the inputs at once. The inputs and outputs are two-dimensional. The weights (filters) are formatted as arrays and applied to the input image in a sliding-window fashion. The filter is first aligned with the top-left corner of the image. Multiplication occurs element-wise. The resulting array is summed and added to the bias term. Activation function applied. The filter then moves to the next location. Process repeats. The outputs of the conv layers are also two-dimensional.
+\begin{frame}{}
+
+\end{frame}
+
+% Link back to results. Model was based on existing model by Ghafoorian et al. Model consisted of two stages: candidate detection, followed by false-positive reduction. The candidate detection model feeds 51x51 subimages through four convolutional layers, followed by 3 fully connected layers. The candidate lacunes output by this first model is fed into a second false-positive reduction model. The false-positive reduction model is comprised of three parallel three-dimensional convolutional neural networks. The outputs of these are concatenated with 7 location-based variables in three fully connected layers.
+\begin{frame}{}
+
+\end{frame}
+
+% Our model adapts this existing model to the data set available from the Neuroscience department. The data set contains 411 MRI scans, of which 35 of these contain at least one lacune. Each image has two weightings - T1 and FLAIR. The coordinates of lacunes were determined by manually searching the T1 and FLAIR images for lesions that matched those described in an accompanying spreadsheet.
+\begin{frame}{}
+
+\end{frame}
+
+% One major difference our model makes is the form of the input data. Ghafoorian's model takes in T1-weighted and FLAIR inputs, applying some pre-processing to remove identifiers such as skull and eyes. Our data set undergoes similar de-identification, whilst also removing CSF. Since lacunes have a similar signal intensity to CSF, this means that a lot of region surrounding lacunes is removed from the T1-weighted scans. Added effect of enlarging and emphasising the loss in intensity. Note that the flair images are extracted by masking a rectangular region rather than removing CSF, and so the intensities around lacunes are still visible.
+\begin{frame}{}
+
+\end{frame}
+
+% Samples were collected by extracting 51x51 T1-weighted and FLAIR images. As there are relatively few positive lacune samples, all possible samples were taken. Negatives were collected by sampling randomly within the brain region. Total of just over 40,000 samples. Positive samples make up 9\% of the data set. These samples were split into three: training, validation and testing sets. The model by Ghafoorian samples enough negatives such that positives make one-third of the data set. A model that tests this positive-negative ratio is discussed further in my thesis.
+\begin{frame}{}
+
+\end{frame}
+
+% Now we apply our data to just the candidate detection component of the model. As is typical during neural network training, the training accuracy of the model exhibits overfitting and reaches 100\% in the first few epochs. What is more important here is the validation accuracy. At each epoch, the model was tested against a separate data set, to assess how the model performs given data that wasn't use during training. This is the model's ability to detect something new. The model reaches its highest validation accuracy within 30 epochs. The model was saved at this point, despite attaining the same accuracy later on, to reduce any overfitting that may occur in later epochs.
+\begin{frame}{}
+
+\end{frame}
+
+% Finally, this model was tested against the testing data set. Tabulating the true and false positives and negatives, we retrieve this confusion matrix. The key error we want to minimise here is the rate of false-negatives. These are lacunes that have been missed. Though undesirable, false-positives can be inspected and classified by a clinician within a reasonable amount of time, so long as there aren't too many of them. The final model exhibits a sensitivity of 99.9\% and specificity of 99.8\%. There are two main reactions from these figures. The first is that of success, the model is doing very well. The second is that of skepticism. Generally after building a model, accuracies at 100\% generally implies that something has gone wrong during the sampling process. For instance, the response has accidentally been fed into the model as a variable, or some issues with the methods of sampling. I have checked for this possibility in my code, and the data set, once generated, was randomised. The model does not have access to the surrounding classifications.
+\begin{frame}{}
+
+\end{frame}
+
+% To alleviate some concerns, we now take a look at some examples of correctly and incorrectly classified points. Examples of true positives. Regions of zero or low intensity in T1, whilst having a dark region surrounded by hyperintensity in flair. If we take a look at some false-positives, we see that they exhibit this same structure. Low to zero T1, near a dark region with hyperintense edge in flair. False-negatives are rare. In this instance, the lacune is very small, only 3 mm in diameter. So small that there is no hyperintense rim visible in the flair image.
+\begin{frame}{}
+
+\end{frame}
+
+% Conclusion. Successfully developed a machine learning algorithm that can identify lacunes from soft tissue extracted T1-weighted images and corresponding flair. Further research: Though 99.8\% specificity is high, there are a large number of voxels in a brain scan, so there may still be a considerable number of false-positives. Worth feeding model through the three-dimensional cnn. Note the extra computation and data collection time required. Also worth experimenting with the threshold during soft tissue extraction. The edges of the mask were quite harsh and lost a lot of data beyond just the eyes and skull. Setting it so that it retains more CSF also retain more of the brain matter which could help reduce false positives. CNNs are computationally and storage intensive. Millions of variables. Worth exploring other types of models, such as gradient boosting through XGBoost. 
+
+
+\begin{frame}{References}
+	\bibliographystyle{plainnat}
+	\bibliography{bibliography_pres.bib}
+\end{frame}
+
+
+
+
+\end{document}
+
+
