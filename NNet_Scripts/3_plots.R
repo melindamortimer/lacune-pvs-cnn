@@ -1,4 +1,3 @@
-
 # Data prep ---------------------------------------------------------------
 
 # setwd("/srv/scratch/z5016924/model1/attempt5")
@@ -147,6 +146,22 @@ ViewPatch(4532,135,188,119, point = T, type = "flair")
 title(main = "Negative: FLAIR")
 
 
+
+
+# Positive sample gif -----------------------------------------------------
+
+# for (i in 140:160) {
+#   print(i)
+#   png(file = paste0("../../lacune_gif/img",i,".png"))
+#   ViewPatch(1224, 98, i, 77, point = F, type = "t1", res = 40)
+#   dev.off()
+# }
+par(mfrow = c(1,2))
+ViewPatch(1224, 98, 147, 77, point = F, type = "t1", res = 40)
+title(main = "T1-weighted")
+ViewPatch(1224, 98, 147, 77, point = F, type = "flair", res = 40)
+title(main = "FLAIR")
+  
 
 # Detected ----------------------------------------------------------------
 

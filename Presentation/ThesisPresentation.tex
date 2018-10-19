@@ -14,6 +14,22 @@
 
 \usepackage[numbers]{natbib}
 \usepackage{todonotes}
+\usepackage{booktabs}
+\usepackage{afterpage}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{pdfpages}
+\usetikzlibrary{arrows}
+\usepackage{float}
+\usepackage[algoruled,boxed,lined]{algorithm2e}
 
 
 % There are many different themes available for Beamer. A comprehensive
@@ -80,7 +96,7 @@
 
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
-\AtBeginSubsection[]
+\AtBeginSection[]
 {
   \begin{frame}<beamer>{Outline}
     \tableofcontents[currentsection,currentsubsection]
@@ -106,17 +122,7 @@
 \begin{document}
 
 \begin{frame}
-  \titlepage
-\end{frame}
-
-
-
-% Section and subsections will appear in the presentation overview
-% and table of contents.
-
-
-\begin{frame}{Overview}
-    
+	\titlepage
 \end{frame}
 
 % Over the past year, I have been collaborating with Neuroscientists at the school of medicine to aid in the study of graceful aging. As the human brain ages, it becomes susceptible to damage that can affect cognition and motor function. Forgetfulness and absentmindedness become more apparent, perhaps it becomes more difficult to maintain balance. And these pathogens are visible in brain imaging as a collective set of abnormalities, known as cerebral svd.
@@ -130,78 +136,486 @@
 \end{frame}
 
 
+\begin{frame}{Overview}
+	\tableofcontents
+\end{frame}
+
+
+
+
 
 % Go through some medical terminology. Current methods (define flair and t1, how to spot lacunes included in definition) and what's wrong with it.
-\begin{frame}{Neuroscience Terminology}
+\section{Neuroscience background}
+\begin{frame}{Applicable neuroscience terminology}
 	\begin{itemize}
-	\item Lacunes are formally defined as small brain cavities, appearing round in \textsc{mri} with a diameter of 3--15 mm.
 	\item \textsc{mri} scans have multiple imaging types: \textit{T1-weighted} and \textit{FLuid-Attenuated Inversion Recovery} (\textsc{flair}).
+	\item \textit{Axial slices} are \textsc{mri} cross-sections viewed from above.
+	\item Lacunes are formally defined as small brain cavities, appearing round in \textsc{mri} with a diameter of 3--15 mm.
 	\item Lacunes appear dark in T1-weighted images, with a bright rim in \textsc{flair}.
 	\end{itemize}
-	\todo[inline]{image of lacune in t1 and corresponding flair. gif?}
+	\begin{figure}
+	\centering
+	\includegraphics[width=0.8\linewidth]{../Thesis_Docs/Images/2_lacune_t1_flair.png}
+	\end{figure}
 	
 \end{frame}
 
 
+
+
+
 % Go through existing classification model by yokoyama2007. Brief. Final performance: sensitivity and specificity (define). Diffult to capture the appearance of something with so few variables, and these variables take time to create. Therefore we attempt machine learning techniques.
-\begin{frame}{}
+\begin{frame}{Current lacune detection methods}
     \begin{itemize}
-    
+	\item Manual detection: approximately 1 hour per scan.
+    \item Yokoyama et al. \cite{Yokoyama2007} developed thresholds for lacune detection (positive) based on candidate area, perimeter and gravitational centre.
+    \end{itemize}
+    \begin{block}{Sensitivity and Specificity}
+	\[
+		Sensitivity = P(Correct | Positive)
+	\]
+	\[
+		Specificity = P(Correct | Negative)
+	\]
+    \end{block}
+    \begin{itemize}
+    \item Yokoyama et al. \cite{Yokoyama2007} achieved a sensitivity of 90.1\%, and averaged 1.7 false-positives per axial slice.
     \end{itemize}
 \end{frame}
 
-% NNets background. Go through basic neuron structure (bunch of inputs, single output) and simple example. These neurons are arranged into layers. Inputs are fed into several neurons. Each output is fed into the inputs of the next layer of neurons, and so on until the final output layer. The final layer can have several outputs, useful for classification probabilities.
-\begin{frame}{}
-    
+
+
+
+% NNets background. Go through basic neuron structure (bunch of inputs, single output). 
+\section{Neural networks background}
+\begin{frame}{Structure of a basic neuron}
+The basic neural network node is the \textit{neuron}.
+% Basic Neuron diagram
+\begin{figure}[hb]
+\centering
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,364); %set diagram left start at 0, and has height of 364
+
+%Shape: Circle [id:dp7806506925261892] 
+\draw   (270,154) .. controls (270,125.28) and (293.28,102) .. (322,102) .. controls (350.72,102) and (374,125.28) .. (374,154) .. controls (374,182.72) and (350.72,206) .. (322,206) .. controls (293.28,206) and (270,182.72) .. (270,154) -- cycle ;
+%Straight Lines [id:da48045113953293783] 
+\draw    (191,76) -- (270,154) ;
+
+
+%Straight Lines [id:da20730706323067383] 
+\draw    (190.92,117.33) -- (270,154) ;
+
+
+%Straight Lines [id:da19390293965519045] 
+\draw    (191.59,224.67) -- (270,154) ;
+
+
+%Straight Lines [id:da5499170807272789] 
+\draw    (374,154) -- (466.51,154) ;
+\draw [shift={(468.51,154)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Straight Lines [id:da7426731370805287] 
+\draw    (270,154) -- (190.92,152.67) ;
+
+
+%Straight Lines [id:da35133187079282135] 
+\draw    (254,80.33) -- (270,154) ;
+
+
+%Straight Lines [id:da7452273715557709] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (257.5,245) -- (292.22,171.71) ;
+\draw [shift={(293.5,169)}, rotate = 475.35] [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (14.21,-4.28) .. controls (9.04,-1.82) and (4.3,-0.39) .. (0,0) .. controls (4.3,0.39) and (9.04,1.82) .. (14.21,4.28)   ;
+
+%Straight Lines [id:da6267543092908385] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (320.5,260.02) -- (320.5,174) ;
+\draw [shift={(320.5,171)}, rotate = 450] [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (14.21,-4.28) .. controls (9.04,-1.82) and (4.3,-0.39) .. (0,0) .. controls (4.3,0.39) and (9.04,1.82) .. (14.21,4.28)   ;
+
+%Straight Lines [id:da27997502059011203] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (415.5,239) -- (359.43,172.3) ;
+\draw [shift={(357.5,170)}, rotate = 409.95] [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (14.21,-4.28) .. controls (9.04,-1.82) and (4.3,-0.39) .. (0,0) .. controls (4.3,0.39) and (9.04,1.82) .. (14.21,4.28)   ;
+
+%Straight Lines [id:da3489893362960632] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (408.5,85.99) -- (408.5,118.13) ;
+\draw [shift={(408.5,121.13)}, rotate = 270] [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (14.21,-4.28) .. controls (9.04,-1.82) and (4.3,-0.39) .. (0,0) .. controls (4.3,0.39) and (9.04,1.82) .. (14.21,4.28)   ;
+
+%Straight Lines [id:da7842417457885081] 
+\draw [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (477.5,89.66) -- (477.5,131.01) ;
+\draw [shift={(477.5,134.01)}, rotate = 270] [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=1.5]    (14.21,-4.28) .. controls (9.04,-1.82) and (4.3,-0.39) .. (0,0) .. controls (4.3,0.39) and (9.04,1.82) .. (14.21,4.28)   ;
+
+
+% Text Node
+\draw (324,156) node   {${\displaystyle \mathbf{x} \cdot \mathbf{w} +b}$};
+% Text Node
+\draw (180,72.33) node   {$x_{1}$};
+% Text Node
+\draw (180.67,113.33) node   {$x_{2}$};
+% Text Node
+\draw (181.33,187.67) node   {$\vdots $};
+% Text Node
+\draw (181.33,225.33) node   {$x_{n}$};
+% Text Node
+\draw (180.67,150.33) node   {$x_{3}$};
+% Text Node
+\draw (219.33,87) node   {$w_{1}$};
+% Text Node
+\draw (216.67,117) node   {$w_{2}$};
+% Text Node
+\draw (216.67,141.67) node   {$w_{3}$};
+% Text Node
+\draw (218.67,182.33) node   {$w_{n}$};
+% Text Node
+\draw (217.33,163) node   {$\vdots $};
+% Text Node
+\draw (254.67,70.33) node   {$b$};
+% Text Node
+\draw (408,139) node   {$f ( \cdot )$};
+% Text Node
+\draw (480,151.67) node   {$a$};
+% Text Node
+\draw (192,254) node  [align=left] {Vector of Input Variables};
+% Text Node
+\draw (314,278) node  [align=left] {Vector of Weights};
+% Text Node
+\draw (452,264) node  [align=left] {Constant bias \\(not statistical bias)};
+% Text Node
+\draw (399,63) node  [align=left] {Activation\\function};
+% Text Node
+\draw (489,66) node  [align=left] {Activation\\value/\\output};
+\end{tikzpicture}
+\end{figure}
 \end{frame}
+
+
+
+
+% Simple example of a neuron. AND gate
+\begin{frame}{Example of a basic neuron}
+The logical \textsc{and} gate can be represented as a neuron.
+\begin{examples}
+Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2 = 1$.
+% AND neuron figure
+\begin{figure}
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.7pt,y=0.7pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,364); %set diagram left start at 0, and has height of 364
+
+%Shape: Circle [id:dp7806506925261892] 
+\draw   (270,154) .. controls (270,125.28) and (293.28,102) .. (322,102) .. controls (350.72,102) and (374,125.28) .. (374,154) .. controls (374,182.72) and (350.72,206) .. (322,206) .. controls (293.28,206) and (270,182.72) .. (270,154) -- cycle ;
+%Straight Lines [id:da48045113953293783] 
+\draw    (189.5,89) -- (270,154) ;
+
+
+%Straight Lines [id:da20730706323067383] 
+\draw    (193.5,220) -- (270,154) ;
+
+
+%Straight Lines [id:da5499170807272789] 
+\draw    (374,154) -- (465.59,154) ;
+\draw [shift={(467.59,154)}, rotate = 540] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Straight Lines [id:da35133187079282135] 
+\draw    (254,80.33) -- (270,154) ;
+
+
+
+% Text Node
+\draw (324,156) node   {$x_{1} +x_{2} -1.5$};
+% Text Node
+\draw (175,80.33) node   {$x_{1}$};
+% Text Node
+\draw (175,223.33) node   {$x_{2}$};
+% Text Node
+\draw (226,102) node   {$1$};
+% Text Node
+\draw (226,172) node   {$1$};
+% Text Node
+\draw (254.67,70.33) node   {$-1.5$};
+% Text Node
+\draw (444,123) node   {$f ( z) =\begin{cases}
+1 & ,\ z >0\\
+0 & ,\ z\leq 0
+\end{cases}$};
+% Text Node
+\draw (480,151.67) node   {$a$};
+
+
+\end{tikzpicture}
+
+
+
+
+
+\end{figure}
+\end{examples}
+\end{frame}
+
+
+
+
+%These neurons are arranged into layers. Inputs are fed into several neurons. Each output is fed into the inputs of the next layer of neurons, and so on until the final output layer. The final layer can have several outputs, useful for classification probabilities.
+\begin{frame}{Structure of a basic neural network}
+% Whole network diagram
+\begin{figure}
+\centering
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+    \tikzstyle{input neuron}=[neuron, fill=red!50];
+    \tikzstyle{output neuron}=[neuron, fill=green!50];
+    \tikzstyle{hidden neuron}=[neuron, fill=blue!50];
+    \tikzstyle{annot} = [text width=4em, text centered]
+	\def\layersep{2.5cm}
+	
+    % Draw the input layer nodes
+    \foreach \name / \y in {1,...,3}
+    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+        \node[input neuron, pin=center:$x_\y$] (I-\name) at (0,-\y) {};
+
+    % Draw the hidden layer1 nodes
+    \foreach \name / \y in {1,...,4}
+        \path[yshift=0.5cm]
+            node[hidden neuron] (Ha-\name) at (\layersep,-\y cm) {};
+            
+    % Draw the hidden layer2 nodes
+    \foreach \name / \y in {1,...,4}
+        \path[yshift=0.5cm]
+            node[hidden neuron] (Hb-\name) at (2*\layersep,-\y cm) {};
+
+    % Draw the output layer node
+    \node[output neuron,pin={[pin edge={->}]right:Output}] (O) at (3*\layersep, -2) {};
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+    \foreach \source in {1,...,3}
+        \foreach \dest in {1,...,4}
+            \path (I-\source) edge (Ha-\dest);
+            
+    % Connect every node in the hidden layer 1 with every node in
+    % hidden layer 2.
+    \foreach \source in {1,...,4}
+        \foreach \dest in {1,...,4}
+            \path (Ha-\source) edge (Hb-\dest);
+
+    % Connect every node in the hidden layer with the output layer
+    \foreach \source in {1,...,4}
+        \path (Hb-\source) edge (O);
+
+    % Annotate the layers
+    \node[annot,above of=Ha-1, node distance=1cm] (hla) {Hidden layer 1};
+    \node[annot,above of=Hb-1, node distance=1cm] (hlb) {Hidden layer 2};
+    \node[annot,left of=hla] {Input layer};
+    \node[annot,right of=hlb] {Output layer};
+
+\end{tikzpicture}
+\end{figure}
+\end{frame}
+
+
+
 
 % How to choose weights? Similarly to regression, create some cost function to minimise. However there are a large number of weights. It is possible to minimise analytically, however the complexity of the problem increases very quickly. As a result, we instead aim to approximate the minimum via the gradient descent algorithm. This algorithm runs the model with some given initial weights, calculates the gradient of the cost function with respect to all the weights and shifts them in the direction of the greatest decrease. NNets present two main problems. The first is that there is no method to determine whether the minimum being converged to is a global minimum or just the local minimum. The second and most recurring problem is the large number of weights. The main cause for model overfitting. There are a number of techniques to mitigate overfitting, but we will not discuss these now. Covered in greater detail in my thesis.
-\begin{frame}{}
-    
+\begin{frame}{Choosing the network weights}
+\begin{itemize}
+\item Network weights and biases are chosen such that they minimise some \textit{cost function}. E.g. Mean Squared Error.
+\item Having a network with a large number of weights makes minimisation slow.
+\item It is faster to instead estimate the weights using the \textit{Gradient Descent algorithm}:
+\begin{itemize}
+	\item Initialise the weights and biases.
+	\item Calculate the gradient of the cost function.
+	\item Shift all the weights and biases in the direction of the greatest decrease in cost.
+\end{itemize}
+\item Two issues: no guarantee that the minimum is global, and overfitting.
+\end{itemize}
+\todo[inline]{Reduce content}
 \end{frame}
 
-% Link back to the problem. This is a machine learning structure, but image identification involves pattern recognition throughout all variables, rather than the behaviour of a select few. Looking for a visual feature, like a colour, can be anywhere in the image, not just say in the bottom corner. This motivates the use of convolutional neural networks.
-% Convolutional layers have a similar structure to fully connected layers in that they contain weights to be multiplied with input variables, added to a bias and applied to an activation function. However, unlike the fully connected layers, these weights are not multplied with all the inputs at once. The inputs and outputs are two-dimensional. The weights (filters) are formatted as arrays and applied to the input image in a sliding-window fashion. The filter is first aligned with the top-left corner of the image. Multiplication occurs element-wise. The resulting array is summed and added to the bias term. Activation function applied. The filter then moves to the next location. Process repeats. The outputs of the conv layers are also two-dimensional.
-\begin{frame}{}
 
+
+
+% Link back to the problem. MRI are images. Each pixel can be encoded into a variable, but ideally we want to identify visual features that occur not just at individual pixels, but in the surrounding region. Convolutional neural networks give us this capability by processing the data in two-dimensions. This is an example of a convolutional neural network. It takes in an image on the left hand side, and wants to identify this image out a list of possible classifications. The model is broken into two parts - the first identifies relevant image features, and the second converts these features into the output probabilities.
+% To identify the image features, a trained convolutional layer will search in a square region for the relevant feature, starting from the top-left of the image to the bottom-right. At each point being analysed, the model will apply a weighted sum of all the variables and apply an activation function, similarly to the neurons shown earlier.
+% Each identified feature has a two-dimensional output resulting in a large number of variables. Max pooling is the process of down sampling. 
+\begin{frame}{Structure of convolutional neural networks (\textsc{cnn}s)}
+\begin{itemize}
+\item \textsc{cnn}s can be used for two-dimensional data.
+\item Convolutional layers locate a set of features from the previous layer.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../Thesis_Docs/Images/4_cnn_structure.png}
+
+\small{Diagram sourced from \citep{ADeshpande2016}.}
+\end{figure}
 \end{frame}
+
+
+
+\section{Model development}
 
 % Link back to results. Model was based on existing model by Ghafoorian et al. Model consisted of two stages: candidate detection, followed by false-positive reduction. The candidate detection model feeds 51x51 subimages through four convolutional layers, followed by 3 fully connected layers. The candidate lacunes output by this first model is fed into a second false-positive reduction model. The false-positive reduction model is comprised of three parallel three-dimensional convolutional neural networks. The outputs of these are concatenated with 7 location-based variables in three fully connected layers.
-\begin{frame}{}
+\begin{frame}{Lacune detection model by Ghafoorian et al.}
+\begin{itemize}
+\item Ghafoorian et al. \cite{GhafoorianM.2017Dml3} developed a model with two stages: candidate detection and false-positive reduction.
+\item First model consists of four convolutional layers, followed by three fully connected layers.
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../Thesis_Docs/Images/5_ghafoorian_model1.png}
+\end{figure}
+\item Second model contains three three-dimensional \textsc{cnn}s in parallel and three fully connected layers, with seven additional location-based variables.
+\end{itemize}
 
 \end{frame}
+
+
+
+
 
 % Our model adapts this existing model to the data set available from the Neuroscience department. The data set contains 411 MRI scans, of which 35 of these contain at least one lacune. Each image has two weightings - T1 and FLAIR. The coordinates of lacunes were determined by manually searching the T1 and FLAIR images for lesions that matched those described in an accompanying spreadsheet.
-\begin{frame}{}
-
+% One major difference our model makes is the form of the input data. Ghafoorian's model takes in T1-weighted and FLAIR inputs, applying some pre-processing to remove identifiers such as skull and eyes. 
+\begin{frame}{\textsc{mri} data set}
+\begin{itemize}
+\item Data set sourced from the Sydney Memory and Aging Study at UNSW.
+\item 411 \textsc{mri} scans each of both T1 and \textsc{flair}. 35 contain lacunes.
+\item Accompanying spreadsheet describing the axial slice and anatomical location of lacunes. 
+\item Data preprocessing:
+\begin{itemize}
+	\item Extracting soft tissue
+	\item Creating lacune response images
+\end{itemize}
+\end{itemize}
 \end{frame}
 
-% One major difference our model makes is the form of the input data. Ghafoorian's model takes in T1-weighted and FLAIR inputs, applying some pre-processing to remove identifiers such as skull and eyes. Our data set undergoes similar de-identification, whilst also removing CSF. Since lacunes have a similar signal intensity to CSF, this means that a lot of region surrounding lacunes is removed from the T1-weighted scans. Added effect of enlarging and emphasising the loss in intensity. Note that the flair images are extracted by masking a rectangular region rather than removing CSF, and so the intensities around lacunes are still visible.
-\begin{frame}{}
 
+
+%Our data set undergoes similar de-identification, whilst also removing CSF. Since lacunes have a similar signal intensity to CSF, this means that a lot of region surrounding lacunes is removed from the T1-weighted scans. Added effect of enlarging and emphasising the loss in intensity. Note that the flair images are extracted by masking a rectangular region rather than removing CSF, and so the intensities around lacunes are still visible.
+\begin{frame}{Results of data preprocessing}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../Thesis_Docs/Images/6_soft_lacune.png}
+\end{figure}
 \end{frame}
+
+
+
 
 % Samples were collected by extracting 51x51 T1-weighted and FLAIR images. As there are relatively few positive lacune samples, all possible samples were taken. Negatives were collected by sampling randomly within the brain region. Total of just over 40,000 samples. Positive samples make up 9\% of the data set. These samples were split into three: training, validation and testing sets. The model by Ghafoorian samples enough negatives such that positives make one-third of the data set. A model that tests this positive-negative ratio is discussed further in my thesis.
-\begin{frame}{}
-
+\begin{frame}{Sampling}
+\begin{itemize}
+\item Samples were collected by extracting 51$\times$51 T1-weighted and \textsc{flair} images.
+\item Positive samples were generated from all available lacunes.
+\item Negative samples chosen randomly through the brain matter.
+\item Total of over 40,000 samples split into training, validation and testing data sets. 9\% of the samples are positive for lacunes.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[scale=0.37]{../Thesis_Docs/Images/6_positive.png}
+\end{figure}
 \end{frame}
 
-% Now we apply our data to just the candidate detection component of the model. As is typical during neural network training, the training accuracy of the model exhibits overfitting and reaches 100\% in the first few epochs. What is more important here is the validation accuracy. At each epoch, the model was tested against a separate data set, to assess how the model performs given data that wasn't use during training. This is the model's ability to detect something new. The model reaches its highest validation accuracy within 30 epochs. The model was saved at this point, despite attaining the same accuracy later on, to reduce any overfitting that may occur in later epochs.
-\begin{frame}{}
 
+
+
+
+% Now we apply our data to just the candidate detection component of the model. As is typical during neural network training, the training accuracy of the model exhibits overfitting and reaches 100\% in the first few epochs. What is more important here is the validation accuracy. 
+\begin{frame}{Model training}
+\begin{itemize}
+\item Model overfits the training data quickly.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_train_acc5.pdf}
+\end{figure}
 \end{frame}
+
+
+% At each epoch, the model was tested against a separate data set, to assess how the model performs given data that wasn't use during training. This is the model's ability to detect something new. The model reaches its highest validation accuracy within 30 epochs. The model was saved at this point, despite attaining the same accuracy later on, to reduce any overfitting that may occur in later epochs. Generally as training epochs progress, we see validation accuracy begin to fall as the model really overfits the training data.
+\begin{frame}{Model validation}
+\begin{itemize}
+\item Validation accuracy increases quickly within the first ten epochs.
+\item The model was saved at the point of highest validation accuracy.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_valid_acc5.pdf}
+\end{figure}
+\end{frame}
+
+
+
+
 
 % Finally, this model was tested against the testing data set. Tabulating the true and false positives and negatives, we retrieve this confusion matrix. The key error we want to minimise here is the rate of false-negatives. These are lacunes that have been missed. Though undesirable, false-positives can be inspected and classified by a clinician within a reasonable amount of time, so long as there aren't too many of them. The final model exhibits a sensitivity of 99.9\% and specificity of 99.8\%. There are two main reactions from these figures. The first is that of success, the model is doing very well. The second is that of skepticism. Generally after building a model, accuracies at 100\% generally implies that something has gone wrong during the sampling process. For instance, the response has accidentally been fed into the model as a variable, or some issues with the methods of sampling. I have checked for this possibility in my code, and the data set, once generated, was randomised. The model does not have access to the surrounding classifications.
-\begin{frame}{}
-
+\begin{frame}{Results}
+\begin{itemize}
+\item Finally, the model is applied to the testing data set.
+\end{itemize}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{@{}lll@{}}
+	\toprule[1.5pt]
+	& Positive & Negative\\
+	\midrule
+	True & 961 & 9977\\
+	False & 19 & 1\\
+	\bottomrule[1.5pt]\\
+	\end{tabular}
+\end{table}
+\begin{itemize}
+\item Gives testing sensitivity of 99.9\% and specificity of 99.8\%.
+\pause
+\item Are these results too good?
+\end{itemize}
 \end{frame}
+
+
+
 
 % To alleviate some concerns, we now take a look at some examples of correctly and incorrectly classified points. Examples of true positives. Regions of zero or low intensity in T1, whilst having a dark region surrounded by hyperintensity in flair. If we take a look at some false-positives, we see that they exhibit this same structure. Low to zero T1, near a dark region with hyperintense edge in flair. False-negatives are rare. In this instance, the lacune is very small, only 3 mm in diameter. So small that there is no hyperintense rim visible in the flair image.
-\begin{frame}{}
-
+\begin{frame}{Examination of false-positives}
+\begin{itemize}
+\item Model appears to be detecting dark regions in T1 and bright edges in \textsc{flair}.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../Thesis_Docs/Images/7_FP_t1_flair.png}
+\end{figure}
 \end{frame}
 
+\begin{frame}{Examination of false-positives}
+\begin{itemize}
+\item Model appears to be detecting dark regions in T1 and bright edges in \textsc{flair}.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../Thesis_Docs/Images/7_FP_t1_flair2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Examination of false-negatives}
+\begin{itemize}
+\item Model misclassifies a small lacune with no bright edges in \textsc{flair}.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../Thesis_Docs/Images/7_FN_t1_flair.png}
+\end{figure}
+\end{frame}
+
+
+
 % Conclusion. Successfully developed a machine learning algorithm that can identify lacunes from soft tissue extracted T1-weighted images and corresponding flair. Further research: Though 99.8\% specificity is high, there are a large number of voxels in a brain scan, so there may still be a considerable number of false-positives. Worth feeding model through the three-dimensional cnn. Note the extra computation and data collection time required. Also worth experimenting with the threshold during soft tissue extraction. The edges of the mask were quite harsh and lost a lot of data beyond just the eyes and skull. Setting it so that it retains more CSF also retain more of the brain matter which could help reduce false positives. CNNs are computationally and storage intensive. Millions of variables. Worth exploring other types of models, such as gradient boosting through XGBoost. 
+\begin{frame}{Conclusion and future research}
+\begin{itemize}
+\item Model successfully identifies lacunes from soft tissue extracted T1-weighted images and corresponding \textsc{flair}.
+\item 
+\item False-positives can be further reduced by applying the false-positive reduction model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}.
+\item 
+\end{itemize}
+
+\end{frame}
 
 
 \begin{frame}{References}

@@ -84,7 +84,7 @@ data.dir <- "/srv/scratch/z5016924/MAS_W2/"
 # View Functions ----------------------------------------------------------
 data.dir <- "/srv/scratch/z5016924/MAS_W2/"
 
-ViewPatch <- function(id, x, y, z, type = "soft", point = T) {
+ViewPatch <- function(id, x, y, z, type = "soft", point = T, res = 25) {
   id <- sprintf("%04d", id)
   if (type == "soft") {
     file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
@@ -98,7 +98,7 @@ ViewPatch <- function(id, x, y, z, type = "soft", point = T) {
     stop("Type needs to be one of 'soft', 't1' or 'flair'")
   }
   img <- f.read.nifti.volume(file.name)
-  subimg <- img[(x - 25):(x + 25), (y - 25):(y + 25), z, 1]
+  subimg <- img[(x - res):(x + res), y, (z-res):(z+res), 1]
   image(subimg, col = grey.colors(100))
   if (point) points(0.5, 0.5, col = "red")
 }
