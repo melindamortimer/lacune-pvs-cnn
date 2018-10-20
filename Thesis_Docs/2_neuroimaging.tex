@@ -5,11 +5,11 @@
 
 \chapter{Neuroimaging background}\label{mri_svd_intro}
 
-An overview of Magnetic Resonance Imaging (\textsc{mri}) and small vessel disease (\textsc{svd}) is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, \textsc{mri}, \textsc{svd} biomarkers, and existing rating standards.
+An overview of Magnetic Resonance Imaging (\textsc{mri}) and small vessel disease (\textsc{svd}) is required to understand the motivations, data and the features that are being detected. This chapter introduces the general structure of the brain, \textsc{mri}, \textsc{svd} biomarkers, and existing rating methods.
 
 \section{Terminology and structure}
 
-By convention, the \textsc{mri} axis planes are referred to as axial, coronal, and sagittal. These are shown in Figure \ref{svd-axes}.
+By convention, the \textsc{mri} axis planes are referred to as coronal, sagittal and axial. These are shown in Figure \ref{svd-axes}.
 
 \begin{figure}[ht]
 	\centering
@@ -19,15 +19,7 @@ By convention, the \textsc{mri} axis planes are referred to as axial, coronal, a
 	\label{svd-axes}
 \end{figure}
 
-As shown in Figure \ref{svd-term-fig}, \textit{volume} refers to a three-dimensional region of the scan, a \textit{point} is a single voxel in the volume, and a \textit{slice} is a cross-sectional image taken from the volume. Axial slices are taken by fixing the $z$ coordinate. Note that \textit{lines} will not be used in this thesis.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.6]{Images/2_mri_volumes.jpg}
-	\caption{\textsc{mri} volumes: point, line, slice and volume}
-	\small Image taken from \cite{Rinck2013}.
-	\label{svd-term-fig}
-\end{figure}
+The resulting image from an \textsc{mri} scan is in three-dimensions, and is therefore referred to as a \textit{volume}. A cross-sectional image taken from the volume is called a \textit{slice}. \textit{Axial slices} are taken by fixing the $z$ coordinate such that the images appear to be viewed from above. A single unit of the volume is referred to as a \textit{voxel}.
 
 Directional terminology in \textsc{mri} include:
 \begin{itemize}
@@ -53,7 +45,7 @@ The largest region is the \textit{cerebrum}, shown in Figure \ref{svd-cerebrumfi
  \begin{itemize}
 	\item The \textit{frontal lobe}, located at the front of the cerebrum, is responsible for voluntary movement, skills and behaviours, mood, and memory.
 	\item The \textit{parietal lobe}, situated posterior to the frontal lobe, is responsible for the senses, including pain, and physical and spatial awareness.
-	\item The \textit{temporal lobe}, located exterior to the perietal lobe, is responsible for memory and auditory functions, including hearing and speech.
+	\item The \textit{temporal lobe}, located exterior to the parietal lobe, is responsible for memory and auditory functions, including hearing and speech.
 	\item The \textit{occipital lobe}, located posterior to the parietal lobe, is responsible for visual information.
 \end{itemize}
 
@@ -100,7 +92,7 @@ T1-weighted images are \textit{hyperintense} (bright) in regions with high fat c
 
 \section{\textsc{svd} biomarkers}\label{svd-markers}
 
-During the analysis of \textsc{mri} scans for \textsc{svd}, there are a number of biomarkers that clinicians observe. Each of these is defined in conjunction with the \textsc{strive} criterion \citep{WardlawJ.M.2013Nsfr} shown in Figure \ref{svd-biomarkers-fig}. The schematics show a simplified representation of each biomarker for particular imaging types. Diffusion-weighted imaging (\textsc{dwi}) will not be discussed in this thesis. 
+During the analysis of \textsc{mri} scans for small vessel disease (\textsc{svd}), there are a number of biomarkers that clinicians observe. Each of these is defined in conjunction with the \textsc{strive} criterion \citep{WardlawJ.M.2013Nsfr} shown in Figure \ref{svd-biomarkers-fig}. The schematics show a simplified representation of each biomarker for particular imaging types. Diffusion-weighted imaging (\textsc{dwi}) will not be discussed in this thesis. 
 
 % Images of lacunes and perivascular spaces from \textsc{strive}
 \begin{figure}[ht]
@@ -113,9 +105,9 @@ During the analysis of \textsc{mri} scans for \textsc{svd}, there are a number o
 
 \textit{White matter hyperintensities} (\textsc{wmh}) are regions of hyperintensity visible in T2-weighted imaging. They also appear in T1-weighted images as hypointense regions, though not as dark as \textsc{csf}. Their cause is not well understood \citep{Gouw2011}.
 
-\textit{Lacunes} are small brain cavities. They usually appear without symptoms, and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \citep{BenjaminJ.Philip2018LIbN, VanDerFlierM.Wiesje2005SVDa}. In \textsc{mri}, lacunes appear round, with a diameter between 3 mm and 15 mm. They tend to give off a darker signal intensity, similar to that of \textsc{csf}, as they are filled with fluid. Lacunes have a tendency to occur in regions of white matter hyperintensity, so they will frequently have a hyperintense rim in \textsc{flair} imaging.
+\textit{Lacunes} are small brain cavities that usually appear without symptoms and are frequently found in the scans of elderly. Their presence indicates a heightened risk of stroke and dementia \citep{BenjaminJ.Philip2018LIbN, VanDerFlierM.Wiesje2005SVDa}. In \textsc{mri}, lacunes appear round, with a diameter of 3--15 mm. They tend to exhibit a darker signal intensity, similar to that of \textsc{csf}, as they are filled with fluid. Lacunes have a tendency to occur in regions of white matter hyperintensity, so they will frequently have a hyperintense rim in \textsc{flair} imaging.
 
-\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and \textsc{wmh}. Perivascular spaces also take on a signal intensity similar to \textsc{csf} as they are fluid-filled. They are found running parallel to vessels, and are generally found under 3 mm in diameter. They can be identified by appearing circular cross-sectionally and rectangular when viewed in parallel to the vessels. In some instances, perivascular spaces can become enlarged, up to 10 mm in diameter. They can be difficult to distinguish from lacunes as their signal intensities are similar.
+\textit{Perivascular spaces} are extensions of the fluid space surrounding blood vessels through the brain. They are generally microscopic but can become enlarged with age, and often appear alongside other \textsc{svd} biomarkers such as lacunes and \textsc{wmh}. Perivascular spaces also exhibit a signal intensity similar to \textsc{csf} as they are fluid-filled. They are found running parallel to vessels, and are generally found under 3 mm in diameter. They can be identified by appearing circular cross-sectionally and rectangular when viewed in parallel to the vessels. In some instances, perivascular spaces can become enlarged, up to 10 mm in diameter. They can be difficult to distinguish from lacunes as their signal intensities are similar.
 
 \textit{Cerebral microbleeds} are blooming regions of microscopic bleeding, usually around 2--5 mm in diameter though they can be larger. They are not visible on T1-weighted, T2-weighted or \textsc{flair} images, and are instead found in T2*-weighted images constructed from a combination of T2-imaging and inhomogeneities in the magnetic field during scanning. 
 
@@ -127,9 +119,11 @@ During the analysis of \textsc{mri} scans for \textsc{svd}, there are a number o
 
 Without a biopsy for confirmation, the identification of \textsc{svd} biomarkers relies on \textsc{mri} analysis. Trained observers examine \textsc{mri} volumes slice by slice and identify any lesions or points of interest. A number of rating guidelines exist in order to establish rating consistency \citep{AdamsH.H.Hieab2013RMfD, PotterGillian2015CPSV, WardlawJ.M.2013Nsfr}.
 
-Though standardised criterion help to improve rating consistency, the appearance of lacunes and perivascular spaces are highly similar and therefore remain difficult to distinguish. As a result, manual rating is still highly inconsistent \citep{PotterGillian2015CPSV}. Additionally, the manual rating process is time consuming. \cite{Heuvel2016} report that the rating of a single scan for microbleeds takes one hour on average. Datasets with many scans can take many hours to process and the resulting identified biomarkers may not be consistent enough to warrant proper inference \citep{BenjaminJ.Philip2018LIbN, WardlawJ.M.2013Nsfr}.
+Though standardised criterion help to improve rating consistency, the appearance of lacunes and perivascular spaces are highly similar and therefore remain difficult to distinguish. As a result, manual rating is still highly inconsistent \citep{PotterGillian2015CPSV}. Additionally, the manual rating process is time consuming. \cite{Heuvel2016} report that the rating of a single scan for microbleeds takes an average of one hour. Therefore data sets with a large number of scans can take many hours to process, and the resulting identified biomarkers may not be consistent enough to warrant correct inference \citep{BenjaminJ.Philip2018LIbN, WardlawJ.M.2013Nsfr}.
 
-In order to assist clinicians in rating quality, consistency, and speed, machine learning algorithms have been built to identify biomarkers. These algorithms can be built to work either alongside clinicians as computer-aided design (\textsc{cad}) programs \citep{Heuvel2016, Uchiyama20071554, Yokoyama2007} or as fully automated systems \citep{DouQ.2016ADoC, GhafoorianM.2017Dml3}.
+In order to improve rating quality, consistency and speed, we now introduce machine learning algorithms. Existing algorithms have been built to work alongside clinicians as computer-aided design(\textsc{cad}) programs \citep{Heuvel2016, Uchiyama20071554, Yokoyama2007}, and as fully automated systems \citep{DouQ.2016ADoC, GhafoorianM.2017Dml3}. Under both schemes, machine learning models have been shown to improve rating consistency and speed. This motivates our discussion of neural network structure and implementation.
+
+
 
 %Prior to 2013, there were no official guidelines for the identification of \textsc{svd} biomarkers. There were several studies attempting to establish rating guidelines \citep{AdamsH.H.Hieab2013RMfD, PotterGillian2015CPSV}, however these methods tended to focus on specific events rather than \textsc{svd} biomarkers in general.
 
