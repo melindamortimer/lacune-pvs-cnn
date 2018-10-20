@@ -165,22 +165,32 @@
 
 % Go through existing classification model by yokoyama2007. Brief. Final performance: sensitivity and specificity (define). Diffult to capture the appearance of something with so few variables, and these variables take time to create. Therefore we attempt machine learning techniques.
 % Lacune detection is time consuming, and they appear like other brain lesions: inconsistent, unreliable. Some medical studies have argued that some of the conclusions drawn about lacunes are incorrect because of possible misidentification. Take out yokoyama discussion?
+%\begin{frame}{Current lacune detection methods}
+%    \begin{itemize}
+%	\item Manual detection: approximately 1 hour per scan.
+%    \item Yokoyama et al. \cite{Yokoyama2007} developed thresholds for lacune detection (positive) based on candidate area, perimeter and gravitational centre.
+%    \end{itemize}
+%    \begin{block}{Sensitivity and Specificity}
+%	\[
+%		Sensitivity = P(Correct | Positive)
+%	\]
+%	\[
+%		Specificity = P(Correct | Negative)
+%	\]
+%    \end{block}
+%    \begin{itemize}
+%    \item Yokoyama et al. \cite{Yokoyama2007} achieved a sensitivity of 90.1\%, and averaged 1.7 false-positives per axial slice.
+%    \end{itemize}
+%\end{frame}
+
 \begin{frame}{Current lacune detection methods}
-    \begin{itemize}
-	\item Manual detection: approximately 1 hour per scan.
-    \item Yokoyama et al. \cite{Yokoyama2007} developed thresholds for lacune detection (positive) based on candidate area, perimeter and gravitational centre.
-    \end{itemize}
-    \begin{block}{Sensitivity and Specificity}
-	\[
-		Sensitivity = P(Correct | Positive)
-	\]
-	\[
-		Specificity = P(Correct | Negative)
-	\]
-    \end{block}
-    \begin{itemize}
-    \item Yokoyama et al. \cite{Yokoyama2007} achieved a sensitivity of 90.1\%, and averaged 1.7 false-positives per axial slice.
-    \end{itemize}
+\begin{itemize}
+\item Manual detection: locate lacunes by eye using T1 and \textsc{flair}.
+\item Current methods are time consuming. Each scan takes approximately 1 hour \cite{Heuvel2016}.
+\item Identifying lacunes by eye is unreliable and subjective. Benjamin et al. \cite{BenjaminJ.Philip2018LIbN} argue that some conclusions drawn about lacunes are incorrect due to possible misidentification.
+\pause
+\item Build a neural network model to improve speed, consistency, and reliability.
+\end{itemize}
 \end{frame}
 
 
@@ -483,9 +493,27 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \centering
 \includegraphics[width=\linewidth]{../Thesis_Docs/Images/5_ghafoorian_model1.png}
 \end{figure}
-\item Second model contains three three-dimensional \textsc{cnn}s in parallel and three fully connected layers, with seven additional location-based variables.
 \end{itemize}
 
+\end{frame}
+
+
+% Models assessed using sens and spec
+\begin{frame}{Model evaluation}
+	\begin{itemize}
+	\item Second stage of the model contains three parallel three-dimensional \textsc{cnn}s and three fully connected layers, with seven additional location-based variables.
+	\end{itemize}
+    \begin{block}{Sensitivity and Specificity}
+	\[
+		Sensitivity = P(Correct | Positive)
+	\]
+	\[
+		Specificity = P(Correct | Negative)
+	\]
+    \end{block}
+    \begin{itemize}
+    \item The model by Ghafoorian \cite{GhafoorianM.2017Dml3} exhibited a sensitivity of 97.4\% and averaged 0.13 false-positives per axial slice.
+	\end{itemize}
 \end{frame}
 
 
@@ -545,9 +573,11 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{itemize}
 \begin{figure}
 \centering
-%\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_train_acc5.pdf}
+\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_train_acc5.pdf}
 \end{figure}
 \end{frame}
+
+
 
 
 % At each epoch, the model was tested against a separate data set, to assess how the model performs given data that wasn't use during training. This is the model's ability to detect something new. The model reaches its highest validation accuracy within 30 epochs. The model was saved at this point, despite attaining the same accuracy later on, to reduce any overfitting that may occur in later epochs. Generally as training epochs progress, we see validation accuracy begin to fall as the model really overfits the training data.
@@ -558,7 +588,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{itemize}
 \begin{figure}
 \centering
-%\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_valid_acc5.pdf}
+\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_valid_acc5.pdf}
 \end{figure}
 \end{frame}
 
@@ -631,7 +661,12 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \begin{itemize}
 \item Model successfully identifies lacunes from soft tissue extracted T1-weighted images and corresponding \textsc{flair}.
 \item Final testing sensitivity of 99.9\% and specificity of 99.8\%.
-\item False-positives can be reduced by applying a three-dimensional \textsc{cnn}.
+\item Further research could reduce false-positives by:
+\begin{itemize}
+\item Applying a three-dimensional \textsc{cnn}.
+\item Assessing the benefit of location-based variables.
+\end{itemize}
+
 \item Model to be implemented as part of the Sydney Memory and Ageing Study data pipeline.
 \end{itemize}
 
