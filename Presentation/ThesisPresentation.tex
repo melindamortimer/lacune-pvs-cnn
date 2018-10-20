@@ -125,6 +125,7 @@
 	\titlepage
 \end{frame}
 
+
 % Over the past year, I have been collaborating with Neuroscientists at the school of medicine to aid in the study of graceful aging. As the human brain ages, it becomes susceptible to damage that can affect cognition and motor function. Forgetfulness and absentmindedness become more apparent, perhaps it becomes more difficult to maintain balance. And these pathogens are visible in brain imaging as a collective set of abnormalities, known as cerebral svd.
 %Intro to problem. SVD, significance of lacunes. 
 \begin{frame}{Introduction}
@@ -132,6 +133,7 @@
     \item Cerebral Small Vessel Disease (\textsc{svd}) describes a set of abnormalities in the brain.
     \item Biomarkers of \textsc{svd} are visible in the \textsc{mri} of over 90\% of 60--90 year olds \citep{deLeeuwF-E2001Pocw}, and is a leading cause of stroke \citep{WardlawJ.M.2013Nsfr}, dementia, and cognitive decline \citep{NorrvingBo2008Linb}.
     \item Lacunes are one such biomarker and are of particular interest for their involvement in the incidence of stroke.
+    \item Necessary to locate lacunes in \textsc{mri}.
     \end{itemize}
 \end{frame}
 
@@ -139,9 +141,6 @@
 \begin{frame}{Overview}
 	\tableofcontents
 \end{frame}
-
-
-
 
 
 % Go through some medical terminology. Current methods (define flair and t1, how to spot lacunes included in definition) and what's wrong with it.
@@ -165,6 +164,7 @@
 
 
 % Go through existing classification model by yokoyama2007. Brief. Final performance: sensitivity and specificity (define). Diffult to capture the appearance of something with so few variables, and these variables take time to create. Therefore we attempt machine learning techniques.
+% Lacune detection is time consuming, and they appear like other brain lesions: inconsistent, unreliable. Some medical studies have argued that some of the conclusions drawn about lacunes are incorrect because of possible misidentification. Take out yokoyama discussion?
 \begin{frame}{Current lacune detection methods}
     \begin{itemize}
 	\item Manual detection: approximately 1 hour per scan.
@@ -189,7 +189,7 @@
 % NNets background. Go through basic neuron structure (bunch of inputs, single output). 
 \section{Neural networks background}
 \begin{frame}{Structure of a basic neuron}
-The basic neural network node is the \textit{neuron}.
+The basic neural network unit is the \textit{neuron}.
 % Basic Neuron diagram
 \begin{figure}[hb]
 \centering
@@ -358,7 +358,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 %These neurons are arranged into layers. Inputs are fed into several neurons. Each output is fed into the inputs of the next layer of neurons, and so on until the final output layer. The final layer can have several outputs, useful for classification probabilities.
 \begin{frame}{Structure of a basic neural network}
 % Whole network diagram
-\begin{figure}
+\begin{figure}[t]
 \centering
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
@@ -411,6 +411,11 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 
 \end{tikzpicture}
 \end{figure}
+\pause
+\begin{itemize}
+\item Network weights and biases are chosen such that they minimise some \textit{cost function}. E.g. Mean Squared Error.
+\item Having a network with a large number of weights makes minimisation slow.
+\end{itemize}
 \end{frame}
 
 
@@ -419,17 +424,31 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % How to choose weights? Similarly to regression, create some cost function to minimise. However there are a large number of weights. It is possible to minimise analytically, however the complexity of the problem increases very quickly. As a result, we instead aim to approximate the minimum via the gradient descent algorithm. This algorithm runs the model with some given initial weights, calculates the gradient of the cost function with respect to all the weights and shifts them in the direction of the greatest decrease. NNets present two main problems. The first is that there is no method to determine whether the minimum being converged to is a global minimum or just the local minimum. The second and most recurring problem is the large number of weights. The main cause for model overfitting. There are a number of techniques to mitigate overfitting, but we will not discuss these now. Covered in greater detail in my thesis.
 \begin{frame}{Choosing the network weights}
 \begin{itemize}
-\item Network weights and biases are chosen such that they minimise some \textit{cost function}. E.g. Mean Squared Error.
-\item Having a network with a large number of weights makes minimisation slow.
-\item It is faster to instead estimate the weights using the \textit{Gradient Descent algorithm}:
-\begin{itemize}
-	\item Initialise the weights and biases.
-	\item Calculate the gradient of the cost function.
-	\item Shift all the weights and biases in the direction of the greatest decrease in cost.
-\end{itemize}
+\item It is faster to instead estimate the weights using the \textit{Gradient Descent algorithm}.
 \item Two issues: no guarantee that the minimum is global, and overfitting.
 \end{itemize}
-\todo[inline]{Reduce content}
+\begin{figure}
+\centering
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.55pt,y=0.55pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,291); %set diagram left start at 0, and has height of 291
+
+%Shape: Parabola [id:dp09742535750627612] 
+\draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=2.25]  (90,18) .. controls (184.33,350) and (278.67,350) .. (373,18) ;
+%Straight Lines [id:da11196791721275057] 
+\draw [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (306,176) -- (275.53,227.42) ;
+\draw [shift={(274,230)}, rotate = 300.65] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][line width=1.5]    (14.21,-4.28) .. controls (9.04,-1.82) and (4.3,-0.39) .. (0,0) .. controls (4.3,0.39) and (9.04,1.82) .. (14.21,4.28)   ;
+
+%Shape: Circle [id:dp1570017763837479] 
+\draw  [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][dash pattern={on 1.69pt off 2.76pt}][line width=1.5]  (272,239.5) .. controls (272,235.91) and (274.91,233) .. (278.5,233) .. controls (282.09,233) and (285,235.91) .. (285,239.5) .. controls (285,243.09) and (282.09,246) .. (278.5,246) .. controls (274.91,246) and (272,243.09) .. (272,239.5) -- cycle ;
+%Shape: Circle [id:dp7325121590212951] 
+\draw  [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 0; blue, 0 }  ,fill opacity=1 ][line width=1.5]  (309,177.5) .. controls (309,173.91) and (311.91,171) .. (315.5,171) .. controls (319.09,171) and (322,173.91) .. (322,177.5) .. controls (322,181.09) and (319.09,184) .. (315.5,184) .. controls (311.91,184) and (309,181.09) .. (309,177.5) -- cycle ;
+%Shape: Rectangle [id:dp29688417965832214] 
+\clip(84,14) rectangle (379,274) ;
+\end{tikzpicture}
+\end{figure}
 \end{frame}
 
 
@@ -516,7 +535,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{frame}
 
 
-
+\section{Results}
 
 
 % Now we apply our data to just the candidate detection component of the model. As is typical during neural network training, the training accuracy of the model exhibits overfitting and reaches 100\% in the first few epochs. What is more important here is the validation accuracy. 
@@ -526,7 +545,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_train_acc5.pdf}
+%\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_train_acc5.pdf}
 \end{figure}
 \end{frame}
 
@@ -539,7 +558,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{itemize}
 \begin{figure}
 \centering
-\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_valid_acc5.pdf}
+%\includegraphics[width=0.83\linewidth]{../Thesis_Docs/Images/7_valid_acc5.pdf}
 \end{figure}
 \end{frame}
 
@@ -605,14 +624,15 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{frame}
 
 
+\section{Conclusion}
 
 % Conclusion. Successfully developed a machine learning algorithm that can identify lacunes from soft tissue extracted T1-weighted images and corresponding flair. Further research: Though 99.8\% specificity is high, there are a large number of voxels in a brain scan, so there may still be a considerable number of false-positives. Worth feeding model through the three-dimensional cnn. Note the extra computation and data collection time required. Also worth experimenting with the threshold during soft tissue extraction. The edges of the mask were quite harsh and lost a lot of data beyond just the eyes and skull. Setting it so that it retains more CSF also retain more of the brain matter which could help reduce false positives. CNNs are computationally and storage intensive. Millions of variables. Worth exploring other types of models, such as gradient boosting through XGBoost. 
 \begin{frame}{Conclusion and future research}
 \begin{itemize}
 \item Model successfully identifies lacunes from soft tissue extracted T1-weighted images and corresponding \textsc{flair}.
-\item 
-\item False-positives can be further reduced by applying the false-positive reduction model by Ghafoorian et al. \cite{GhafoorianM.2017Dml3}.
-\item 
+\item Final testing sensitivity of 99.9\% and specificity of 99.8\%.
+\item False-positives can be reduced by applying a three-dimensional \textsc{cnn}.
+\item Model to be implemented as part of the Sydney Memory and Ageing Study data pipeline.
 \end{itemize}
 
 \end{frame}

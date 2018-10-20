@@ -44,3 +44,6 @@ z_attempt5/
 *.nav
 *.out
 *.snm
+
+# Exceptions
+!Thesis_Docs/Images/*.pdf
