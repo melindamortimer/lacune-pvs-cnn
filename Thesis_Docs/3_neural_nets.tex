@@ -3,7 +3,7 @@
 
 \chapter{Neural networks}\label{neuralNets-intro}
 
-This chapter outlines the structure and workings of basic neural network models. Those who have a basic understanding of neural networks and wish to avoid the details surrounding model structure and minimisation algorithms can proceed to Chapter \ref{convnets} for an overview of convolutional neural networks and Chapter \ref{litrev} for existing lacune model attempts.
+This chapter outlines the structure and workings of basic neural network models. Those who have a basic understanding of neural networks and wish to avoid the details surrounding model structure and minimisation algorithms can proceed to Chapter \ref{convnets} for an overview of convolutional neural networks and Chapter \ref{litrev} for existing lacune detection attempts.
 
 % - Basic neural networks theory + perceptron
 % - Loss functions
@@ -19,18 +19,16 @@ This chapter outlines the structure and workings of basic neural network models.
 
 Neural networks have become increasingly popular with advances in computing power and the availability of large data sets \citep{Goodfellow-et-al-2016}. They have been proven successful with \textsc{mri} discrimination tasks \citep{DouQ.2016ADoC, Yokoyama2007} and image classification tasks \citep{HeKaiming2015DDiR, AlexNet2012, GoogLeNet2015}. In some instances, neural networks have exhibited a higher image recognition accuracy than humans \citep{HeKaiming2015DDiR}.
 
-The construction of neural networks has to be conducted with care. The resulting models are difficult to interpret and prone to overfitting. We now discuss the underlying structure of neural networks, loss minimisation, and techniques to avoid overfitting the data.
+The construction of neural networks has to be conducted with care. The resulting models are difficult to interpret and prone to overfitting. We now discuss the underlying structure of neural networks, cost minimisation, and techniques to avoid overfitting the data.
 
 \section{Basic structure}\label{nnets-structure}
 
-The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence. Neural networks adopt a similar structure. Individual nodes receive variables, apply a transformation, and pass the result to the next node. For this reason, the nodes are referred to as \textit{neurons}.
+The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence and in parallel. Neural networks adopt a similar structure. Individual nodes receive values, apply a transformation, and pass the output to the next node. Several nodes may apply their transformations simultaneously. For this reason, the nodes are referred to as \textit{neurons}.
 
-The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let \\${\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal}$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable. This bias is not to be confused with statistical bias and is included to provide the neuron with a constant term. This additional weight can be used to leverage the value of the neuron just before output, independent of the input variables. The output of a single neuron is given by
+The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let \\${\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal}$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable, not to be confused with statistical bias. The bias term is a constant used to leverage the value of the neuron independently of the input variables. Let $f(\cdot)$ be some function, known as an \textit{activation function}, which is generally nonlinear (see Section \ref{nnets-act}). Let $\cdot$ be the usual dot product. The output of a single neuron, known as an \textit{activation value}, is given by
 \begin{align}
-	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b),
+	a = f(\mathbf{w}\cdot\mathbf{x} + b).
 \end{align}
-where $\sigma(\cdot)$ is some function known as an \textit{activation function} and $a$ is an \textit{activation value}.
-
 
 
 % Neuron structure diagram
@@ -67,7 +65,7 @@ where $\sigma(\cdot)$ is some function known as an \textit{activation function} 
 \draw    (254,80.33) -- (270,154) ;
 
 % Text Node
-\draw (324,156) node   {$\mathbf{x} \cdot \mathbf{w} +b$};
+\draw (324,156) node   {$\mathbf{w} \cdot \mathbf{x} +b$};
 % Text Node
 \draw (180,72.33) node   {$x_{1}$};
 % Text Node
@@ -91,7 +89,7 @@ where $\sigma(\cdot)$ is some function known as an \textit{activation function} 
 % Text Node
 \draw (254.67,70.33) node   {$b$};
 % Text Node
-\draw (408,145) node   {$\sigma ( \cdot )$};
+\draw (408,145) node   {$f ( \cdot )$};
 % Text Node
 \draw (480,155) node   {$a$};
 
@@ -111,18 +109,25 @@ where $\sigma(\cdot)$ is some function known as an \textit{activation function} 
 
 \begin{example}
 \label{nnets-and-eg}
-A logical \textsc{and} gate of two inputs can be expressed as a neuron. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0, so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function to be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
+A neuron can be used to express a logical \textsc{and} gate of two inputs. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0 so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function be the step function $f(z) = 1$ for $z > 0$ and $f(z) = 0$ otherwise. The resulting neuron has output
 \begin{align}
 	a(\mathbf{x}) = \begin{cases}
-		1 & x_1 + x_2 - 1.5 > 0\\
-		0 & otherwise
+		1 & ,x_1 + x_2 - 1.5 > 0\\
+		0 & ,otherwise
 	\end{cases},
 \end{align}
-which will output 1 only when $\mathbf{x} = (1, 1)^\intercal$.
+which will output 1 only when $\mathbf{x} = (1, 1)^\intercal$, satisfying the definition of an \textsc{and} gate.
 \end{example}
 
 
-A large number of these neurons can be arranged to form a neural network. The generated outputs of these neurons can be fed as inputs into later neurons. Basic neural networks arrange a number of these neurons into layers, as shown in Figure \ref{nnet-structurefig}. The first layer is an input layer, where data is fed into the model. Each neuron in this first layer represents a variable. The last layer is an output layer which generates the final result. The central layers, which conduct most of the processing, are known as \textit{hidden layers} and are shown as Hidden layer 1 and Hidden layer 2 in Figure \ref{nnet-structurefig}.
+A large number of these neurons can be arranged in layers to form a \textit{fully connected neural network}, as shown in Figure \ref{nnet-structurefig}. The inputs $\mathbf{x} = (x_1, x_2, \ldots, x_n)$ are used to predict the final response $y$. Let $\mathbf{a}^\ell$ be the vector of activation values of the $\ell$-th layer, where $\mathbf{a}^0 := \mathbf{x}$. Let $\mathbf{w}^\ell$ be the matrix of weights such that each row entry $\mathbf{w}_j^{\ell\intercal}$ is used to compute the $j$-th neuron of the $\ell$-th layer. Let $\mathbf{b}^\ell$ be the vector of biases of the $\ell$-th layer. Hence, the vector of activation values of the $\ell$-th layer can be expressed as
+\begin{align}\label{nnets-act-eqn}
+	\mathbf{a}^\ell = f(\mathbf{w}^\ell \mathbf{a}^{\ell - 1} + \mathbf{b}^\ell),
+\end{align}
+where $f(\cdot)$ applies the activation function to each element of the vector. Parameterising Equation \eqref{nnets-act-eqn} as $g_\ell(\mathbf{a}^{\ell - 1}; \mathbf{w}^\ell, \mathbf{b}^\ell)$, the final output of the neural network can be written as sequence of function compositions
+\begin{align}
+	\mathbf{a}^L = g_L \circ g_{L-1} \circ \ldots \circ g_1.
+\end{align}
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 %\begin{figure}[ht]
@@ -159,7 +164,7 @@ A large number of these neurons can be arranged to form a neural network. The ge
             node[hidden neuron] (Hb-\name) at (2*\layersep,-\y cm) {};
 
     % Draw the output layer node
-    \node[output neuron,pin={[pin edge={->}]right:Output}] (O) at (3*\layersep, -2) {};
+    \node[output neuron,pin={[pin edge={->}]right:$\hat{y}$}] (O) at (3*\layersep, -2) {};
 
     % Connect every node in the input layer with every node in the
     % hidden layer.
@@ -183,21 +188,16 @@ A large number of these neurons can be arranged to form a neural network. The ge
     \node[annot,left of=hla] {Input layer};
     \node[annot,right of=hlb] {Output layer};
     
-    \node[annot,below of=Ha-4, node distance=1cm] (fa) {$f_1(\mathbf{v}_1)$};
-    \node[annot,below of=Hb-4, node distance=1cm] (fb) {$f_2(\mathbf{v}_2)$};
-    \node[annot,right of=fb, node distance=\layersep] (fo) {$f(\mathbf{v})$};
+%    \node[annot,below of=Ha-4, node distance=1cm] (fa) {$f_1(\mathbf{v}_1)$};
+%    \node[annot,below of=Hb-4, node distance=1cm] (fb) {$f_2(\mathbf{v}_2)$};
+%    \node[annot,right of=fb, node distance=\layersep] (fo) {$f(\mathbf{v})$};
 
 \end{tikzpicture}
-\caption{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases have been hidden.}
+\caption{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases are not shown.}
 \label{nnet-structurefig}
 \end{figure}
 
-Let the weights and biases of the $\ell$-th layer be $\mathbf{v}_\ell$ and let the output of hidden layer $\ell$ be $f_\ell(\mathbf{v}_\ell)$. Then the output of the whole network is
-\begin{align}
-	f(\mathbf{v}) = f_L(\mathbf{v}_L) \circ f_{L-1}(\mathbf{v}_{L-1}) \circ \cdots \circ f_1(\mathbf{v}_1).
-\end{align}
-
-During model fitting, the quality of the model is quantified using some \textit{cost function} $C(W,B)$, where a cost of 0 describes a perfect model fit. The set of weights $W$ and set of biases $B$ are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
+During model fitting, the quality of the estimated model is quantified using some \textit{cost function} $C(W,B)$, where $W$ is the set of weights and $B$ the set of biases. A cost of 0 describes a perfect model fit. The weights and biases are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
 
 %Let $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
 
@@ -211,11 +211,11 @@ During model fitting, the quality of the model is quantified using some \textit{
 %Let $W$ and $B$ be the sets of all weights and biases as before. Let $\eta$ be the learning rate of the network. 
 \section{Activation functions}\label{nnets-act}
 
-Activation functions, denoted by $\sigma(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions avoid this by introducing nonlinearity into the model.
+Activation functions, denoted by $f(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions avoid this by introducing nonlinearity into the model.
 
 The simplest neuron type is the \textit{perceptron}, used in Example \ref{nnets-and-eg}. It is characterised by,
 \begin{align}
-	x_i \in \{0,1\} \text{ and } \sigma(z) = \begin{cases}
+	x_i \in \{0,1\} \text{ and } f(z) = \begin{cases}
 		1, & z > 0 \\
 		0, & z \le 0
 	\end{cases}.
@@ -223,23 +223,23 @@ The simplest neuron type is the \textit{perceptron}, used in Example \ref{nnets-
 
 To allow for continuous outputs, other common activation functions include the sigmoids, which are monotonically increasing, smooth approximations to the step function. Examples of these include the sigmoid function
 \begin{align}
-	\sigma(z) = \dfrac{1}{1+e^{-z}},
+	f(z) = \dfrac{1}{1+e^{-z}},
 \end{align}
 and hyperbolic tan function
 \begin{align}
-	\sigma(z) = \tanh(z).
+	f(z) = \tanh(z).
 \end{align}
 Both the sigmoid and hyperbolic tan functions are common activation functions \citep{Goodfellow-et-al-2016}, however they are computationally expensive and so are not preferred for image recognition tasks as they contain a large number of variables \citep{LeCun2012, Nielson2015}.
 
 The Rectified Linear Unit (ReLU) activation \citep{Maas2013} is given by,
 \begin{align}
-	\sigma(z) = \max(0, z).
+	f(z) = \max(0, z).
 \end{align}
 The ReLU activation function is suitable for neural network optimisation as the function and its derivative are simplistic \citep{Goodfellow-et-al-2016}. The neuron is said to be \textit{active} for $z > 0$. In this region, the gradient is constant and large for positive input values, promoting training of the neuron's weights (see Section \ref{nnets-graddesc} on Gradient Descent). For $z \leq 0$, the neuron has a gradient of 0 and is deactivated, avoiding unnecessary parameter adjustments and computation. 
 
 The softmax activation function,
 \begin{align}
-	\sigma(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
+	f(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
 \end{align}
 is used to structure the output layer as a discrete probability distribution over $k$ classes.
 
@@ -449,13 +449,13 @@ During gradient descent, it is necessary to calculate the gradient of the cost f
 \begin{lemma}
 	The error of the $j$-th neuron of the final output layer is
 	\begin{align}
-		\delta_j^L = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+		\delta_j^L = \dfrac{\partial C}{\partial a_j^L}f'(z_j^L).
 	\end{align}
 	The vector of output layer errors can be expressed in the matrix form,
 	\begin{align}\label{nnets-bprop-eq1}
-		\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC,
+		\delta^L = f'(\mathbf{z}^L)\nabla_aC,
 	\end{align}
-where $\Sigma'(\cdot)$ is a matrix such that the $j$-th diagonal entry is $\sigma'(z_j^L)$ and all non-diagonal entries are 0.
+where $\Sigma'(\cdot)$ is a matrix such that the $j$-th diagonal entry is $f'(z_j^L)$ and all non-diagonal entries are 0.
 \end{lemma}
 
 \begin{proof}
@@ -464,14 +464,14 @@ Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
 	\begin{align}
 		\delta_j^L = \dfrac{\partial C}{\partial z_j^L} & = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
 		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\\
-		& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+		& = \dfrac{\partial C}{\partial a_j^L}f'(z_j^L).
 	\end{align}
 \end{proof}
 
 \begin{lemma}
 	The error $\delta^\ell_j$ of the $\ell$-th layer can be written in terms of the errors of the $(\ell + 1)$-th layer, 
 	\begin{align}
-		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}\sigma'(z_j^\ell).
+		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}f'(z_j^\ell).
 	\end{align}
 	The vector of errors $\delta^\ell$ for the $\ell$-th layer can be expressed in the matrix form,
 	\begin{align}\label{nnets-bprop-eq2}
@@ -486,9 +486,9 @@ Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
 		\delta_j^\ell = \dfrac{\partial C}{\partial z_j^\ell}& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\
 		& = \sum_k\delta_k^{\ell+1}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell}.
 	\end{align}
-	Since $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot\sigma(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}\sigma'(z_j^\ell)$, $\delta_j^\ell$ can be written
+	Since $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot f(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}f'(z_j^\ell)$, $\delta_j^\ell$ can be written
 	\begin{align}
-		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}\sigma'(z_j^\ell).
+		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}f'(z_j^\ell).
 	\end{align}
 \end{proof}
 
@@ -566,19 +566,19 @@ The error $\delta^\ell$ is dependent on the gradient of the activation function.
 
 \noindent For the sigmoid activation function,
 \begin{align}
-	\sigma '(z) = e^{-z}(1+e^{-z})^{-2}.
+	f '(z) = e^{-z}(1+e^{-z})^{-2}.
 \end{align}
 For the tanh activation function,
 \begin{align}
-	\sigma '(z) = 1-\tanh^2(z).
+	f '(z) = 1-\tanh^2(z).
 \end{align}
 For both the sigmoid and tanh activations, the limit as $z\rightarrow\pm\infty$ yields 
 \begin{align}
-	\lim_{z\rightarrow\pm\infty}\sigma '(z)= 0.
+	\lim_{z\rightarrow\pm\infty}f '(z)= 0.
 \end{align}
 Very large positive or negative $z_j^\ell$ will have an activation gradient near 0, stagnating the movement of weights and biases. The ReLU activation function avoids this by having gradient
 \begin{align}
-	\sigma '(z) = \begin{cases}
+	f '(z) = \begin{cases}
 		1, & z > 0 \\
 		0, & z < 0 \\
 		undefined, & z = 0
@@ -590,11 +590,11 @@ Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \
 
 %If this occurs in the whole network, the ReLU activation can be replaced with the \textit{leaky ReLU},
 %\[
-%	\sigma(z) = \max(x, ax), \quad a \le 1.
+%	f(z) = \max(x, ax), \quad a \le 1.
 %\]
 %This activation has gradient function
 %\[
-%	\sigma '(z) = \begin{cases}
+%	f '(z) = \begin{cases}
 %		1 & z > 0 \\
 %		a & z < 0
 %	\end{cases},
@@ -605,9 +605,9 @@ Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \
 
 The initialisation of weights and biases affects the rate and quality of training \citep{Mishkin2016}. Intuitively, if the weights are initialised close to the final output values, it will be faster to train. Conversely, weights that are initialised poorly may take a longer time to train to the same accuracy, or the local minimum of the cost function may not converge close to the global minimum and produce a poor model.
 
-If the weights in two neurons are similar, using the same activation function will result in similar outputs. Therefore, initialising weights and biases with the same values introduces a lot of redundant calculations. It is commonplace for weights and biases to be initialised randomly \citep{Nielson2015}. An example of an initialisation distribution is the truncated normal distribution. Let $X\sim\mathcal{N}(\mu,\sigma^2)$ and $-\infty \le a < b \le \infty$. For $x \in (a,b)$, the truncated normal $X$ has probability density function (\textsc{pdf})
+If the weights in two neurons are similar, using the same activation function will result in similar outputs. Therefore, initialising weights and biases with the same values introduces a lot of redundant calculations. It is commonplace for weights and biases to be initialised randomly \citep{Nielson2015}. An example of an initialisation distribution is the truncated normal distribution. Let $X\sim\mathcal{N}(\mu,f^2)$ and $-\infty \le a < b \le \infty$. For $x \in (a,b)$, the truncated normal $X$ has probability density function (\textsc{pdf})
 \begin{align}
-	f_X(x;\mu, \sigma^2,a,b) = \dfrac{\phi\big(\frac{x-\mu}{\sigma}\big)}{\sigma\bigg(\Phi\big(\frac{b-\mu}{\sigma}\big) - \Phi\big(\frac{a-\mu}{\sigma}\big)\bigg)},
+	f_X(x;\mu, f^2,a,b) = \dfrac{\phi\big(\frac{x-\mu}{f}\big)}{f\bigg(\Phi\big(\frac{b-\mu}{f}\big) - \Phi\big(\frac{a-\mu}{f}\big)\bigg)},
 \end{align}
 where $\phi$ and $\Phi$ are the standard Normal \textsc{pdf} and cumulative density function (\textsc{cdf}) respectively. This method initialises the weights with a small amount of noise, with truncation of the Normal distribution helping to avoid vanishing gradients (see Section \ref{nnet-vanishinggradprob}) should the sigmoid or hyperbolic tan activation functions be used.
 

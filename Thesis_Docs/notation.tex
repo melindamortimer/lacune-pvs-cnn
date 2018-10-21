@@ -6,8 +6,9 @@ $a_j^\ell$ & $j$-th element of $\mathbf{a}^\ell$, the activation value of the $j
 $\mathbf{w}^\ell$ & Matrix of weights used to compute the vector $\mathbf{a}^\ell$.\\
 $\mathbf{w}^\ell_j$ & Vector of weights used to compute $a_j^\ell$.\\
 $w_{ji}^\ell$ & $i$-th element of $\mathbf{w}^\ell_j$, to be multiplied with $a_i^{\ell-1}$.\\
+$\mathbf{b}^\ell$ & Vector of biases of the $\ell$-th layer.\\
 $b_j^\ell$ & Bias of the $j$-th neuron of the $\ell$-th layer.\\
-$z_j^\ell$ & Value of the $j$-th neuron of the $\ell$-th layer before the activation function $\sigma(\cdot)$ is applied. $\mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$.\\
+$z_j^\ell$ & Value of the $j$-th neuron of the $\ell$-th layer before the activation function $f(\cdot)$ is applied. $\mathbf{w}_j^\ell\cdot \mathbf{a}^{\ell-1} + b_j^\ell= \sum_k w_{jk}^\ell a_k^{\ell-1} + b_j^\ell$.\\
 $\mathbf{z}^\ell$ & Vector of $z_j^\ell$ of the $\ell$-th layer.\\
 $\delta_j^\ell$ & Gradient error in the $j$-th neuron of the $\ell$-th layer when minimising the cost function $C$. $\dfrac{\partial C}{\partial z_j^\ell}$.\\
 $\delta^\ell$ & Vector of errors $\delta_j^\ell$ for the $\ell$-th layer.\\
