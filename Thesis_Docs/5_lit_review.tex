@@ -3,15 +3,15 @@
 
 \chapter{Existing methodologies}\label{litrev}
 
-This chapter outlines existing models in more detail, and discusses the impact of including location-based variables. In particular, we examine the variable thresholds developed by \cite{Yokoyama2007} and the location-based \textsc{cnn} by \cite{GhafoorianM.2017Dml3}.
+This chapter outlines in greater detail the structure and performance of existing lacune detection models. We discuss the thresholds developed by \cite{Yokoyama2007} (Section \ref{litrev-threshold}), the location-based \textsc{cnn} by \cite{GhafoorianM.2017Dml3} (Section \ref{litrev-cnn}), and outline potential changes and simplifications to these models (Section \ref{litrev-changes}).
 
 \section{Thresholding}\label{litrev-threshold}
 
-This section describes an existing attempt to automate the identification of lacunes by developing and applying thresholds for certain variables. In 2007, \cite{Yokoyama2007} developed an algorithm that identifies lacune candidates by examining their \textit{area}, \textit{circularity} and \textit{gravitational centre}. Area $A$ is the number of pixels that the candidate lacune covers. Circularity is given by $C = 4\pi\times\dfrac{A}{\ell^2}$, where $\ell$ is the perimeter of the candidate lacune. The gravitational centre is given by $(g_x, g_y) = \bigg(\dfrac{1}{n}\sum_{i=1}^nx_i, \dfrac{1}{n}\sum_{i=1}^ny_i\bigg)$.
+This section describes an existing attempt to automate the identification of lacunes by developing and applying thresholds for certain variables. In 2007, \cite{Yokoyama2007} developed an algorithm that identifies lacune candidates by examining their \textit{area}, \textit{circularity} and \textit{gravitational centre}. Area $A$ is the number of pixels that the candidate lacune covers. Circularity is given by $C = 4\pi\times\dfrac{A}{\ell^2}$, where $\ell$ is the perimeter of the candidate lacune. The gravitational centre is given by $(g_x, g_y) = \bigg(\dfrac{1}{A}\sum_{i=1}^Ax_i, \dfrac{1}{A}\sum_{i=1}^Ay_i\bigg)$, where the $(x_i, y_i)$ denote the coordinates of the pixels that the lacune covers.
 
 \cite{Yokoyama2007} claim that lacunes primarily occur in the basal ganglia, a structure at the centre of the brain. Thus the search for lacunes was limited to a central circular region with the coordinates of the centre and the radius determined for each scan.
 
-Candidate lacunes satisfy thresholds based on area, circularity and gravitational centre. The thresholds are established dependent on the intensity of the surrounding structures. For this reason, candidates are separated into two categories: isolated lacunes and those surrounded by \textsc{wmh}. Isolated lacune candidates are determined by extracting the cerebral ventricle and calculating the mean pixel intensity. Candidates are determined as regions with an intensity below 70\% of the mean value. Isolated candidate lacunes satisfy the inequalities
+Candidate lacunes satisfy thresholds based on area, circularity and gravitational centre. The thresholds are established dependent on the intensity of the surrounding structures. For this reason, candidates are separated into two categories: isolated lacunes and those surrounded by white matter hyperintensities (\textsc{wmh}). Isolated lacune candidates are determined by extracting the cerebral ventricle and calculating the mean pixel intensity. Candidates are determined as regions with an intensity below 70\% of the mean value. Isolated candidate lacunes satisfy the inequalities
 \begin{align*}
 	& 19 \le A \le 200, \\
 	& 0.45 \le C,\text{ and } \\
@@ -23,7 +23,7 @@ where $(c_x, c_y)$ is the centre of the circular region of interest. The region 
 \begin{figure}[ht]
 \centering
 \includegraphics[scale=0.7]{Images/5_yokoyama_reg.png}
-\caption{Relationship between candidate lacune area and circularity on the training data set.}
+\caption{The threshold for candidate area and circularity is defined by the top-left region.}
 \small Image taken from \cite{Yokoyama2007}
 \label{litrev-area-circ}
 \end{figure}
@@ -35,9 +35,7 @@ Lacunes that appear next to \textsc{wmh} are more difficult to extract and so ar
 
 Once candidates are identified, the model eliminates false-positives by examining the T1-weighted scans. False-positive removal is based on a candidate's location, area and gravitational centre.
 
-The data set used to develop the model consisted of 100 scans, totalling 832 axial slices. Model training and testing consisted of 20 and 80 scans respectively. The final algorithm exhibited a \textit{sensitivity} rate (correct classification of positives) of 90.1\% and averaged 1.7 false-positives per slice.
-
-Although the testing sensitivity was high, it was insufficient for the model to be usable on its own. Model improvement is required before it can be used to aid clinicians reliably. The low sensitivity rate may be the result of a restricted search area. \cite{Yokoyama2007} made the assumption that lacunes only occur deep within the brain, through the basal ganglia. This was the motivation behind defining a circular search region and extracting the cerebral ventricles. However, this assumption is not always satisfied. Though less common, lacunes have been found in other brain regions, including the cerebrum (see Section \ref{data}). Restricting the search area may inadvertently exclude lacunes from detection.
+The data set used to develop the model consisted of 100 scans, totalling 832 axial slices. Model training and testing consisted of 20 and 80 scans respectively. The final algorithm exhibited a \textit{sensitivity} rate (correct classification of positives) of 90.1\% and averaged 1.7 false-positives per slice. Although the testing sensitivity was high, it was insufficient for the model to be usable on its own. Model improvement is required before it can be used to aid clinicians reliably. The low sensitivity rate may be the result of a restricted search area. \cite{Yokoyama2007} made the assumption that lacunes only occur deep within the brain, through the basal ganglia. This was the motivation behind defining a circular search region and extracting the cerebral ventricles. However, this assumption is not always satisfied. Though less common, lacunes have been found in other brain regions, including the cerebrum (see Section \ref{data}). Restricting the search area may inadvertently exclude lacunes from detection.
 
 The model by \cite{Yokoyama2007} was dependent on a number of existing architectures. The first is the identification and extraction of particular brain regions. In this model, \cite{Yokoyama2007} were able to use existing binarisation techniques to extract the cerebral ventricle. Each sample also requires a calculated area, circularity and gravitational centre. Each of these calculations requires sufficient time and resources particularly if these calculations are to be conducted manually.
 
@@ -115,17 +113,22 @@ The comparatively low sensitivity may also be the result of too few variables. A
 
 %In 2012, Wang et al. \citep{WangY.2012Msow} developed an algorithm that labels three features: \textsc{wmh}, lacunes in the cerebral cortex (cortical infarcts), and lacunes beneath the cerebral cortex (lacunar infarcts). The model was provided with 272 scans, each capturing T1-weighted, T2-weighted and \textsc{flair} images. In the first stage of the algorithm, the T1-weighted images are used to segment the brain into white matter, grey matter and \textsc{csf}. Average intensities are calculated for each segmented region and for each image type. Candidate features are identified based on their intensity relative to these these averages. The resulting sensitivity rate for lacunes is 80.6\% and 006 false-positives per slice.
 
-\section{Machine learning}\label{litrev-ml}
 
-This section describes a number of models that were developed using machine learning techniques. The model by \cite{Yokoyama2007} suffered from a lower sensitivity rate, possibly caused by lack of information extracted from the images. Machine learning techniques seek to identify features that are not always easily interpreted, but have had promising results. 
 
-The first attempts were made by \cite{Uchiyama20071554, Uchiyama2007b} as a continuation of the model by \cite{Yokoyama2007}. The data consisted of 132 scans totalling 1143 images of T1 and T2 weighting. Once candidates have been identified, the models undergo false-positive reduction. Twelve location based features are identified: $x$ and $y$ coordinates, intensity differences in T1 and T2, four nodule shape variables, and four combined nodule and linear shape variables.
 
-These features were input into two different machine learning algorithms: a support vector machine (machine learning algorithm for discrimination tasks) and a neural network. The support vector machine resulted in a sensitivity of 96.8\%, with 0.76 false-positives per slice. The second model was a neural network, with a sensitivity of 96.8\% and 0.30 false-positives per slice.
 
-In 2015, \cite{Uchiyama2015} augmented their previous models by matching candidates with a number of lacune templates. To improve the efficiency of the matching process, data was reduced to a lower dimensional space through principal component analysis. False-positives were reduced by 34.1\%, with the final model having a sensitivity of 96.8\% and 0.47 false-positives per slice.
 
-The substantial rise in sensitivity in comparison to the original model \citep{Yokoyama2007} confirms that additional information was required to improve lacune detection. However the included variables remain location dependent and require either existing algorithms or significant time resources during data collection.
+%\section{Machine learning}\label{litrev-ml}
+%
+%This section describes a number of models that were developed using machine learning techniques. The model by \cite{Yokoyama2007} suffered from a lower sensitivity rate, possibly caused by lack of information extracted from the images. Machine learning techniques seek to identify features that are not always easily interpreted, but have had promising results. 
+%
+%The first attempts were made by \cite{Uchiyama20071554, Uchiyama2007b} as a continuation of the model by \cite{Yokoyama2007}. The data consisted of 132 scans totalling 1,143 images of T1 and T2 weighting. Once candidates have been identified, the models undergo false-positive reduction. Twelve location based features are identified: $x$ and $y$ coordinates, intensity differences in T1 and T2, four nodule shape variables, and four combined nodule and linear shape variables.
+%
+%These features were input into two different machine learning algorithms: a support vector machine (machine learning algorithm for discrimination tasks) and a neural network. The support vector machine resulted in a sensitivity of 96.8\%, with 0.76 false-positives per slice. The second model was a neural network, with a sensitivity of 96.8\% and 0.30 false-positives per slice.
+%
+%In 2015, \cite{Uchiyama2015} augmented their previous models by matching candidates with a number of lacune templates. To improve the efficiency of the matching process, data was reduced to a lower dimensional space through principal component analysis. False-positives were reduced by 34.1\%, with the final model having a sensitivity of 96.8\% and 0.47 false-positives per slice.
+%
+%The substantial rise in sensitivity in comparison to the original model \citep{Yokoyama2007} confirms that additional information was required to improve lacune detection. However the included variables remain location dependent and require either existing algorithms or significant time resources during data collection.
 
 
 %\section{Yokoyama 2007}
@@ -198,11 +201,11 @@ The substantial rise in sensitivity in comparison to the original model \citep{Y
 
 \section{Convolutional neural networks}\label{litrev-cnn}
 
-We will now discuss the convolutional neural network structure utilised by \cite{GhafoorianM.2017Dml3}. This model forms the basis of our adjusted location-independent model. This model consists of two phases; candidate generation using a \textsc{cnn}, and false-positive reduction using a 3D \textsc{cnn} and candidate location data.
+We will now discuss the convolutional neural network structure utilised by \cite{GhafoorianM.2017Dml3}. This model is a supervised machine learning model and forms the basis of our adjusted location-independent model. It consists of two phases; candidate generation using a \textsc{cnn}, and false-positive reduction using a three-dimensional \textsc{cnn} and location-based variables.
 
-\subsection*{Candidate Detection}
+\subsection*{Candidate detection model}
 
-The data set consists of 1075 \textsc{mri} scans split into training, validation and testing sets of size 868, 96 and 111 respectively. Each scan contains two image weightings: T1-weighted and \textsc{flair}. Data samples are generated by randomly sampling axial slices of dimension 51$\times$51 pixels, each called a \textit{patch}. The model is trained to detect lacunes at the centre of each patch, returning either a positive response $(1, 0)^\intercal$ or negative response $(0, 1)^\intercal$. Combining the T1-weighted image, \textsc{flair} and response gives samples containing two 51$\times$51 pixel images and a response vector in $\mathbb{R}^2$. For use in convolution, the T1-weighted image and the \textsc{flair} image are treated as separate colour channels. Samples were generated such that there were twice as many negative samples as positive, totalling $3.2\times10^5$ training samples.
+The data set consisted of 1,075 \textsc{mri} scans split into training, validation and testing sets of size 868, 96 and 111 respectively. Each scan contained two image weightings: T1-weighted and \textsc{flair}. Data samples were generated by randomly sampling axial slices of dimension 51$\times$51 pixels, each called a \textit{patch}. The model was trained to detect lacunes at the centre of each patch, returning either a positive response $(1, 0)^\intercal$ or negative response $(0, 1)^\intercal$. Combining the T1-weighted image, \textsc{flair} and response gave samples containing two 51$\times$51 pixel images and a response vector in $\mathbb{R}^2$. For use in convolution, the T1-weighted image and the \textsc{flair} image were treated as separate colour channels. Samples were generated such that there were twice as many negative samples as positive, totalling $3.2\times10^5$ training samples.
 
 % Candidate model structure
 \begin{figure}[ht]
@@ -213,15 +216,11 @@ The data set consists of 1075 \textsc{mri} scans split into training, validation
 	\label{litrev-ghafoorian_model1fig}
 \end{figure}
 
-The \textsc{cnn} is made of seven layers, as shown in Figure \ref{litrev-ghafoorian_model1fig}. The first four are convolutional layers, followed by three fully connected layers. The four convolutional layers contain 20, 40, 80 and 110 filters, with filter sizes 7$\times$7, 5$\times$5, 3$\times$3 and 3$\times$3 respectively. A max pooling layer is included between the first and second convolutional layer, with a filter size of 2$\times$2 and stride of 2. No zero padding is applied to the convolution or pooling layers. The convolution is followed by three fully connected layers of 300, 200 and 2 neurons.
+The \textsc{cnn} is made of seven layers, as shown in Figure \ref{litrev-ghafoorian_model1fig}. The first four are convolutional layers, followed by three fully connected layers. The four convolutional layers contain 20, 40, 80 and 110 filters, with filter sizes 7$\times$7, 5$\times$5, 3$\times$3 and 3$\times$3 respectively. It should be noted that \cite{GhafoorianM.2017Dml3} did not discuss any dimension reduction prior to the first convolutional layer, however the included model diagram appears to apply stride or pooling techniques before the first convolutional layer, reducing the image dimension from 51$\times$51 to 26$\times$26. A max pooling layer is included between the first and second convolutional layer, with a filter size of 2$\times$2 and stride of 2. No zero padding is applied to the convolutional or pooling layers. The convolutional layer is followed by three fully connected layers of 300, 200 and 2 neurons.
 
-Batch normalisation and ReLU activation is applied to all neurons. Dropout is applied to the fully connected layers, with a rate of 0.3. All weights are intialised using the He method \citep{HeKaiming2015DDiR}. Training is conducted by stochastic gradient descent with the Adam optimiser. Each training batch has a sample size of 128. A decaying learning rate is used, from $5\times10^{-4}$ to $10^{-6}$ by the last epoch.
+Batch normalisation and ReLU activation is applied to all neurons. Dropout is applied to the fully connected layers, with a rate of 0.3. All weights are initialised using the He method \citep{HeKaiming2015DDiR}. Training is conducted by stochastic gradient descent with the Adam optimiser. Each training batch has a sample size of 128. A decaying learning rate is used, from $5\times10^{-4}$ to $10^{-6}$ by the last epoch. Cross-entropy loss is used to assess the model at the end of each batch. L2-regularisation is used, with the penalty term set to $10^{-4}$. The final layer applies softmax activation to ensure the output follows a probability distribution. An early stopping algorithm is used such that the model with the highest validation accuracy is saved.
 
-Cross-entropy loss is used to assess the model at the end of each batch. L2-regularisation is used, with the penalty term set to $10^{-4}$. The final layer applies softmax activation to ensure the output follows a probability distribution. An early stopping algorithm is used such that the model with the highest validation accuracy is saved.
-
-\cite{GhafoorianM.2017Dml3} comment that the model can be computationally intensive to run on many data points. To improve speed, the fully connected layers are converted into convolutional layers.
-
-Candidate lacunes are identified by feeding 51$\times$51 samples of the tested scan through the trained \textsc{cnn}. For each given sample, the model outputs a lacune classification probability. Once this has been completed for the whole volume, a 10$\times$10 sliding window identifies local maximums in the resulting probabilities. Sliding window samples with lacune probabilities below 0.1 are removed and the remaining samples are lacune candidates to be input into the second phase of the model. Note that there were no performance diagnostics provided for the first model stage.
+\cite{GhafoorianM.2017Dml3} comment that the model can be computationally intensive to run on many data points. To improve speed, the fully connected layers are converted into convolutional layers. Candidate lacunes are identified by feeding 51$\times$51 samples of the tested scan through the trained \textsc{cnn}. For each given sample, the model outputs a lacune classification probability. Once this has been completed for the whole volume, a 10$\times$10 sliding window identifies local maximums in the resulting probabilities. Sliding window samples with lacune probabilities below 0.1 are removed and the remaining samples are lacune candidates to be input into the second phase of the model. Note that there were no performance diagnostics provided for the first model stage.
 
 %
 %Entire model is made up of two neural networks.
@@ -264,9 +263,9 @@ Candidate lacunes are identified by feeding 51$\times$51 samples of the tested s
 %
 %Didn't mention: number of epochs to train. How pooling and convolutions were padded. Diagram implied no padding, but diagram dimensions weren't correct. 
 
-\subsection*{False-positive reduction}
+\subsection*{False-positive reduction model}
 
-The second phase of the model serves to reduce the number of false-positives returned by the first stage of the model. This model uses a 3D \textsc{cnn}, adding additional contextual information to the image. Each data point is captured at three different resolutions, 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5, to capture varying levels of contextual information. These samples are reduced to dimension 32$\times$32$\times$5 before input into the model to lower the number of variables. In total, there were $3.85\times10^5$ samples for training, and $3.5\times10^4$ for validation. 
+The second phase of the model serves to reduce the number of false-positives returned by the first stage of the model. This model uses a three-dimensional \textsc{cnn}, adding additional contextual information to the image. Each data point is captured at three different resolutions, 32$\times$32$\times$5, 64$\times$64$\times$5 and 128$\times$128$\times$5, to capture varying levels of contextual information. These samples are reduced to dimension 32$\times$32$\times$5 before input into the model to lower the number of variables. In total, there were $3.85\times10^5$ samples for training, and $3.5\times10^4$ for validation. 
 
 Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{litrev-ghafoorian_model2fig}. Each \textsc{cnn} branch contains six convolutional layers and a fully connected layer. The convolutional layers have 64, 64, 128, 128, 256 and 256 filters of sizes 3$\times$3$\times$2, 3$\times$3$\times$2, 3$\times$3$\times$1, 3$\times$3$\times$1, 3$\times$3$\times$1 and 3$\times$3$\times$1 respectively.
 
@@ -279,15 +278,13 @@ Each resolution is fed through its own 3D \textsc{cnn}, as shown in Figure \ref{
 	\label{litrev-ghafoorian_model2fig}
 \end{figure}
 
-A single max pooling layer is placed after the second convolution layer, of size $2\times2\times1$. In each resolution branch, the final convolution layer is followed by a fully connected layer of 300 neurons. The $3\times300$ fully connected neurons are concatenated together with seven additional location variables. For each candidate, these location features include the $x$, $y$ and $z$ coordinates, and distances to the left and right ventricles, cortex, and midsagittal brain surface.
+A single max pooling layer is placed after the second convolutional layer, of size 2$\times$2$\times$1. In each resolution branch, the final convolutional layer is followed by a fully connected layer of 300 neurons. The 3$\times$300 fully connected neurons are concatenated together with seven additional location variables. For each candidate, these location features include the $x$, $y$ and $z$ coordinates, and distances to the left and right ventricles, cortex, and midsagittal brain surface.
 
-The 907 fully connected neurons are passed to two final fully connected layers of size 200 and 2 neurons. The final layer consists of a softmax activation to output the lacune probabilities. All weights are He initialised. All neurons, excepting the output layer, have ReLU activation and are batch normalised. The fully connected layers have a dropout rate of 0.5. 
+The 907 fully connected neurons are passed to two final fully connected layers of size 200 and 2 neurons. The final layer consists of a softmax activation to output the lacune probabilities. All weights are He initialised. All neurons, excepting the output layer, have ReLU activation and are batch normalised. The fully connected layers have a dropout rate of 0.5. The cost function chosen was cross-entropy with L2-regularisation and penalty parameter $2\times10^{-15}$. This was minimised using stochastic gradient descent with an Adam optimiser. The learning rate is initialised as $5\times10^{-4}$. If training accuracy drops, the learning rate decays by a factor of 2. Each training batch contained 128 samples.
 
-The cost function chosen was cross-entropy with L2-regularisation and penalty parameter $2\times10^{-15}$. This was minimised using stochastic gradient descent with an Adam optimiser. The learning rate is initialised as $5\times10^{-4}$. If training accuracy drops, the learning rate decays by a factor of 2. Each training batch contained 128 samples.
+The model was trained for 40 epochs, with the final model and hyper-parameters chosen to maximise validation accuracy. The resulting model exhibited a sensitivity of 97.4\% and an average of 0.13 false-positives per slice.
 
-The model was trained for 40 epochs, with the final model chosen to maximise validation accuracy. A number of hyper-parameters were chosen by maximising validation accuracy. These included network depth, batch size, the initial learning rate and decay factor, penalty parameter, and dropout rate. The resulting model exhibited a sensitivity of 97.4\% and an average of 0.13 false-positives per slice.
-
-
+%including network depth, batch size, the initial learning rate and decay factor, penalty parameter, and dropout rate.
 
 
 %
@@ -339,14 +336,17 @@ The model was trained for 40 epochs, with the final model chosen to maximise val
 
 \section{Proposed changes}\label{litrev-changes}
 
-The models trained by \cite{UchiyamaYoshikazu2007Ioad}, \cite{Yokoyama2007} and \cite{GhafoorianM.2017Dml3} rely on location variables generated for each candidate lacune. \cite{GhafoorianM.2017Dml3} claimed that the inclusion of location variables helps to differentiate lacunes from perivascular spaces, which occur primarily in the basal ganglia. However, lacunes can occur throughout the brain white and grey matter \citep{WardlawJm2013Mosc} and so adding these location variables could result in incorrect classification should lacunes occur in less frequently observed regions.
+In this study, we simplify the model by \cite{GhafoorianM.2017Dml3} by assessing an adapted form of their candidate lacune detection model. In assessing the model with this structure, we remove the dependence on location-based variables. The models trained by \cite{UchiyamaYoshikazu2007Ioad}, \cite{Yokoyama2007} and \cite{GhafoorianM.2017Dml3} each rely on location-based variables generated for each candidate lacune. \cite{GhafoorianM.2017Dml3} claimed that the inclusion of location-based variables helps to differentiate lacunes from perivascular spaces, which occur primarily in the basal ganglia. However, lacunes can occur throughout the white and grey matter of the brain \citep{WardlawJm2013Mosc} and so adding these location variables could result in incorrect classification should lacunes occur in less frequently observed regions. In addition, the inclusion of location data requires extra data pre-processing. The location of brain structures is not inherently included with \textsc{mri} data and are instead found by either visual estimation or by using existing algorithms \citep{Uchiyama2007b, UchiyamaYoshikazu2007Ioad}.
 
-The inclusion of location data requires extra data pre-processing. These variables are calculated in relation to other located brain structures, however these locations are not inherently included within \textsc{mri} scan data. Instead these variables are generated prior to model usage and require either visual estimation or a feature extraction algorithm \citep{Uchiyama2007b, UchiyamaYoshikazu2007Ioad}. If the variables are to be determined visually, the variables for each candidate lacune have to be determined separately and this would require significant extra data preparation time. If location variable extraction algorithms exist, as in the model by \cite{UchiyamaYoshikazu2007Ioad}, additional measurement errors could also make location-based inference inaccurate.
+Our model makes three major adjustments to the candidate detection model by \cite{GhafoorianM.2017Dml3}. The first is the extraction of brain tissue from the T1-weighted scans as a form of data de-identification (see Section \ref{data-soft}). This process has the effect of enlarging regions of high \textsc{csf} probability, including lacunes.
 
-In this study, we attempt to simplify and adapt the model by \cite{GhafoorianM.2017Dml3} to the available data set (see Section \ref{data}). A key component of the existing model is the removal of false-positives by analysing the three-dimensional context and location-based variables. These variables include the $x$, $y$ and $z$ coordinates, and distances between the candidate and the ventricles, cortex and midsagittal plane. Without the architecture to determine these distances, these variables have to be determined manually. In addition, the  $x$, $y$ and $z$ coordinates are not standardised between scans. Consequently, the coordinates across images do not necessarily align with the same brain structures.
+The second adaptation is the proportion of negative samples generated (see Section \ref{data-samples}). The data set \cite{GhafoorianM.2017Dml3} used for model training was sufficiently large that they could enforce a positive-negative ratio of one-third positives to two-thirds negatives. Given a smaller number of \textsc{mri} scans, and hence smaller number of lacune samples, enforcing the same ratio would result in a much smaller data set. The proportion of negative samples is increased to 91\% to ensure that the model is exposed to a sufficiently large data set.
 
-The available image pre-processing pipeline (see Section \ref{data}) allows for the automated extraction of brain tissue. This may reduce the complexity of the task such that location-based variables may not be required. We therefore simplify and assess the existing model when performed on brain tissue extracted data, independent of location-based variables.
+The final adaptation is the delay of image dimension reduction until after the first convolutional layer. The model structure outlined by \cite{GhafoorianM.2017Dml3} indicates early dimension reduction, with input data reduced from 51$\times$51 to 26$\times$26 after the first layer. This rapid loss in dimensionality may result in the removal of vital visual information, particularly if the lacunes being analysed are small. Instead, the image data dimensions are maintained and no stride or pooling is applied until the max pooling layer indicated in Figure \ref{litrev-ghafoorian_model1fig}.
 
+
+%The available image pre-processing pipeline (see Section \ref{data}) allows for the automated extraction of brain tissue. This may reduce the complexity of the task such that location-based variables may not be required. We therefore simplify and assess the existing model when performed on brain tissue extracted data, independent of location-based variables.
+%
 
 %- All previous models have made some use of location data. In particular, Ghafoorian used x/y/z, and distances from the candidate to particular brain structures. However, lacunes can appear in other regions of the brain, including regions far from the basal ganglia. The location data requires the location of the ventricles, cortex and midsaggital plane. To do this in an automated fashion requires an algorithm that can find these brain features. This requires additional estimation. Try to develop an algorithm that is independent of location data. Rely more on the image.
 %

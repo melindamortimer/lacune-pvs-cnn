@@ -25,10 +25,10 @@ The construction of neural networks has to be conducted with care. The resulting
 
 The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence and in parallel. Neural networks adopt a similar structure. Individual nodes receive values, apply a transformation, and pass the output to the next node. Several nodes may apply their transformations simultaneously. For this reason, the nodes are referred to as \textit{neurons}.
 
-The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}. Let \\${\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal}$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable, not to be confused with statistical bias. The bias term is a constant used to leverage the value of the neuron independently of the input variables. Let $f(\cdot)$ be some function, known as an \textit{activation function}, which is generally nonlinear (see Section \ref{nnets-act}). Let $\cdot$ be the usual dot product. The output of a single neuron, known as an \textit{activation value}, is given by
-\begin{align}
-	a = f(\mathbf{w}\cdot\mathbf{x} + b).
-\end{align}
+The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}, and its goal is to quantify a particular feature of the input variables. Let ${\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal}$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable, not to be confused with statistical bias. The bias term is a constant used to leverage the value of the neuron independently of the input variables. Let $\sigma(\cdot)$ be some function, known as an \textit{activation function}, which is generally nonlinear (see Section \ref{nnets-act}). Let $\cdot$ be the usual dot product. The output of a single neuron, known as an \textit{activation value}, is given by
+\begin{align*}
+	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b).
+\end{align*}
 
 
 % Neuron structure diagram
@@ -89,7 +89,7 @@ The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}
 % Text Node
 \draw (254.67,70.33) node   {$b$};
 % Text Node
-\draw (408,145) node   {$f ( \cdot )$};
+\draw (408,145) node   {$\sigma ( \cdot )$};
 % Text Node
 \draw (480,155) node   {$a$};
 
@@ -109,25 +109,25 @@ The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}
 
 \begin{example}
 \label{nnets-and-eg}
-A neuron can be used to express a logical \textsc{and} gate of two inputs. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0 so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function be the step function $f(z) = 1$ for $z > 0$ and $f(z) = 0$ otherwise. The resulting neuron has output
-\begin{align}
+A neuron can be used to express a logical \textsc{and} gate of two inputs. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0 so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
+\begin{align*}
 	a(\mathbf{x}) = \begin{cases}
 		1 & ,x_1 + x_2 - 1.5 > 0\\
 		0 & ,otherwise
 	\end{cases},
-\end{align}
+\end{align*}
 which will output 1 only when $\mathbf{x} = (1, 1)^\intercal$, satisfying the definition of an \textsc{and} gate.
 \end{example}
 
 
-A large number of these neurons can be arranged in layers to form a \textit{fully connected neural network}, as shown in Figure \ref{nnet-structurefig}. The inputs $\mathbf{x} = (x_1, x_2, \ldots, x_n)$ are used to predict the final response $y$. Let $\mathbf{a}^\ell$ be the vector of activation values of the $\ell$-th layer, where $\mathbf{a}^0 := \mathbf{x}$. Let $\mathbf{w}^\ell$ be the matrix of weights such that each row entry $\mathbf{w}_j^{\ell\intercal}$ is used to compute the $j$-th neuron of the $\ell$-th layer. Let $\mathbf{b}^\ell$ be the vector of biases of the $\ell$-th layer. Hence, the vector of activation values of the $\ell$-th layer can be expressed as
+A large number of these neurons can be arranged in layers to form a \textit{fully connected neural network}, as shown in Figure \ref{nnet-structurefig}. The inputs $\mathbf{x} = (x_1, x_2, \ldots, x_n)$ are used to predict the final response $y$. Let $\mathbf{a}^\ell$ be the vector of activation values of the $\ell$-th layer, where $\mathbf{a}^0 := \mathbf{x}$. Let $\mathbf{w}^\ell$ be the matrix of weights used to calculate $\mathbf{a}^\ell$, such that each row entry $\mathbf{w}_j^{\ell\intercal}$ is used to compute the $j$-th neuron of the $\ell$-th layer. Let $\mathbf{b}^\ell$ be the vector of biases of the $\ell$-th layer. Hence, the vector of activation values of the $\ell$-th layer can be expressed as
 \begin{align}\label{nnets-act-eqn}
-	\mathbf{a}^\ell = f(\mathbf{w}^\ell \mathbf{a}^{\ell - 1} + \mathbf{b}^\ell),
+	\mathbf{a}^\ell = \sigma(\mathbf{w}^\ell \mathbf{a}^{\ell - 1} + \mathbf{b}^\ell),
 \end{align}
-where $f(\cdot)$ applies the activation function to each element of the vector. Parameterising Equation \eqref{nnets-act-eqn} as $g_\ell(\mathbf{a}^{\ell - 1}; \mathbf{w}^\ell, \mathbf{b}^\ell)$, the final output of the neural network can be written as sequence of function compositions
-\begin{align}
+where $\sigma(\cdot)$ applies the activation function to each element of the vector. Parameterising Equation \eqref{nnets-act-eqn} as $g_\ell(\mathbf{a}^{\ell - 1}; \mathbf{w}^\ell, \mathbf{b}^\ell)$, the final output of the neural network can be written as sequence of function compositions
+\begin{align*}
 	\mathbf{a}^L = g_L \circ g_{L-1} \circ \ldots \circ g_1.
-\end{align}
+\end{align*}
 
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
 %\begin{figure}[ht]
@@ -197,7 +197,7 @@ where $f(\cdot)$ applies the activation function to each element of the vector. 
 \label{nnet-structurefig}
 \end{figure}
 
-During model fitting, the quality of the estimated model is quantified using some \textit{cost function} $C(W,B)$, where $W$ is the set of weights and $B$ the set of biases. A cost of 0 describes a perfect model fit. The weights and biases are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
+During model fitting, the quality of the estimated weights $W$ and biases $B$ is quantified using some \textit{cost function} $C(W,B)$. A cost of 0 describes a perfect model fit. The weights and biases are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
 
 %Let $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
 
@@ -211,86 +211,73 @@ During model fitting, the quality of the estimated model is quantified using som
 %Let $W$ and $B$ be the sets of all weights and biases as before. Let $\eta$ be the learning rate of the network. 
 \section{Activation functions}\label{nnets-act}
 
-Activation functions, denoted by $f(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions avoid this by introducing nonlinearity into the model.
+Activation functions, denoted by $\sigma(\cdot)$, are applied just before neuron output. Without these functions, the network can be reduced to a linear combination of inputs. Activation functions avoid this by introducing nonlinearity into the model.
 
 The simplest neuron type is the \textit{perceptron}, used in Example \ref{nnets-and-eg}. It is characterised by,
-\begin{align}
-	x_i \in \{0,1\} \text{ and } f(z) = \begin{cases}
+\begin{align*}
+	x_i \in \{0,1\} \text{ and } \sigma(z) = \begin{cases}
 		1, & z > 0 \\
 		0, & z \le 0
 	\end{cases}.
-\end{align}
+\end{align*}
 
 To allow for continuous outputs, other common activation functions include the sigmoids, which are monotonically increasing, smooth approximations to the step function. Examples of these include the sigmoid function
-\begin{align}
-	f(z) = \dfrac{1}{1+e^{-z}},
-\end{align}
+\begin{align*}
+	\sigma(z) = \dfrac{1}{1+e^{-z}},
+\end{align*}
 and hyperbolic tan function
-\begin{align}
-	f(z) = \tanh(z).
-\end{align}
-Both the sigmoid and hyperbolic tan functions are common activation functions \citep{Goodfellow-et-al-2016}, however they are computationally expensive and so are not preferred for image recognition tasks as they contain a large number of variables \citep{LeCun2012, Nielson2015}.
+\begin{align*}
+	\sigma(z) = \tanh(z).
+\end{align*}
+Both the sigmoid and hyperbolic tan functions are common activation functions \citep{Goodfellow-et-al-2016}, however they are computationally expensive and so are not preferred for image recognition tasks, which contain a large number of variables \citep{LeCun2012, Nielson2015}.
 
 The Rectified Linear Unit (ReLU) activation \citep{Maas2013} is given by,
-\begin{align}
-	f(z) = \max(0, z).
-\end{align}
+\begin{align*}
+	\sigma(z) = \max(0, z).
+\end{align*}
 The ReLU activation function is suitable for neural network optimisation as the function and its derivative are simplistic \citep{Goodfellow-et-al-2016}. The neuron is said to be \textit{active} for $z > 0$. In this region, the gradient is constant and large for positive input values, promoting training of the neuron's weights (see Section \ref{nnets-graddesc} on Gradient Descent). For $z \leq 0$, the neuron has a gradient of 0 and is deactivated, avoiding unnecessary parameter adjustments and computation. 
 
 The softmax activation function,
-\begin{align}
-	f(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
-\end{align}
-is used to structure the output layer as a discrete probability distribution over $k$ classes.
+\begin{align*}
+	\sigma(z_j) = \dfrac{e^{z_j}}{\sum_ke^{z_k}},
+\end{align*}
+is used to structure a layer as a discrete probability distribution over $k$ classes. Hence, it is frequently used in the output layer of classification tasks.
 
 
 \section{Cost functions}\label{nnets-cost}
 
 Weights and biases are chosen such that they approximately minimise some cost function. \cite{Nielson2015} describes two restrictions on cost functions for them to be minimised using the Gradient Descent algorithm (see Section \ref{nnets-graddesc}). The first requirement is that the cost $C_X(\cdot)$ accrued from all samples $X$ equals the mean of costs accrued from $n$ distinct subsamples of $X$, denoted by $X_i$,
-\begin{align}
+\begin{align*}
 	C_X(W, B) = \dfrac{1}{n}\sum_{i=1}^n C_{X_i}(W,B).
-\end{align}
+\end{align*}
 
-The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$. There are a number of cost functions in frequent use, and the choice of cost function depends on the structure of the response. A common cost function for regression is the \textit{quadratic cost}, or Mean Squared Error (\textsc{mse}) cost \citep{Nielson2015}. Denote $\|\cdot\|$ to be the Euclidean norm. The \textsc{mse} cost function is given by
-\begin{align}
-	C(W,B) = \dfrac{1}{2n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||^2.
-\end{align}
-This form is convenient for backpropagation (see Section \ref{nnets-backprop}) as it has an efficiently computable gradient,
-\begin{align}
-	\nabla_aC(W,B) = \dfrac{1}{n}\sum_{i=1}^n||\mathbf{a}^L(\mathbf{x}_i,W,B) - \mathbf{y}_i ||,
-\end{align}
-where $\nabla C(\mathbf{v}) = \Big(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\ldots, \dfrac{\partial C}{\partial v_N}\Big)$.
-%In using quadratic cost, if the amount of error is large, the learning rate is low.
-
-The most common cost function for classification tasks is \textit{cross-entropy} \citep{Nielson2015}, given by
+The second requirement is that the cost is independent of $\mathbf{a}^\ell$ for all $\ell < L$, noting that there remains a dependence on the final activation values. The most common cost function for classification tasks is \textit{cross-entropy} \citep{Nielson2015}, given by
 \begin{align}\label{nnets-cross-entropy-eq}
-	C(W,B) = -\dfrac{1}{n}\sum_{i=1}^n\sum_j\big[y_{ij}\log\big(a_j^L(\mathbf{x}_i,W,B)\big) + (1 - y_{ij})\log\big( (1 - a_j^L(\mathbf{x}_i,W,B))\big)\big],
+	C(W,B) = -\dfrac{1}{n}\sum_{i=1}^{n}\sum_{j=1}^{n_L}\big[y_{ij}\log\big(a_j^L(\mathbf{x}_i,W,B)\big) + (1 - y_{ij})\log\big( (1 - a_j^L(\mathbf{x}_i,W,B))\big)\big],
 \end{align}
-with gradient
-\begin{align}
-	\nabla_aC(W,B) = \dfrac{1}{n}\sum_{i=1}^n\sum_j\dfrac{a_j^L(\mathbf{x}_i,W,B) - y_{ij}}{a_j^L(\mathbf{x}_i,W,B)(1-a_j^L(\mathbf{x}_i,W,B))}.
-\end{align}
+where $n$ is the number of samples and $n_L$ is the number of neurons in the output layer.
 
-The efficacy of cross-entropy as a measure of misclassification cost can be shown through the Maximum Likelihood Estimator (\textsc{mle}) of the weights $(W, B)$ and also by considering distributional similarities between the data and the proposed model.
+We now show the efficacy of cross-entropy as a measure of misclassification cost by first determining the Maximum Likelihood Estimator (\textsc{mle}) of the weights $(W, B)$, and secondly by considering distributional differences between the data and the proposed model.
 
-Let ${p}_{data}(\mathbf{x})$ be the unknown probability distribution of the data points $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n$. Let $p_{model}(\mathbf{x}; \mathbf{\theta})$ be a family of probability distributions estimating the true $p_{data}(\mathbf{x})$. The \textsc{mle} of $\mathbf{\theta}$ is defined as
-\begin{align}
+Let ${p}_{data}(\mathbf{x})$ be the unknown probability distribution of the data points \\${X = (\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n)}$. Let $p_{model}(\mathbf{x}; \mathbf{\theta})$ be a family of probability distributions estimating the true $p_{data}(\mathbf{x})$. The \textsc{mle} of $\mathbf{\theta}$ is defined as
+\begin{align*}
 	\hat{\mathbf{\theta}}_{MLE} = \arg\max_{\mathbf{\theta}}\prod_{i=1}^np_{model}(\mathbf{x}_i;\mathbf{\theta}).
-\end{align}
+\end{align*}
 This can be reformulated using the log-likelihood,
-\begin{align}
+\begin{align*}
 	\hat{\mathbf{\theta}}_{MLE} = \arg\max_{\mathbf{\theta}}\sum_{i=1}^n\log p_{model}(\mathbf{x}_i;\mathbf{\theta}).
-\end{align}
-Dividing by $n$, the expression to be written in terms of expectation,
+\end{align*}
+Dividing by $n$, the expression can be written in terms of expectation,
 \begin{align}\label{nnets-mle-eq}
 	\hat{\mathbf{\theta}}_{MLE} = \arg\max_{\mathbf{\theta}}\mathbb{E}_{\mathbf{x}\sim \hat{p}_{data}}\left[\log p_{model}(\mathbf{x}; \mathbf{\theta})\right].
 \end{align}
+This expression is equivalent to the minimisation of cross-entropy. The same minimisation occurs when considering the KL-divergence between $p_{model}$ and $p_{data}$.
 
 \begin{definition}
 	\textbf{Kullback-Leibler (KL)-divergence} is a measure of difference between two probability distributions $P(x)$ and $Q(x)$ given by
-	\begin{align}
+	\begin{align*}
 		D_{KL}(P||Q) = \mathbb{E}_{x\sim P}\left[\log\dfrac{P(x)}{Q(x)}\right] = \mathbb{E}_{x\sim P}[\log P(x) - \log Q(x)],
-	\end{align}
+	\end{align*}
 	where $\cdot||\cdot$ denotes necessary ordering of the function inputs. Note that \textsc{kl}-divergence is not symmetric and is therefore not a metric.	
 \end{definition}
 
@@ -303,7 +290,7 @@ Since $\hat{p}_{data}$ is not a function of $\mathbf{\theta}$, Equation \eqref{n
 \begin{align}\label{nnets-kl-eq2}
 	\hat\theta_{KL} = \arg\min_\theta-\mathbb{E}_{\mathbf{x}\sim\hat{p}_{data}}\left[\log p_{model}(\mathbf{x};\theta)\right].
 \end{align}
-Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimiser of \textsc{kl}-divergence (Equation \eqref{nnets-kl-eq2}) are equivalent to the minimiser of cross-entropy (Equation \eqref{nnets-cross-entropy-eq}). 
+Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimiser of \textsc{kl}-divergence (Equation \eqref{nnets-kl-eq2}) are equivalent to the minimisation of cross-entropy (Equation \eqref{nnets-cross-entropy-eq}). This minimisation is generally conducted through the Gradient Descent algorithm.
 
 % https://www.deeplearningbook.org/contents/ml.html P130
 %The KL divergence between the empirical distribution $\hat{p}_{data}$ and 
@@ -321,21 +308,21 @@ Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimi
 
 Weights $W$ and biases $B$ are chosen such that they approximately minimise the cost function $C(W,B)$. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \citep{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
 
-Gradient Descent considers the gradient of the cost given the current weights and biases \citep{Nielson2015}. The algorithm shifts the weights and biases by a small amount such that the cost decreases. The amount that the values are shifted by is referred to as the learning rate, denoted as $\eta$. Let $N$ be a positive integer and let $\mathbf{v} = (W,B)$. The approximate change in the cost function $C(\mathbf{v})$ as a result of the shifted $\mathbf{v}$ is given by the \textit{Total Differential Approximation}
+Let $\mathbf{v} = (W,B)$ of length $N$ be the vector of all weights and biases in the network. Gradient Descent considers the gradient of the cost with respect to the current weights and biases given by $\nabla C(\mathbf{v}) = \left(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\cdots, \dfrac{\partial C}{\partial v_N}\right)$. The algorithm shifts the weights and biases by a small amount $\Delta\mathbf{v}$ such that the cost decreases. Define $\mathbf{v}':= \mathbf{v} + \Delta\mathbf{v}$ to be the updated value of $\mathbf{v}$. Let $\Delta C(\mathbf{v})$ be the change in the cost function as a result of the shifted $\mathbf{v}'$. An approximation of $\Delta C(\mathbf{v})$ is given by the \textit{Total Differential Approximation}
 \begin{align}
 	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\\
 	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.\label{nnets-total-diff-eq}
 \end{align}
+Note the distinction between the gradients denoted by $\nabla$ and small changes denoted by $\Delta$.
 
-
-Define $\mathbf{v}':= \mathbf{v} + \Delta\mathbf{v}$ to be the updated value of $\mathbf{v}$. We update $\mathbf{v}'$ inductively such that the cost decreases by an amount proportional to $\eta$. At the next iteration, $\mathbf{v}$ is chosen such that the cost function decreases by an amount controlled by $\eta$, such that
-\begin{align}
+We update $\mathbf{v}'$ inductively such that the cost decreases by an amount proportional to a given \textit{learning rate} $\eta$, such that
+\begin{align}\label{nnets-delta-v-eq}
 	\Delta\mathbf{v} = -\eta \nabla C(\mathbf{v}), \quad \text{ where }\eta > 0.
 \end{align}
-By substitution, Equation \eqref{nnets-total-diff-eq} can be written as
-\begin{align}
+Substituting Equation \eqref{nnets-delta-v-eq} into Equation \eqref{nnets-total-diff-eq}, we can write
+\begin{align*}
 	\Delta C(\mathbf{v}) \approx -\eta \|\nabla C(\mathbf{v})\|^2 \le 0.
-\end{align}
+\end{align*}
 
 Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost function will decrease. In training a neural network, the size of the shift can be set to $\|\Delta\mathbf{v}\| = \varepsilon$, for some $\varepsilon > 0$. It can be shown that the $\Delta\mathbf{v}$ which gives the greatest decrease in $C(\mathbf{v})$ is a function of $\varepsilon$ and $\nabla C$ \citep{Nielson2015}.
 
@@ -362,13 +349,15 @@ Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost functi
 		& = -\dfrac{\varepsilon\nabla C\cdot\nabla C}{\|\nabla C\|} \label{nnets-gdesc-eq4}.
 	\end{align}
 	By equating the coefficients of $\nabla C$ between Equations \eqref{nnets-gdesc-eq1} and \eqref{nnets-gdesc-eq4}, and noting that $\eta = \epsilon / ||\nabla C||$,
-	\begin{align}
+	\begin{align*}
 		\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\nabla C}{\|\nabla C\|} \\
 		& = -\eta\nabla C.
-	\end{align}	
+	\end{align*}	
 \end{proof}
 
-The Gradient Descent algorithm moves the coefficients in the direction of the steepest negative gradient. It assumes that the starting values are close enough to the global minimum to converge. If this assumption is not satistifed, the algorithm will instead converge to the local minimum. In this thesis, we are only concerned about estimating the local minimum.
+The Gradient Descent algorithm moves the coefficients in the direction of the steepest negative gradient. It assumes that the starting values are close enough to the global minimum to converge. If this assumption is not satisfied, the algorithm will instead converge to the local minimum. In this thesis, we are only concerned about estimating the local minimum as attaining the global minimum results in overfitting of the training data.
+
+The Gradient Descent algorithm relies on the gradients of a large number of variables. We now discuss a number of techniques that improve algorithm efficiency, including the Stochastic Gradient Descent algorithm, the choice of learning rate and the Adam Optimiser.
 
 %Since the updated weights and biases rely on the gradient, it should be noted that these gradients are required to be significantly different from zero. When this is not the case, the weights and biases stagnate and we have what is known as the Vanishing gradient problem, which is discussed further in Section \ref{nnet-vanishinggradprob}.
 
@@ -378,8 +367,8 @@ Gradient Descent is a highly computationally intensive algorithm as the neural n
 
 \subsection*{Learning rate}\label{nnets-learningrate}
 
-During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla C$ moves the weights in the direction of the steepest negative gradient (see Section \ref{nnets-graddesc}). The learning rate $\eta$ controls the magnitude of the movement. If $\eta$ is too small, the adjustment of weights is also small and model training will take a long time. If $\eta$ is too large, the weights may be shifted too far and the values of $\mathbf{v}$ will continuously move past the local minimum. This is shown in Figure \ref{nnets-high-learn-fig}.
-
+During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla C$ moves the weights in the direction of the steepest negative gradient (see Section \ref{nnets-graddesc}). The learning rate $\eta$ controls the magnitude of this movement. If $\eta$ is too small, the adjustment of weights is also small and model training will take a long time. If $\eta$ is too large, the weights may be shifted too far and the values of $\mathbf{v}$ will continuously move past the local minimum, as shown in Figure \ref{nnets-high-learn-fig}.
+% High learning rate during grad desc
 \begin{figure}[ht]
 \centering
 
@@ -433,46 +422,47 @@ During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla
 \label{nnets-high-learn-fig}
 \end{figure}
 
-To aid in efficient training, learning rates can be adjusted throughout model training. At the start of training, it can be beneficial to have a higher learning rate. This allows the weights to move closer to the local minimum much faster. At later epochs, a smaller learning rate will allow for fine tuning of the weights, ensuring precision.
+To aid in efficient training, it can be beneficial for learning rates to be adjusted during the training process. Higher initial learning rates allow for fast convergence toward the local minimum, and lower learning rates at later epochs give the algorithm greater precision.
 
 \subsection*{Adam Optimiser}\label{nnets-adam}
 
-The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to each of the weights in the neural network, allowing the cost function to converge to the minimum more quickly \citep{Kingma2014}.
+The Adam Optimiser is an algorithm that introduces additional learning rates to the Gradient Descent algorithm. Different learning rates are applied to each of the weights in the neural network, allowing for faster convergence of the cost function to the minimum \citep{Kingma2014}.
 
 
 \section{The Backpropagation algorithm}\label{nnets-backprop}
 
-During gradient descent, it is necessary to calculate the gradient of the cost function with respect to the weights $(W,B)$. The Backpropagation algorithm is an efficient algorithm that determines $\dfrac{\partial C}{\partial z}$ and relates them to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$ \citep{Nielson2015}. The following lemmas are necessary to understand the Backpropagation algorithm.
+During Gradient Descent, it is necessary to calculate the gradient of the cost function with respect to the weights $(W,B)$. Let $z_j^\ell = \mathbf{w}_j^\ell \cdot \mathbf{a}^{\ell - 1} + b_j^\ell$ be the value of the $j$-th neuron of the $\ell$-th layer before the activation function is applied. The Backpropagation algorithm is an efficient algorithm that determines the $\dfrac{\partial C}{\partial z}$ and relates them to the rates of interest, $\dfrac{\partial C}{\partial W}$ and $\dfrac{\partial C}{\partial B}$ \citep{Nielson2015}. The following lemmas are necessary to understand the Backpropagation algorithm.
 
 % http://neuralnetworksanddeeplearning.com/chap2.html
 
 \begin{lemma}
 	The error of the $j$-th neuron of the final output layer is
-	\begin{align}
-		\delta_j^L = \dfrac{\partial C}{\partial a_j^L}f'(z_j^L).
-	\end{align}
+	\begin{align*}
+		\delta_j^L = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+	\end{align*}
 	The vector of output layer errors can be expressed in the matrix form,
 	\begin{align}\label{nnets-bprop-eq1}
-		\delta^L = f'(\mathbf{z}^L)\nabla_aC,
+		\delta^L = \Sigma'(\mathbf{z}^L)\nabla_aC,
 	\end{align}
-where $\Sigma'(\cdot)$ is a matrix such that the $j$-th diagonal entry is $f'(z_j^L)$ and all non-diagonal entries are 0.
+where $\Sigma'(\cdot)$ is a matrix such that the $j$-th diagonal entry is $\sigma'(z_j^L)$ and all non-diagonal entries are 0.
 \end{lemma}
 
 \begin{proof}
 
-Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
-	\begin{align}
-		\delta_j^L = \dfrac{\partial C}{\partial z_j^L} & = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
+Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
+	\begin{align*}
+		\delta_j^L & = \dfrac{\partial C}{\partial z_j^L}\\
+		& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
 		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\\
-		& = \dfrac{\partial C}{\partial a_j^L}f'(z_j^L).
-	\end{align}
+		& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
+	\end{align*}
 \end{proof}
 
 \begin{lemma}
 	The error $\delta^\ell_j$ of the $\ell$-th layer can be written in terms of the errors of the $(\ell + 1)$-th layer, 
-	\begin{align}
-		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}f'(z_j^\ell).
-	\end{align}
+	\begin{align*}
+		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}\sigma'(z_j^\ell).
+	\end{align*}
 	The vector of errors $\delta^\ell$ for the $\ell$-th layer can be expressed in the matrix form,
 	\begin{align}\label{nnets-bprop-eq2}
 		\delta^\ell & = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}
@@ -482,14 +472,15 @@ Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
 
 \begin{proof}
 	Using the chain rule,
-	\begin{align}
-		\delta_j^\ell = \dfrac{\partial C}{\partial z_j^\ell}& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\
+	\begin{align*}
+		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell}\\
+		& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\
 		& = \sum_k\delta_k^{\ell+1}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell}.
-	\end{align}
-	Since $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot f(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}f'(z_j^\ell)$, $\delta_j^\ell$ can be written
-	\begin{align}
-		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}f'(z_j^\ell).
-	\end{align}
+	\end{align*}
+	Noting that $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot \sigma(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}\sigma'(z_j^\ell)$, we can write $\delta_j^\ell$ as
+	\begin{align*}
+		\delta_j^\ell & = \sum_k\delta_k^{\ell+1}w_{kj}^{\ell+1}\sigma'(z_j^\ell).
+	\end{align*}
 \end{proof}
 
 \begin{lemma}
@@ -499,12 +490,13 @@ Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
 	\end{align}
 \end{lemma}
 \begin{proof}
-	Since $z_j^\ell$ is only a function of $b_k^\ell$ for $j = k$,
-	\begin{align}
-		\delta_j^\ell = \dfrac{\partial C}{\partial z_j^\ell} & = \sum_k\dfrac{\partial C}{\partial b_k^\ell}\dfrac{\partial b_k^\ell}{\partial z_j^\ell}\\
+	Noting that $z_j^\ell$ is independent of $b_k^\ell$ for all $j \neq k$,
+	\begin{align*}
+		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell} \\
+		& = \sum_k\dfrac{\partial C}{\partial b_k^\ell}\dfrac{\partial b_k^\ell}{\partial z_j^\ell}\\
 		& = \dfrac{\partial C}{\partial b_j^\ell}\dfrac{\partial b_j^\ell}{\partial z_j^\ell} \\
 		& = \dfrac{\partial C}{\partial b_j^\ell}.
-	\end{align}
+	\end{align*}
 \end{proof}
 
 \begin{lemma}
@@ -515,21 +507,21 @@ Since $z_j^L$ is only a function of $a_k^L$ for $k = j$, $\delta_j^L$ is
 \end{lemma}
 \begin{proof}
 	By definition,
-	\begin{align}
+	\begin{align*}
 		z_k^\ell & = \mathbf{w}_k^\ell\cdot\mathbf{a}^{\ell-1} + b_k^\ell
-	\end{align}
+	\end{align*}
 	Differentiating with respect to some weight $w_{km}^\ell$,
-	\begin{align}
+	\begin{align*}
 		\dfrac{\partial z_k^\ell}{\partial w_{km}^\ell} = a_m^{\ell-1}.
-	\end{align}
+	\end{align*}
 	Using the chain rule,
-	\begin{align}	
+	\begin{align*}	
 		\dfrac{\partial C}{\partial w_{jk}^\ell} & = \dfrac{\partial C}{\partial z_j^\ell}\dfrac{\partial z_j^\ell}{\partial w_{jk}^\ell} = \delta_j^\ell a_k^{\ell-1}.
-	\end{align}
+	\end{align*}
 \end{proof}
 
 
-The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the network to determine the error in the final layer $\delta^L$ (Equation \eqref{nnets-bprop-eq1}).  The algorithm moves backwards from the final layer through to the first hidden layer to determine the other $\delta^\ell$ (Equation \eqref{nnets-bprop-eq2}). From these errors, the cost gradients in terms of the weights and biases can be calculated (Equations \eqref{nnets-bprop-eq3} and \eqref{nnets-bprop-eq4}). The complete algorithm is detailed in Algorithm \ref{nnets-bprop-alg}.
+The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the network to determine the error in the final layer $\delta^L$ (Equation \eqref{nnets-bprop-eq1}).  The algorithm moves backwards through the network from the final layer back to the first hidden layer to determine the remaining errors in the network $\delta^\ell$, $\ell < L$ (Equation \eqref{nnets-bprop-eq2}). From these errors, the cost gradients in terms of the weights and biases can be calculated (Equations \eqref{nnets-bprop-eq3} and \eqref{nnets-bprop-eq4}). The complete algorithm is detailed in Algorithm \ref{nnets-bprop-alg}.
 %\begin{enumerate}
 %	\item \textbf{Inputs}. Enter observations $x_1,\ldots,x_n$ to retrieve $\mathbf{a}^1$.
 %	\item \textbf{Feedforward}. Compute $\mathbf{z}^\ell = \mathbf{w}^\ell\mathbf{a}^{\ell-1} + \mathbf{b}^\ell$ for each $l = 2, 3,\ldots,L$.
@@ -562,30 +554,28 @@ The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the ne
 
 
 \subsection*{Vanishing gradient problem}\label{nnet-vanishinggradprob}
-The error $\delta^\ell$ is dependent on the gradient of the activation function. If the gradient of the activation is close to 0, then both the error detected and learning rate also become close to 0.
-
-\noindent For the sigmoid activation function,
-\begin{align}
-	f '(z) = e^{-z}(1+e^{-z})^{-2}.
-\end{align}
-For the tanh activation function,
-\begin{align}
-	f '(z) = 1-\tanh^2(z).
-\end{align}
-For both the sigmoid and tanh activations, the limit as $z\rightarrow\pm\infty$ yields 
-\begin{align}
-	\lim_{z\rightarrow\pm\infty}f '(z)= 0.
-\end{align}
-Very large positive or negative $z_j^\ell$ will have an activation gradient near 0, stagnating the movement of weights and biases. The ReLU activation function avoids this by having gradient
-\begin{align}
-	f '(z) = \begin{cases}
+The \textit{vanishing gradient problem} refers to the stagnation of weights and biases during the Gradient Descent algorithm caused by very small activation function gradients. The errors $\delta^\ell$ calculated during backpropagation are dependent on the gradient of the activation function (see Equation \eqref{nnets-bprop-eq1}). If this gradient becomes too small, then the errors $\delta$ and movement of weights $\Delta\mathbf{v}$ also become small (see Equation \eqref{nnets-delta-v-eq}), limiting the movement of weights and biases. For the sigmoid activation function,
+\begin{align*}
+	\sigma'(z) = e^{-z}(1+e^{-z})^{-2},
+\end{align*}
+and for the hyperbolic tan activation function,
+\begin{align*}
+	\sigma'(z) = 1-\tanh^2(z).
+\end{align*}
+For both the sigmoid and tanh activation functions, the limit as $z\rightarrow\pm\infty$ yields 
+\begin{align*}
+	\lim_{z\rightarrow\pm\infty}\sigma'(z)= 0,
+\end{align*}
+causing stagnation of the movement of weights and biases. The ReLU activation function avoids this by having gradient
+\begin{align*}
+	\sigma'(z) = \begin{cases}
 		1, & z > 0 \\
 		0, & z < 0 \\
-		undefined, & z = 0
+		\text{undefined}, & z = 0
 	\end{cases}.
-\end{align}
+\end{align*}
 % Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
-Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \citep{Goodfellow-et-al-2016}. Neurons that return a positive $z_j^\ell$ have a large gradient and so remain actively trained. If the value of $z_j^\ell$ becomes negative, the activation will have a gradient of 0 and the neuron will cease training. 
+Neurons that return a positive $z_j^\ell$ have a large gradient and so remain actively trained. If the value of $z_j^\ell$ becomes negative, the activation will have a gradient of 0 and the neuron will cease training. It should be noted that, in practice, the gradient of ReLU activation will output 0 at $z = 0$ for simplicity \citep{Goodfellow-et-al-2016}. 
 
 
 %If this occurs in the whole network, the ReLU activation can be replaced with the \textit{leaky ReLU},
@@ -605,11 +595,11 @@ Note that in practise, a ReLU gradient will output 0 at $z = 0$ for simplicity \
 
 The initialisation of weights and biases affects the rate and quality of training \citep{Mishkin2016}. Intuitively, if the weights are initialised close to the final output values, it will be faster to train. Conversely, weights that are initialised poorly may take a longer time to train to the same accuracy, or the local minimum of the cost function may not converge close to the global minimum and produce a poor model.
 
-If the weights in two neurons are similar, using the same activation function will result in similar outputs. Therefore, initialising weights and biases with the same values introduces a lot of redundant calculations. It is commonplace for weights and biases to be initialised randomly \citep{Nielson2015}. An example of an initialisation distribution is the truncated normal distribution. Let $X\sim\mathcal{N}(\mu,f^2)$ and $-\infty \le a < b \le \infty$. For $x \in (a,b)$, the truncated normal $X$ has probability density function (\textsc{pdf})
-\begin{align}
-	f_X(x;\mu, f^2,a,b) = \dfrac{\phi\big(\frac{x-\mu}{f}\big)}{f\bigg(\Phi\big(\frac{b-\mu}{f}\big) - \Phi\big(\frac{a-\mu}{f}\big)\bigg)},
-\end{align}
-where $\phi$ and $\Phi$ are the standard Normal \textsc{pdf} and cumulative density function (\textsc{cdf}) respectively. This method initialises the weights with a small amount of noise, with truncation of the Normal distribution helping to avoid vanishing gradients (see Section \ref{nnet-vanishinggradprob}) should the sigmoid or hyperbolic tan activation functions be used.
+If the weights in two neurons are similar, using the same activation function will result in similar outputs. Therefore, initialising weights and biases with the same values introduces a lot of redundant calculations. It is commonplace for weights and biases to be initialised randomly \citep{Nielson2015}. An example of an initialisation distribution is the truncated normal distribution. Let $X\sim\mathcal{N}(\mu,\sigma^2)$ and $-\infty \le a < b \le \infty$. For $x \in (a,b)$, the truncated normal $X$ has probability density function (\textsc{pdf})
+\begin{align*}
+	f_X(x;\mu, \sigma^2,a,b) = \dfrac{\phi\big(\frac{x-\mu}{\sigma}\big)}{f\bigg(\Phi\big(\frac{b-\mu}{\sigma}\big) - \Phi\big(\frac{a-\mu}{\sigma}\big)\bigg)},
+\end{align*}
+where $\phi$ and $\Phi$ are the standard Normal \textsc{pdf} and cumulative density function (\textsc{cdf}) respectively. This method initialises the weights with a small amount of noise, with truncation of the Normal distribution helping to avoid vanishing gradients should the sigmoid or hyperbolic tan activation functions be used (see Section \ref{nnet-vanishinggradprob}).
 
 In the case that the ReLU activation function is used, the He Method \citep{HeKaiming2015DDiR} is a common initialisation algorithm. This method recognises the use of the ReLU activation function and scales its initialisations dependent on the size of the previous layer. According to \cite{HeKaiming2015DDiR}, the method helps to constrain the variance of the weights during training and thus improves training time and quality. The He Method samples from the Normal distribution $\mathcal{N}\left(0, 2/d_{\ell-1}\right)$, where $d_{\ell-1}$ is the number of neurons in the $(\ell-1)$-th layer.
 
@@ -625,16 +615,16 @@ In the case that the ReLU activation function is used, the He Method \citep{HeKa
 
 \section{Regularisation}\label{nnet-reg}
 
-Due to the large number of parameters to be estimated, parameters generally outnumber observations. During training, observations must be reused and so neural network models have a tendency to overfit the data \citep{Nielson2015}. \textit{Regularisation} is the process of mitigating the tendency to overfit data by applying penalties to the network as it trains.
+Due to the large number of parameters to be estimated, parameters generally outnumber observations. During training, observations must be reused and so neural network models have a tendency to overfit the data \citep{Nielson2015}. \textit{Regularisation} is the process of mitigating the tendency to overfit data by applying penalties to the network as it trains. We now cover some regularisation techniques, including L2-regularisation, dropout, batch normalisation, data expansion and early stopping.
 
 \subsection*{L2-regularisation}\label{nnet-l2reg}
 
 % Regularisation & Dropout
 
-\textit{L2-regularisation} penalises the cost function by adding a penalty term of scaled model weights. This penalty is similar to that of Ridge regression. The scaling of the weights is controlled by the regularisation parameter $\lambda$ to give the updated cost function
-\begin{align}
+Penalties can be applied to the cost function to artificially increase the error and promote model training. \textit{L2-regularisation} adds a penalty term of scaled model weights, similar to that of Ridge regression. The scaling of the weights is controlled by the regularisation parameter $\lambda$ to give the updated cost function
+\begin{align*}
 	C(W,B) + \dfrac{\lambda}{2n}\sum_{v\in (W,B)}v^2.
-\end{align}
+\end{align*}
 
 %Another common regularisation is L1, or Lasso Regression, which takes the sum of the absolute weights,
 %\begin{align}

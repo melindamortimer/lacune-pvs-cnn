@@ -9,12 +9,12 @@ Convolutional neural networks (\textsc{cnn}s) are of particular interest when wo
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/4_cnn_structure.png}
-	\caption{Typical CNN Structure. Convolution layers with ReLU activation (nonlinearity) are followed by pooling layers. The final layers are fully connected, using softmax activation to generate a probability distribution.}
+	\caption{Typical CNN Structure to classify an image from a finite set of classes. Convolution layers with ReLU activation (nonlinearity) are followed by pooling layers. The final layers are fully connected, using softmax activation to generate a probability distribution.}
 	\small Image taken from \cite{ADeshpande2016}
 	\label{convnets-structurefig}
 \end{figure}
 
-CNNs typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. The convolutional layers identify significant visual features, however they introduce a large number of variables into the network. Max pooling layers occur after convolutional layers to reduce network dimensionality. For classification tasks, the last layers of the network are fully connected to ensure the final outputs match the structure of the given responses. Softmax activation (see Section \ref{nnets-act}) is used for the final output layer to generate a probability distribution of the classifications.
+CNNs typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. Each convolutional layer identifies a significant visual features, however they introduce a large number of variables into the network. Max pooling layers occur after convolutional layers to reduce network dimensionality. For classification tasks, the last layers of the network are fully connected to ensure the final outputs match the structure of the given responses. Softmax activation (see Section \ref{nnets-act}) is used for the final output layer to generate a probability distribution of the classifications.
 
 \section{Convolutional layers}\label{convnets-convlayer}
 

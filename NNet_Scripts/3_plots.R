@@ -1,15 +1,22 @@
 # Data prep ---------------------------------------------------------------
 
 # setwd("/srv/scratch/z5016924/model1/attempt5")
-setwd("~/hdrive/Honours/lacune-pvs-cnn/y_attempt5")
+# setwd("~/hdrive/Honours/lacune-pvs-cnn/y_attempt5")
+# 
+# load("train_accuracy.Rda")
+# load("train_accuracy2.Rda")
+# 
+# train.accuracy2 <- head(train.accuracy2, -1)
+
+
+# Plots Attempt 4 -------------------------------------------------------------------
+
+setwd("~/hdrive/Honours/lacune-pvs-cnn/y_attempt4")
 
 load("train_accuracy.Rda")
 load("train_accuracy2.Rda")
 
 train.accuracy2 <- head(train.accuracy2, -1)
-
-
-# Plots Attempt 4 -------------------------------------------------------------------
 
 which(train.accuracy == max(train.accuracy))[[1]]
 # attempt4: First hits 100% at batch 28x5 = 140
@@ -20,16 +27,19 @@ max(train.accuracy2)
 
 plot((1:length(train.accuracy))*5+1, train.accuracy,
      type = "l", lty = "dashed",
-     xlab = "Batch Number",
+     xlab = "Batch Number (log)",
      ylab = "Training Accuracy",
-     main = "Training Accuracy")
+     main = "Training Accuracy",
+     log = "x",
+     col = "gray50")
 # attempt4: Consistently at 100% by batch 300
 lines(smooth.spline((1:length(train.accuracy))*5+1, train.accuracy,
-                    spar = 0.4),col = "red")
+                    spar = 0.4),col = "red", lwd= 2)
 legend("bottomright",
        c("Training Accuracy", "Cubic Spline"),
        lty = c(2, 1),
-       col = c("black","red"))
+       lwd = c(1,2),
+       col = c("gray50","red"))
 
 
 plot(train.accuracy2,
@@ -74,16 +84,19 @@ max(train.accuracy2)
 
 plot((1:length(train.accuracy))*5+1, train.accuracy,
      type = "l", lty = "dashed",
-     xlab = "Batch Number",
+     xlab = "Batch Number (log)",
      ylab = "Training Accuracy",
-     main = "Training Accuracy")
+     main = "Training Accuracy",
+     log = "x",
+     col = "gray50")
 # attempt5: More noise - from larger sample size. Consistently at 100% by batch 1000.
 lines(smooth.spline((1:length(train.accuracy))*5+1, train.accuracy, spar = 0.4),
-      col = "red")
+      col = "red", lwd = 2)
 legend("bottomright",
        c("Training Accuracy", "Cubic Spline"),
        lty = c(2, 1),
-       col = c("black","red"))
+       lwd = c(1,2),
+       col = c("gray50","red"))
 
 
 plot(train.accuracy2,
