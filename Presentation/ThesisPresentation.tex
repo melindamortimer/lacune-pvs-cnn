@@ -407,8 +407,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % Secondly, this method is prone to overfitting the data. There are methods to mitigate this, but these are covered in greater detail in my thesis.
 \begin{frame}{Choosing the network weights}
 \begin{itemize}
-\item It is faster to instead estimate the weights using the \textit{Gradient Descent algorithm}.
-\item Two issues: no guarantee that the minimum is global, and overfitting.
+\item Instead estimate the weights using the \textit{Gradient Descent algorithm}.
 \end{itemize}
 \begin{figure}
 \centering
@@ -417,7 +416,8 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 
 \begin{tikzpicture}[x=0.55pt,y=0.55pt,yscale=-1,xscale=1]
 %uncomment if require: \path (0,291); %set diagram left start at 0, and has height of 291
-
+%Shape: Rectangle [id:dp29688417965832214] 
+\clip(84,14) rectangle (379,274) ;
 %Shape: Parabola [id:dp09742535750627612] 
 \draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=2.25]  (90,18) .. controls (184.33,350) and (278.67,350) .. (373,18) ;
 %Straight Lines [id:da11196791721275057] 
@@ -428,10 +428,12 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \draw  [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][dash pattern={on 1.69pt off 2.76pt}][line width=1.5]  (272,239.5) .. controls (272,235.91) and (274.91,233) .. (278.5,233) .. controls (282.09,233) and (285,235.91) .. (285,239.5) .. controls (285,243.09) and (282.09,246) .. (278.5,246) .. controls (274.91,246) and (272,243.09) .. (272,239.5) -- cycle ;
 %Shape: Circle [id:dp7325121590212951] 
 \draw  [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 0; blue, 0 }  ,fill opacity=1 ][line width=1.5]  (309,177.5) .. controls (309,173.91) and (311.91,171) .. (315.5,171) .. controls (319.09,171) and (322,173.91) .. (322,177.5) .. controls (322,181.09) and (319.09,184) .. (315.5,184) .. controls (311.91,184) and (309,181.09) .. (309,177.5) -- cycle ;
-%Shape: Rectangle [id:dp29688417965832214] 
-\clip(84,14) rectangle (379,274) ;
+
 \end{tikzpicture}
 \end{figure}
+\begin{itemize}
+\item Two issues: overfitting, and no guarantee that the minimum is global.
+\end{itemize}
 \end{frame}
 
 
