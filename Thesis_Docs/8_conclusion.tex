@@ -3,13 +3,15 @@
 
 \chapter{Conclusion}\label{conclusion}
 
-In this thesis, we propose a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. The proposed model greatly simplifies the existing machine learning model created by \cite{GhafoorianM.2017Dml3}.
+We proposed a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. The model greatly simplifies the existing machine learning model created by \cite{GhafoorianM.2017Dml3}.
 
-Our proposed model makes three major changes. The first is the pre-processing applied to the input T1-weighted images. Soft tissue is extracted to remove features outside the brain, such as eyes and skull, and to de-identify the data. The algorithm also has the effect of masking regions of possible \textsc{csf} content, which has an appearance similar to that of lacunes. The voxel intensity of some positive responses may be reduced to zero as a result.
+Our proposed model isolates the candidate detection model by \cite{GhafoorianM.2017Dml3} and makes three major changes. The first is the pre-processing applied to the input T1-weighted images. Soft tissue is extracted to remove features outside the brain, such as eyes and skull, and to de-identify the data. The algorithm also has the effect of masking regions of possible \textsc{csf} content, which has an appearance similar to that of lacunes. The voxel intensity of some positive responses may be reduced to zero as a result.
 
 The second change examined the impact of positive to negative sample ratios. The original model consisted of twice as many negative samples as positive. On our smaller data set, the sensitivity and specificity both improved when given a greater number of samples, regardless of the ratio of training.
 
 The third change was the removal of the false-positive reduction model. Upon examining the performance of the initial model, the sensitivity and specificity rates were 99.9\% and 99.8\% respectively. To maintain model simplicity, and reduce computation time and resources, the model was consolidated after candidate generation.
+
+\todo[inline]{remove convolution downsampling.}
 
 \section{Improvements and further research}
 

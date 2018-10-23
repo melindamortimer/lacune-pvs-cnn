@@ -54,9 +54,9 @@ lines(smooth.spline(train.accuracy2, spar = 0.5), col = "red")
 # attempt 4: Seems to remain stable after about 15 epochs.
 # Maximum is reached at epoch 18 with accuracy 0.9923717
 abline(h = max.acc.4, col = "blue", lty = 2)
-points(which.max.acc.4, max.acc.4)
+points(which.max.acc.4, max.acc.4, col = "green3",pch = 19)
 legend('bottomright',
-       c("Validation Accuracy","Cubic Spline", "Highest Acc = 0.9923717"),
+       c("Validation Accuracy","Cubic Spline", "Highest Acc = 0.9924"),
        lty = c(2,1,2),
        col = c("black","red", "blue"))
 
@@ -66,7 +66,7 @@ legend('bottomright',
 
 
 # setwd("/srv/scratch/z5016924/model1/attempt5")
-setwd("~/hdrive/Honours/lacune-pvs-cnn/attempt5")
+setwd("~/hdrive/Honours/lacune-pvs-cnn/y_attempt5")
 
 load("train_accuracy.Rda")
 load("train_accuracy2.Rda")
@@ -110,9 +110,9 @@ lines(smooth.spline(train.accuracy2, spar = 0.5), col = "red")
 (max.acc.5 = max(train.accuracy2))
 (which.max.acc.5 = which(train.accuracy2 == max.acc.5)[1] )
 abline(h = max.acc.5, col = "blue", lty = 2)
-points(which.max.acc.5, max.acc.5)
+points(which.max.acc.5, max.acc.5, col = "green3", pch = 19)
 legend('bottomright',
-       c("Validation Accuracy","Cubic Spline", "Highest Acc = 0.9983333"),
+       c("Validation Accuracy","Cubic Spline", "Highest Acc = 0.9983"),
        lty = c(2,1,2),
        col = c("black","red", "blue"))
 

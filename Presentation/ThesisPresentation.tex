@@ -12,7 +12,7 @@
 
 \documentclass{beamer}
 
-\usepackage[numbers]{natbib}
+\usepackage{natbib}
 \usepackage{todonotes}
 \usepackage{booktabs}
 \usepackage{afterpage}
@@ -137,8 +137,8 @@
 \begin{frame}{Introduction}
     \begin{itemize}
     \item Lacunes are small brain cavities associated with the incidence of stroke.
-    \item Appear round in \textsc{mri} with a diameter of 3--15 mm.
-	\item Lacunes appear dark in T1-weighted images, with a bright rim in \textsc{flair}.
+    \item Appear round in MRI with a diameter of 3--15 mm.
+	\item Lacunes appear dark in T1-weighted images, with a bright rim in FLAIR.
     \end{itemize}
     	\begin{figure}
 	\centering
@@ -157,10 +157,11 @@
 \begin{itemize}
 \setlength\itemsep{1em}
 \item Lacune detection is conducted by eye.
-\item Process is time consuming.
+\item Process is time consuming, approximately 1 hour.
 \item Identification is inconsistent.
+\item Validity of research is questioned due to misclassification.
 \pause
-\item \textbf{Aim:} Implement an automated approach to improve the speed, consistency, and reliability of lacune detection.
+\item \textbf{Aim:} Implement a neural networks approach to improve the speed, consistency, and reliability of lacune detection.
 \end{itemize}
 \end{frame}
 
@@ -274,7 +275,7 @@ The basic neural network unit is the \textit{neuron}.
 % Simple example of a neuron. AND gate
 \begin{frame}{Example of a basic neuron}
 The logical \textsc{and} gate can be represented as a neuron.
-\begin{examples}
+\begin{example}
 Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2 = 1$.
 % AND neuron figure
 \begin{figure}
@@ -331,7 +332,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 
 
 \end{figure}
-\end{examples}
+\end{example}
 \end{frame}
 
 
@@ -396,7 +397,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \pause
 \begin{itemize}
 \item Network weights and biases are chosen such that they minimise some \textit{cost function}. E.g. Mean Squared Error.
-\item Having a network with a large number of weights makes minimisation slow.
+\item Minimising cost has no explicit solution.
 \end{itemize}
 \end{frame}
 
@@ -407,16 +408,15 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % Secondly, this method is prone to overfitting the data. There are methods to mitigate this, but these are covered in greater detail in my thesis.
 \begin{frame}{Choosing the network weights}
 \begin{itemize}
-\item Instead estimate the weights using the \textit{Gradient Descent algorithm}.
+\item Weights and biases are estimated via the \textit{Gradient Descent algorithm}.
 \end{itemize}
 \begin{figure}
 \centering
 
 \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
-\begin{tikzpicture}[x=0.55pt,y=0.55pt,yscale=-1,xscale=1]
+\begin{tikzpicture}[x=0.5pt,y=0.5pt,yscale=-1,xscale=1]
 %uncomment if require: \path (0,291); %set diagram left start at 0, and has height of 291
-%Shape: Rectangle [id:dp29688417965832214] 
 \clip(84,14) rectangle (379,274) ;
 %Shape: Parabola [id:dp09742535750627612] 
 \draw  [color={rgb, 255:red, 74; green, 144; blue, 226 }  ,draw opacity=1 ][line width=2.25]  (90,18) .. controls (184.33,350) and (278.67,350) .. (373,18) ;
@@ -428,12 +428,12 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \draw  [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][dash pattern={on 1.69pt off 2.76pt}][line width=1.5]  (272,239.5) .. controls (272,235.91) and (274.91,233) .. (278.5,233) .. controls (282.09,233) and (285,235.91) .. (285,239.5) .. controls (285,243.09) and (282.09,246) .. (278.5,246) .. controls (274.91,246) and (272,243.09) .. (272,239.5) -- cycle ;
 %Shape: Circle [id:dp7325121590212951] 
 \draw  [color={rgb, 255:red, 255; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 255; green, 0; blue, 0 }  ,fill opacity=1 ][line width=1.5]  (309,177.5) .. controls (309,173.91) and (311.91,171) .. (315.5,171) .. controls (319.09,171) and (322,173.91) .. (322,177.5) .. controls (322,181.09) and (319.09,184) .. (315.5,184) .. controls (311.91,184) and (309,181.09) .. (309,177.5) -- cycle ;
-
+%Shape: Rectangle [id:dp29688417965832214] 
 \end{tikzpicture}
-\end{figure}
 \begin{itemize}
-\item Two issues: overfitting, and no guarantee that the minimum is global.
+\item Two issues: no guarantee that the minimum is global, and overfitting.
 \end{itemize}
+\end{figure}
 \end{frame}
 
 
@@ -442,16 +442,16 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % Regular neuron networks work well for a collection of variables, but our lacune detection problem is not concerned with the values of particular pixels on their own, but rather patterns that are occurring with a collection of pixels in a 2D space. Conv nets allow for that and are frequently used for image classification.
 % IN this example, on the left we have the input image of a bird, and we are trying to classify the image as one of these categories. The cnn adds what are called convolutional layers, which try to identify certain visual features. For example feathers or an eye, and scans the image in a small search window from top left to bottom right, outputing a high value at each point that contains the relevant feature. 
 % As the conv layer creates essentially another image for each feature being identified, the number of variables increases very quickly. Pooling layers are placed after convolution to reduce some of the dimensionality. 
-\begin{frame}{Structure of convolutional neural networks (\textsc{cnn}s)}
+\begin{frame}{Structure of convolutional neural networks (CNNs)}
 \begin{itemize}
-\item \textsc{cnn}s can be used for two-dimensional data.
+\item CNNs can be used for image data.
 \item Convolutional layers locate a set of features from the previous layer.
 \end{itemize}
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{../Thesis_Docs/Images/4_cnn_structure.png}
 
-\small{Diagram sourced from \citep{ADeshpande2016}.}
+\small{Diagram sourced from \cite{ADeshpande2016}.}
 \end{figure}
 \end{frame}
 
@@ -462,17 +462,13 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % Link back to results. Model was based on existing model by Ghafoorian et al. Model consisted of two stages: candidate detection, followed by false-positive reduction. The candidate detection model feeds 51x51 subimages through four convolutional layers, followed by 3 fully connected layers. The candidate lacunes output by this first model is fed into a second false-positive reduction model. The false-positive reduction model is comprised of three parallel three-dimensional convolutional neural networks. The outputs of these are concatenated with 7 location-based variables in three fully connected layers.
 \begin{frame}{Lacune detection model by Ghafoorian et al.}
 \begin{itemize}
-\item Ghafoorian et al. \cite{GhafoorianM.2017Dml3} lacune candidate detection model. 51$\times$51 inputs.
+\item Two stage supervised model \citep{GhafoorianM.2017Dml3} candidate detection, and false-positive reduction.
+\item Candidate detection CNN classifies 51$\times$51 subimages as lacune (positive) or non-lacune (negative).
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{../Thesis_Docs/Images/5_ghafoorian_model1.png}
 \end{figure}
-\item Three adjustments:
-\begin{itemize}
-\item Extract soft tissue from T1-weighted scans.
-\item Increase proportion of negative samples from 67\% to 91\%.
-\item Remove downsampling from the first convolutional layer.
-\end{itemize}
+\item False-positive reduction employs three parallel 3D CNNs and seven location-based variables.
 \end{itemize}
 \end{frame}
 
@@ -485,18 +481,30 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \begin{itemize}
     \begin{block}{Sensitivity and Specificity}
 	\[
-		Sensitivity = P(Correct | Positive)
+		Sensitivity = \mathbb{P}(Correct | Positive)
 	\]
 	\[
-		Specificity = P(Correct | Negative)
+		Specificity = \mathbb{P}(Correct | Negative)
 	\]
     \end{block}
 \item The full model by Ghafoorian et al. exhibited a sensitivity of 97.4\% and averaged 0.13 false-positives per cross-sectional image.
+\pause
+\item Our model makes three major alterations:
+\begin{itemize}
+\item Remove dependence on location-based variables.
+\item Extract soft tissue from the T1-weighted images.
+\item Maintain the resolution of the input image before the first convolutional layer.
+\end{itemize}
 \end{itemize}
 
 \end{frame}
 
-
+%\begin{itemize}
+%\item Remove downsampling from first convolutional layer.
+%\item Remove dependence on location-based variables.
+%\item Extract soft tissue from T1-weighted scans.
+%\item Increase proportion of non-lacune samples from 67\% to 91\%.
+%\end{itemize}
 
 %Our data set undergoes similar de-identification, whilst also removing CSF. Since lacunes have a similar signal intensity to CSF, this means that a lot of region surrounding lacunes is removed from the T1-weighted scans. Added effect of enlarging and emphasising the loss in intensity. Note that the flair images are extracted by masking a rectangular region rather than removing CSF, and so the intensities around lacunes are still visible.
 %\begin{frame}{Results of data preprocessing}
@@ -512,10 +520,10 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % Samples were collected by extracting 51x51 T1-weighted and FLAIR images. As there are relatively few positive lacune samples, all possible samples were taken. Negatives were collected by sampling randomly within the brain region. Total of just over 40,000 samples. Positive samples make up 9\% of the data set. These samples were split into three: training, validation and testing sets. The model by Ghafoorian samples enough negatives such that positives make one-third of the data set. A model that tests this positive-negative ratio is discussed further in my thesis.
 \begin{frame}{Sampling}
 \begin{itemize}
-\item Samples of 51$\times$51 resolution T1-weighted and \textsc{flair} images.
-\item Positive samples were generated from all available lacunes.
-\item Negative samples chosen randomly through the brain matter.
-\item Total of over 40,000 samples split into training, validation and testing data sets.
+\item 411 MRI volumes used to generate 40,000 samples.
+\item Each sample contains two 51$\times$51 images: soft tissue extracted T1 and FLAIR.
+\item Additional positive samples by flipping horizontally, encompassing 9\% of samples. Negatives chosen randomly.
+\item Samples split into training, validation and testing sets.
 \end{itemize}
 \begin{figure}
 \centering
@@ -564,7 +572,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \end{itemize}
 \begin{table}[ht]
 	\centering
-	\begin{tabular}{@{}lll@{}}
+	\begin{tabular}{@{}lrr@{}}
 	\toprule[1.5pt]
 	& Positive & Negative\\
 	\midrule
@@ -586,7 +594,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 % To alleviate some concerns, we now take a look at some examples of correctly and incorrectly classified points. Examples of true positives. Regions of zero or low intensity in T1, whilst having a dark region surrounded by hyperintensity in flair. If we take a look at some false-positives, we see that they exhibit this same structure. Low to zero T1, near a dark region with hyperintense edge in flair. False-negatives are rare. In this instance, the lacune is very small, only 3 mm in diameter. So small that there is no hyperintense rim visible in the flair image.
 \begin{frame}{Examination of true-positives}
 \begin{itemize}
-\item Model appears to be detecting dark regions in T1 and bright edges in \textsc{flair}.
+\item Model appears to be detecting dark regions in T1 and bright edges in FLAIR.
 \end{itemize}
 \begin{figure}
 \centering
@@ -596,7 +604,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 
 \begin{frame}{Examination of false-positives}
 \begin{itemize}
-\item Model appears to be detecting dark regions in T1 and bright edges in \textsc{flair}.
+\item Model appears to be detecting dark regions in T1 and bright edges in FLAIR.
 \end{itemize}
 \begin{figure}
 \centering
@@ -606,7 +614,7 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 
 \begin{frame}{Examination of false-negatives}
 \begin{itemize}
-\item Model misclassifies a small lacune with no bright edges in \textsc{flair}.
+\item Model misclassifies a small lacune with no bright edges in FLAIR.
 \end{itemize}
 \begin{figure}
 \centering
@@ -619,19 +627,22 @@ Let $x_1,x_2\in\{0,1\}$. The output of the neuron is 1 if and only if $x_1 = x_2
 \begin{frame}{Conclusion and future research}
 \begin{itemize}
 \item Model successfully identifies lacunes with a very high accuracy, efficiency and consistency.
-\item Improves validity of inference concerning strokes originating from lacunes.
-\item Further research could reduce false-positives by:
+\item Improves validity of research surrounding lacunes.
+\item Greater detection of increased stroke risk.
+\item Further research:
 \begin{itemize}
-\item Applying a three-dimensional \textsc{cnn}.
-\item Assessing the benefit of location-based variables.
+\item Assess model on new MRI scans.
+\item Reduce false-positives via a three-dimensional CNN.
+\item Assess the benefit of location-based variables.
 \end{itemize}
+\item Model to be added to UNSW Neuroscience data pipeline.
 \end{itemize}
 
 \end{frame}
 
 
-\begin{frame}[allowframebreaks]{References}
-	\bibliographystyle{plainnat}
+\begin{frame}{References}
+	\bibliographystyle{apalike}
 	\bibliography{bibliography_pres.bib}
 \end{frame}
 
