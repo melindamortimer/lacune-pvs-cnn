@@ -1,9 +1,9 @@
 library(tensorflow)
 library(crayon)
 # rm(list = ls())
-load("/srv/scratch/z5016924/training3.Rda")
-load("/srv/scratch/z5016924/validation3.Rda")
-load("/srv/scratch/z5016924/testing3.Rda")
+load("/srv/scratch/z5016924/training5.Rda")
+load("/srv/scratch/z5016924/validation5.Rda")
+load("/srv/scratch/z5016924/testing5.Rda")
 
 
 # 1 -----------------------------------------------------------------------
@@ -173,12 +173,13 @@ e <- 1
 start.timer <- proc.time()
 while (e < max.epochs) {
   # randomise data
+  stoch.training <- training[sample(nrow(training)),]
   for (i in seq(1, num.samples-128, by = 128)) {
     cat(white$bgBlack(paste("Epoch:",e)))
     cat(paste(" Analysing sample: ",i, "/",num.samples, " = ",round(i/num.samples,3)*100,"%", sep = ""))
     cat(paste(" Elapsed:", round((proc.time() - start.timer)[[3]]/60,2), "min"))
     train.step$run(feed_dict = dict(
-      x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 0.7, learn.rate = learning.rates[e]))
+      x = stoch.training[i:(i+127), 5:5206], y_ = stoch.training[i:(i+127), 5207:5208], keep.prob = 0.7, learn.rate = learning.rates[e]))
     
     # Report training accuracy
     if (i %% 5 == 0) {
@@ -204,7 +205,7 @@ while (e < max.epochs) {
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, "/srv/scratch/z5016924/y_model/attempt5/model.ckpt")
+    saver$save(sess, "/srv/scratch/z5016924/correct_sampling/attempt5/model.ckpt")
   }
     i.train.acc2 <- i.train.acc2 + 1
     
@@ -242,7 +243,7 @@ accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], k
 
 
 
-saver$restore(sess, "/srv/scratch/z5016924/y_model/attempt5/model.ckpt")
+saver$restore(sess, "/srv/scratch/z5016924/correct_sampling/attempt5/model.ckpt")
 # saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt5"))
 
 sess$close()
@@ -252,10 +253,10 @@ nrow.train.acc <- max(which(train.accuracy != 0))
 train.accuracy <- train.accuracy[1:nrow.train.acc]
 
 # Training accuracy
-save(train.accuracy, file = "/srv/scratch/z5016924/y_model/attempt5/train_accuracy.Rda")
+save(train.accuracy, file = "/srv/scratch/z5016924/correct_sampling/attempt5/train_accuracy.Rda")
 
 # Epoch validation accuracy
-save(train.accuracy2, file = "/srv/scratch/z5016924/y_model/attempt5/train_accuracy2.Rda")
+save(train.accuracy2, file = "/srv/scratch/z5016924/correct_sampling/attempt5/train_accuracy2.Rda")
 
 
 
@@ -286,7 +287,7 @@ testseq <- seq(1,nrow(testing), by = 1000)
 
 names(tfpn.eval) <- c("TP","TN","FP","FN")
 
-for (i in testseq[1]) {
+for (i in testseq) {
   print(paste(i, "of", nrow(testing)))
   lower <- i
   upper <- min(i+999, nrow(testing))

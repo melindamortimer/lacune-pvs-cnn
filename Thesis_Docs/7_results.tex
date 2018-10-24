@@ -32,9 +32,9 @@ Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural netw
 
 \subsection*{First model}
 
-The first model generated has the same positive-negative sample ratio as outlined by Ghafoorian et. al \cite{GhafoorianM.2017Dml3}. The data consists of one-third positives and two-thirds negatives.
+The first model generated has the same positive-negative sample ratio as outlined by \cite{GhafoorianM.2017Dml3}. The data consists of one-third positives and two-thirds negatives.
 
-The model was trained for 40 epochs over 24 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \cite{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training data set becomes very high, whereas the accuracy of the validation and testing data sets are low. Hence assessing model training accuracy can efficiently convey early model improvement; however it is not indicative of the model's performance when given new data.
+The model was trained for 40 epochs over 24 minutes, adjusting the network weights with each batch of 128 samples. Reusing the same data samples a large number of times introduces overfitting into the network \citep{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training data set becomes very high, whereas the accuracy of the validation and testing data sets are low. Hence assessing model training accuracy can efficiently convey early model improvement; however it is not indicative of the model's performance when given new data.
 
 Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \citep{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
 
@@ -238,3 +238,4 @@ We now discuss the features of samples classified correctly and incorrectly. Fig
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\include{bibliography}
+%\end{document}

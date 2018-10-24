@@ -1,13 +1,6 @@
-%\include{packages}
-%\begin{document}
-
-
-\begin{appendices}
-\chapter{\textsc{r} code for candidate lacune detection model}\label{app-r-code}
-
-\begin{verbatim}
 library(tensorflow)
 library(crayon)
+
 
 # Data placeholders
 # Num of samples. 51x51 = 2601. x2 channels = 5202
@@ -15,7 +8,7 @@ x <- tf$placeholder(tf$float32, shape(NULL, 5202L))
 # Num of samples, 2 outcomes
 y_ <- tf$placeholder(tf$float32, shape(NULL, 2L))
 
-# Weights initialised by He Method
+# Weights initialised by He Method (maybe can test Xavier init?)
 he.init <- tf$contrib$layers$
   variance_scaling_initializer(factor = 2.0,
                                 mode = "FAN_AVG",
@@ -209,13 +202,122 @@ while (e < max.epochs) {
   e <- e + 1
 }
 
-\end{verbatim}
-
-\end{appendices}
 
 
+# Batch Accuracy Testing --------------------------------------------------
+# When data was split into train/test only, and positives only made up 7% of data
+
+# 85% of the way through epoch 12, accuracy sudden plummets from around 100%, down to near 0??
+# test.up.to <- nrow(testing)
+test.up.to <- 1000
+accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
+
+# Check all testing accuracy (in batches since it can't evaluate all at once)
+num.testing <- dim(testing)[1]
+testing.seq <- seq(1, num.testing, by = 5000)
+testing.accuracy <- numeric(length(testing.seq))
+for (i in 1:length(testing.seq)) {
+  print(paste(i,"of", length(testing.seq)))
+  testing.accuracy[i] <- accuracy$eval(feed_dict = dict(x = testing[i:min(i+4999, num.testing),5:5206], y_ = testing[i:min(i+4999, num.testing),5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+}
+mean(testing.accuracy)
+# 0.9938
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
+# Testing Set -------------------------------------------------------------
+# Positives now make 1/3 of the data. Data split into training/validation/testing
+
+accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+
+
+
+saver$restore(sess, "/srv/scratch/z5016924/correct_sampling/attempt5/model.ckpt")
+# saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt5"))
+
+sess$close()
+
+# Cut out 0s
+nrow.train.acc <- max(which(train.accuracy != 0))
+train.accuracy <- train.accuracy[1:nrow.train.acc]
+
+# Training accuracy
+save(train.accuracy, file = "/srv/scratch/z5016924/correct_sampling/attempt5/train_accuracy.Rda")
+
+# Epoch validation accuracy
+save(valid.accuracy, file = "/srv/scratch/z5016924/correct_sampling/attempt5/train_accuracy2.Rda")
+
+
+
+# Converting Full to Convolutional ----------------------------------------
+
+# https://tech.hbc.com/2016-05-18-fully-connected-to-convolutional-conversion.html
+
+
+
+# Evaluation --------------------------------------------------------------
+
+
+truepos <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 0L)), tf$float32))
+trueneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 1L)), tf$float32))
+falsepos <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 1L)), tf$float32))
+falseneg <- tf$reduce_sum(tf$cast(tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 0L)), tf$float32))
+
+# ntest <- dim(testing)[1]
+# truepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# trueneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# falsepos$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# falseneg$eval(feed_dict = dict(x = testing[1:ntest,5:5206], y_ = testing[1:ntest,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+
+
+# Batch True/False Pos/neg evaluation
+tfpn.eval <- numeric(4)
+testseq <- seq(1,nrow(testing), by = 1000)
+
+names(tfpn.eval) <- c("TP","TN","FP","FN")
+
+for (i in testseq) {
+  print(paste(i, "of", nrow(testing)))
+  lower <- i
+  upper <- min(i+999, nrow(testing))
+  tfpn.eval[1] <- tfpn.eval[1] + truepos$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+  tfpn.eval[2] <- tfpn.eval[2] + trueneg$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+  tfpn.eval[3] <- tfpn.eval[3] + falsepos$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+  tfpn.eval[4] <- tfpn.eval[4] + falseneg$eval(feed_dict = dict(x = testing[lower:upper,5:5206], y_ = testing[lower:upper,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+}
+
+tfpn.eval
+round(tfpn.eval/nrow(testing),4)
+
+
+# Search for true positive samples etc
+
+tp.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 0L))
+tn.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 1L))
+fp.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 0L), tf$equal(tf$argmax(y_, 1L), 1L))
+fn.test <- tf$logical_and(tf$equal(tf$argmax(y, 1L), 1L), tf$equal(tf$argmax(y_, 1L), 0L))
+
+found <- 0
+for (i in 1:1000) {
+  found <- tn.test$eval(feed_dict = dict(x = array(testing[i, 5:5206], dim = c(1, 5202)), y_ = array(testing[i, 5207:5208], dim = c(1, 2)), keep.prob = 1.0, learn.rate = learning.rates[1]))
+  
+  if (found) break
+}
+
+lower <- 3630
+upper <- 3640
+# Number of TRUE in range
+falseneg$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+
+# Showing TRUE and FALSE values in range
+fn.test$eval(feed_dict = dict(x = testing[lower:upper, 5:5206], y_ = testing[lower:upper, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+
+y$eval(feed_dict = dict(x = testing[1:100, 5:5206], y_ = testing[1:100, 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[1]))
+
+
+for(tmp in 1:100) {
+  print(y$eval(feed_dict = dict(x = array(testing[tmp, 5:5206], dim = c(1, 5202)), y_ = array(testing[tmp, 5207:5208], dim = c(1,2)), keep.prob = 1.0, learn.rate = learning.rates[1])))
+  readline(prompt = "enter")
+}
+

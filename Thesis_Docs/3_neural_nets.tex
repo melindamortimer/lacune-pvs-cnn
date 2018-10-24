@@ -465,7 +465,7 @@ Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
 	\end{align*}
 	The vector of errors $\delta^\ell$ for the $\ell$-th layer can be expressed in the matrix form,
 	\begin{align}\label{nnets-bprop-eq2}
-		\delta^\ell & = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}
+		\delta^\ell & = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\delta^{\ell+1}.
 	\end{align}
 		%& = \Sigma'(\mathbf{z}^\ell)(w^{\ell+1})^\intercal\cdots\Sigma'(\mathbf{z}^{L-1})(w^L)^\intercal\Sigma'(\mathbf{z}^L)\nabla_aC.
 \end{lemma}
@@ -508,7 +508,7 @@ Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
 \begin{proof}
 	By definition,
 	\begin{align*}
-		z_k^\ell & = \mathbf{w}_k^\ell\cdot\mathbf{a}^{\ell-1} + b_k^\ell
+		z_k^\ell & = \mathbf{w}_k^\ell\cdot\mathbf{a}^{\ell-1} + b_k^\ell.
 	\end{align*}
 	Differentiating with respect to some weight $w_{km}^\ell$,
 	\begin{align*}
@@ -652,3 +652,4 @@ Lengthy model training can cause extensive overfitting of the data. Early stoppi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\include{bibliography}
+%\end{document}

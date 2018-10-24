@@ -3,25 +3,29 @@
 
 \chapter{Conclusion}\label{conclusion}
 
-We proposed a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. The model greatly simplifies the existing machine learning model created by \cite{GhafoorianM.2017Dml3}.
 
-Our proposed model isolates the candidate detection model by \cite{GhafoorianM.2017Dml3} and makes three major changes. The first is the pre-processing applied to the input T1-weighted images. Soft tissue is extracted to remove features outside the brain, such as eyes and skull, and to de-identify the data. The algorithm also has the effect of masking regions of possible \textsc{csf} content, which has an appearance similar to that of lacunes. The voxel intensity of some positive responses may be reduced to zero as a result.
+We proposed a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. Our proposed model adapts the lacune detection model by \cite{GhafoorianM.2017Dml3} and makes three major changes. The first is the removal of dependence on location-based variables. This reduces the quantity and complexity of data pre-processing, and ensures that samples are classified correctly even if they occur in less frequently observed regions.
 
-The second change examined the impact of positive to negative sample ratios. The original model consisted of twice as many negative samples as positive. On our smaller data set, the sensitivity and specificity both improved when given a greater number of samples, regardless of the ratio of training.
+The second adaptation is use of soft tissue extraction on the T1-weighted scans prior to model input. This process occurs to remove identification features visible in \textsc{mri}, and has the additional effect of enlarging spaces that appear similar to \textsc{csf}, and hence enlarges lacunes.
 
-The third change was the removal of the false-positive reduction model. Upon examining the performance of the initial model, the sensitivity and specificity rates were 99.9\% and 99.8\% respectively. To maintain model simplicity, and reduce computation time and resources, the model was consolidated after candidate generation.
+The third change is the removal of dimension reduction prior to the first convolutional layer. Early reduction of image dimension results in loss of pixel information that may contain lacunes. Maintaining the dimension of the input image ensures that vital pixel information is retained early in the model, which aids in the identification of smaller lacunes.
 
-\todo[inline]{remove convolution downsampling.}
+The final simplified lacune detection model exhibited a testing sensitivity and specificity of 99.9\% and 99.8\% respectively. The model was consolidated after candidate generation to maintain model simplicity, and reduce computation time and resources. 
 
 \section{Improvements and further research}
 
-Due to time constraints and limitations of the available data, the effect of location information could not be tested. It still remains to be tested whether location data is beneficial to the model, or in fact detrimental. It is also possible that running a three-dimensional \textsc{cnn} on the candidate lacunes could introduce greater context and further reduce false-positives. This was not included in this thesis due to time constraints, to maintain model simplicity, and to reduce training and usage time.
+The model exhibits a very high detection performance, however the incidence of remaining false-positive errors requires clinicians to supervise the model outputs. Each positive classification must be examined by clinicians to reduce the number of false-positives. The high specificity rate helps to restrict this number, however the dimensions of each \textsc{mri} scan are high, involving approximately 50,000 points within the brain tissue. Hence, further model improvement can be made to reduce the number of false-positives.
 
-Soft tissue extraction on the T1-weighted scans resulted in very distinct edges between the brain matter and surrounding structures. It is possible that the mask is removing some of the contextual brain matter, or removing information inherant in the voxels of lacunes. Raising the soft tissue probability thresholds used during extraction could reduce any information lost.
+Information inherent in two-dimensional sample subimages may not contain enough context to make an accurate classification for some samples. This is particularly the case with samples that contain blood vessels or perivascular spaces that appear circular from the axial perspective. The amount of context included in the sample can be increased by considering three-dimensional samples and employing a three-dimensional \textsc{cnn}. The inclusion of volume based samples ensures that a distinction can be made between structures that only appear circular in the two-dimensional patches, and samples that are truly spherical. It should be noted that three-dimensional \textsc{cnn}s require a large number of weights and hence have lengthy computation time if applied to all points in a volume. Implementation time can be improved by applying the three-dimensional \textsc{cnn} to the candidate lacunes indicated by the initial two-dimensional \textsc{cnn} as a form of false-positive reduction.
 
-The large number of variables required for \textsc{cnn}s makes them computationally and space intensive. Further research could be conducted by considering other more efficient computer algorithms and model types, such as gradient boosting in XGBoost.
+Soft tissue extraction applied to the T1-weighted scans resulted in very distinct edges between the brain matter and surrounding structures. This resulted in the masking of voxels that exhibited a high probability of \textsc{csf} content, which includes lacunes. Further research could be conducted on the impact of soft tissue extraction on lacune detection. If found to be detrimental to model performance, it may be beneficial to implement lacune detection on T1-weighted scans prior to soft tissue extraction.
+
+Once the number of false-positive samples has been reduced, the model is to be included as part of the Sydney \textsc{mas} \textsc{mri} data processing pipeline. Inclusion of the model will assist neuroscientists in the efficient and consistent detection of lacunes, and thus ensure the validity of medical studies conducted. Additionally, the inclusion of the model during medical practice would provide accurate detection of lacunes in the \textsc{mri} of individual patients, indicating any heightened risk of stroke. The awareness of any increased risk could then result in appropriate treatment and possible avoidance of stroke.
+
+%The large number of variables required for \textsc{cnn}s makes them computationally and space intensive. Further research could be conducted by considering other more efficient computer algorithms and model types, such as gradient boosting in XGBoost.
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\include{bibliography}
+%\end{document}
