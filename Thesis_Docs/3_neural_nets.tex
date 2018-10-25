@@ -23,13 +23,12 @@ The construction of neural networks has to be conducted with care. The resulting
 
 \section{Basic structure}\label{nnets-structure}
 
-The structure of neural networks are analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information in sequence and in parallel. Neural networks adopt a similar structure. Individual nodes receive values, apply a transformation, and pass the output to the next node. Several nodes may apply their transformations simultaneously. For this reason, the nodes are referred to as \textit{neurons}.
+The structure of neural networks is analogous to that of neurons in the brain. Each brain cell receives a signal, conducts a small amount of processing, and passes the resulting signal to the next cell. Decisions made by the brain are the result of many neurons processing information and communicating in parallel. Neural networks adopt a similar structure. Individual nodes receive values and apply a transformation. The outputs of several nodes are passed as inputs into later nodes, feeding information forward until a final response is calculated. For this reason, the nodes are referred to as \textit{neurons}.
 
 The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}, and its goal is to quantify a particular feature of the input variables. Let ${\mathbf{x} = (x_1, x_2, \ldots, x_n)^\intercal}$ be a vector of $n$ input variables. Let $\mathbf{w} = (w_1, \ldots, w_n)^\intercal$ be a vector of weights. Let $b$ be an additional \textit{bias} variable, not to be confused with statistical bias. The bias term is a constant used to leverage the value of the neuron independently of the input variables. Let $\sigma(\cdot)$ be some function, known as an \textit{activation function}, which is generally nonlinear (see Section \ref{nnets-act}). Let $\cdot$ be the usual dot product. The output of a single neuron, known as an \textit{activation value}, is given by
 \begin{align*}
 	a = \sigma(\mathbf{w}\cdot\mathbf{x} + b).
 \end{align*}
-
 
 % Neuron structure diagram
 \begin{figure}[hb]
@@ -95,7 +94,7 @@ The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}
 
 
 \end{tikzpicture}
-\caption{Neuron structure.}
+\caption{\small{Structure of a basic neuron.}}
 \label{nnet-neuronfig}
 \end{figure}
 
@@ -107,37 +106,22 @@ The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}
 %	\label{nnet-neuronfig}
 %\end{figure}
 
+\noindent As an example, considering the following neuron structure.
+
 \begin{example}
 \label{nnets-and-eg}
 A neuron can be used to express a logical \textsc{and} gate of two inputs. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0 so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
 \begin{align*}
 	a(\mathbf{x}) = \begin{cases}
-		1 & ,x_1 + x_2 - 1.5 > 0\\
-		0 & ,otherwise
+		1 & , x_1 + x_2 - 1.5 > 0\\
+		0 & , otherwise
 	\end{cases},
 \end{align*}
-which will output 1 only when $\mathbf{x} = (1, 1)^\intercal$, satisfying the definition of an \textsc{and} gate.
+which will output 1 if and only if $\mathbf{x} = (1, 1)^\intercal$, satisfying the definition of an \textsc{and} gate.
 \end{example}
 
-
-A large number of these neurons can be arranged in layers to form a \textit{fully connected neural network}, as shown in Figure \ref{nnet-structurefig}. The inputs $\mathbf{x} = (x_1, x_2, \ldots, x_n)$ are used to predict the final response $y$. Let $\mathbf{a}^\ell$ be the vector of activation values of the $\ell$-th layer, where $\mathbf{a}^0 := \mathbf{x}$. Let $\mathbf{w}^\ell$ be the matrix of weights used to calculate $\mathbf{a}^\ell$, such that each row entry $\mathbf{w}_j^{\ell\intercal}$ is used to compute the $j$-th neuron of the $\ell$-th layer. Let $\mathbf{b}^\ell$ be the vector of biases of the $\ell$-th layer. Hence, the vector of activation values of the $\ell$-th layer can be expressed as
-\begin{align}\label{nnets-act-eqn}
-	\mathbf{a}^\ell = \sigma(\mathbf{w}^\ell \mathbf{a}^{\ell - 1} + \mathbf{b}^\ell),
-\end{align}
-where $\sigma(\cdot)$ applies the activation function to each element of the vector. Parameterising Equation \eqref{nnets-act-eqn} as $g_\ell(\mathbf{a}^{\ell - 1}; \mathbf{w}^\ell, \mathbf{b}^\ell)$, the final output of the neural network can be written as sequence of function compositions
-\begin{align*}
-	\mathbf{a}^L = g_L \circ g_{L-1} \circ \ldots \circ g_1.
-\end{align*}
-
 % Diagram of basic neural network structure. Input, 1 hidden layer and series of output layers
-%\begin{figure}[ht]
-%	\centering
-%	\includegraphics[width=\textwidth]{Images/3_nnet_structure.jpg}
-%	\caption{Basic neural network structure.}
-%	\small Image taken from \url{`https://www.digitaltrends.com/cool-tech/what-is-an-artificial-neural-network/'}
-%	\label{nnet-structurefig}
-%\end{figure}
-\begin{figure}[hb]
+\begin{figure}[b]
 \centering
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
@@ -193,11 +177,23 @@ where $\sigma(\cdot)$ applies the activation function to each element of the vec
 %    \node[annot,right of=fb, node distance=\layersep] (fo) {$f(\mathbf{v})$};
 
 \end{tikzpicture}
-\caption{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases are not shown.}
+\caption{\small{Basic neural network structure. Each hidden neuron (blue) and the output neuron (green) has the structure shown in Figure \ref{nnet-neuronfig}. For simplicity, the weights and biases are not shown.}}
 \label{nnet-structurefig}
 \end{figure}
 
-During model fitting, the quality of the estimated weights $W$ and biases $B$ is quantified using some \textit{cost function} $C(W,B)$. A cost of 0 describes a perfect model fit. The weights and biases are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
+
+A large number of these neurons can be arranged in layers to form a \textit{fully connected neural network}, as shown in Figure \ref{nnet-structurefig}. The inputs $\mathbf{x} = (x_1, x_2, \ldots, x_n)$ are used to predict the final response $y$. Let $\mathbf{a}^\ell$ be the vector of activation values of the $\ell$-th layer, where $\mathbf{a}^0 := \mathbf{x}$. Let $\mathbf{w}^\ell$ be the matrix of weights used to calculate $\mathbf{a}^\ell$, such that each row entry $\mathbf{w}_j^{\ell\intercal}$ is used to compute the $j$-th neuron of the $\ell$-th layer. Let $\mathbf{b}^\ell$ be the vector of biases of the $\ell$-th layer. Hence, the vector of activation values of the $\ell$-th layer can be expressed as
+\begin{align}\label{nnets-act-eqn}
+	\mathbf{a}^\ell = \sigma(\mathbf{w}^\ell \mathbf{a}^{\ell - 1} + \mathbf{b}^\ell),
+\end{align}
+where $\sigma(\cdot)$ applies the activation function to each element of the vector. Parameterising Equation \eqref{nnets-act-eqn} as $g_\ell(\mathbf{a}^{\ell - 1}; \mathbf{w}^\ell, \mathbf{b}^\ell)$, the final output of the neural network can be written as a sequence of function compositions
+\begin{align*}
+	\mathbf{a}^L = g_L \circ g_{L-1} \circ \ldots \circ g_1.
+\end{align*}
+
+
+
+During model fitting, the quality of the estimated weights $W$ and biases $B$ is quantified using some \textit{cost function} $C(W,B)$, where a cost of zero describes a perfect model fit. The weights and biases are trained to minimise this cost function with respect to $(W,B)$. However, since the number of variables can be very large, it is not always feasible to analytically minimise $C(W,B)$. Instead, we can approximate this minimisation via the Gradient-Descent algorithm (see Section \ref{nnets-graddesc}). This algorithm is repeated until the cost function falls within some tolerance $\tau$, or reaches the maximum number of iterations $n_T$.
 
 %Let $\mathbf{w}^\ell_j$ to be the vector of weights used to compute the $j$-th neuron of the $\ell$-th layer, where $w_{ji}^\ell$ is the weight attributed to the $i$-th neuron of the $(\ell-1)$-th layer.
 
@@ -308,7 +304,11 @@ Both the \textsc{mle} of $\theta$ (Equation \eqref{nnets-mle-eq}) and the minimi
 
 Weights $W$ and biases $B$ are chosen such that they approximately minimise the cost function $C(W,B)$. Analytically minimising the cost function is possible, however the large number of variables makes this process slow, having time complexity $O(n^3)$ \citep{Marquardt1963}. The weights are instead estimated using the Gradient Descent algorithm, improving computation speed.
 
-Let $\mathbf{v} = (W,B)$ of length $N$ be the vector of all weights and biases in the network. Gradient Descent considers the gradient of the cost with respect to the current weights and biases given by $\nabla C(\mathbf{v}) = \left(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\cdots, \dfrac{\partial C}{\partial v_N}\right)$. The algorithm shifts the weights and biases by a small amount $\Delta\mathbf{v}$ such that the cost decreases. Define $\mathbf{v}':= \mathbf{v} + \Delta\mathbf{v}$ to be the updated value of $\mathbf{v}$. Let $\Delta C(\mathbf{v})$ be the change in the cost function as a result of the shifted $\mathbf{v}'$. An approximation of $\Delta C(\mathbf{v})$ is given by the \textit{Total Differential Approximation}
+Let $\mathbf{v} = (W,B)$ of length $N$ be the vector of all weights and biases in the network. Gradient Descent considers the gradient of the cost with respect to the current weights and biases given by
+\begin{align*}
+\nabla C(\mathbf{v}) = \left(\dfrac{\partial C}{\partial v_1}, \dfrac{\partial C}{\partial v_2},\cdots, \dfrac{\partial C}{\partial v_N}\right).
+\end{align*}
+The algorithm shifts the weights and biases by a small amount $\Delta\mathbf{v}$ such that the cost decreases. Define $\mathbf{v}':= \mathbf{v} + \Delta\mathbf{v}$ to be the updated value of $\mathbf{v}$. Let $\Delta C(\mathbf{v})$ be the change in the cost function as a result of the shifted $\mathbf{v}'$. An approximation of $\Delta C(\mathbf{v})$ is given by the \textit{Total Differential Approximation}
 \begin{align}
 	\Delta C(\mathbf{v}) & \approx \dfrac{\partial C}{\partial v_1}\Delta v_1 + \dfrac{\partial C}{\partial v_2}\Delta v_2 + \cdots + \dfrac{\partial C}{\partial v_N}\Delta v_N\\
 	& = \nabla C(\mathbf{v})\cdot \Delta \mathbf{v}.\label{nnets-total-diff-eq}
@@ -339,7 +339,7 @@ Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost functi
 	\begin{align}\label{nnets-gdesc-eq1}
 		\min(\nabla C\cdot\Delta\mathbf{v}) = -\|\nabla C\|\times\|\Delta\mathbf{v}\|.
 	\end{align}
-	Substituting $||\Delta\mathbf{v}|| = \epsilon$ into Equation 	\eqref{nnets-gdesc-eq1}, we have
+	Substituting $||\Delta\mathbf{v}|| = \varepsilon$ into Equation 	\eqref{nnets-gdesc-eq1}, we have
 	\begin{align}\label{nnets-gdesc-eq2}
 		\min(\nabla C\cdot\Delta\mathbf{v}) = -\varepsilon\|\nabla C\|.
 	\end{align}
@@ -348,7 +348,7 @@ Thus if $\mathbf{v}' := \mathbf{v} - \eta \nabla C(\mathbf{v})$, the cost functi
 		\min(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\|\nabla C\|^2}{\|\nabla C\|}\\[1em]
 		& = -\dfrac{\varepsilon\nabla C\cdot\nabla C}{\|\nabla C\|} \label{nnets-gdesc-eq4}.
 	\end{align}
-	By equating the coefficients of $\nabla C$ between Equations \eqref{nnets-gdesc-eq1} and \eqref{nnets-gdesc-eq4}, and noting that $\eta = \epsilon / ||\nabla C||$,
+	By equating the coefficients of $\nabla C$ between Equations \eqref{nnets-gdesc-eq1} and \eqref{nnets-gdesc-eq4}, and noting that $\eta = \varepsilon / ||\nabla C||$,
 	\begin{align*}
 		\operatorname*{arg\,min}_{\Delta\mathbf{v}}(\nabla C\cdot\Delta\mathbf{v}) & = -\dfrac{\varepsilon\nabla C}{\|\nabla C\|} \\
 		& = -\eta\nabla C.
@@ -418,7 +418,7 @@ During Gradient Descent, the change in gradients $\Delta\mathbf{v} = -\eta\nabla
 
 \end{tikzpicture}
 
-\caption{High learning rates adjust weights past the local minimum}
+\caption{\small{High learning rates adjust weights past the local minimum}}
 \label{nnets-high-learn-fig}
 \end{figure}
 
@@ -451,9 +451,9 @@ where $\Sigma'(\cdot)$ is a matrix such that the $j$-th diagonal entry is $\sigm
 
 Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
 	\begin{align*}
-		\delta_j^L & = \dfrac{\partial C}{\partial z_j^L}\\
-		& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\
-		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\\
+		\delta_j^L & = \dfrac{\partial C}{\partial z_j^L}\\[0.7em]
+		& = \sum_k\dfrac{\partial C}{\partial a_k^L}\dfrac{\partial a_k^L}{\partial z_j^L} \\[0.7em]
+		& = \dfrac{\partial C}{\partial a_j^L}\dfrac{\partial a_j^L}{\partial z_j^L}\\[0.7em]
 		& = \dfrac{\partial C}{\partial a_j^L}\sigma'(z_j^L).
 	\end{align*}
 \end{proof}
@@ -473,8 +473,8 @@ Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
 \begin{proof}
 	Using the chain rule,
 	\begin{align*}
-		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell}\\
-		& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\
+		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell}\\[0.7em]
+		& = \sum_k\dfrac{\partial C}{\partial z_k^{\ell+1}}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} \\[0.7em]
 		& = \sum_k\delta_k^{\ell+1}\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell}.
 	\end{align*}
 	Noting that $\dfrac{\partial z_k^{\ell+1}}{\partial z_j^\ell} = \dfrac{\partial}{\partial z_j^\ell}(\mathbf{w}_k^{\ell+1}\cdot \sigma(\mathbf{z}^\ell) + b_k^{\ell+1}) = w_{kj}^{\ell+1}\sigma'(z_j^\ell)$, we can write $\delta_j^\ell$ as
@@ -492,9 +492,9 @@ Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
 \begin{proof}
 	Noting that $z_j^\ell$ is independent of $b_k^\ell$ for all $j \neq k$,
 	\begin{align*}
-		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell} \\
-		& = \sum_k\dfrac{\partial C}{\partial b_k^\ell}\dfrac{\partial b_k^\ell}{\partial z_j^\ell}\\
-		& = \dfrac{\partial C}{\partial b_j^\ell}\dfrac{\partial b_j^\ell}{\partial z_j^\ell} \\
+		\delta_j^\ell & = \dfrac{\partial C}{\partial z_j^\ell} \\[0.7em]
+		& = \sum_k\dfrac{\partial C}{\partial b_k^\ell}\dfrac{\partial b_k^\ell}{\partial z_j^\ell}\\[0.7em]
+		& = \dfrac{\partial C}{\partial b_j^\ell}\dfrac{\partial b_j^\ell}{\partial z_j^\ell} \\[0.7em]
 		& = \dfrac{\partial C}{\partial b_j^\ell}.
 	\end{align*}
 \end{proof}
@@ -521,7 +521,7 @@ Noting that $z_j^L$ is independent of $a_k^L$ for all $k \neq j$, we can write
 \end{proof}
 
 
-The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the network to determine the error in the final layer $\delta^L$ (Equation \eqref{nnets-bprop-eq1}).  The algorithm moves backwards through the network from the final layer back to the first hidden layer to determine the remaining errors in the network $\delta^\ell$, $\ell < L$ (Equation \eqref{nnets-bprop-eq2}). From these errors, the cost gradients in terms of the weights and biases can be calculated (Equations \eqref{nnets-bprop-eq3} and \eqref{nnets-bprop-eq4}). The complete algorithm is detailed in Algorithm \ref{nnets-bprop-alg}.
+The Backpropagation algorithm feeds an input $\mathbf{x}$ fowards through the network to determine the error in the final layer $\delta^L$ (Equation \eqref{nnets-bprop-eq1}).  The algorithm moves backwards through the network from the final layer back to the first hidden layer to determine the remaining errors in the network $\delta^\ell$, $\ell < L$ (Equation \eqref{nnets-bprop-eq2}). From these errors, the cost gradients in terms of the weights and biases can be calculated (Equations \eqref{nnets-bprop-eq3} and \eqref{nnets-bprop-eq4}). The complete algorithm is detailed in Algorithm \ref{nnets-bprop-alg}. Dependence on the gradient of the cost function makes the algorithm vulnerable to slow training if the gradients are close to zero. This motivates our discussion of the \emph{vanishing gradient problem}.
 %\begin{enumerate}
 %	\item \textbf{Inputs}. Enter observations $x_1,\ldots,x_n$ to retrieve $\mathbf{a}^1$.
 %	\item \textbf{Feedforward}. Compute $\mathbf{z}^\ell = \mathbf{w}^\ell\mathbf{a}^{\ell-1} + \mathbf{b}^\ell$ for each $l = 2, 3,\ldots,L$.
@@ -571,7 +571,7 @@ causing stagnation of the movement of weights and biases. The ReLU activation fu
 	\sigma'(z) = \begin{cases}
 		1, & z > 0 \\
 		0, & z < 0 \\
-		\text{undefined}, & z = 0
+		\text{not defined}, & z = 0
 	\end{cases}.
 \end{align*}
 % Paper: https://www.utc.fr/~bordesan/dokuwiki/_media/en/glorot10nipsworkshop.pdf
@@ -615,7 +615,7 @@ In the case that the ReLU activation function is used, the He Method \citep{HeKa
 
 \section{Regularisation}\label{nnet-reg}
 
-Due to the large number of parameters to be estimated, parameters generally outnumber observations. During training, observations must be reused and so neural network models have a tendency to overfit the data \citep{Nielson2015}. \textit{Regularisation} is the process of mitigating the tendency to overfit data by applying penalties to the network as it trains. We now cover some regularisation techniques, including L2-regularisation, dropout, batch normalisation, data expansion and early stopping.
+Due to the large number of parameters to be estimated, parameters generally outnumber observations. During training, observations must be reused and so neural network models have a tendency to overfit the data \citep{Nielson2015}. \textit{Regularisation} is the process of mitigating the tendency to overfit data by applying penalties to the network as it trains. We now cover some regularisation techniques, including L2-regularisation, dropout, batch normalisation, data expansion, and early stopping.
 
 \subsection*{L2-regularisation}\label{nnet-l2reg}
 

@@ -9,26 +9,26 @@ Convolutional neural networks (\textsc{cnn}s) are of particular interest when wo
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/4_cnn_structure.png}
-	\caption{Typical CNN Structure to classify an image from a finite set of classes. Convolution layers with ReLU activation (nonlinearity) are followed by pooling layers. The final layers are fully connected, using softmax activation to generate a probability distribution.}
+	\caption{\small{Typical \textsc{cnn} Structure to classify an image from a finite set of classes. Convolution layers with ReLU activation (nonlinearity) are followed by pooling layers. The final layers are fully connected, using softmax activation to generate a probability distribution.}}
 	\small Image taken from \cite{ADeshpande2016}
 	\label{convnets-structurefig}
 \end{figure}
 
-CNNs typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. Each convolutional layer identifies a significant visual features, however they introduce a large number of variables into the network. Max pooling layers occur after convolutional layers to reduce network dimensionality. For classification tasks, the last layers of the network are fully connected to ensure the final outputs match the structure of the given responses. Softmax activation (see Section \ref{nnets-act}) is used for the final output layer to generate a probability distribution of the classifications.
+\textsc{cnn}s typically consist of alternating convolutional layers (see Section \ref{convnets-convlayer}) and max pooling layers (see Section \ref{convnets-pool}), as shown in Figure \ref{convnets-structurefig}. Max pooling layers occur after convolutional layers to reduce the network dimensionality caused by image data. For classification tasks, the last layers of the network are fully connected to ensure the final outputs match the structure of the given responses. Softmax activation (see Section \ref{nnets-act}) is used for the final output layer to output the classifications as a probability distribution.
 
 \section{Convolutional layers}\label{convnets-convlayer}
 
-The neurons of convolutional layers have a similar overall structure to that of regular neurons (see Section \ref{nnets-structure}). The input variables $X$ are multiplied with weights $W$, summed and added to a bias variable $b$. The resulting linear combination is passed through an activation function $\sigma(\cdot)$ to give the output of the neuron with activation value $a$.
+The neurons of convolutional layers have a similar overall structure to that of regular neurons (see Section \ref{nnets-structure}). The input variables $X$ are multiplied with weights $W$, summed, and added to a bias variable $b$. The resulting linear combination is passed through an activation function $\sigma(\cdot)$ to give the output of the neuron with activation value $a$.
 
-The major difference between convolutional layers and regular neural network layers is the structure of the inputs and weights. Image data is two-dimensional and generally has multiple colour \textit{channels}. For example, a coloured image contains three channels: red, green, and blue. The intensity of each pixel in each channel is represented as a number such that the image forms a three-dimensional array. The weights of convolutional layers are formatted as three-dimensional arrays to accommodate for the number of colour channels. These weight arrays are element-wise multiplied with a subset of the whole image. Unlike fully connected layers, convolutional layers do not apply weights to all of the input variables at once. Instead, the weights have an array height and width much smaller than that of the input image, designed to identify particular visual features in smaller subimages. A single matrix of weights that describes a feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
+The major difference between convolutional layers and regular neural network layers is the structure of the inputs and weights. Image data is two-dimensional and generally has multiple colour \textit{channels}. For example, a coloured image contains three channels: red, green, and blue. The image can be represented as a three-dimensional array with its depth equal to the number of colour channels. The weights of convolutional layers are also formatted as three-dimensional arrays to accommodate for the depth of the input images. Unlike fully connected layers, convolutional layers do not multiply the weights to all of the input variables at once. Instead, the array of weights has a height and width designed to identify visual features in smaller subimages. A single array of weights that describes a feature is called a \textit{filter}. Each convolutional layer can have multiple filters, analogous to having multiple neurons in a fully connected layer.
 
-Each filter processes the whole image by multiplying with subimages chosen sequentially. The process, known as \textit{convolution}, begins at the top-left of the image and moves towards the bottom-right. Let the $f$-th filter of the convolultional layer be $F^{(f)}$, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
+Each filter processes the whole image by multiplying element-wise with all existing subimages chosen sequentially. The process, known as \textit{convolution}, begins at the top-left of the image and moves towards the bottom-right. Let the $f$-th filter of the convolutional layer be $F^{(f)}$, with dimension $M\times N \times C$. Given an input image matrix $X$, number of channels $C$, and the bias of the $f$-th filter $b^{(f)}$, the value of the convolution at element $X_{j,k}$ is given by
 \begin{align}
 	a_{jk}^{(f)} = \sigma\left(\sum_{c=1}^C\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}X_{j+m, k+n, c}F_{m,n,c}^{(f)}  + b^{(f)}\right).
 \end{align}
 
 Let us consider an example.
-\begin{example}
+\begin{example} A convolution is to be applied to an input image with one channel, with identity activation function $\sigma(z) = z$.
 %\begin{figure}[h]
 %\centering
 %\includegraphics[scale=0.5]{Images/4_conv_eg2.png}
@@ -78,7 +78,7 @@ The filter in red is multiplied element-wise with the inputs given in blue. This
 \end{tikzpicture}
 \end{figure}
 
-Taking the sum of the products and adding the bias in purple gives the activation value $(1 + 0 + -2 + 0) + 1 = 0$. This process is iterated for all $2\times2$ subimages in the original input, giving the following output:
+Taking the sum of the elements of the array and adding the bias in purple gives the activation value ${(1 + 0 + -2 + 0) + 1 = 0}$. This process is iterated for all $2\times2$ subimages in the original input, giving the following output:
 
 \begin{figure}[h]
 \centering
@@ -109,13 +109,13 @@ Taking the sum of the products and adding the bias in purple gives the activatio
 
 %As shown in Figure \ref{convnets-conv-alg}, the convolution process starts from the top-left corner of the input volume. A subset of the image is taken at that location, with the same dimensions as the filter. The image subset and the filter are entry-wise multiplied and added together. A bias variable is added and an activation function applied as with fully connected layers. This result becomes the output of a single neuron of the convolutional layer. The filter is moved to the next location (depending on the size of the stride) to build the value of the next neuron.
 
-The arrays output by the convolutional filters are bound together to form a three-dimensional array, with depth dependent on the number of filters in the layer.
+The output arrays of the convolutional filters are bound together to form a three-dimensional array, with depth dependent on the number of filters in the layer.
 
-The convolution process involves a very large number of variables, many of which are redundant when identifying important features. A number of techniques have been developed to control how the subimages are chosen, reduce image dimensionality, speed up processing, and provide flexiblity in network design. We now discuss some of these methods.
+The convolution process involves a very large number of variables, many of which are redundant when identifying important features. We now discuss a number of techniques to reduce image dimensionality, speed up the convolution process, and provide flexiblity in network design.
 
 \subsection*{Zero padding}\label{convnets-pad}
 
-During convolution, the filters are only placed within the boundaries of the input image, resulting in loss of dimension from the borders. For an input image with dimension $J \times K$ and a filter with dimension $M \times N$, the filter output will be of dimension $(J - M + 1)\times (K - N + 1)$. This places a limit on the number of convolutional layers used before the image dimension becomes too small for further convolution.
+During convolution, the filters multiply element-wise within the boundaries of the input image, resulting in loss of dimension at the borders. For an input image with dimension $J \times K$ and a filter with dimension $M \times N$, the filter output will be of dimension $(J - M + 1)\times (K - N + 1)$. This places a limit on the number of convolutional layers used before the image dimension becomes too small for further convolution.
 
 \textit{Zero padding} surrounds the edges of the input image with $P$ layers of zeros, increasing the input dimension to  $(J+2P) \times (K+2P)$. When convolution takes place, the resulting image size has dimension $(J+2P - M + 1) \times (K + 2P - N + 1)$. The value of $P$ can be set such that the convolution maintains the original image dimension, allowing the network to continue applying convolution to outputs, thus producing very deep networks \citep{GoogLeNet2015}.
 
@@ -133,7 +133,7 @@ For \textit{max pooling}, the values output are the maximum values of all inputs
 
 \section{ReLU activation}\label{convnets-act}
 
-The ReLU activation function, as defined in Section \ref{nnets-act}, is frequently used for  convolutional neural networks. Computation time can become very large as there are a large number of variables. The ReLU function can be computed very quickly and so is a common choice for convolutional neural networks \citep{ADeshpande2016}. Additionally, the ReLU activation function is also able to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
+The computation of neurons and convolutional layer outputs can be time consuming as there are a large number of variables in image data. The ReLU function, as defined in Section \ref{nnets-act}, can be computed very quickly and consequently is a common choice for convolutional neural networks \citep{ADeshpande2016}. Additionally, the usage of the ReLU activation function helps avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}).
 
 
 %Convolutional Neural Networks are very similar to traditional neural networks, but make the assumption that the input data are images.

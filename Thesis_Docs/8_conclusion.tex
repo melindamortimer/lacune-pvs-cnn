@@ -3,8 +3,9 @@
 
 \chapter{Conclusion}\label{conclusion}
 
+The detection of lacunes in \textsc{mri} is necessary for neurological study surrounding cerebral \textsc{svd} and the incidence of stroke. Current identification methods are time consuming and largely inconsistent, resulting in potentially invalid study conclusions and misdiagnosis for those of heightened risk of stroke. Lacune detection models exist and are successful in classifying lacunes, however are reliant on location-based variables. These variables must be estimated using existing tools to segment the brain structure, however these tools are not necessarily available to clinicians. 
 
-We proposed a two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. Our proposed model adapts the lacune detection model by \cite{GhafoorianM.2017Dml3} and makes three major changes. The first is the removal of dependence on location-based variables. This reduces the quantity and complexity of data pre-processing, and ensures that samples are classified correctly even if they occur in less frequently observed regions.
+We proposed a location-independent two-dimensional convolutional neural network model for the detection of lacunes in \textsc{mri}. Our proposed model adapts the lacune detection model by \cite{GhafoorianM.2017Dml3} and makes three major changes. The first is the removal of dependence on location-based variables. This reduces the quantity and complexity of data pre-processing, and ensures that samples are classified correctly even if they occur in less frequently observed regions.
 
 The second adaptation is use of soft tissue extraction on the T1-weighted scans prior to model input. This process occurs to remove identification features visible in \textsc{mri}, and has the additional effect of enlarging spaces that appear similar to \textsc{csf}, and hence enlarges lacunes.
 
@@ -22,8 +23,7 @@ Soft tissue extraction applied to the T1-weighted scans resulted in very distinc
 
 Once the number of false-positive samples has been reduced, the model is to be included as part of the Sydney \textsc{mas} \textsc{mri} data processing pipeline. Inclusion of the model will assist neuroscientists in the efficient and consistent detection of lacunes, and thus ensure the validity of medical studies conducted. Additionally, the inclusion of the model during medical practice would provide accurate detection of lacunes in the \textsc{mri} of individual patients, indicating any heightened risk of stroke. The awareness of any increased risk could then result in appropriate treatment and possible avoidance of stroke.
 
-%The large number of variables required for \textsc{cnn}s makes them computationally and space intensive. Further research could be conducted by considering other more efficient computer algorithms and model types, such as gradient boosting in XGBoost.
-
+Recent attention has been drawn to other forms of automated medical diagnosis. Algorithms have been found successful in the detection of breast cancer \citep{LiuYun2018} and bone fractures \citep{Lindsey2018}. Data inputs in these contexts are of a similar three-dimensional array structure to that of \textsc{mri}, therefore the \textsc{cnn} techniques used can be extended to other classification and diagnostic tasks.
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

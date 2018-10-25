@@ -5,26 +5,29 @@
 
 \section{Final model structure}
 
-The final simplified model has a similar structure to that of the candidate detection model by \cite{GhafoorianM.2017Dml3}. The overall structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: soft tissue extracted T1 and \textsc{flair} images. Each of the images has resolution 51$\times$51 pixels and is centred at the same coordinate. The model classifies the central pixel as either a positive (lacune) or negative (non-lacune) by returning the classification with the highest probability.
+The final simplified model has a similar structure to that of the candidate detection model by \cite{GhafoorianM.2017Dml3}. The overall structure is shown in Figure \ref{results-model-fig}. The input data contains two axial images: T1-weighted and \textsc{flair} images. Each of the images has resolution 51$\times$51 pixels and is centred at the same coordinate. The model classifies the central pixel as either a positive (lacune) or negative (non-lacune) by returning the classification with the highest probability.
 % Simplified model structure
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\linewidth]{Images/7_simplified_model.png}
-	\caption{\small{Simplified model structure.}}
+	\caption{Simplified model structure.}
 	\small Image adapted from \cite{GhafoorianM.2017Dml3}
 	\label{results-model-fig}
 \end{figure}
 
-The model consists of four convolutional layers of size 20, 40, 80, and 110, with filter sizes respectively 7$\times$7, 5$\times$5, 3$\times$3, and 3$\times$3. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200, and 2. The final layer has softmax activation to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}). All neurons undergo batch normalisation and are initialised using the He method \citep{HeKaiming2015DDiR}. A dropout rate of 0.3 was applied to the fully connected layers.
+The model consists of four convolutional layers of size 20, 40, 80 and 110, with filter sizes 7$\times$7, 5$\times$5, 3$\times$3 and 3$\times$3 respectively. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200 and 2. The final layer has softmax activation to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}). All neurons undergo batch normalisation and are initialised using the He method \citep{HeKaiming2015DDiR}. A dropout rate of 0.3 was applied to the fully connected layers.
 
 Training was conducted using stochastic gradient descent with the Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy cost was used with L2-regularisation of penalty rate $1\times10^{-4}$. An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, the final saved model will have the highest validation accuracy.
 
-Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by \cite{GhafoorianM.2017Dml3}: one-third positive and two-thirds negative.  
+Two models were compared to assess the impact of soft tissue extraction on the quality of lacune detection. Soft tissue extraction creates a mask that retains voxels with an over 50\% probability of containing brain tissue. This threshold is low and the mask has a tendency to remove voxels that contain a high probability of \textsc{csf} content. This includes voxels that contain lacunes and voxels close to the edge of the brain matter. Hence, the resulting images have a tendency to increase the perceived size of lacunes in the T1-weighted images, and additionally significant contextual loss occurs for lacunes in regions close to the edge of the brain matter. We conduct two models of differing image inputs to test to the severity of this information loss and how it affects lacune detection.
+
+Two models were trained using different T1-weighted images. The first was developed using the soft tissue extracted T1-weighted scans. 
 
 
-%, allowing for a random selection of 7,600 negative samples. These samples were split into three data sets: training, validation and testing. Splitting the data into these groups at a ratio of 50:25:25 yielded sample sizes 5,769, 2,884 and 2,885 respectively.
+Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by \cite{GhafoorianM.2017Dml3}: one-third positive and two-thirds negative. There are only 3,846 positive samples in the MAS data set, allowing for a random selection of 7,692 negative samples, thus giving a total sample size of 11,538. These samples were split into three data sets: training, validation and testing. Splitting the data into these groups at a ratio of 50:25:25 yielded sample sizes 5,769, 2,884 and 2,885 respectively.
 
 The second model used the entire developed set of positive and negative lacune samples. This consisted of 3,846 positive and 39,983 negative samples to give a total sample size of 43,829. Positive samples encompass 8.78\% of data samples. Similarly to the first data set, the data was split into training, validation and testing sets using a ratio of 50:25:25. This yielded sample sizes 21,914, 10,957 and 10,958 respectively. All data sets were saved as R data files (\texttt{.Rda}).
+
 
 
 \section{Training environment}
@@ -41,7 +44,7 @@ The first model generated has the same positive-negative sample ratio as outline
 \begin{figure}[b]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_train_acc4.pdf}
-	\caption{\small{Training data accuracy logged every 5 batches.}}
+	\caption{Training data accuracy logged every 5 batches.}
 	\label{results-train-acc4-fig}
 \end{figure}
 
@@ -53,7 +56,7 @@ Training accuracy was calculated every 5 batches, where each batch contained 128
 \begin{figure}[b]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_valid_acc4.pdf}
-	\caption{\small{Validation data accuracy logged after each epoch.}}
+	\caption{Validation data accuracy logged after each epoch.}
 	\label{results-valid-acc4-fig}
 \end{figure}
 
@@ -73,7 +76,7 @@ Though overall accuracy is a strong indicator of model performance, some types o
 	False & 16 & 2\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{\small{Confusion matrix of the Model 1 testing data set.}}
+	\caption{Confusion matrix of the Model 1 testing data set.}
 	\label{results-confmat4-tab}
 \end{table}
 
@@ -87,7 +90,7 @@ The second model was built using all of the generated positive and negative samp
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_train_acc5.pdf}
-	\caption{\small{Training data accuracy logged every 5 batches.}}
+	\caption{Training data accuracy logged every 5 batches.}
 	\label{results-train-acc5-fig}
 \end{figure}
 
@@ -97,7 +100,7 @@ The performance of the model on the validation set is given in Figure \ref{resul
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_valid_acc5.pdf}
-	\caption{\small{Validation data accuracy logged after each epoch}}
+	\caption{Validation data accuracy logged after each epoch}
 	\label{results-valid-acc5-fig}
 \end{figure}
 
@@ -113,7 +116,7 @@ Applying this best validation accuracy model to the test set achieved an accurac
 	False & 19 & 1\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{\small{Confusion matrix of the Model 2 testing data set.}}
+	\caption{Confusion matrix of the Model 2 testing data set.}
 	\label{results-confmat5-tab}
 \end{table}
 
@@ -131,7 +134,7 @@ We now discuss the effect of the positive-negative sample ratio and sample size 
 	Model 2 & 0.9990 (961/962) & 0.9981 (9977/9996)\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{\small{Sensitivities and specificities of both models.}}
+	\caption{Sensitivities and specificities of both models.}
 	\label{results-sens-spec-tab}
 \end{table}
 
@@ -163,28 +166,28 @@ We now discuss the features of samples classified correctly and incorrectly. Fig
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{Images/7_TP_t1_flair.png}
-\caption{\small{True-positive sample. The sample has a zero intensity in the T1-weighted image. A distinct dark region with hyperintense rim is visible in the \textsc{flair} image.}}
+\caption{True-positive sample. The sample has a zero intensity in the T1-weighted image. A distinct dark region with hyperintense rim is visible in the \textsc{flair} image.}
 \label{results-tp}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{Images/7_FP_t1_flair.png}
-\caption{\small{False-positive sample. The sample occurs near the edge of the brain matter and so has a low intensity in the T1-weighted scans. The false-positive classification may arise from the small amount of hyperintensity visible in the \textsc{flair} image.}}
+\caption{False-positive sample. The sample occurs near the edge of the brain matter and so has a low intensity in the T1-weighted scans. The false-positive classification may arise from the small amount of hyperintensity visible in the \textsc{flair} image.}
 \label{results-fp1}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{Images/7_FP_t1_flair2.png}
-\caption{\small{False-positive sample. The sample occurs next to the cerebral ventricles, which have a zero intensity in the T1-weighted image. A dark region with a hyperintense edge is visible in the \textsc{flair} image.}}
+\caption{False-positive sample. The sample occurs next to the cerebral ventricles, which have a zero intensity in the T1-weighted image. A dark region with a hyperintense edge is visible in the \textsc{flair} image.}
 \label{results-fp2}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{Images/7_FN_t1_flair.png}
-\caption{\small{False-negative sample. The lacune has a diameter of only 3 mm, and is visible in the T1-weighted image. The \textsc{flair} image has no visible dark region around the lacune or hyperintense rim.}}
+\caption{False-negative sample. The lacune has a diameter of only 3 mm, and is visible in the T1-weighted image. The \textsc{flair} image has no visible dark region around the lacune or hyperintense rim.}
 \label{results-fn}
 \end{figure}
 

@@ -77,6 +77,9 @@ for (id in list.id.lacune.sets[[tvt]]) {
   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
   soft <- f.read.nifti.volume(file.soft)
   
+  file.t1 <- paste0(data.dir, "T1/", id, "_tp2_t1.nii")
+  t1 <- f.read.nifti.volume(file.t1)
+  
   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
   flair <- f.read.nifti.volume(file.flair)
   
@@ -93,7 +96,7 @@ for (id in list.id.lacune.sets[[tvt]]) {
         data.train.lacunes[i, 3] <- y
         data.train.lacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         
         data.train.lacunes[i, 5:2605] <- patch.t1
@@ -112,7 +115,7 @@ for (id in list.id.lacune.sets[[tvt]]) {
         data.train.lacunes[i, 3] <- y
         data.train.lacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x + 25):(x - 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x + 25):(x - 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x + 25):(x - 25), y, (z-25):(z+25), 1]
         
         data.train.lacunes[i, 5:2605] <- patch.t1
@@ -144,6 +147,9 @@ for (id in c(list.id.lacune.sets[[tvt]], list.id.lacune.sets[[tvt]])) {
   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
   soft <- f.read.nifti.volume(file.soft)
   
+  file.t1 <- paste0(data.dir, "T1/", id, "_tp2_t1.nii")
+  t1 <- f.read.nifti.volume(file.t1)
+  
   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
   flair <- f.read.nifti.volume(file.flair)
   
@@ -171,7 +177,7 @@ for (id in c(list.id.lacune.sets[[tvt]], list.id.lacune.sets[[tvt]])) {
         data.train.nonlacunes[i, 3] <- y
         data.train.nonlacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         
         data.train.nonlacunes[i, 5:2605] <- patch.t1
@@ -203,9 +209,9 @@ training <- rbind(data.train.lacunes, data.train.nonlacunes)
 # Randomise and save
 training <- training[sample(nrow(training)),]
 
-save(data.train.lacunes, file = "/srv/scratch/z5016924/train_lacunes.Rda")
-save(data.train.nonlacunes, file = "/srv/scratch/z5016924/train_nonlacunes.Rda")
-save(training, file = "/srv/scratch/z5016924/training5.Rda")
+save(data.train.lacunes, file = "/srv/scratch/z5016924/Data sets/attempt2/train_lacunes.Rda")
+save(data.train.nonlacunes, file = "/srv/scratch/z5016924/Data sets/attempt2/train_nonlacunes.Rda")
+save(training, file = "/srv/scratch/z5016924/Data sets/attempt2/training.Rda")
 
 
 
@@ -223,6 +229,9 @@ for (id in list.id.lacune.sets[[tvt]]) {
   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
   soft <- f.read.nifti.volume(file.soft)
   
+  file.t1 <- paste0(data.dir, "T1/", id, "_tp2_t1.nii")
+  t1 <- f.read.nifti.volume(file.t1)
+  
   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
   flair <- f.read.nifti.volume(file.flair)
   
@@ -239,7 +248,7 @@ for (id in list.id.lacune.sets[[tvt]]) {
         data.valid.lacunes[i, 3] <- y
         data.valid.lacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         
         data.valid.lacunes[i, 5:2605] <- patch.t1
@@ -258,7 +267,7 @@ for (id in list.id.lacune.sets[[tvt]]) {
         data.valid.lacunes[i, 3] <- y
         data.valid.lacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x + 25):(x - 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x + 25):(x - 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x + 25):(x - 25), y, (z-25):(z+25), 1]
         
         data.valid.lacunes[i, 5:2605] <- patch.t1
@@ -291,6 +300,9 @@ for (id in c(list.id.lacune.sets[[tvt]], list.id.lacune.sets[[tvt]])) {
   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
   soft <- f.read.nifti.volume(file.soft)
   
+  file.t1 <- paste0(data.dir, "T1/", id, "_tp2_t1.nii")
+  t1 <- f.read.nifti.volume(file.t1)
+  
   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
   flair <- f.read.nifti.volume(file.flair)
   
@@ -318,7 +330,7 @@ for (id in c(list.id.lacune.sets[[tvt]], list.id.lacune.sets[[tvt]])) {
         data.valid.nonlacunes[i, 3] <- y
         data.valid.nonlacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         
         data.valid.nonlacunes[i, 5:2605] <- patch.t1
@@ -351,9 +363,9 @@ validation <- rbind(data.valid.lacunes, data.valid.nonlacunes)
 # Randomise and save
 validation <- validation[sample(nrow(validation)),]
 
-save(data.valid.lacunes, file = "/srv/scratch/z5016924/valid_lacunes.Rda")
-save(data.valid.nonlacunes, file = "/srv/scratch/z5016924/valid_nonlacunes.Rda")
-save(validation, file = "/srv/scratch/z5016924/validation5.Rda")
+save(data.valid.lacunes, file = "/srv/scratch/z5016924/Data sets/attempt2/valid_lacunes.Rda")
+save(data.valid.nonlacunes, file = "/srv/scratch/z5016924/Data sets/attempt2/valid_nonlacunes.Rda")
+save(validation, file = "/srv/scratch/z5016924/Data sets/attempt2/validation.Rda")
 
 
 # Test - Positive --------------------------------------------------------
@@ -368,6 +380,9 @@ for (id in list.id.lacune.sets[[tvt]]) {
   
   file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
   soft <- f.read.nifti.volume(file.soft)
+  
+  file.t1 <- paste0(data.dir, "T1/", id, "_tp2_t1.nii")
+  t1 <- f.read.nifti.volume(file.t1)
   
   file.flair <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
   flair <- f.read.nifti.volume(file.flair)
@@ -385,7 +400,7 @@ for (id in list.id.lacune.sets[[tvt]]) {
         data.test.lacunes[i, 3] <- y
         data.test.lacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         
         data.test.lacunes[i, 5:2605] <- patch.t1
@@ -404,7 +419,7 @@ for (id in list.id.lacune.sets[[tvt]]) {
         data.test.lacunes[i, 3] <- y
         data.test.lacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x + 25):(x - 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x + 25):(x - 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x + 25):(x - 25), y, (z-25):(z+25), 1]
         
         data.test.lacunes[i, 5:2605] <- patch.t1
@@ -464,7 +479,7 @@ for (id in c(list.id.lacune.sets[[tvt]], list.id.lacune.sets[[tvt]])) {
         data.test.nonlacunes[i, 3] <- y
         data.test.nonlacunes[i, 4] <- z
         
-        patch.t1 <- soft[(x - 25):(x + 25), y, (z-25):(z+25), 1]
+        patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
         
         data.test.nonlacunes[i, 5:2605] <- patch.t1
@@ -495,6 +510,6 @@ testing <- rbind(data.test.lacunes, data.test.nonlacunes)
 # Randomise and save
 testing <- testing[sample(nrow(testing)),]
 
-save(data.test.lacunes, file = "/srv/scratch/z5016924/test_lacunes.Rda")
-save(data.test.nonlacunes, file = "/srv/scratch/z5016924/test_nonlacunes.Rda")
-save(testing, file = "/srv/scratch/z5016924/testing5.Rda")
+save(data.test.lacunes, file = "/srv/scratch/z5016924/Data sets/attempt2/test_lacunes.Rda")
+save(data.test.nonlacunes, file = "/srv/scratch/z5016924/Data sets/attempt2/test_nonlacunes.Rda")
+save(testing, file = "/srv/scratch/z5016924/Data sets/attempt2/testing.Rda")

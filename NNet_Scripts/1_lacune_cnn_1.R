@@ -1,9 +1,9 @@
 library(tensorflow)
 library(crayon)
 # rm(list = ls())
-load("/srv/scratch/z5016924/training5.Rda")
-load("/srv/scratch/z5016924/validation5.Rda")
-load("/srv/scratch/z5016924/testing5.Rda")
+load("/srv/scratch/z5016924/Data sets/attempt2/training.Rda")
+load("/srv/scratch/z5016924/Data sets/attempt2/validation.Rda")
+load("/srv/scratch/z5016924/Data sets/attempt2/testing.Rda")
 
 
 # 1 -----------------------------------------------------------------------
@@ -168,6 +168,11 @@ i.train.acc <- 1
 train.accuracy2 <- numeric(max.epochs)
 i.train.acc2 <- 1
 
+
+# training ----------------------------------------------------------------
+
+
+
 best.accuracy <- 0
 e <- 1
 start.timer <- proc.time()
@@ -187,7 +192,7 @@ while (e < max.epochs) {
         x = training[i:(i+127), 5:5206], y_ = training[i:(i+127), 5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
       cat(sprintf(" Acc: %g", train.accuracy[i.train.acc]))
       i.train.acc <- i.train.acc + 1
-      plot(train.accuracy[max(i.train.acc-500,1):i.train.acc])
+      plot(train.accuracy[max(i.train.acc-500,1):(i.train.acc - 1)], type = "b")
     }
     cat("\n")
   }
@@ -205,7 +210,7 @@ while (e < max.epochs) {
   if(train.accuracy2[i.train.acc2] > best.accuracy) {
     cat("Saving Model..\n")
     best.accuracy <- train.accuracy2[i.train.acc2]
-    saver$save(sess, "/srv/scratch/z5016924/correct_sampling/attempt5/model.ckpt")
+    saver$save(sess, "/srv/scratch/z5016924/correct_sampling_results/attempt2/model.ckpt")
   }
     i.train.acc2 <- i.train.acc2 + 1
     
@@ -219,31 +224,31 @@ while (e < max.epochs) {
 
 # 85% of the way through epoch 12, accuracy sudden plummets from around 100%, down to near 0??
 # test.up.to <- nrow(testing)
-test.up.to <- 1000
-accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-# Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
-
-# Check all testing accuracy (in batches since it can't evaluate all at once)
-num.testing <- dim(testing)[1]
-testing.seq <- seq(1, num.testing, by = 5000)
-testing.accuracy <- numeric(length(testing.seq))
-for (i in 1:length(testing.seq)) {
-  print(paste(i,"of", length(testing.seq)))
-  testing.accuracy[i] <- accuracy$eval(feed_dict = dict(x = testing[i:min(i+4999, num.testing),5:5206], y_ = testing[i:min(i+4999, num.testing),5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
-}
-mean(testing.accuracy)
-# 0.9938
+# test.up.to <- 1000
+# accuracy$eval(feed_dict = dict(x = testing[1:test.up.to,5:5206], y_ = testing[1:test.up.to,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# # Testing up to 5000 samples at that cut-off training gives accuracy of 99.74%
+# 
+# # Check all testing accuracy (in batches since it can't evaluate all at once)
+# num.testing <- dim(testing)[1]
+# testing.seq <- seq(1, num.testing, by = 5000)
+# testing.accuracy <- numeric(length(testing.seq))
+# for (i in 1:length(testing.seq)) {
+#   print(paste(i,"of", length(testing.seq)))
+#   testing.accuracy[i] <- accuracy$eval(feed_dict = dict(x = testing[i:min(i+4999, num.testing),5:5206], y_ = testing[i:min(i+4999, num.testing),5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# }
+# mean(testing.accuracy)
+# # 0.9938
 
 
 
 # Testing Set -------------------------------------------------------------
 # Positives now make 1/3 of the data. Data split into training/validation/testing
 
-accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
+# accuracy$eval(feed_dict = dict(x = testing[,5:5206], y_ = testing[,5207:5208], keep.prob = 1.0, learn.rate = learning.rates[e]))
 
 
 
-saver$restore(sess, "/srv/scratch/z5016924/correct_sampling/attempt5/model.ckpt")
+saver$restore(sess, "/srv/scratch/z5016924/correct_sampling_results/attempt2/model.ckpt")
 # saver$restore(sess, tf$train$latest_checkpoint("/srv/scratch/z5016924/model1/attempt5"))
 
 sess$close()
@@ -253,10 +258,10 @@ nrow.train.acc <- max(which(train.accuracy != 0))
 train.accuracy <- train.accuracy[1:nrow.train.acc]
 
 # Training accuracy
-save(train.accuracy, file = "/srv/scratch/z5016924/correct_sampling/attempt5/train_accuracy.Rda")
+save(train.accuracy, file = "/srv/scratch/z5016924/correct_sampling_results/attempt2/train_accuracy.Rda")
 
 # Epoch validation accuracy
-save(train.accuracy2, file = "/srv/scratch/z5016924/correct_sampling/attempt5/train_accuracy2.Rda")
+save(train.accuracy2, file = "/srv/scratch/z5016924/correct_sampling_results/attempt2/train_accuracy2.Rda")
 
 
 

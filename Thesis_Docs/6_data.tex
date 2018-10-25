@@ -1,5 +1,5 @@
-%\include{packages}
-%\begin{document}
+\include{packages}
+\begin{document}
 
 \chapter{Data sample collection}\label{data}
 
@@ -29,11 +29,11 @@ Individual T1 images were segmented into grey matter, white matter, and \textsc{
 \label{data-t1-soft-fig}
 \end{figure}
 
-The resulting images retain voxels that are likely to contain brain tissue. Other features, such as the skull and suspected \textsc{csf}, are given an intensity of zero. Lacunes are filled with fluid and so have a signal intensity similar to that of \textsc{csf}. Consequently, lacunes are removed by the soft tissue mask. The removed regions tend to have well-defined edges, which may aid in the identification of smaller lacunes. Note that lacunes are still visible in the \textsc{flair} images.
+The resulting images retain voxels that are likely to contain brain tissue. Other features, such as the skull and suspected \textsc{csf}, are given an intensity of zero. Lacunes are filled with fluid and so have a signal intensity similar to that of \textsc{csf}. Consequently, lacunes are removed by the soft tissue mask. It should be noted that lacunes are still visible in the \textsc{flair} images.
 
 \section{Generating response arrays}\label{data-lacune}
 
-The T1-weighted and \textsc{flair} scans were rated visually by trained clinicians in accordance to the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}. The clinicians visually analysed the scans slice by slice, identifying possible lacunes, perivascular spaces, and other lesions. Each lesion was analysed by a team of clinicians to confirm the identification. The rating of lacunes were then logged in Microsoft Excel, which also details the scan ID and the number of lacunes in each \textsc{mri} scan. For each lacune detected, the spreadsheet lists the axial slice ($y$-coordinate), diameter in millimetres, hemispheric location, and the ID of the surrounding brain structure. A sample of the spreadsheet data is shown in Table \ref{data-excel-tab}.
+The T1-weighted and \textsc{flair} scans were rated visually by trained clinicians in accordance to the \textsc{strive} criterion \cite{WardlawJ.M.2013Nsfr}. The clinicians visually analysed the scans slice by slice, identifying possible lacunes, perivascular spaces, and other lesions. Each candidate lesion was analysed by a team of clinicians to confirm the identification. The rating of lacunes was logged in Microsoft Excel, detailing the scan ID and the number of lacunes in each \textsc{mri} scan. For each lacune detected, the spreadsheet indicates the axial slice ($y$-coordinate), diameter in millimetres, hemispheric location (side), and the ID of the surrounding brain region. A sample of the spreadsheet data is shown in Table \ref{data-excel-tab}.
 
 \begin{table}[ht]
 	\centering
@@ -46,7 +46,7 @@ The T1-weighted and \textsc{flair} scans were rated visually by trained clinicia
 	\ldots\\
 	\bottomrule[1.5pt]\\
 	\end{tabular}
-	\caption{Sample spreadsheet data. Each row describes one scan, identifying the size and location of lacunes. Each row contains repeated columns to describe multiple lacunes per scan ID.}
+	\caption{\small{Sample spreadsheet data. Each row describes one scan, identifying the size and location of lacunes. Columnn headings are repeated so that multiple lacunes can be identified per scan ID.}}
 	\label{data-excel-tab}
 \end{table}
 
@@ -59,7 +59,7 @@ The provided data describes the approximate anatomical location of lacunes. This
 \label{data-t1-flair-lac}
 \end{figure}
 
-The responses were generated in FSLView \citeyearpar{fslview}, a program used by neuroscientists to view and annotate \textsc{mri} scans in the \texttt{.nifti} file format. For each brain scan described in the Excel spreadsheet, FSLView \citeyearpar{fslview} was used to generate a zero-initialised three-dimensional array of the same dimensions as the corresponding T1-weighted scan. Lacunes were visually identified by examining the indicated brain structure for lesions that appear dark in the T1-weighted images and with a hyperintense rim in the \textsc{flair} images. The empty arrays were opened in FSLView \citeyearpar{fslview} such that the voxels correspond to that of the T1-weighted images. The voxels that form the identified lacunes were indicated with ones using the Brush tool. These overlays were saved as \texttt{.nifti} files so they could be imported alongside the soft tissue and \textsc{flair} \texttt{.nifti} files. An example of a lacune overlay is shown in Figure \ref{data-t1-flair-lac}.
+The responses were generated in FSLView \citeyearpar{fslview}, a program used by neuroscientists to view and annotate \textsc{mri} scans in the \texttt{.nifti} file format. For each brain scan described in the Excel spreadsheet, FSLView \citeyearpar{fslview} was used to generate a zero-initialised three-dimensional array of the same dimensions as the corresponding T1-weighted scan. Lacunes were visually identified by examining the indicated brain structure for lesions that appear dark in the T1-weighted images and with a hyperintense rim in the \textsc{flair} images. The voxels that form the identified lacunes were indicated with ones using the Brush tool. These overlays were saved as \texttt{.nifti} files so they could be imported alongside the soft tissue and \textsc{flair} \texttt{.nifti} files. An example of a lacune overlay is shown in Figure \ref{data-t1-flair-lac}.
 
 
 
@@ -75,7 +75,9 @@ The locations of the positive samples (lacunes) were extracted using the overlay
 
 Negative (non-lacune) samples were generated by considering voxels that return a negative response in the lacune overlay. The number of lacunes appearing in \textsc{mri} is fairly low, and each lacune has a diameter up to only 15 mm. Therefore, the number of potential negative samples vastly outnumbers positive samples. Given too many negative samples, the model will have a tendency to classify each given sample as negative without the cost function reporting large errors. For example, a data set containing 99\% negatives will return a 99\% classification accuracy for a model that outputs all points as negative.
 
-Negative samples were chosen in intervals of 25 pixels with starting location chosen randomly. Samples were discarded if the central voxel was surrounded by a 4$\times$4$\times$4 empty volume, reducing the number of sparse samples. Examples are shown in Figure \ref{data-negatives}. This was used to generate a total of 39,983 negative samples. Positives samples make up 8.78\% of the dataset.
+Negative samples were chosen in intervals of 25 pixels with starting locations chosen randomly. Samples were discarded if the central voxel was surrounded by a 4$\times$4$\times$4 empty volume, reducing the number of sparse samples sourced externally to the brain. Examples are shown in Figure \ref{data-negatives}. This was used to generate a total of 39,983 negative samples. Positives samples make up 8.78\% of the dataset.
+
+Model training was be conducted on three separate data sets: training, validation, and testing. The set of scan IDs containing lacunes and the set without lacunes were each split in the ratio 50:25:25. Samples were partitioned into the three separate data sets by scan ID to ensure zero correlation between the samples during the validation and testing phases.
 
 \begin{figure}[hb]
 \centering
@@ -125,5 +127,5 @@ Negative samples were chosen in intervals of 25 pixels with starting location ch
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\include{bibliography}
-%\end{document}
+\include{bibliography}
+\end{document}

@@ -68,6 +68,8 @@ legend('bottomright',
 # setwd("/srv/scratch/z5016924/model1/attempt5")
 setwd("~/hdrive/Honours/lacune-pvs-cnn/y_attempt5")
 
+setwd("/srv/scratch/z5016924/correct_sampling/attempt5/")
+
 load("train_accuracy.Rda")
 load("train_accuracy2.Rda")
 
@@ -103,8 +105,8 @@ plot(train.accuracy2,
      type = "l", lty = "dashed",
      xlab = "Epoch",
      ylab = "Validation Accuracy",
-     main = "Validation Accuracy",
-     ylim = c(0.965, 1))
+     main = "Validation Accuracy")
+     # ylim = c(0.965, 1))
 lines(smooth.spline(train.accuracy2, spar = 0.5), col = "red")
 # Attempt5: small rise from epoch 10 to 20. Some instability from 20 to 30. Then stable again. Staying around 
 (max.acc.5 = max(train.accuracy2))
@@ -112,7 +114,7 @@ lines(smooth.spline(train.accuracy2, spar = 0.5), col = "red")
 abline(h = max.acc.5, col = "blue", lty = 2)
 points(which.max.acc.5, max.acc.5, col = "green3", pch = 19)
 legend('bottomright',
-       c("Validation Accuracy","Cubic Spline", "Highest Acc = 0.9983"),
+       c("Validation Accuracy","Cubic Spline", paste("Highest Acc = ", round(max.acc.5, 5))),
        lty = c(2,1,2),
        col = c("black","red", "blue"))
 
