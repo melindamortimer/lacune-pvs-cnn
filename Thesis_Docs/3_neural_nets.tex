@@ -113,8 +113,8 @@ The structure of a neural network neuron is shown in Figure \ref{nnet-neuronfig}
 A neuron can be used to express a logical \textsc{and} gate of two inputs. Let \textsc{true} be encoded to 1 and \textsc{false} be encoded to 0 so that $x_i \in \{0,1\}$ for $i=1,2$. Let $\mathbf{w} = (1, 1)^\intercal$ and $b = -1.5$. Let the activation function be the step function $\sigma(z) = 1$ for $z > 0$ and $\sigma(z) = 0$ otherwise. The resulting neuron has output
 \begin{align*}
 	a(\mathbf{x}) = \begin{cases}
-		1 & , x_1 + x_2 - 1.5 > 0\\
-		0 & , otherwise
+		1, & x_1 + x_2 - 1.5 > 0\\
+		0, & \text{otherwise}
 	\end{cases},
 \end{align*}
 which will output 1 if and only if $\mathbf{x} = (1, 1)^\intercal$, satisfying the definition of an \textsc{and} gate.

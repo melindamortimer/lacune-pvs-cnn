@@ -21,7 +21,7 @@ Improvements in image classification have been made with the introduction of con
 
 A successful \textsc{cnn} model for lacune detection was first developed by \cite{GhafoorianM.2017Dml3}. This model involved a two-dimensional \textsc{cnn} for candidate lacune detection, followed by three parallel three-dimensional \textsc{cnn}s connected with seven additional location-based variables, to reduce the number of false-positive classifications. This model exhibited a sensitivity of 97.4\% and exhibited an average of 0.13 false-positives per slice. Although the model demonstrates highly accurate performance, it relies on the inclusion of location-based variables. Some of these variables include distances between the candidate points and particular structures of the brain. However, the precise locations and sizes of these brain structures are not constant between scans. These location-based variables must be estimated using existing algorithms or, in the case that a clinician does not have access to these algorithms, measured manually. 
 
-In this thesis, we adapt the \textsc{cnn} developed by \cite{GhafoorianM.2017Dml3} to the scenario in which the location-based variables are unavailable. In particular, we make three major adjustments. The first is the \textit{removal of the location-based variables} presumed to be inaccessible. The second adjustment is the \textit{extraction of brain matter}to remove visual identifiers such as the skull and eyes. The third adjustment is the \textit{removal of early dimension reduction} to ensure that adequate pixel information is being passed to the first layer of the \textsc{cnn}.
+In this thesis, we adapt the \textsc{cnn} developed by \cite{GhafoorianM.2017Dml3} to the scenario in which the location-based variables are unavailable. In particular, we make three major adjustments. The first is the \textit{removal of the location-based variables} presumed to be inaccessible. The second adjustment is the \textit{extraction of brain matter} to remove visual identifiers such as the skull and eyes. The third adjustment is the \textit{removal of early dimension reduction} to ensure that adequate pixel information is being passed to the first layer of the \textsc{cnn}.
 
 The resulting model exhibits a testing sensitivity of 99.9\% and specificity of 99.8\%. This improved sensitivity indicates that the model is as sensitive to lacunes as a trained clinician. Improving model specificity minimises the time spent checking the model results. A model with a very large number of false-positives may take just as long to correct as the rating of a whole scan. Improvement in specificity may be achieved by applying a three-dimensional \textsc{cnn} to improve image context, or by the inclusion of simple location-based variables, such as the $x$, $y$, and $z$-coordinates. It should be noted that these methods require additional data preprocessing before use in a data pipeline.
 
@@ -41,15 +41,7 @@ In Chapter 6, we describe the methods of data collection and the preprocessing a
 
 In Chapter 7, we present the results of two \textsc{cnn}s. We test the significance of a greater proportion of negative samples during training, and determine the final testing sensitivity and specificity rates. We discuss the final behaviour of the model, including the characteristics of samples that incur model error.
 
-%- overview
-%
-%- motivation
-%
-%- brief results
-%
-%- structure of thesis
-
-
+In Chapter 8, we discuss existing sample correlations between the training, validation, and testing data sets. We outline the results of the revised models, discuss updated model improvements, and review the existing model false-positive rate.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

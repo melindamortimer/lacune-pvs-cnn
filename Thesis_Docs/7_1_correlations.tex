@@ -1,0 +1,57 @@
+%\include{packages}
+%\begin{document}
+
+\chapter{Effect of sample correlations}\label{corr}
+
+Observed performance of the model was augmented by the correlation of samples between training, validation, and testing data sets. Specifically, this dependence was constructed by data augmentation of the positive samples, which were distributed randomly amongst the data sets.
+
+\section{Updated model performance}
+
+Upon sampling correction, we trained the model on the updated data set. The first model was trained on all soft tissue extracted T1-weighted and \textsc{flair} images, as described in Section \ref{data-samples}. The resulting testing performance is shown in Table \ref{corr-mod1-tab}.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{@{}lll@{}}
+	\toprule[1.5pt]
+	& Positive & Negative\\
+	\midrule
+	True & 206 & 6740\\
+	False & 1196 & 164\\
+	\bottomrule[1.5pt]\\
+	\end{tabular}
+	\caption{\small{Confusion matrix of the first corrected model testing set.}}
+	\label{corr-mod1-tab}
+\end{table}
+
+The resulting sensitivity and specificity rates were respectively 55.7\% and 84.9\%. The model was able to detect some lacunes, however its efficacy was much lower than that of the existing models by \cite{Uchiyama2015} and \cite{GhafoorianM.2017Dml3}.
+
+A second model was trained to examine the impact of information loss due to soft tissue extraction. Samples were generated similarly to the process described in Section \ref{data-samples}, replacing the soft tissue extracted T1-weighted images with original T1-weighted images. The resulting testing performance is shown in Table \ref{corr-mod2-tab}.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{@{}lll@{}}
+	\toprule[1.5pt]
+	& Positive & Negative\\
+	\midrule
+	True & 319 & 7303\\
+	False & 633 & 55\\
+	\bottomrule[1.5pt]\\
+	\end{tabular}
+	\caption{\small{Confusion matrix of the second corrected model testing set.}}
+	\label{corr-mod2-tab}
+\end{table}
+
+The resulting sensitivity and specificity rates were respectively 85.3\% and 92.0\%. This model exhibited a significant improvement in lacune detection, indicating the benefit of information retention surrounding lacunes.
+
+Further improvements in sensitivity can be made by increasing the sample size. The corrected data set consisted of 40,000 samples, whereas the data set used by \cite{GhafoorianM.2017Dml3} consisted of $3.2\times10^5$ samples. Increasing the number of lacunes observed during model training may improve sensitivity rates.
+
+The model exhibits a large number of false-positives. These can be reduced through the inclusion of three-dimensional \textsc{cnn}s, increasing the amount of contextual information.
+
+The realisation of sample correlations motivates a discussion on the false-positive rate reported by \cite{GhafoorianM.2017Dml3}. The T1-weighted scans have approximately 190 axial slices, thus an average of 0.13 false-positives per slice indicates approximately 25 false-positives per volume. The final model described in Section \ref{results-modresults} exhibited a sensitivity of 99.8\%, which would output an average of 100 false-positives across 50,000 brain tissue sample inputs. The specificity reported by \cite{GhafoorianM.2017Dml3} is hence lower than that of the advantaged model. This performance comes into question as the quality of the responses being estimated is bounded by the quality of lacune detection by clinicians, and also the subjectivity surrounding pixels at the border of lacunes. Each voxel of the T1-weighted scans is a 1$\times$1$\times$1 mm cube, hence the lacunes do not fill each voxel perfectly. We hypothesise that initial rating inconsistencies and subjectivity at the borders of lacunes should affect response quality and increase the number of false-positives. This motivates us to question the false-positive reduction statistic reported by \cite{GhafoorianM.2017Dml3} and conclude that replication of the model on new data is required.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\include{bibliography}
+%\end{document}

@@ -1,14 +1,13 @@
 library(tensorflow)
 library(crayon)
 
-
 # Data placeholders
 # Num of samples. 51x51 = 2601. x2 channels = 5202
 x <- tf$placeholder(tf$float32, shape(NULL, 5202L))
 # Num of samples, 2 outcomes
 y_ <- tf$placeholder(tf$float32, shape(NULL, 2L))
 
-# Weights initialised by He Method (maybe can test Xavier init?)
+# Weights initialised by He Method
 he.init <- tf$contrib$layers$
   variance_scaling_initializer(factor = 2.0,
                                 mode = "FAN_AVG",
@@ -43,7 +42,7 @@ batch.norm <- function(z, beta, scale) {
 keep.prob <- tf$placeholder(tf$float32)
 
 
-# Reshape x into sample size, of 51x51,
+# Reshape x into sample size of 51x51
 # 2 colour channels (FLAIR & T1)
 x.image <- tf$reshape(x, shape(-1L, 51L, 51L, 2L))
 
@@ -57,62 +56,62 @@ z.conv1 <- conv2d(x.image, W.conv1)
 beta.conv1 <- beta.variable(shape(20L))
 scale.conv1 <- scale.variable(shape(20L))
 bn.conv1 <- batch.norm(z.conv1, beta.conv1, scale.conv1)
-h.conv1 <- tf$nn$relu(bn.conv1)
+a.conv1 <- tf$nn$relu(bn.conv1)
 
 # pool: 2x2 size, 2 stride
-h.pool1 <- tf$nn$max_pool(h.conv1, ksize = c(1L,2L,2L,1L),
+a.pool1 <- tf$nn$max_pool(a.conv1, ksize = c(1L,2L,2L,1L),
                           strides = c(1L,2L,2L,1L),
                           padding = "VALID")
 
 # conv 2: 40 filters, 5x5 size
 W.conv2 <- weight.variable(shape(5L, 5L, 20L, 40L))
-z.conv2 <- conv2d(h.pool1, W.conv2)
+z.conv2 <- conv2d(a.pool1, W.conv2)
 beta.conv2 <- beta.variable(shape(40L))
 scale.conv2 <- scale.variable(shape(40L))
 bn.conv2 <- batch.norm(z.conv2, beta.conv2, scale.conv2)
-h.conv2 <- tf$nn$relu(bn.conv2)
+a.conv2 <- tf$nn$relu(bn.conv2)
 
 # conv 3: 80 filters, 3x3 size
 W.conv3 <- weight.variable(shape(3L, 3L, 40L, 80L))
-z.conv3 <- conv2d(h.conv2, W.conv3)
+z.conv3 <- conv2d(a.conv2, W.conv3)
 beta.conv3 <- beta.variable(shape(80L))
 scale.conv3 <- scale.variable(shape(80L))
 bn.conv3 <- batch.norm(z.conv3, beta.conv3, scale.conv3)
-h.conv3 <- tf$nn$relu(bn.conv3)
+a.conv3 <- tf$nn$relu(bn.conv3)
 
 # conv 4: 110 filters, 3x3 size
 W.conv4 <- weight.variable(shape(3L, 3L, 80L, 110L))
-z.conv4 <- conv2d(h.conv3, W.conv4)
+z.conv4 <- conv2d(a.conv3, W.conv4)
 beta.conv4 <- beta.variable(shape(110L))
 scale.conv4 <- scale.variable(shape(110L))
 bn.conv4 <- batch.norm(z.conv4, beta.conv4, scale.conv4)
-h.conv4 <- tf$nn$relu(bn.conv4)
+a.conv4 <- tf$nn$relu(bn.conv4)
 
 
 # Fully Connected Layers ----------------------------------------
 
-h.conv4.flat <- tf$reshape(h.conv4, shape(-1L, 14L*14L*110L))
+a.conv4.flat <- tf$reshape(a.conv4, shape(-1L, 14L*14L*110L))
 # full 1: 300 size
 W.fcl1 <- weight.variable(shape(14L*14L*110L, 300L))
-z.fcl1 <- tf$matmul(h.conv4.flat, W.fcl1)
+z.fcl1 <- tf$matmul(a.conv4.flat, W.fcl1)
 beta.fcl1 <- beta.variable(shape(300L))
 scale.fcl1 <- scale.variable(shape(300L))
 bn.fcl1 <- batch.norm(z.fcl1, beta.fcl1, scale.fcl1)
-h.fcl1 <- tf$nn$relu(bn.fcl1)
-h.fcl1.drop <- tf$nn$dropout(h.fcl1, keep.prob)
+a.fcl1 <- tf$nn$relu(bn.fcl1)
+a.fcl1.drop <- tf$nn$dropout(a.fcl1, keep.prob)
 
 # full 2: 200 size
 W.fcl2 <- weight.variable(shape(300L, 200L))
-z.fcl2 <- tf$matmul(h.fcl1.drop, W.fcl2)
+z.fcl2 <- tf$matmul(a.fcl1.drop, W.fcl2)
 beta.fcl2 <- beta.variable(shape(200L))
 scale.fcl2 <- scale.variable(shape(200L))
 bn.fcl2 <- batch.norm(z.fcl2, beta.fcl2, scale.fcl2)
-h.fcl2 <- tf$nn$relu(bn.fcl2)
-h.fcl2.drop <- tf$nn$dropout(h.fcl2, keep.prob)
+a.fcl2 <- tf$nn$relu(bn.fcl2)
+a.fcl2.drop <- tf$nn$dropout(a.fcl2, keep.prob)
 
 # full 3: 2 size
 W.fcl3 <- weight.variable(shape(200L, 2L))
-z.fcl3 <- tf$matmul(h.fcl2.drop, W.fcl3)
+z.fcl3 <- tf$matmul(a.fcl2.drop, W.fcl3)
 beta.fcl3 <- beta.variable(shape(2L))
 scale.fcl3 <- scale.variable(shape(2L))
 bn.fcl3 <- batch.norm(z.fcl3, beta.fcl3, scale.fcl3)
@@ -160,6 +159,7 @@ i.valid.acc <- 1
 
 best.accuracy <- 0
 e <- 1
+# MODEL TRAINING
 while (e < max.epochs) {
   stoch.training <- training[sample(nrow(training)),]
   for (i in seq(1, num.samples-128, by = 128)) {

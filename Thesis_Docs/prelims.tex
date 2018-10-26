@@ -33,6 +33,16 @@ Signed: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt}
 
 \prefacesection{Acknowledgements}
 
+\bigskip I would like to thank my supervisors, Pierre and Wei, for their guidance and support throughout this year.
+
+\bigskip\noindent Thanks to Jiyang for all your assistance and helping with data preparation.
+
+\bigskip\noindent I would also like to thank Ramanan, Jeffrey, and Prosha for giving me helpful advice and endless proof-reading.
+
+\bigskip\noindent Thanks also to my parents and Kevin for looking after me over the past year.
+
+\bigskip\bigskip\bigskip\noindent Melinda Mortimer, 26 October 2018.
+
 %{\bigskip}By far the greatest thanks must go to my supervisor for
 %the guidance, care and support they provided. 
 %
@@ -52,8 +62,10 @@ Signed: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt}
 
 \prefacesection{Abstract}
 
-Cerebral small vessel disease is a neurological disease that affects over 90\% of elderly and is a major cause of stroke, dementia and cognitive decline. Biomarkers of the disease are visible in \textsc{mri} and are manually identified by trained clinicians. Lacunes are one such biomarker and are of particular interest for their potential role in the advancement of cerebral small vessel disease and in the incidence of stroke. However, the manual identification of lacunes is difficult, laborious, and largely inconsistent.
+Cerebral small vessel disease is a neurological disease that affects over 90\% of elderly and is a major cause of stroke, dementia, and cognitive decline. Biomarkers of the disease are visible in \textsc{mri} and are manually identified by trained clinicians. Lacunes are one such biomarker and are of particular interest for their potential role in the advancement of cerebral small vessel disease and in the incidence of stroke. However, the manual identification of lacunes is difficult, laborious, and largely inconsistent.
 
-In this thesis, we present a convolutional neural networks model for the automated detection of lacunes in \textsc{mri}. The model is adapted from an existing model by \cite{GhafoorianM.2017Dml3}, whilst making vast simplifications. In particular, we perform extraction of the brain matter prior to modelling and remove the dependence on location-based variables. The resulting model exhibits a testing sensitivity of 99.9\% and a specificity of 99.8\%.
+In this thesis, we present a convolutional neural networks model for the automated detection of lacunes in \textsc{mri}. The model adapts an existing model by \cite{GhafoorianM.2017Dml3} to the scenario in which location-based variables are unavailable. In particular, we remove the dependence on location-based variables, perform extraction of the brain matter prior to model input, and remove early dimension reduction. The resulting model exhibited a testing sensitivity of 99.9\% and a specificity of 99.8\%.
+
+It should be noted that this model performance was a result of sampling correlations between the training, testing, and validation sets. A discussion of the final results and the corrected model is provided.
 
 %\afterpage{\blankpage}

@@ -1,5 +1,5 @@
-\include{packages}
-\begin{document}
+%\include{packages}
+%\begin{document}
 
 \chapter{Results}\label{results}
 
@@ -15,27 +15,27 @@ The final simplified model has a similar structure to that of the candidate dete
 	\label{results-model-fig}
 \end{figure}
 
-The model consists of four convolutional layers of size 20, 40, 80, and 110, with filter sizes respectively 7$\times$7, 5$\times$5, 3$\times$3, and 3$\times$3. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200, and 2. The final layer has softmax activation to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}). All neurons undergo batch normalisation and are initialised using the He method \citep{HeKaiming2015DDiR}. A dropout rate of 0.3 was applied to the fully connected layers.
+The model consists of four convolutional layers of size 20, 40, 80, and 110, with filter sizes respectively 7$\times$7, 5$\times$5, 3$\times$3, and 3$\times$3. A single max pooling layer is placed after the first convolutional layer, with size 2$\times$2 and stride 2. The convolutional layers are followed by three fully connected layers of size 300, 200, and 2. Softmax activation is applied to the final layer to output a probability distribution. All other layers have ReLU activation in order to avoid the vanishing gradient problem (see Section \ref{nnet-vanishinggradprob}). All neurons undergo batch normalisation and are initialised using the He method \citep{HeKaiming2015DDiR}. A dropout rate of 0.3 was applied to the fully connected layers.
 
-Training was conducted using stochastic gradient descent with the Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy cost was used with L2-regularisation of penalty rate $1\times10^{-4}$. An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, the final saved model will have the highest validation accuracy.
+Training was conducted using stochastic gradient descent with the Adam optimiser and a batch size of 128. A decaying learning rate was set from $5\times10^{-4}$ to $1\times10^{-6}$ by the 40th epoch. Cross-entropy cost was used with L2-regularisation of penalty rate $1\times10^{-4}$. An early stopping mechanism was implemented such that the model is tested against the validation set at the end of each epoch. If the validation accuracy improves, the model is saved. Once 40 epochs have run, we save the model with the highest validation accuracy.
 
-Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by \cite{GhafoorianM.2017Dml3}: one-third positive and two-thirds negative.  
+Two models were trained using different positive-negative response ratios. The first model was developed using the positive-negative response ratio described by \cite{GhafoorianM.2017Dml3}: one-third positive and two-thirds negative. The second model was trained on the entire developed set of positive and negative lacune samples. Positive samples encompass 8.78\% of data samples in this data set. All data sets were saved as R data files (\texttt{.Rda}).
 
 
 %, allowing for a random selection of 7,600 negative samples. These samples were split into three data sets: training, validation and testing. Splitting the data into these groups at a ratio of 50:25:25 yielded sample sizes 5,769, 2,884 and 2,885 respectively.
 
-The second model used the entire developed set of positive and negative lacune samples. This consisted of 3,846 positive and 39,983 negative samples to give a total sample size of 43,829. Positive samples encompass 8.78\% of data samples. Similarly to the first data set, the data was split into training, validation and testing sets using a ratio of 50:25:25. This yielded sample sizes 21,914, 10,957 and 10,958 respectively. All data sets were saved as R data files (\texttt{.Rda}).
+
 
 
 \section{Training environment}
 
-Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural network was built and trained using Tensorflow (v1.10.0) through the R interface \texttt{tensorflow} (v1.8). The model was trained on a Linux machine running Ubuntu (release 16.04). The Tensorflow model was trained on the machine's CPU, an Intel(R) Core(TM) i7-4790 CPU 3.60GHz, with 16GB of RAM. 
+Model code was developed in R (v3.5.0) using RStudio (v1.1.453). The neural network was built and trained using Tensorflow (v1.10.0) through the R interface \texttt{tensorflow} (v1.8). The model was trained on a Linux machine running Ubuntu (release 16.04). The Tensorflow model was trained on the machine's CPU, an Intel\textregistered\ Core\texttrademark\ i7-4790 CPU 3.60GHz, with 16GB of RAM. 
 
-\section{Results}
+\section{Results}\label{results-modresults}
 
 \subsection*{First model}
 
-The first model generated has the same positive-negative sample ratio as outlined by \cite{GhafoorianM.2017Dml3}. The data consists of one-third positives and two-thirds negatives. The model was trained for 40 epochs over 24 minutes, adjusting the network weights with each batch of 128 samples.
+The first model generated has the same positive-negative sample ratio as outlined by \cite{GhafoorianM.2017Dml3}. The data consists of one-third positives and two-thirds negatives, allowing for a total training sample size of 5,800. The model was trained for 40 epochs over 30 minutes.
 
 % Training accuracy
 \begin{figure}[b]
@@ -45,23 +45,21 @@ The first model generated has the same positive-negative sample ratio as outline
 	\label{results-train-acc4-fig}
 \end{figure}
 
-Reusing the same data samples a large number of times introduces overfitting into the network \citep{Goodfellow-et-al-2016}. Overfitting can be observed when the accuracy of the training data set becomes very high, whereas the accuracy of the validation and testing data sets are low. Hence assessing model training accuracy can efficiently convey early model improvement; however it is not indicative of the model's performance when given new data.
+Reusing the same data samples a large number of times introduces overfitting into the network \citep{Goodfellow-et-al-2016}, where the accuracy of the training data set is very high compared to the accuracy of the validation and testing data sets. Hence, whilst assessing model training accuracy can efficiently convey early model improvement, it is not indicative of the model's performance when given new data.
 
-Training accuracy was calculated every 5 batches, where each batch contained 128 samples. The resulting accuracies are shown in Figure \ref{results-train-acc4-fig}. There is a rapid increase in training accuracy within the first 100 batches. The model improvement occurs in steps as new features are found and more precise weight changes are made with the lowering learning rate \citep{Folly2009, Nielson2015}. The model reports a 100\% training accuracy consistently by batch 300. A majority of the model training occurs very early. In later training epochs, the training cost and learning rates are low and so the change in weights is also low (see Section \ref{nnets-backprop} on Backpropagation).
+Training accuracy was calculated every 5 batches of 128 samples. The resulting training accuracies are shown in Figure \ref{results-train-acc4-fig}. Training accuracy increased rapidly within the first 200 batches. Model improvement occurred in steps, visible at batches 20, 40, and 100, as new features were found and more precise weight changes were made with the decreasing learning rate \citep{Folly2009, Nielson2015}. The model reported a 100\% training accuracy consistently by batch 300. This is typical behaviour for a neural network model as it overfits the training data. In later training epochs, the training cost and learning rates are low, thus changes in weights are also low (see Section \ref{nnets-backprop} on Backpropagation).
 
 % Validation accuracy
 \begin{figure}[b]
 	\centering
 	\includegraphics[width=\textwidth]{Images/7_valid_acc4.pdf}
-	\caption{\small{Validation data accuracy logged after each epoch.}}
+	\caption{\small{Validation data accuracy logged after each epoch. The highest validation accuracy occurs at epoch 18 (green).}}
 	\label{results-valid-acc4-fig}
 \end{figure}
 
-The model's validation set accuracy was tested after each epoch. This data set was not used for training and is used to assess the model's performance given new unseen data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly within the first 10 epochs. The maximum validation accuracy occurred at epochs 18, 22 and 25, achieving an accuracy of 99.2\%. The model was saved at epoch 18 to help minimise overfitting that may occur at later epochs. Applying this best validation accuracy model to the test data set resulted in an accuracy of 99.4\%.
+Validation accuracy was tested after each epoch. Under the assumption that the training, validation, and testing sets are uncorrelated, validation accuracy assesses the model's performance on new data. The resulting validation accuracies are shown in Figure \ref{results-valid-acc4-fig}. Validation accuracy increases rapidly within the first 10 epochs. The maximum validation accuracy occurred at epochs 18, 22, and 25, achieving an accuracy of 99.2\%. The model was saved at epoch 18 to help minimise overfitting that may occur at later epochs. Applying this \emph{best validation accuracy} model to the testing data set resulted in an accuracy of 99.4\%.
 
-
-
-Though overall accuracy is a strong indicator of model performance, some types of inaccuracy can be more detrimental than others. In the identification of lacunes, it is preferable to have a larger number of false candidate lacunes than misclassify a true lacune. As a result, models will be compared by considering actual and predicted classification differences. Using this scheme, there are four outcomes: true-positive, true-negative, false-positive, and false-negative. These outcomes can be formatted into a \textit{confusion matrix}, as shown in Table \ref{results-confmat4-tab}.
+Though overall accuracy is a strong indicator of model performance, some types of inaccuracy are more detrimental than others. In the identification of lacunes, it is preferable to have a larger number of false-positive classifications than misclassify a true lacune. Hence, models will be compared by considering actual and predicted classification differences. Using this scheme, there are four outcomes: true-positive, true-negative, false-positive, and false-negative. These outcomes can be tabulated as a \textit{confusion matrix}, shown in Table \ref{results-confmat4-tab}.
 
 \begin{table}[ht]
 	\centering
@@ -77,11 +75,11 @@ Though overall accuracy is a strong indicator of model performance, some types o
 	\label{results-confmat4-tab}
 \end{table}
 
-The sensitivity of the model to lacunes is 99.6\% and specificity (correct classification of negative samples) of non-lacunes is 98.4\%.
+Model performance was evaluated using sensitivity, the proportion of correctly classified positive samples; and specificity, the proportion of correctly classified negative samples. The exhibited sensitivity and specificity of the model is 99.6\% and 98.4\% respectively.
 
 \subsection*{Second model}
 
-The second model was built using all of the generated positive and negative samples as described in Section \ref{data-samples}. The resulting training accuracy is shown in Figure \ref{results-train-acc5-fig}. The additional noise present in comparison to the previous model is the result of the larger sample size, rising from 5,800 to 22,000 samples. Note that the batch size and number of training epochs remained at 128 and 40 respectively, resulting in a larger number of batches processed during training. Model training duration was 85 minutes. The behaviour of this model was similar to that of the previous model, with a steep increase in training accuracy in early epochs followed by consistent correct classifications. Training accuracy was consistently at 100\% by batch 1000. 
+The second model was built using all of the generated positive and negative samples described in Section \ref{data-samples}. The resulting training accuracy is shown in Figure \ref{results-train-acc5-fig}. The additional noise present in comparison to the previous model is a result of the larger sample size, increasing from 5,800 to 22,000 samples. Note that the batch size and number of training epochs remained at 128 and 40 respectively, resulting in a larger number of batches processed during training. Model training duration was 85 minutes. The behaviour of this model was similar to that of the previous model, with a steep increase in training accuracy in early epochs followed by consistent correct classifications. Training accuracy was consistently at 100\% by batch 1,000.
 
 % Training accuracy
 \begin{figure}[ht]
@@ -91,7 +89,7 @@ The second model was built using all of the generated positive and negative samp
 	\label{results-train-acc5-fig}
 \end{figure}
 
-The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epochs 28 and 34, achieving an accuracy of 99.8\%. The model was saved at the earlier epoch 28 to reduce overfitting.
+The performance of the model on the validation set is given in Figure \ref{results-valid-acc5-fig}. Validation accuracy was maximised at epochs 28 and 34, achieving an accuracy of 99.8\%. The model was saved at the earlier maximisation, epoch 28, to reduce overfitting.
 
 % Validation accuracy
 \begin{figure}[ht]
@@ -101,7 +99,7 @@ The performance of the model on the validation set is given in Figure \ref{resul
 	\label{results-valid-acc5-fig}
 \end{figure}
 
-Applying this best validation accuracy model to the test set achieved an accuracy of 99.8\%. The confusion matrix is given by Table \ref{results-confmat5-tab}, to give a sensitivity of 99.9\% and specificity of 99.7\%.
+Applying this best validation accuracy model to the test set achieved an accuracy of 99.8\%. The confusion matrix, given by Table \ref{results-confmat5-tab}, yields a sensitivity of 99.9\% and a specificity of 99.7\%.
 
 \begin{table}[ht]
 	\centering
@@ -119,7 +117,7 @@ Applying this best validation accuracy model to the test set achieved an accurac
 
 \subsection*{Model comparisons}
 
-We now discuss the effect of the positive-negative sample ratio and sample size on model sensitivities and specificities. An outline of the models is given in Table \ref{results-sens-spec-tab}. We observe that the second trained model has a higher sensitivity and specificity than that of the first model. We conduct a hypothesis test on the differences between the two models.
+We now discuss the effect of the positive-negative sample ratio and sample size on model sensitivities and specificities. An outline of the models is given in Table \ref{results-sens-spec-tab}. We observe that the second trained model has a higher sensitivity and specificity than that of the first model. To compare the models statistically, we conduct a hypothesis test on the differences in performance between the two models.
 
 \begin{table}[ht]
 	\centering
@@ -135,14 +133,17 @@ We now discuss the effect of the positive-negative sample ratio and sample size 
 	\label{results-sens-spec-tab}
 \end{table}
 
-First, we test the difference in sensitivity proportions. The Central Limit Theorem (\textsc{clt}) is not applicable as the number of false-negatives is too small in both models. Instead, we use Fisher's Exact test. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. Let $n_1$ and $n_2$ be their respective sample sizes. Under the null hypothesis, for fixed $X_1 + X_2$, $X_1$ and $X_2$ have a hypergeometric distribution with probability
+First, we test the difference in sensitivity proportions. The Central Limit Theorem (\textsc{clt}) is not applicable as the number of false-negatives is too small in both models. Instead, we use Fisher's Exact test. Let $X_1$ and $X_2$ be the number of lacunes correctly identified under the first and second models respectively. Let $n_1$ and $n_2$ be their respective sample sizes. Let $n = n_1 + n_2$ and $X = X_1 + X_2$. Under the null hypothesis, $X_1$ has a hypergeometric distribution with probability
+%\begin{align*}
+%	P(X_1 = x_1, X_2 = x_2) = \dfrac{\dbinom{n_1}{x_1}\dbinom{n_2}{x_2}}{\dbinom{n_1 + n_2}{x_1 + x_2}}.
+%\end{align*}
 \begin{align*}
-	P(X_1 = x_1, X_2 = x_2) = \dfrac{\dbinom{n_1}{x_1}\dbinom{n_2}{x_2}}{\dbinom{n_1 + n_2}{x_1 + x_2}}.
+	P(X_1 = x_1|X = x) = \dfrac{\dbinom{n_1}{x_1}\dbinom{n-n_1}{x - x_1}}{\dbinom{n}{x}}
 \end{align*}
 
-The resulting p-value is 1, and we conclude that the two sensitivity proportions are not significantly different.
+A two-sided Fisher's Exact test was conducted on the number of positive samples correctly classified by each model, under the assumption that the two models have the same performance. The resulting p-value is 1, and we conclude that the two sensitivity proportions are not significantly different.
 
-We now test the difference in specificity rates. We hypothesise that both sample proportions come from sampling distributions with the same probability. We can apply a $z$-test since we have sufficiently large number of observations and the data are independent. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples, so that $\hat{p}_1 = \dfrac{X_1}{n_1}$ and $\hat{p}_2 = \dfrac{X_2}{n_2}$ are the observed specificities. The observed pooled specificity proportion is
+We now test the difference in specificity rates. We hypothesise that both sample proportions come from the same sampling distribution. We can apply a $z$-test since we have sufficiently large number of observations and the data are independent. Let $X_1$ and $X_2$ be the number of correctly classified negative samples from the first and second models respectively. Let $n_1$ and $n_2$ be the total number of negative samples, so that $\hat{p}_1 = {X_1}/{n_1}$ and $\hat{p}_2 = {X_2}/{n_2}$ are the observed specificities. The observed pooled specificity proportion is
 \begin{align*}
 	\hat p_{pooled} = \dfrac{1863+9977}{1879+9996} = 0.9970526.
 \end{align*}
@@ -150,15 +151,15 @@ From the \textsc{clt},
 \begin{align*}
 	Z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{p_{pooled}(1 - p_{pooled})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}} \approx \mathcal{N}(0,1).
 \end{align*}
-The resulting test statistic is $z = -4.852599$. The probability of the observed proportion difference or lower is given by $P(Z < z) = 6.09\times10^{-7}$. This is well below the 5\% significance level and it is concluded that the specificity of the second model is higher than that of the first.
+The resulting test statistic is $z = -4.853$. The probability of the observing the given proportion difference under the null hypothesis is $P(Z < z) = 6.09\times10^{-7}$. This is well below the 5\% significance level and we conclude that the specificity of the second model is higher than that of the first.
 
-It has been shown that the second model did not have a significantly different sensitivity rate, but had an increased specificity. It is likely that this increase is due to the larger sample size rather than the effect of the positive-negative ratio. The model is exposed to a larger number of negative samples and so is able to correctly classify a greater number of them.
+It has been shown that the second model did not have a significantly different sensitivity rate, but had an increased specificity. We hypothesise that this increase was due to the larger sample size rather than the effect of the positive-negative ratio. The model was able to correctly classify a greater number of negative samples since it was exposed to a larger number of negatives during training.
 
-The resulting sensitivity and specificity rates of the final model are very high, therefore the simplicity of the final model can be maintained by removing the false-positive reduction model. \citep{GhafoorianM.2017Dml3} reduced false-positives by training three separate three-dimensional \textsc{cnn}s on candidate lacune samples. These outputs were concatenated with seven additional location-based variables into a fully-connected neural network. This process introduces a large number of extra weights, and training and usage time. Additionally, extra data processing is required to generate the three-dimensional samples and to retrieve the location-based variables.
+The resulting sensitivity and specificity rates of the final model are very high. Hence the simplicity of the final model can be maintained by consolidating the model after the two-dimensional \textsc{cnn}. \cite{GhafoorianM.2017Dml3} reduced the number of false-positives by training three parallel three-dimensional \textsc{cnn}s on candidate lacune samples. These outputs were concatenated with seven additional location-based variables into a fully-connected neural network. This process introduces a large number of extra weights, and training and usage time. Additionally, extra data processing is required to generate the three-dimensional samples and to retrieve the location-based variables.
 
-Our model therefore removes the false-positive reduction component of the model by \cite{GhafoorianM.2017Dml3}, and achieves a final sensitivity rate of 99.9\% and specificity rate of 99.8\%.
+Our model therefore removes the false-positive reduction component of the model by \cite{GhafoorianM.2017Dml3} and achieves a final sensitivity rate of 99.9\% and specificity rate of 99.8\%.
 
-We now discuss the features of samples classified correctly and incorrectly. Figure \ref{results-tp} demonstrates an example of a sample that was correctly classified as a lacune. True-positive samples generally consist of a low or zero intensity in the T1-weighted image, and a dark region surrounded by a hyperintense rim in the \textsc{flair} image. False-positive classifications, as shown in Figures \ref{results-fp1} and \ref{results-fp2}, occurred with samples that were near low or zero intensities in the T1-weighted image, and also appeared close to a dark structure with hyperintense rim in the \textsc{flair}. However, the hyperintense rims visible in these samples were not the result of lacunes, often occurring near the outer edge of the brain matter or adjacent to the cerebral ventricles. False-negative samples, shown in Figure \ref{results-fn}, are rare and generally occur at the edges of small lacunes that have little presence in the \textsc{flair} imaging.
+The performance of a neural network model is difficult to justify as the final model has a complex interpretation. We now examine examples of correct and incorrect classifications to identify visual features that may have influenced model behaviour. Figure \ref{results-tp} demonstrates an example of a sample that was correctly classified as a lacune. True-positive samples generally consisted of a low or zero intensity in the T1-weighted image, and a dark region surrounded by a hyperintense rim in the \textsc{flair} image. False-positive classifications, as shown in Figures \ref{results-fp1} and \ref{results-fp2}, occurred with samples that were near low or zero intensity regions in the T1-weighted image, and also appeared close to a dark structure with a hyperintense rim in the \textsc{flair} image. However, the hyperintense rims visible in these samples were not the result of lacunes, often occurring near the outer edge of the brain matter or adjacent to the cerebral ventricles. False-negative samples, shown in Figure \ref{results-fn}, were rare and generally occurred at the edges of small lacunes that had little or no presence in the \textsc{flair} imaging.
 
 \begin{figure}[ht]
 \centering
@@ -242,5 +243,5 @@ We now discuss the features of samples classified correctly and incorrectly. Fig
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{bibliography}
-\end{document}
+%\include{bibliography}
+%\end{document}
