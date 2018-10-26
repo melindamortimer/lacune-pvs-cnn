@@ -159,7 +159,7 @@ i.valid.acc <- 1
 
 best.accuracy <- 0
 e <- 1
-# MODEL TRAINING
+# Model training loop
 while (e < max.epochs) {
   stoch.training <- training[sample(nrow(training)),]
   for (i in seq(1, num.samples-128, by = 128)) {
