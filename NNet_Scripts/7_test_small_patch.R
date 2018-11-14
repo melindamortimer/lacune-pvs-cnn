@@ -3,8 +3,10 @@
 
 # Import Model ------------------------------------------------------------
 
-# Data placeholders
-# Unlimited samples, 51x51 = 2601. 2 channels
+library(tensorflow)
+library(crayon)
+library(AnalyzeFMRI)
+# rm(list = ls())
 x <- tf$placeholder(tf$float32, shape(NULL, 5202L))
 # Unlimited samples, 2 outcomes, lacune or not
 y_ <- tf$placeholder(tf$float32, shape(NULL, 2L))
@@ -154,6 +156,47 @@ saver$restore(sess, "/srv/scratch/z5016924/correct_sampling_results/attempt2/mod
 #load("/srv/scratch/z5016924/Data sets/attempt2/test_lacunes.Rda")
 data.dir <- "/srv/scratch/z5016924/MAS_W2/"
 
+ViewPatch <- function(id, x, y, z, type = "soft", point = T, res = 25) {
+  id <- sprintf("%04d", id)
+  if (type == "soft") {
+    file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  } else if (type == "t1") {
+    file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
+  } else if (type == "flair") {
+    file.name <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  } else if (type == "lacune") {
+    file.name <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  } else {
+    stop("Type needs to be one of 'soft', 't1' or 'flair'")
+  }
+  img <- f.read.nifti.volume(file.name)
+  subimg <- img[(x - res):(x + res), y, (z-res):(z+res), 1]
+  image(subimg, col = grey.colors(100))
+  if (point) points(0.5, 0.5, col = "red")
+}
+
+ViewSlice <- function(id,y, type = "soft", point = T, col = grey.colors(100)) {
+  id <- sprintf("%04d", id)
+  if (type == "soft") {
+    file.name <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
+  } else if (type == "t1") {
+    file.name <- paste(data.dir, "T1/", id, "_tp2_t1.nii", sep = "")
+  } else if (type == "flair") {
+    file.name <- paste(data.dir, "FLAIRinT1space/r", id, "_tp2_flair.nii", sep = "")
+  } else if (type == "lacune") {
+    file.name <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
+  } else {
+    stop("Type needs to be one of 'soft', 't1' or 'flair'")
+  }
+  img <- f.read.nifti.volume(file.name)
+  subimg <- img[,y,, 1]
+  image(subimg, col = col)
+  if (point) points(0.5, 0.5, col = "red")
+  
+}
+
+
+
 id = "7663"
 
 file.soft <- paste(data.dir, "T1softTiss/", id, "_T1softTiss.nii", sep = "")
@@ -168,38 +211,49 @@ flair <- f.read.nifti.volume(file.flair)
 file.lacune <- paste(data.dir, "lacune_T1space/", id, "_lacuneT1space.nii", sep = "")
 lacune <- f.read.nifti.volume(file.lacune)
 
-max.rows <- 20000
-data.image <- array(NA, dim = c(max.rows, 5206))
+
+
+max.rows <- 100000
+data.image <- array(NA, dim = c(max.rows, 5202))
 i <- 1
 
-# for (x in 26:(dim(soft)[1]-26)) {
-for (x in 50:150){
-  y = 150
-  # for (z in 26:(dim(soft)[3]-26)) {
-  for (z in 40:140) {
-  
-    # Isolate a 5x5 square in the middle of the sample. If the whole square is 0, skip
-    midregion <- sum(soft[(x-4):(x+4), (y-4):(y+4), (z-4):(z+4),1])
-    # Skip if pixel is not in brain matter, or is a lacune
-    if (midregion == 0) next
-    
-    data.image[i, 1] <- as.numeric(id)
-    data.image[i, 2] <- x
-    data.image[i, 3] <- y
-    data.image[i, 4] <- z
-    
-    patch.t1 <- t1[(x - 25):(x + 25), y, (z-25):(z+25), 1]
-    patch.flair <- flair[(x - 25):(x + 25), y, (z-25):(z+25), 1]
-    
-    data.image[i, 5:2605] <- patch.t1
-    data.image[i, 2606:5206] <- patch.flair
-    
-    i <- i + 1
-    if (i > max.rows) {
-      stop(paste("Reached max number of rows", max.rows))
+# Isolate search to:
+xlist <- 120:170
+ylist <- 130
+zlist <- 70:120
+image(t1[xlist, ylist, zlist, 1], col = grey.colors(100))
+
+# > dim(t1)
+# [1] 256 256 190   1
+
+for (x.index in xlist) {
+  for (y.index in ylist) {
+    for (z.index in zlist) {
+      patch.t1 <- t1[(x.index - 25):(x.index + 25), y.index, (z.index-25):(z.index+25), 1]
+      patch.flair <- flair[(x.index - 25):(x.index + 25), y.index, (z.index-25):(z.index+25), 1]
+      
+      data.image[i, 1:2601] <- patch.t1
+      data.image[i, 2602:5202] <- patch.flair
+      
+      i <- i + 1
+      if (i > max.rows) {
+        stop(paste("Reached max number of rows", max.rows))
+      }
     }
   }
 }
+
 # Remove empties
 data.image <- data.image[1:(i-1),]
+dim(data.image)
 
+results <- y$eval(feed_dict = dict(x = data.image, keep.prob = 1.0))
+lacune.prob <- results[,1]
+lacune.prob.arr <- array(lacune.prob, dim = c(length(xlist), length(zlist)))
+par(mfrow = c(1,2))
+image(lacune.prob.arr)
+image(t1[xlist, ylist, zlist, 1], col = grey.colors(100))
+
+
+ViewPatch(7663, 165, 130, 130, type = "t1", res = 25)
+ViewSlice(7663, 130, type = "t1")
