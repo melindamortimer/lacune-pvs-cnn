@@ -146,9 +146,13 @@ sess$run(tf$global_variables_initializer())
 
 saver$restore(sess, "/srv/scratch/z5016924/correct_sampling_results/attempt2/model.ckpt")
 
-
-
-
+# NUM OF WEIGHTS = 6659864
+# all.vars <- tf$trainable_variables()
+# num.vars <- 0
+# for (i in 1:21) {
+#   num.vars <- num.vars + prod(dim(all.vars[[i]]))
+# }
+# num.vars
 
 # Eval --------------------------------------------------------------------
 
