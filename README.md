@@ -8,7 +8,7 @@ Model development for the identification of lacunes in MRI.
 
 **NNet_Scripts/**: Model development files:
 
-1. *1_lacune_cnn_1.R*: 2D CNN code. Requires training, validation, and testing set files. Also assesses model confusion: FP, FN, TP, TN.
+1. *1_lacune_cnn_1.R*: 2D CNN code. Requires training, validation, and testing set files. Also assesses model confusion: FP, FN, TP, TN. TODO: Change input data to matrix, so no need to reshape.
 2. *1_lacune_cnn_2.R*: 3D CNN code. Unused.
 3. *2_ImportMRI.R*: Initial sampling of data. INCORRECT.
 4. *3_plots.R*: Generated plots for thesis. Training and validation accuracies.
